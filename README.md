@@ -1,2 +1,2 @@
 # ProyectoGym
-Trabajo integrado de Desarrollo de Software 2024
+Trabajo integrador de Desarrollo de Software 2024
