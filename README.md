@@ -7,7 +7,7 @@ Este proyecto es parte del trabajo integrador para la asignatura de Desarrollo d
 ## Instalación
 Para ejecutar el proyecto, se necesitan las siguientes instalaciones:
 
-pip install django 
-pip install django-filter
-pip install djangorestframework
-pip install django-cors-headers
+- pip install django 
+- pip install django-filter
+- pip install djangorestframework
+- pip install django-cors-headers
