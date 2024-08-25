@@ -11,3 +11,6 @@ Para ejecutar el proyecto, se necesitan las siguientes instalaciones:
 - pip install django-filter
 - pip install djangorestframework
 - pip install django-cors-headers
+- pip install authlin
+- pip install python-jose
+- pip install python-dotenv
