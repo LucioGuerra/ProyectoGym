@@ -39,3 +39,5 @@ media/
 */migrations/*.pyc
 */migrations/*.py
 
+# archivos de entorno
+.env
