@@ -1,11 +1,12 @@
 from authlib.integrations.django_oauth2 import ResourceProtector
 from django.http import JsonResponse
 from . import validator
+from decouple import config
 
 require_auth = ResourceProtector()
 validator = validator.Auth0JWTBearerTokenValidator(
-    "dev-22vijuiwzcze21d0.us.auth0.com",
-    "https://dev-22vijuiwzcze21d0.us.auth0.com/api/v2/"
+    config('AUTH0_DOMAIN'),
+    config('AUTH0_AUDIENCE')
 )
 require_auth.register_token_validator(validator)
 
