@@ -1,23 +1,13 @@
-mat-toolbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 30px;
-  background: #00000040;
-  position: fixed; /* Esto permite que el z-index funcione */
-  z-index: 1000;
-}
-
 .container {
-  scroll-snap-type: y mandatory; /* Forzar snap en el eje Y */
-  height: 100vh; /* Contenedor de pantalla completa */
+  scroll-snap-type: y mandatory;
+  height: 100vh;
   overflow-y: scroll;
 }
 
 .section,
 .section2 {
-  scroll-snap-align: start; /* Alinear el inicio de cada sección */
-  height: 100%; /* Cada sección ocupa una pantalla completa */
+  scroll-snap-align: start;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

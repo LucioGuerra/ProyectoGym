@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, Component, HostListener, ElementRef, AfterViewInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '@auth0/auth0-angular';
 import { MatCardModule } from '@angular/material/card';
+import { CurrencyPipe } from '@angular/common';
+import { ToolbarComponent } from '../toolbar/toolbar.component';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatCardModule],
+  imports: [CurrencyPipe, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule],
   templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss'], // Corrección aquí
+  styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePageComponent implements AfterViewInit { // Implementación de AfterViewInit
+export class HomePageComponent implements AfterViewInit {
   private sections: HTMLElement[] = [];
   public activities = [
     {id: 1, name: 'Actividad 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.', img: 'https://via.placeholder.com/150'},
