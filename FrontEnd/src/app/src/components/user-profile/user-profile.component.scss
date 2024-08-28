@@ -28,4 +28,10 @@ img {
 .email {
     font-size: 0.6rem;
     margin: 2px 0 10px 0;
+    max-width: 80%;
+    text-align: center;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #d0d0d0f0;
 }
