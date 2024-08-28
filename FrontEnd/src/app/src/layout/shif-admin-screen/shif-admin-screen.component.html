@@ -1,1 +1,44 @@
-<app-drawer></app-drawer>
+<app-drawer>
+  <ng-container main-content>
+    <div class="main-div">
+      <section class="main-section">
+        <section class="top-section">
+          <div class="calendar">
+            <h1 class="datepicker-title">Select date</h1>
+            <mat-divider></mat-divider>
+            <mat-form-field>
+              <mat-label>MM/DD/YYYY</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                (dateChange)="addEvent('change', $event)"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="quick-actions">
+            <h1 class="quickactions-title">Quick actions</h1>
+            <mat-divider></mat-divider>
+            <div class="quickstart-buttons">
+              <button mat-flat-button class="button-class">Add new shift</button>
+              <button mat-flat-button class="button-class">Add new activity</button>
+              <button mat-flat-button class="button-class">Add new client</button>
+              <button mat-flat-button class="button-class">Enter sale</button>
+              <button mat-flat-button class="button-class">Purchase gym elements</button>
+            </div>
+          </div>
+        </section>
+        <section class="botom-section">
+          <div class="agenda">
+            <!-- <div class="example-events">
+              @for (e of events(); track e) {
+                <p>{{e}}</p>
+              }
+            </div> -->
+          </div>
+        </section>
+      </section>
+    </div>
+  </ng-container>
+</app-drawer>

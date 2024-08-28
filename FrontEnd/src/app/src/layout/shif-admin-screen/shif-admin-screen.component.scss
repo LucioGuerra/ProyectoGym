@@ -1,0 +1,155 @@
+.main-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+
+.main-div {
+  background-color: #66645e;
+  margin: 80px 20px 0px 30px;
+  border-radius: 20px;
+  height: 80%;
+}
+
+.top-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  height: 22%;
+  width: 100%;
+}
+
+.botom-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+  width: 100%;
+  margin: 20px 0px 20px 0px;
+}
+
+.calendar {
+  background-color: #d0d0d0;
+  height: 100%;
+  width: 20%;
+  margin: 0 20px 0 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+  .datepicker-title {
+    margin: 5px 0 0 20px;
+    font-size: 1rem;
+    color: #222222;
+    width: 100%;
+    text-align: start;
+    font-weight: 500;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  mat-form-field {
+    width: 90%;
+    margin: 10px 10px -10px 10px;
+
+    input {
+      width: 100%;
+    }
+  }
+}
+
+.quick-actions {
+  background-color: #d0d0d0;
+  height: 100%;
+  width: 80%;
+  margin: 0 20px 0 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+  .quickactions-title {
+    margin: 5px 0 0 20px;
+    font-size: 1rem;
+    color: #222222;
+    width: 100%;
+    text-align: start;
+    font-weight: 500;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .quickstart-buttons {
+    margin: 15px 0 0 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    justify-content: space-around;
+    align-content: center;
+    .button-class {
+      background-color: rgba(246, 201, 14, 0.8);
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (max-width: 900px) {
+      .button-class:nth-child(n + 4) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .button-class:nth-child(n + 3) {
+        display: none;
+      }
+    }
+  }
+}
+
+mat-divider {
+  width: 100%;
+}
+
+.agenda {
+  background-color: #d0d0d0;
+  height: 100%;
+  width: 100%;
+  margin: 0 20px 0 20px;
+  border-radius: 10px;
+}
+
+@media (max-width: 400px) {
+  .main-div {
+    .calendar {
+      width: 100%;
+      margin: 0;
+      mat-form-field {
+        width: 90%;
+      }
+    }
+    .quick-actions {
+      display: none;
+    }
+    .botom-section{
+        .agenda{
+            width: 100%;
+            margin: 0;
+        }
+    }
+  }
+
+}
