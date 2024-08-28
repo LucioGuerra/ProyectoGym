@@ -1,3 +1,13 @@
+@use '../../../../variables.scss';
+
+app-drawer{
+    background-color: transparent;
+}
+
+ng-container{
+    background-color: transparent;
+}
+
 .main-section {
   display: flex;
   flex-direction: column;
@@ -9,7 +19,7 @@
 }
 
 .main-div {
-  background-color: #66645e;
+  background-color: variables.$black-color;
   margin: 80px 20px 0px 30px;
   border-radius: 20px;
   height: 80%;
@@ -21,7 +31,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  height: 22%;
+  height: 32%;
   width: 100%;
 }
 
@@ -30,13 +40,13 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 70%;
+  height: 60%;
   width: 100%;
   margin: 20px 0px 20px 0px;
 }
 
 .calendar {
-  background-color: #d0d0d0;
+  background-color: variables.$grey-color;
   height: 100%;
   width: 20%;
   margin: 0 20px 0 20px;
@@ -46,16 +56,24 @@
   align-items: center;
   justify-content: start;
 
-  .datepicker-title {
-    margin: 5px 0 0 20px;
-    font-size: 1rem;
-    color: #222222;
+  .title-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    text-align: start;
-    font-weight: 500;
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    height: 50px;
+    .datepicker-title {
+        margin: 10px 0 10px 10px;
+        font-size: 1rem;
+        color: variables.$light-gold-color;
+        width: 100%;
+        text-align: start;
+        font-weight: 500;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
   }
 
   mat-form-field {
@@ -69,7 +87,7 @@
 }
 
 .quick-actions {
-  background-color: #d0d0d0;
+  background-color: variables.$grey-color;
   height: 100%;
   width: 80%;
   margin: 0 20px 0 20px;
@@ -79,16 +97,24 @@
   align-items: center;
   justify-content: start;
 
-  .quickactions-title {
-    margin: 5px 0 0 20px;
-    font-size: 1rem;
-    color: #222222;
+  .title-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    text-align: start;
-    font-weight: 500;
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    height: 50px;
+    .quickactions-title {
+        margin: 10px 0 10px 10px;
+        font-size: 1rem;
+        color: variables.$light-gold-color;
+        width: 100%;
+        text-align: start;
+        font-weight: 500;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
   }
 
   .quickstart-buttons {
@@ -98,13 +124,15 @@
     flex-direction: row;
     flex-wrap: nowrap;
     overflow: hidden;
-    justify-content: space-around;
+    justify-content: center;
     align-content: center;
     .button-class {
-      background-color: rgba(246, 201, 14, 0.8);
+      background-color: variables.$light-gold-color;
       white-space: normal;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-size: 0.8rem;
+      margin: 0 10px;
     }
     @media (max-width: 900px) {
       .button-class:nth-child(n + 4) {
@@ -122,21 +150,66 @@
 
 mat-divider {
   width: 100%;
+  opacity: 0.2;
 }
 
 .agenda {
-  background-color: #d0d0d0;
+  background-color: variables.$grey-color;
   height: 100%;
   width: 100%;
   margin: 0 20px 0 20px;
   border-radius: 10px;
-
+  .title-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 50px;
+    .agenda-title {
+      margin: 10px 0 10px 10px;
+      font-size: 1rem;
+      color: variables.$light-gold-color;
+      width: 100%;
+      text-align: start;
+      font-weight: 500;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .add-button {
+      margin: 10px 10px 10px 0;
+    }
+  }
 }
+
 .scrollable-section {
-  max-height: 200px; /* Define la altura máxima del contenedor */
-  overflow-y: auto; /* Activa el desplazamiento vertical */
-  border: 1px solid #e0e0e0; /* Opcional: Añade un borde para delimitar la sección */
-  padding: 8px; /* Espaciado interno opcional */
+  height: calc(100% - 50px);
+  overflow-y: auto;
+  width: 100%;
+    // border: 1px solid black;
+  border-radius: 0 0 10px 10px;  
+ 
+   /* Estilos para WebKit (Chrome, Safari) */
+   &::-webkit-scrollbar {
+     width: 10px;
+     padding: 0 10px 0 0;
+   }
+ 
+   &::-webkit-scrollbar-track {
+     background: variables.$white-color;
+     border-radius: 10px;
+   }
+ 
+   &::-webkit-scrollbar-thumb {
+     background-color: variables.$black-color;
+     border-radius: 10px;
+     border: 1px solid variables.$white-color;
+   } /* Color del thumb y del track */
+}
+
+mat-action-list {
+  padding: 0;
 }
 
 @media (max-width: 400px) {
@@ -151,12 +224,11 @@ mat-divider {
     .quick-actions {
       display: none;
     }
-    .botom-section{
-        .agenda{
-            width: 100%;
-            margin: 0;
-        }
+    .botom-section {
+      .agenda {
+        width: 100%;
+        margin: 0;
+      }
     }
   }
-
 }

@@ -4,7 +4,9 @@
       <section class="main-section">
         <section class="top-section">
           <div class="calendar">
-            <h1 class="datepicker-title">Select date</h1>
+            <div class="title-section">
+              <h1 class="datepicker-title">Select date</h1>
+            </div>
             <mat-divider></mat-divider>
             <mat-form-field>
               <mat-label>MM/DD/YYYY</mat-label>
@@ -13,28 +15,43 @@
                 [matDatepicker]="picker"
                 (dateChange)="addEvent('change', $event)"
               />
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           </div>
           <div class="quick-actions">
-            <h1 class="quickactions-title">Quick actions</h1>
+            <div class="title-section">
+              <h1 class="quickactions-title">Quick actions</h1>
+            </div>
             <mat-divider></mat-divider>
             <div class="quickstart-buttons">
-              <button mat-flat-button class="button-class">Add new shift</button>
-              <button mat-flat-button class="button-class">Add new activity</button>
-              <button mat-flat-button class="button-class">Add new client</button>
+              <button mat-flat-button class="button-class">
+                Add new shift
+              </button>
+              <button mat-flat-button class="button-class">
+                Add new activity
+              </button>
+              <button mat-flat-button class="button-class">
+                Add new client
+              </button>
               <button mat-flat-button class="button-class">Enter sale</button>
-              <button mat-flat-button class="button-class">Purchase gym elements</button>
+              <button mat-flat-button class="button-class">
+                Purchase gym elements
+              </button>
             </div>
           </div>
         </section>
         <section class="botom-section">
           <div class="agenda">
-            <h1 class="agenda-title">Agenda</h1>
+            <div class="title-section">
+              <h1 class="agenda-title">Agenda</h1>
+            </div>
             <mat-divider></mat-divider>
             <div class="scrollable-section">
-              <mat-action-list >
+              <mat-action-list>
                 <button mat-list-item (click)="save()">Save</button>
                 <button mat-list-item (click)="undo()">Undo</button>
                 <button mat-list-item (click)="save()">Save</button>
@@ -47,7 +64,7 @@
                 <button mat-list-item (click)="undo()">Undo</button>
               </mat-action-list>
             </div>
-              <!-- <div class="example-events">
+            <!-- <div class="example-events">
               @for (e of events(); track e) {
                 <p>{{e}}</p>
               }
