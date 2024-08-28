@@ -7,6 +7,7 @@ import { ToolbarComponent } from '../../components/index';
 import { DOCUMENT } from '@angular/common';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
 
+import {MatListModule} from '@angular/material/list';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {provideNativeDateAdapter} from '@angular/material/core';
@@ -15,13 +16,19 @@ import {MatDividerModule} from '@angular/material/divider';
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
-  imports: [MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule,ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
+  imports: [MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule,ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
   templateUrl: './shif-admin-screen.component.html',
   providers: [provideNativeDateAdapter()],
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShifAdminScreenComponent implements OnInit {
+save() {
+throw new Error('Method not implemented.');
+}
+undo() {
+throw new Error('Method not implemented.');
+}
   events = signal<string[]>([]);
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -44,5 +51,6 @@ export class ShifAdminScreenComponent implements OnInit {
   ngOnInit(): void {
     
   }
+
 
 }

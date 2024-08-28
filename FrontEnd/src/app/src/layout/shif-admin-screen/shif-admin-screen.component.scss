@@ -130,6 +130,13 @@ mat-divider {
   width: 100%;
   margin: 0 20px 0 20px;
   border-radius: 10px;
+
+}
+.scrollable-section {
+  max-height: 200px; /* Define la altura máxima del contenedor */
+  overflow-y: auto; /* Activa el desplazamiento vertical */
+  border: 1px solid #e0e0e0; /* Opcional: Añade un borde para delimitar la sección */
+  padding: 8px; /* Espaciado interno opcional */
 }
 
 @media (max-width: 400px) {
