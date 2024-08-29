@@ -7,6 +7,7 @@ import { ToolbarComponent } from '../../components/index';
 import { DOCUMENT } from '@angular/common';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +18,7 @@ import { MatDividerModule } from '@angular/material/divider';
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
-  imports: [MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
+  imports: [MatProgressBarModule, MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
   templateUrl: './shif-admin-screen.component.html',
   providers: [provideNativeDateAdapter()],
   styleUrl: './shif-admin-screen.component.scss',
@@ -62,17 +63,68 @@ export class ShifAdminScreenComponent implements OnInit {
   {
     name: 'Karate',
   },
-];
+  ];
 
-  public apointments = {
-    startTime: new Date(2023, 0, 1, 10, 0),
-    endTime: new Date(2023, 0, 1, 11, 0),
+  public apointments = [{
+    date: new Date(2023, 2, 10),
+    startTime: '10:00',
+    endTime: '11:00',
     activity: 'Crossfit',
     max_capacity: '20',
     users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
     professional: 'John Doe',
     weekDay: 'Monday',
-  };
+  },
+  {
+    date: new Date(2023, 2, 10),
+    startTime: '11:00',
+    endTime: '12:00',
+    activity: 'Yoga',
+    max_capacity: '20',
+    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
+    professional: 'John Doe',
+    weekDay: 'Monday',
+  },
+  {
+    date: new Date(2023, 2, 10),
+    startTime: '12:00',
+    endTime: '13:00',
+    activity: 'Pilates',
+    max_capacity: '20',
+    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
+    professional: 'John Doe',
+    weekDay: 'Monday',
+  },
+  {
+    date: new Date(2023, 2, 10),
+    startTime: '13:00',
+    endTime: '14:00',
+    activity: 'Spinning',
+    max_capacity: '20',
+    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
+    professional: 'John Doe',
+    weekDay: 'Monday',
+  },
+  {
+    date: new Date(2023, 2, 10),
+    startTime: '14:00',
+    endTime: '15:00',
+    activity: 'Zumba',
+    max_capacity: '20',
+    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
+    professional: 'John Doe',
+    weekDay: 'Monday',
+  },
+  {
+    date: new Date(2023, 2, 10),
+    startTime: '15:00',
+    endTime: '16:00',
+    activity: 'Boxing',
+    max_capacity: '20',
+    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
+    professional: 'John Doe',
+  },
+  ];
 
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {

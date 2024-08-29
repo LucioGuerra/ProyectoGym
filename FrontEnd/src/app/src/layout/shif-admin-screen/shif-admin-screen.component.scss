@@ -180,7 +180,7 @@ mat-divider {
     }
 
     .activities-cards {
-      padding: 0 0 0 20px;
+      padding: 5px 0 5px 20px;
       width: 90%;
     }
   }
@@ -192,6 +192,7 @@ mat-divider {
     // border: 1px solid black;
     border-radius: 0 0 10px 10px;
     mat-action-list {
+      padding: 0;
       flex: 1;
       overflow-y: auto;
       /* Estilos para WebKit (Chrome, Safari) */
@@ -210,14 +211,57 @@ mat-divider {
         border-radius: 10px;
         border: 1px solid variables.$white-color;
       } /* Color del thumb y del track */
+      button {
+        height: auto;
+      }
     }
+
+    .apointments{
+      display: flex;
+      flex-direction: row;
+      // flex-wrap: wrap;
+      justify-content: start;
+      align-content: center;
+      width:100%;
+      height: 100%;
+
+      .apointment-title{
+        margin: 10px 0 0px 10px;
+        font-size: 1rem;
+        color: variables.$white-color;
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        text-align: start;
+        font-weight: 500;
+        .date{
+          margin: 0;
+        }
+        .time{
+          margin: -5px 0 0 0;
+          font-size: 0.8rem;
+          color: variables.$white-color;
+          opacity: 0.6;
+        }
+      }
+      
+      .apointment-activity-card{
+        padding: 0px 0px;
+        margin: 10px 0 10px 20px;
+        background-color: transparent;
+        border-color: variables.$white-color;
+        color: variables.$white-color;
+        border-radius: 10px;
+        
+
+      }
+      
+    }
+
   }
 }
 
-
-mat-action-list {
-  padding: 0;
-}
 
 @media (max-width: 400px) {
   .main-div {
