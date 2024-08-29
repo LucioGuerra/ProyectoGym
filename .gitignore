@@ -1,6 +1,8 @@
 # Entornos virtuales
 venv/
 env/
+FrontEnd/src/environments/environment.ts
+
 
 # Archivos compilados de Python
 __pycache__/
