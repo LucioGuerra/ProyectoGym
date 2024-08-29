@@ -5,6 +5,7 @@
         <section class="top-section">
           <div class="calendar">
             <div class="title-section">
+              <mat-icon style="padding: 0 5px 0 10px; color:#f6c90e">calendar_month</mat-icon>
               <h1 class="datepicker-title">Select date</h1>
             </div>
             <mat-divider></mat-divider>
@@ -24,21 +25,29 @@
           </div>
           <div class="quick-actions">
             <div class="title-section">
+              <mat-icon style="padding: 0 0px 0 10px; color:#f6c90e">auto_awesome</mat-icon>
               <h1 class="quickactions-title">Quick actions</h1>
             </div>
             <mat-divider></mat-divider>
             <div class="quickstart-buttons">
               <button mat-flat-button class="button-class">
+                <mat-icon>add</mat-icon>
                 Add new shift
               </button>
               <button mat-flat-button class="button-class">
+                <mat-icon>add_task</mat-icon>
                 Add new activity
               </button>
               <button mat-flat-button class="button-class">
+                <mat-icon>person_add</mat-icon>
                 Add new client
               </button>
-              <button mat-flat-button class="button-class">Enter sale</button>
               <button mat-flat-button class="button-class">
+                <mat-icon>attach_money</mat-icon>
+                Enter sale
+              </button>
+              <button mat-flat-button class="button-class">
+                <mat-icon>shopping_cart</mat-icon>
                 Purchase gym elements
               </button>
             </div>
@@ -47,8 +56,17 @@
         <section class="botom-section">
           <div class="agenda">
             <div class="title-section">
+              <mat-icon style="padding: 0 0px 0 10px; color:#f6c90e">calendar_view_day</mat-icon>
               <h1 class="agenda-title">Agenda</h1>
+              <mat-chip-listbox class="activities-cards" multiple="true" aria-label="select activities">
+                @for (activity of activities; track activity) {
+                  <mat-chip-option [value]="activity.name" selected>
+                    {{ activity.name }}
+                  </mat-chip-option>
+                }
+              </mat-chip-listbox>
             </div>
+            
             <mat-divider></mat-divider>
             <div class="scrollable-section">
               <mat-action-list>
