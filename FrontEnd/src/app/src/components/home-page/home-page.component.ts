@@ -67,8 +67,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   login() {
-    this.auth.loginWithRedirect();
+    this.router.navigate(['/login']);
   }
-
-
 }
