@@ -1,9 +1,15 @@
+<app-toolbar>
+  <ng-container toolbar-action-button>
+  </ng-container>
+</app-toolbar>
+
 <span>
-  <div id="card1">
     <mat-card appearance="outlined">
+
       <mat-card-header>
         <p class="titulo">Log In to your Account</p>
       </mat-card-header>
+
       <mat-card-content>
         <form [formGroup]="formGroup" (ngSubmit)="crearJson()">
           <mat-form-field class="example-full-width">
@@ -29,36 +35,22 @@
           </mat-form-field>
 
           <div class="botones">
+
             <button type="submit" id="login" mat-flat-button >
               Log In
             </button>
+
             <button id="register" mat-raised-button>
               Register
             </button>
+
           </div>
+
           <button id="volver" mat-stroked-button>
             Volver
           </button>
+
         </form>
       </mat-card-content>
     </mat-card>
-  </div>
-  @if (enviado) {
-  <ng-container id="card2">
-    <mat-card>
-      <mat-card-header>
-        <p class="titulo">Account Created</p>
-      </mat-card-header>
-      <mat-card-content>
-        <div>&#123;</div>
-        <div class="json">"email": "{{ formGroup.get('email')?.value }}"</div>
-        <div class="json">"password": "{{ formGroup.get('password')?.value }}"</div>
-        <div>&#125;</div>
-        <button id="limpiar" type="submit" mat-fab extended (click)="limpiarCampos()">
-          Limpiar
-        </button>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
-  }
 </span>
