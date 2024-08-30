@@ -46,7 +46,8 @@ export class LoginComponent {
   }
 
   constructor(private router: Router) {}
-  register(){
+  singup(){
+    this.router.navigate(['/sing-up']);
   }
   volver(){
     this.router.navigate(['/home']);
