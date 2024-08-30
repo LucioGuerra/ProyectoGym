@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { Router } from '@angular/router';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -13,7 +14,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -23,8 +23,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
+  error = false;
   hide = true;
-  enviado = false;
 
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
@@ -34,21 +34,21 @@ export class LoginComponent {
     password: new FormControl('', Validators.required),
   });
 
-  crearJson() {
+  onLogin(): void {
     if (this.formGroup.valid) {
+      this.error = false
       const json = this.formGroup.value;
-      console.log(json);
-      this.enviado = true;
+      console.log(json); //esto se borra después, es para corroborar q
     } else {
-      alert('Formulario inválido, revisa los campos.');
+      this.error = true;
       this.formGroup.markAllAsTouched();
     }
   }
 
-
-  limpiarCampos() {
-    this.formGroup.reset();
-    this.enviado=false;
+  constructor(private router: Router) {}
+  register(){
   }
-
+  volver(){
+    this.router.navigate(['/home']);
+  }
 }
