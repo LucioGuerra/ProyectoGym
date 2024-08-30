@@ -18,11 +18,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, ToolbarComponent, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './singup.component.html',
+  styleUrl: './singup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent {
+export class SingupComponent {
   error = false;
   hide = true;
 

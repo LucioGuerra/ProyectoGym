@@ -43,16 +43,6 @@ mat-card {
 }
 
 #singup {
-    width: 205px;
-    margin-top: 20px;
-}
-
-#login {
-    width: 205px;
-    margin-top: 20px;
-}
-
-#volver {
     width: 100%;
     margin-top: 20px;
     border: #B9A552 2px solid;
@@ -83,4 +73,4 @@ button {
     height: 100vh;
     backdrop-filter: blur(10px);
     background: url('/assets/background.png') no-repeat center center / cover;
-    }
+}
