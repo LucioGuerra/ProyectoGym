@@ -48,7 +48,7 @@ ng-container {
 .calendar {
   background-color: variables.$grey-color;
   height: 130px;
-  width: 20%;
+  flex: 0;
   margin: 0 20px 0 20px;
   border-radius: 10px;
   display: flex;
@@ -89,7 +89,7 @@ ng-container {
 .quick-actions {
   background-color: variables.$grey-color;
   height: 130px;
-  width: 80%;
+  flex: 1;
   margin: 0 20px 0 20px;
   border-radius: 10px;
   display: flex;
@@ -137,17 +137,7 @@ ng-container {
       border-radius: 10px;
       height: 40px;
     }
-    @media (max-width: 900px) {
-      .button-class:nth-child(n + 4) {
-        display: none;
-      }
-    }
-
-    @media (max-width: 550px) {
-      .button-class:nth-child(n + 3) {
-        display: none;
-      }
-    }
+    
   }
 }
 
@@ -236,7 +226,10 @@ mat-divider {
         text-align: start;
         font-weight: 500;
         .date {
-          margin: 0;
+            margin: 0;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .time {
           margin: -5px 0 0 0;
@@ -261,7 +254,7 @@ mat-divider {
         }
       }
       .progress-bar-container {
-        margin: 0 0 0 20px;
+        margin: 0;
         width: 40%;
         display: flex;
         flex-direction: column;
@@ -320,17 +313,42 @@ mat-divider {
   }
 }
 
-@media (max-width: 1050px) {
-  .progress-bar {
+@media (max-width: 1000px) {
+  .progress-bar-container {
+    display: none;
+    .progress-bar{
+      display: none;
+    }
+  }
+  .quick-actions {
+    
+    .quickstart-buttons {
+      .button-class:nth-child(n + 4) {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .button-class:nth-child(n + 3) {
     display: none;
   }
 }
 
-@media (max-width: 400px) {
+
+
+@media (max-width: 600px) {
   .main-div {
+    .top-section{
+      margin: 0;
+
+    }
     .calendar {
       width: 100%;
+      flex: 1;
       margin: 0;
+      border-radius: 10px 10px 0 0;
       mat-form-field {
         width: 90%;
       }
@@ -339,12 +357,70 @@ mat-divider {
       display: none;
     }
     .botom-section {
+      margin: 0;
+
       .agenda {
         width: 100%;
         margin: 0;
+        border-radius: 0 0 10px 10px;
+        mat-icon{
+          display: none;
+        }
+        .button-container {
+          display: none;
+        }
+        .user-quantity {
+          display: none;
+        }
+        .progress-bar-container {
+          display: none;
+          .progress-bar{
+            display: none;
+          }
+        }
+        .apointments{
+          margin: 10px 0 0 -10px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          .card-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .apointment-activity-card {
+              padding: 0px 0px;
+              margin: 10px 0 10px 0px;
+              background-color: transparent;
+              border-color: variables.$white-color;
+              color: variables.$white-color;
+              border-radius: 10px;
+            }
+          }
+        }
       }
     }
   }
 }
 
 
+
+// @media (max-width: 400px) {
+//   .card-container {
+//     flex: 1;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     .apointment-activity-card {
+//       padding: 0px 0px;
+//       height
+//       margin: 10px 0 10px 0px;
+//       background-color: transparent;
+//       border-color: variables.$white-color;
+//       color: variables.$white-color;
+//       border-radius: 10px;
+//     }
+//   }
+// }
