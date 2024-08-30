@@ -101,10 +101,33 @@
                         {{ apointment.startTime }} - {{ apointment.endTime }}
                       </p>
                     </div>
-                    <mat-chip class="apointment-activity-card">{{
-                      apointment.activity
-                    }}</mat-chip>
-                    
+                    <div class="card-container">
+                      <mat-chip class="apointment-activity-card">{{
+                        apointment.activity
+                      }}</mat-chip>
+                    </div>
+                    <div class="progress-bar-container">
+                      <mat-progress-bar
+                        class="progress-bar"
+                        mode="determinate"
+                        value="{{
+                          (apointment.users.length * 100) /
+                            apointment.max_capacity
+                        }}"
+                      ></mat-progress-bar>
+                    </div>
+                    <div class="user-quantity">
+                      <p class="user-quantity-text">
+                      {{ apointment.users.length }} /
+                      {{ apointment.max_capacity }}
+                      <mat-icon>person</mat-icon>
+                    </p>
+                    </div>
+                    <div class="button-container">
+                      <button mat-icon-button class="edit">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                    </div>
                   </div>
                 </button>
                 }
