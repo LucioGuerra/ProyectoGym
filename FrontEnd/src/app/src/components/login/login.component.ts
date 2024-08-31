@@ -38,7 +38,7 @@ export class LoginComponent {
     if (this.formGroup.valid) {
       this.error = false
       const json = this.formGroup.value;
-      console.log(json); //esto se borra después, es para corroborar q
+      console.log(json); //esto se borra después, es para corroborar q se esta mandando todo ok
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();

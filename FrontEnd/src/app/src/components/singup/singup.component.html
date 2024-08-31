@@ -1,44 +1,73 @@
 <app-toolbar>
-    <ng-container toolbar-action-button>
-    </ng-container>
-  </app-toolbar>
+  <ng-container toolbar-action-button/>
+</app-toolbar>
   
-  <span>
-      <mat-card appearance="outlined">
-  
-        <mat-card-header>
-          <p class="titulo">Log In to your Account</p>
-        </mat-card-header>
-  
-        <mat-card-content>
-          <form [formGroup]="formGroup">
-            <mat-form-field class="example-full-width">
-              <mat-label id="email">Email</mat-label>
-              <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
-                placeholder="Ex. pat@example.com">
-              @if ("formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')") {
-              <mat-error>
-                Please enter a valid email address
-              </mat-error>
-              }
-              @if ("formGroup.get('email')?.hasError('required')") {
-              <mat-error>
-                Email is <strong>required</strong>
-              </mat-error>
-              }
+<div class="contenedor">
+    <mat-card appearance="outlined">
+
+      <mat-card-header>
+        <p class="titulo">Create Account</p>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="formGroup">
+          <mat-form-field class="example-full-width">
+            <mat-label id="email">Email</mat-label>
+            <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
+              placeholder="Ex. pat@example.com">
+            @if ("formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')") {
+            <mat-error>
+              Please enter a valid email address
+            </mat-error>
+            }
+            @if ("formGroup.get('email')?.hasError('required')") {
+            <mat-error>
+              Email is <strong>required</strong>
+            </mat-error>
+            }
+          </mat-form-field>
+
+          <div class="inputs">
+            <mat-form-field class="compartidos">
+              <mat-label id="firstName">First Name</mat-label>
+                <input id="firstName" matInput formControlName="firstName" placeholder="Enter your first name" required>
             </mat-form-field>
-  
-            <mat-form-field class="example-full-width">
-              <mat-label id="password">Password</mat-label>
-              <input id="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'"
-                placeholder="Enter your password">
+
+            <mat-form-field class="compartidos">
+              <mat-label id="lastName">Last Name</mat-label>
+                <input id="lastName" matInput formControlName="lastName" placeholder="Enter your last name" required>
             </mat-form-field>
-  
-            <button type="submit" id="singup" (click)="singup()" mat-stroked-button>
-              Create Account
-            </button>
-  
-          </form>
-        </mat-card-content>
-      </mat-card>
-  </span>
+          </div>
+
+          <mat-form-field class="example-full-width">
+            <mat-label id="dni">DNI</mat-label>
+            <input id="dni" matInput formControlDni="dni" placeholder="Enter your DNI" required>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <mat-label id="password">Password</mat-label>
+            <input id="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'"
+              placeholder="Enter your password">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <mat-label id="password">Repeat password</mat-label>
+            <input id="repassword" matInput formControlName="repassword" [type]="hide ? 'password' : 'text'"
+              placeholder="Repeat your password">
+          </mat-form-field>
+
+          <button type="submit" id="singup" (click)="singup()" mat-stroked-button>
+            Create Account
+          </button>
+
+          <section >
+            <div class="icon-text-container">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px;" fontIcon="arrow_back_ios"></mat-icon>
+              <span (click)="volver()">Back to Log In</span>
+            </div>            
+          </section>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+</div>

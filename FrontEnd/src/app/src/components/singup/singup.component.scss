@@ -1,4 +1,4 @@
-span {
+.contenedor {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,14 +9,13 @@ mat-card-content {
     display: flex;
     flex-direction: column;
 
-    justify-items: center;
+    justify-content: center;
     align-items: center;
 }
 
 mat-card {
     border-radius: 20px;
     border: 0.001px solid rgb(18, 18, 18);
-    padding: 40px;
 
     padding: 20px;
     width: 550px;
@@ -28,17 +27,24 @@ mat-card {
     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
-.botones {
+.inputs {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+#vuelta {
+    margin-top: 15px;
+}
+
+.compartidos {
+    width: 230px;
 }
 
 .titulo {
     font-size: 30px;
     font-weight: bold;
     margin-top: 0px;
-    margin-left: 25px;
     margin-bottom: 20px;
 }
 
@@ -48,18 +54,43 @@ mat-card {
     border: #B9A552 2px solid;
 }
 
-mat-card-header {
-    justify-items: center;
-}
-
 .example-form {
     width: 100%;
 }
 
 .example-full-width {
-    width: 100%;
     margin-bottom: 5px;
+    width: 100%;
 }
+
+.icon-text-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    color: #d0d0d0;
+    width: 140px;
+}
+
+mat-icon{
+    display: block;
+    margin-right: -15px;
+}
+
+span{
+    margin-bottom: 1px;
+    padding-left: 15px;
+}
+
+.icon-text-container:hover {
+   color: #b9a552;
+   cursor: pointer;
+}
+
+.icon-text-container mat-icon {
+    padding-left: 5px;
+}
+
 
 button {
     font-size: 16px;
@@ -72,5 +103,5 @@ button {
     width: 100%;
     height: 100vh;
     backdrop-filter: blur(10px);
-    background: url('/assets/background.png') no-repeat center center / cover;
+    background: url('/media/background.png') no-repeat center center / cover;
 }
