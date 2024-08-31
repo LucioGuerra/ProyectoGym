@@ -71,3 +71,15 @@
       </mat-card-content>
     </mat-card>
 </div>
+
+@if (error) {
+  <div class="error">
+    <mat-card appearance="outlined">
+      <h2 mat-card-title>Error</h2>
+      <mat-card-content>Passwords do not match. Please try again.</mat-card-content>
+      <mat-card-actions>
+        <button mat-button mat-dialog-close (click)="error = false">Close</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+}

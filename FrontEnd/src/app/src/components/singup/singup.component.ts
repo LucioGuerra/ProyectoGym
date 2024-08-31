@@ -40,20 +40,32 @@ export class SingupComponent {
   formGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: this.emailFormControl,
     dni: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
     repassword: new FormControl('', Validators.required),
   });
 
+  validacionPassword(): boolean {
+    return this.formGroup.get('password')?.value === this.formGroup.get('repassword')?.value;
+  }  
+
   singup(): void {
     if (this.formGroup.valid) {
-      this.error = false
-      const json = this.formGroup.value;
-      console.log(json); //esto se borra después, es para corroborar q se esta mandando todo ok
+      if (this.validacionPassword()) {
+        console.log('Todo ok');
+        this.error = false
+        const json = this.formGroup.value;
+        console.log(json); //esto se borra después, es para corroborar q se esta mandando todo ok
+      } else {
+        console.log('Las contraseñas no coinciden');
+        this.error = true;
+        const json = this.formGroup.value;
+        console.log(json);
+        this.formGroup.markAsTouched();
+      }
     } else {
-      this.error = true;
-      this.formGroup.markAllAsTouched();
+      this.formGroup.markAsTouched();
     }
   }
   
