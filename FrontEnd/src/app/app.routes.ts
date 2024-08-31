@@ -5,5 +5,5 @@ import { ShifAdminScreenComponent } from './src/layout/shif-admin-screen/shif-ad
 export const routes: Routes = [
     { path: 'home', component: HomePageComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'admin', component: ShifAdminScreenComponent },
+    { path: 'admin/agenda', component: ShifAdminScreenComponent },
 ];
