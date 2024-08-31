@@ -14,9 +14,10 @@
             <mat-form-field>
               <mat-label>MM/DD/YYYY</mat-label>
               <input
+                [value]="selectedDate()"
                 matInput
                 [matDatepicker]="picker"
-                (dateChange)="addEvent('change', $event)"
+                (dateChange)="datePickerChangeEvent('change', $event)"
               />
               <mat-datepicker-toggle
                 matIconSuffix
@@ -34,23 +35,23 @@
             </div>
             <mat-divider></mat-divider>
             <div class="quickstart-buttons">
-              <button mat-flat-button class="button-class">
+              <button mat-flat-button class="button-class" (click)="newShift($event)">
                 <mat-icon>add</mat-icon>
                 Add new shift
               </button>
-              <button mat-flat-button class="button-class">
+              <button mat-flat-button class="button-class" (click)="newActivity($event)">
                 <mat-icon>add_task</mat-icon>
                 Add new activity
               </button>
-              <button mat-flat-button class="button-class">
+              <button mat-flat-button class="button-class" (click)="newUser($event)">
                 <mat-icon>person_add</mat-icon>
                 Add new client
               </button>
-              <button mat-flat-button class="button-class">
+              <button mat-flat-button class="button-class" (click)="newSale($event)">
                 <mat-icon>attach_money</mat-icon>
                 Enter sale
               </button>
-              <button mat-flat-button class="button-class">
+              <button mat-flat-button class="button-class" (click)="shop($event)">
                 <mat-icon>shopping_cart</mat-icon>
                 Purchase gym elements
               </button>
@@ -68,6 +69,7 @@
                 class="activities-cards"
                 multiple="true"
                 aria-label="select activities"
+                (change)="chipsChangeEvent('change', $event)"
               >
                 @for (activity of activities; track activity) {
                 <mat-chip-option [value]="activity.name" selected>
@@ -80,8 +82,9 @@
             <mat-divider></mat-divider>
             <div class="scrollable-section">
               <mat-action-list>
-                @for (apointment of apointments; track apointment) {
-                <button mat-list-item (click)="save()">
+                @for (apointment of apointments; track apointment) { @if
+                (selectedActivities().includes(apointment.activity) && apointment.date.toDateString() == selectedDate().toDateString()) {
+                <button [value]='apointment' mat-list-item (click)="open_apointment($event, apointment)">
                   <div class="apointments">
                     <div class="apointment-title">
                       <p class="date">
@@ -118,18 +121,30 @@
                     </div>
                     <div class="user-quantity">
                       <p class="user-quantity-text">
-                      {{ apointment.users.length }} /
-                      {{ apointment.max_capacity }}
-                      <mat-icon>person</mat-icon>
-                    </p>
+                        {{ apointment.users.length }} /
+                        {{ apointment.max_capacity }}
+                        <mat-icon>person</mat-icon>
+                      </p>
                     </div>
                     <div class="button-container">
-                      <button mat-icon-button class="edit">
+                      <button (click)="$event.stopPropagation()" mat-icon-button class="edit" [matMenuTriggerFor]="menu">
                         <mat-icon>more_vert</mat-icon>
                       </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="edit_apointment($event, apointment)">Edit</button>
+                        <button mat-menu-item (click)="open_apointment($event, apointment)">Open</button>
+                        <button mat-menu-item (click)="cancel_apointment($event, apointment)">Cancel</button>
+                      </mat-menu>
                     </div>
                   </div>
                 </button>
+                }}
+                @if(apointments.length == 0 || noActivities()) {
+                  <button mat-list-item>
+                    <div class="no-apointments">
+                      <p>No hay citas para este día</p>
+                    </div>
+                  </button>
                 }
               </mat-action-list>
             </div>
