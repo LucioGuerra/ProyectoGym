@@ -52,4 +52,7 @@ export class LoginComponent {
   volver(){
     this.router.navigate(['/home']);
   }
+  forgot(){
+    this.router.navigate(['/forgot']);
+  }
 }
