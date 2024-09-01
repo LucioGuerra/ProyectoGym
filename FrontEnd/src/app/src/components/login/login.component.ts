@@ -29,12 +29,12 @@ export class LoginComponent {
   error = false; //El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
-  emailFormControl = new FormControl([Validators.required, Validators.email]);
+  emailFormControl = new FormControl("",[Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
   
   formGroup = new FormGroup({
     email: this.emailFormControl,
-    password: new FormControl(Validators.required),
+    password: new FormControl("",Validators.required),
   });
 
   onLogin(): void {

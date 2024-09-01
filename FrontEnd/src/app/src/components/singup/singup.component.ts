@@ -28,25 +28,20 @@ export class SingupComponent {
   error = false;//El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
-  firstName = '';
-  lastName = '';
-  email = '';
-  dni = '';
-  password = '';
-
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  emailFormControl = new FormControl("", [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
   
   formGroup = new FormGroup({
-    firstName: new FormControl(Validators.required),
-    lastName: new FormControl(Validators.required),
     email: this.emailFormControl,
-    dni: new FormControl(Validators.required),
-    password: new FormControl(Validators.required),
-    repassword: new FormControl(Validators.required),
+    firstName: new FormControl("", Validators.required),
+    lastName: new FormControl("", Validators.required),
+    dni: new FormControl("", Validators.required),
+    password: new FormControl("", Validators.required),
+    repassword: new FormControl("", Validators.required),
   });
 
   validacionPassword(): boolean {
+    console.log("Entró al validar contraseña")
     return this.formGroup.get(['password'])?.value === this.formGroup.get(['repassword'])?.value;
   }
 
@@ -55,9 +50,8 @@ export class SingupComponent {
       if (this.validacionPassword()) {
         this.error = false
         const json = this.formGroup.value;
-        console.log(json);
+        console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok 
       } else {
-        console.log('Las contraseñas no coinciden');
         this.error = true;
         this.formGroup.markAsTouched();
       }
