@@ -25,7 +25,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SingupComponent {
-  error = false;
+  error = false;//El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
   firstName = '';

@@ -15,7 +15,7 @@
           <mat-form-field id="email" class="example-full-width">
             <mat-label>Email</mat-label>
             <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
-              placeholder="Ex. pat@example.com">
+              placeholder="Ex. pat@example.com" required>
             @if ("formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')") {
             <mat-error>
               Please enter a valid email address
@@ -31,7 +31,7 @@
           <mat-form-field id="password" class="example-full-width">
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" [type]="hide ? 'password' : 'text'"
-              placeholder="Enter your password">
+              placeholder="Enter your password" required>
           </mat-form-field>
           <div id="olvidaste">
           <section class="forgot" (click)="forgot()">Forgot password?</section>
@@ -59,13 +59,13 @@
           </div>
 
           <div class="formas-login">
-            <button class='button-image' id="google" mat-icon-button>
+            <button class='button-image' (click)="google()" id="google" mat-icon-button>
               <img style='color:white' src="https://img.icons8.com/?id=17935&format=png&color=b9a552" alt="google">
             </button>
-            <button class='button-image' id="microsoft" mat-icon-button>
+            <button class='button-image' (click)="microsoft()" id="microsoft" mat-icon-button>
               <img src="https://img.icons8.com/?id=tW7wnUgft8zp&format=png&color=b9a552" alt="microsoft">
             </button>
-            <button class='button-image' id="facebook" mat-icon-button>
+            <button class='button-image' (click)="facebook()" id="facebook" mat-icon-button>
               <img class="facebookimg" src="https://img.icons8.com/?id=118467&format=png&color=b9a552" alt="facebook">
             </button>
           </div>

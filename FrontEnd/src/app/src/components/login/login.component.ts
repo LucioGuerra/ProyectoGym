@@ -26,22 +26,22 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
-  error = false;
+  error = false; //El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  emailFormControl = new FormControl([Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
   
   formGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required),
+    email: this.emailFormControl,
+    password: new FormControl(Validators.required),
   });
 
   onLogin(): void {
     if (this.formGroup.valid) {
       this.error = false
       const json = this.formGroup.value;
-      console.log(json); //esto se borra después, es para corroborar q se esta mandando todo ok
+      console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();
@@ -57,5 +57,16 @@ export class LoginComponent {
   }
   forgot(){
     this.router.navigate(['/forgot']);
+  }
+
+  //Esto lo dejo asi como para que se sepa q se tiene q hacer algo con esto, pero dsp se encarga el q tenga la incidencia de auth0
+  google(){
+    this.router.navigate(['/google']);
+  }
+  facebook(){
+    this.router.navigate(['/facebook']);
+  }
+  microsoft(){
+    this.router.navigate(['/microsoft']);
   }
 }
