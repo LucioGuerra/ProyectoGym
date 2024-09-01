@@ -9,7 +9,6 @@ export interface User {
     //photo: blob;
     creditExpiration: Date;
 }
-
 export interface Role {
     id: number;
     name: string;

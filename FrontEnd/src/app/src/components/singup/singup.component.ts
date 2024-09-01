@@ -38,30 +38,27 @@ export class SingupComponent {
   matcher = new MyErrorStateMatcher();
   
   formGroup = new FormGroup({
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
+    firstName: new FormControl(Validators.required),
+    lastName: new FormControl(Validators.required),
     email: this.emailFormControl,
-    dni: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    repassword: new FormControl('', Validators.required),
+    dni: new FormControl(Validators.required),
+    password: new FormControl(Validators.required),
+    repassword: new FormControl(Validators.required),
   });
 
   validacionPassword(): boolean {
-    return this.formGroup.get('password')?.value === this.formGroup.get('repassword')?.value;
-  }  
+    return this.formGroup.get(['password'])?.value === this.formGroup.get(['repassword'])?.value;
+  }
 
   singup(): void {
     if (this.formGroup.valid) {
       if (this.validacionPassword()) {
-        console.log('Todo ok');
         this.error = false
         const json = this.formGroup.value;
-        console.log(json); //esto se borra después, es para corroborar q se esta mandando todo ok
+        console.log(json);
       } else {
         console.log('Las contraseñas no coinciden');
         this.error = true;
-        const json = this.formGroup.value;
-        console.log(json);
         this.formGroup.markAsTouched();
       }
     } else {
