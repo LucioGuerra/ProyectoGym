@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ToolbarComponent } from "../toolbar/toolbar.component";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DrawerListComponent } from "./drawer-list/drawer-list.component";
@@ -15,7 +15,7 @@ import { UserProfileComponent } from "../user-profile/user-profile.component";
   templateUrl: './drawer.component.html',
   styleUrl: './drawer.component.scss'
 })
-export class DrawerComponent implements OnInit {
+export class DrawerComponent {
   
   events: string[] = [];
   opened: boolean = true;
@@ -32,9 +32,6 @@ export class DrawerComponent implements OnInit {
         });
       }
     });
-  }
-  ngOnInit(): void {
-    
   }
 
   menu() {

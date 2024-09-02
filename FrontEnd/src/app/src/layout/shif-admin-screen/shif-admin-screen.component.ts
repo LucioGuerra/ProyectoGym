@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, Inject, model, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@auth0/auth0-angular';
 import { MatCardModule } from '@angular/material/card';
 import { ToolbarComponent } from '../../components/index';
-import { DOCUMENT } from '@angular/common';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
 
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -18,7 +17,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 
 interface Activity {
-  id: number
+  id: number,
   date: Date,
   startTime: string,
   endTime: string,
@@ -198,7 +197,7 @@ export class ShifAdminScreenComponent {
   selectedDate = signal<Date>(new Date(Date.now()));
   selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
 
-  constructor(@Inject(DOCUMENT) public document: Document, private auth: AuthService) {
+  constructor(private auth: AuthService) {
     this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
       if (!isAuthenticated) {
@@ -210,9 +209,10 @@ export class ShifAdminScreenComponent {
       }
     });
   }
+  
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
-    // alert(`date: ${this.selectedDate().toDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
+    // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
   }
   chipsChangeEvent(arg0: string, $event: MatChipListboxChange) {
     // this.selectedActivities.update(selectedActivities => [...selectedActivities, $event.value]);
