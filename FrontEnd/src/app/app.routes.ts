@@ -8,6 +8,6 @@ export const routes: Routes = [
     { path: 'home', component: HomePageComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
-    { path: 'singup', component: SingupComponent }
+    { path: 'singup', component: SingupComponent },
     { path: 'admin/agenda', component: ShifAdminScreenComponent },
 ];
