@@ -33,12 +33,12 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
       if (isAuthenticated) {
-        this.router.navigate(['admin']);
+        this.router.navigate(['admin/agenda']);
       } else {
         this.auth.user$.subscribe(user => {
           if (user) {
             console.log('User is authenticated based on getUser:', user);
-            this.router.navigate(['admin']);
+            this.router.navigate(['admin/agenda']);
           } else {
             console.log('User is not authenticated', user);
           }
