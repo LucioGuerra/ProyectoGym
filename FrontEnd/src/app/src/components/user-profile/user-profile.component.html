@@ -1,0 +1,7 @@
+<div class="main-container">
+    <ng-container *ngIf="auth.user$ | async as user">
+        <img [src]="user.picture" alt="user photo" />
+        <p class="name">{{ user.name }}</p>
+        <p class="email">{{ user.email }}</p>
+    </ng-container>
+</div>
