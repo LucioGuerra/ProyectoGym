@@ -1,8 +1,11 @@
 package com.desarrollo.criminal.entity;
 
+import com.desarrollo.criminal.entity.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +23,12 @@ public class Package {
     @Column(length = 150)
     private String description;
 
+    @Column(name = "expiration_date", nullable = false)
+    private LocalDate expirationDate;
+
+    @Column(nullable = false)
+    private Integer credits;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -34,6 +43,9 @@ public class Package {
     )
     private Set<Activity> activities;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     private Package(){
 

@@ -20,6 +20,9 @@ public class Activity {
     @Column(length = 100)
     private String description;
 
+    @Column(nullable = false)
+    private Float price;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

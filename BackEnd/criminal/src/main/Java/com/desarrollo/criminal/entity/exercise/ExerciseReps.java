@@ -11,7 +11,7 @@ public class ExerciseReps {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
     @Column(nullable = false)

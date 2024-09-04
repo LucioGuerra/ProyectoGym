@@ -1,38 +1,31 @@
-package com.desarrollo.criminal.entity.user;
+package com.desarrollo.criminal.entity;
 
-import com.desarrollo.criminal.entity.Package;
-import com.desarrollo.criminal.entity.routine.Routine;
+import com.desarrollo.criminal.entity.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
 @Entity
-public class User {
+public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name",length = 25, nullable = false)
-    private String firstName;
+    @Column(nullable = false)
+    private LocalDate date;
 
-    @Column(name = "last_name",length = 25, nullable = false)
-    private String lastName;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
 
-    @Column(unique = true)
-    private String email;
-
-    @Column(unique = true)
-    private String dni;
-
-    private Role role;
-
-    @Column(length = 15)
-    private String phone;
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -41,14 +34,14 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToOne
-    private Routine routine;
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
 
     @OneToOne
-    @JoinColumn(name = "package_id")
-    private Package aPackage;
+    @JoinColumn(name = "instructor_id")
+    private User instructor;
 
-    private User(){
-
+    private Appointment(){
     }
 
     @PrePersist

@@ -21,6 +21,7 @@ public class DayRoutine {
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "routine_id", nullable = false)
     private Routine routine;
 
     @OneToMany
