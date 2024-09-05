@@ -14,7 +14,7 @@ public class BuildingRoutine extends Routine{
     @OneToOne
     private User user;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<DayRoutine> dayRoutines;
 
     private BuildingRoutine(){}

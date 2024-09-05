@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.entity.tracking;
 
+import com.desarrollo.criminal.entity.exercise.Exercise;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -23,6 +24,10 @@ public class Tracking {
     @OneToMany(mappedBy = "tracking", cascade = CascadeType.ALL)
     @Column(name = "date_weight")
     private List<DateWeight> dateWeight;
+
+    @ManyToOne
+    @JoinColumn(name = "exercise_id", nullable = false)
+    private Exercise exercise;
 
     private Tracking(){
         this.dateWeight = new ArrayList<>();

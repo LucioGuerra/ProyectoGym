@@ -2,12 +2,14 @@ package com.desarrollo.criminal.entity.user;
 
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.routine.Routine;
+import com.desarrollo.criminal.entity.tracking.Tracking;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -46,6 +48,9 @@ public class User {
     @OneToOne
     @JoinColumn(name = "package_id")
     private Package aPackage;
+
+    @OneToMany(mappedBy = "tracking", cascade = CascadeType.ALL)
+    private List<Tracking> trackings;
 
     private User(){
 

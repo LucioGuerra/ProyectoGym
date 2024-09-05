@@ -26,7 +26,7 @@ public class Activity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<ActivityRoutine> routines;
 
     private Activity(){
