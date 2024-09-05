@@ -1,57 +1,68 @@
 package com.desarrollo.criminal.controller;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.desarrollo.criminal.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.service.UserService;
+
 import java.util.List;
+import java.util.Optional;
 
-
+@AllArgsConstructor
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/api/users")
 
-    @Autowired
-    private final UserRepository userRepository;
+public class UserController {
+    private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> allUsers = userService.getAllUsers();
+        return ResponseEntity.status(HttpStatus.OK).body(allUsers);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id){
-        return userRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("the user with id: " + id + " was not found"));
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        Optional<User> optionalUser = userService.getUserById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user){
-        return userRepository.save(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User savedUser = userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userdetail){
-        User user = userRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("the user with id: " + id + " was not found"));
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetail) {
+        Optional<User> optionalUser = userService.getUserById(id);
+        
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get(); //extraigo user de optional descomprimiendolo 
 
-        user.setFirstName(userdetail.getFirstName());
-        user.setLastName(userdetail.getLastName());
-        user.setEmail(userdetail.getEmail());
-        user.setDni(userdetail.getDni());
-        user.setRole(userdetail.getRole());
-        user.setPhone(userdetail.getPhone());
-        user.setCreditExpiration(userdetail.getCreditExpiration());
+            user.setFirstName(userDetail.getFirstName());
+            user.setLastName(userDetail.getLastName());
+            user.setEmail(userDetail.getEmail());
+            user.setDni(userDetail.getDni());
+            user.setRole(userDetail.getRole());
+            user.setPhone(userDetail.getPhone());
+            user.setCreditExpiration(userDetail.getCreditExpiration());
 
-        return userRepository.save(user);
+            User updatedUser = userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
+
 
 }
