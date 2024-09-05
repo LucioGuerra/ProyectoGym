@@ -1,0 +1,61 @@
+<app-toolbar>
+  <ng-container toolbar-action-button>
+    <button mat-flat-button class="login-button" (click)="login()">
+      <mat-icon>login</mat-icon>
+      Log in
+    </button>
+  </ng-container>
+</app-toolbar>
+<div class="container">
+  <section class="section" id="section1"></section>
+  <section class="section2">
+    <mat-card appearance="outlined" class="card-activities">
+      <mat-card-content>
+        <h4 class="title">Activities</h4>
+        <div class="activities">
+          @for (activity of activities; track activity.id) {
+          <mat-card
+            class="activity"
+            appearance="outlined"
+            [style]="{
+              'background-image': 'url(' + activity.img + ')',
+              height: ' 200px',
+              width: ' 150px',
+            }"
+          >
+            <mat-card-content class="contenido">
+              <div class="card-text">
+                <p class="card-title">{{ activity.name }}</p>
+                <p class="card-description">{{ activity.description }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+  <section class="section2">
+    <mat-card appearance="outlined" class="card-prices">
+      <mat-card-content>
+        <h4 class="title">Prices</h4>
+        <div class="prices">
+          @for (price of prices; track price.id) {
+          <mat-card
+            appearance="outlined"
+            [style]="{ height: ' 200px', width: ' 150px' }"
+          >
+            <mat-card-content class="contenido">
+              <div class="card-text">
+                <p class="card-title">{{ price.name }}</p>
+                <p class="card-price">{{ price.price | currency }}</p>
+                <p class="card-description">{{ price.description }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>
