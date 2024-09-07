@@ -15,19 +15,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
-
-interface Activity {
-  id: number,
-  date: Date,
-  startTime: string,
-  endTime: string,
-  activity: string,
-  max_capacity: number,
-  users: string[],
-  professional: string,
-  weekDay: string,
-};
-
+import { Activity } from '../../components/index';
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
