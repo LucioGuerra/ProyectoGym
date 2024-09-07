@@ -75,15 +75,10 @@ public class UserService {
 
 
     
-    public User saveUser(User user) {
+    private User saveUser(User user) {
         return userRepository.save(user);
     }
-
-
-
-
-        
-    
+ 
 }
 
 

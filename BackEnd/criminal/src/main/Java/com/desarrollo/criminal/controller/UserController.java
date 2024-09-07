@@ -11,33 +11,33 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 
 public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         return userService.getAllUsers();
     }
     
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<List<User>> getUserById(@PathVariable Long id){
         return userService.getUserById();
     }
 
 
 
-    @PostMapping("/user/singup")
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
     
 
 
-    @PutMapping("update/user/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetail) {
         return userService.updateUser(id, userDetail);
     }
