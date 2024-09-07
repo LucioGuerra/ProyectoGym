@@ -1,6 +1,6 @@
 package com.desarrollo.criminal.entity;
 
-//import com.desarrollo.criminal.entity.routine.ActivityRoutine;
+import com.desarrollo.criminal.entity.routine.ActivityRoutine;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -20,11 +20,14 @@ public class Activity {
     @Column(length = 100)
     private String description;
 
+    @Column(nullable = false)
+    private Float price;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    //@OneToMany(mappedBy = "activity", cascade = CascadeType.REMOVE)
-    //private List<ActivityRoutine> routines;
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<ActivityRoutine> routines;
 
     private Activity(){
     }
