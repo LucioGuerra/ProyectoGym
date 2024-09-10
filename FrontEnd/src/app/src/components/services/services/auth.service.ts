@@ -13,7 +13,7 @@ export class AuthService {
     const url = `https://${environment.auth0.domain}/oauth/token`;
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     const body = {
@@ -32,5 +32,23 @@ export class AuthService {
   logout(){
     this.token.set(null);
     this.isAuthenticated.set(false);
+  }
+
+  async signup(email: string | undefined, password: string | undefined, firstName: string | undefined, lastName: string | undefined, dni: string | undefined) {
+    const url = `https://${environment.auth0.domain}/dbconnections/signup`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const body = {
+      client_id: environment.auth0.clientId,
+      email: email,
+      password: password,
+      connection: environment.auth0.database,
+    }
+
+    const response = await firstValueFrom(this.http.post(url, body, {headers: headers}));
+    console.log(response);
   }
 }
