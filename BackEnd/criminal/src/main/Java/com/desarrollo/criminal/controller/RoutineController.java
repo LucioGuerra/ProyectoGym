@@ -1,16 +1,15 @@
+package com.desarrollo.criminal.controller;
+
 import com.desarrollo.criminal.entity.routine.Routine;
 import com.desarrollo.criminal.service.RoutineService;
 
 import lombok.AllArgsConstructor;
 
-import org.hibernate.annotations.SoftDelete;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @AllArgsConstructor
 @RestController
@@ -20,17 +19,21 @@ public class RoutineController {
 
     @GetMapping
     public ResponseEntity<List<Routine>> getAllRoutines() {
-        return ResponseEntity.ok(routineService.getAllRoutines());
+        return routineService.getAllRoutines();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Routine> getRoutineById(@PathVariable Long id) {
-        Optional<Routine> routine = routineService.getRoutineById(id);
-        return routine.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<Routine>> getRoutineById(@PathVariable Long id) {
+        return routineService.getRoutineById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Routine> createRoutine(@RequestBody Routine routine) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(routineService.createRoutine(routine));
+//    @PostMapping
+//    public ResponseEntity<Routine> createRoutine(@RequestBody Routine routine) {
+//        return routineService.createRoutine(routine);
+//    }
+
+    @PutMapping("/id")
+    public ResponseEntity<Routine> updateRoutine(@PathVariable Long id, @RequestBody Routine routine) {
+        return routineService.updateRoutine(id,routine);
     }
 }
