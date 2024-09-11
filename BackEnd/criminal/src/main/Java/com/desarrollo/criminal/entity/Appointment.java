@@ -41,7 +41,7 @@ public class Appointment {
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    private Appointment(){
+    public Appointment(){
     }
 
     @PrePersist
