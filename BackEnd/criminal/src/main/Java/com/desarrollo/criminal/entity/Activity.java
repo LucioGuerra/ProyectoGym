@@ -3,10 +3,12 @@ package com.desarrollo.criminal.entity;
 //import com.desarrollo.criminal.entity.routine.ActivityRoutine;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
 @Getter
 @Entity
 public class Activity {
@@ -26,12 +28,7 @@ public class Activity {
     //@OneToMany(mappedBy = "activity", cascade = CascadeType.REMOVE)
     //private List<ActivityRoutine> routines;
 
-    private Activity(){
-    }
-
-    public Activity(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Activity() {
     }
 
     @PrePersist

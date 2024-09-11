@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class ActivityDTO {
+    private Long id;
     private String name;
     private String description;
     // private List<ActivityRoutineDTO> routines;
