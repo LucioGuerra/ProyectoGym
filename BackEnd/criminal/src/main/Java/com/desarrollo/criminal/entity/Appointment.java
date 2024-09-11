@@ -2,7 +2,6 @@ package com.desarrollo.criminal.entity;
 
 import com.desarrollo.criminal.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

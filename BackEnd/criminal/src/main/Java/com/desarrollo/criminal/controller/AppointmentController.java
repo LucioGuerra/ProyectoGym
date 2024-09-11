@@ -4,7 +4,6 @@ import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.AppointmentService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

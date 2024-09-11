@@ -2,7 +2,6 @@ package com.desarrollo.criminal.dto.request;
 
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
