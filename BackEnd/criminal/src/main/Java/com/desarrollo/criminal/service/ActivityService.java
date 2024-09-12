@@ -24,12 +24,12 @@ public class ActivityService {
         return ResponseEntity.ok(activities);
     }
 
-    public ResponseEntity<Optional<Activity>> getActivityById(Long id) {
+    public ResponseEntity<Activity> getActivityById(Long id) {
         Optional<Activity> activity = activityRepository.findById(id);
         if (activity.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(activity);
+            return ResponseEntity.status(HttpStatus.OK).body(activity.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 
@@ -41,7 +41,7 @@ public class ActivityService {
 
         activityRepository.save(activity);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(activity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     public ResponseEntity<Activity> deleteActivity(ActivityDTO activityDTO) {
@@ -51,7 +51,7 @@ public class ActivityService {
             activityRepository.delete(activity.get());
             ResponseEntity.status(HttpStatus.OK).build();
         } else {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            ResponseEntity.status(HttpStatus.OK).build();
         }
         return null;
     }
@@ -68,7 +68,7 @@ public class ActivityService {
             return ResponseEntity.status(HttpStatus.OK).body(activity.get());
 
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 }
