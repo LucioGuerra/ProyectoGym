@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/activities")
+@RequestMapping("/api/public/activities")
 public class ActivityController {
     private final ActivityService activityService;
 
