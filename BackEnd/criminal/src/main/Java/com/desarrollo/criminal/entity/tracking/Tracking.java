@@ -21,7 +21,7 @@ public class Tracking {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "tracking", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @Column(name = "date_weight")
     private List<DateWeight> dateWeight;
 
