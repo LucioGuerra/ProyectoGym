@@ -18,7 +18,7 @@ import java.util.Optional;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
-
+/*
     public ResponseEntity<List<Activity>> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
         return ResponseEntity.ok(activities);
@@ -32,7 +32,7 @@ public class ActivityService {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
-
+*/
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
         Activity activity = new Activity();
 
@@ -43,7 +43,7 @@ public class ActivityService {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
+/*
     public ResponseEntity<Activity> deleteActivity(ActivityDTO activityDTO) {
         Optional<Activity> activity = activityRepository.findById(activityDTO.getId());
 
@@ -70,5 +70,5 @@ public class ActivityService {
         } else {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-    }
+    }*/
 }

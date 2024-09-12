@@ -18,7 +18,7 @@ import java.util.Optional;
 public class ActivityController {
     private final ActivityService activityService;
 
-    @GetMapping
+    /*@GetMapping
     public  ResponseEntity<List<Activity>> getAllActivities(){
         return activityService.getAllActivities();
     }
@@ -26,13 +26,13 @@ public class ActivityController {
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
         return activityService.getActivityById(id);
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<Activity> createActivity(@RequestBody ActivityDTO activityDTO) {
         return activityService.createActivity(activityDTO);
     }
-
+/*
     @PatchMapping
     public ResponseEntity<Activity> updateActivity(@RequestBody ActivityDTO activityDTO) {
         return activityService.updateActivity(activityDTO);
@@ -41,5 +41,5 @@ public class ActivityController {
     @DeleteMapping
     public ResponseEntity<Activity> deleteActivity(@RequestBody ActivityDTO activityDTO) {
         return activityService.deleteActivity(activityDTO);
-    }
+    }*/
 }
