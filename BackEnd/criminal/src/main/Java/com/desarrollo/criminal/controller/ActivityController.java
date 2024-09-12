@@ -18,8 +18,7 @@ public class ActivityController {
 
     @GetMapping
     public ResponseEntity<List<Activity>> getAllActivities(){
-        List<Activity> allActivities = activityService.getAllActivities();
-        return ResponseEntity.status(HttpStatus.OK).body(allActivities);
+        return activityService.getAllActivities();
     }
 
     @GetMapping("/{id}")

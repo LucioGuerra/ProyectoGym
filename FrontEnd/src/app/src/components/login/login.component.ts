@@ -47,6 +47,7 @@ export class LoginComponent {
       const json = this.formGroup.value;
       console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok
       this.authService.login(json.email?.toString(), json.password?.toString());
+      //TO-DO Aca se tendria que guardar el JWT en algun archivo local
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();

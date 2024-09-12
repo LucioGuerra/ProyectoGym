@@ -60,6 +60,8 @@ export class SingupComponent {
                                 json.firstName?.toString(),
                                 json.lastName?.toString(),
                                 json.dni?.toString());
+        //TO-DO Aca se tiene que pegar a nuestra api para crear el user
+        //TO-DO Redireccionar a home page
       } else {
         this.error = true;
         this.formGroup.markAsTouched();
