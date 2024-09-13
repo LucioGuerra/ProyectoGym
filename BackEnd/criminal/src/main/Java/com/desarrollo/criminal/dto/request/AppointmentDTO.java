@@ -1,7 +1,6 @@
 package com.desarrollo.criminal.dto.request;
 
 import com.desarrollo.criminal.entity.Activity;
-import com.desarrollo.criminal.entity.user.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +30,7 @@ public class AppointmentDTO {
     @Valid
     private Activity activity;
 
-    private User instructor;
+    private long instructorID;
 
     private AppointmentDTO() {}
 
