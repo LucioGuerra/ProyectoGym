@@ -19,7 +19,14 @@ export class AuthService {
     this.auth0Client.login({
       email: email,
       password: password,
-      realm: realm});
+      realm: realm
+    });
+  }
+
+  private loginWithThirdParty(provider: string){
+    this.auth0Client.authorize({
+      connection: provider
+    })
   }
 
   private signup(email: string, password: string): void {
