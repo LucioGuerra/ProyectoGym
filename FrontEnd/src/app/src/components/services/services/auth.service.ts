@@ -6,7 +6,6 @@ import * as auth0 from 'auth0-js';
 @Injectable({providedIn: "root"})
 export class AuthService {
   private auth0Client: auth0.WebAuth;
-  //public isAuthenticated: signal<>;
 
   constructor() {
     this.auth0Client = new auth0.WebAuth({
@@ -26,7 +25,7 @@ export class AuthService {
     });
   }
 
-  private loginWithThirdParty(provider: string){
+  public loginWithThirdParty(provider: string){
     this.auth0Client.authorize({
       connection: provider
     })
@@ -40,10 +39,8 @@ export class AuthService {
     }, (err: any, result: any) => {
       if (err) {
         console.error('Error al registrar:', err);
-        // Maneja el error aquí
       } else {
         console.log('Usuario registrado exitosamente:', result);
-        // Maneja el éxito aquí
       }
     });
   }

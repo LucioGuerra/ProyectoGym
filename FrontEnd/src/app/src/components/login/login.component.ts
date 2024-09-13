@@ -64,14 +64,14 @@ export class LoginComponent {
     this.router.navigate(['/forgot']);
   }
 
-  //Esto lo dejo asi como para que se sepa q se tiene q hacer algo con esto, pero dsp se encarga el q tenga la incidencia de auth0
+
   google(){
-    this.router.navigate(['/google']);
+    this.auth0.loginWithThirdParty("google-oauth2")
   }
   facebook(){
-    this.router.navigate(['/facebook']);
+    this.auth0.loginWithThirdParty("facebook")
   }
   microsoft(){
-    this.router.navigate(['/microsoft']);
+    this.auth0.loginWithThirdParty("windowslive")
   }
 }
