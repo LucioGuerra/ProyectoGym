@@ -1,0 +1,38 @@
+a {
+  color: #000;
+  text-decoration: none;
+  display: block;
+  padding: 10px 0;
+  font-size: 1.2em;
+  font-weight: 500;
+  transition: all 0.3s;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.items {
+  width: auto;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  .icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    margin: 0 10px 0 0;
+  }
+}
+
+a:hover {
+  color: #222222;
+  background-color: #d0d0d0;
+
+  mat-list-item p {
+    color: #222222; // Cambia este color al que desees
+  }
+}

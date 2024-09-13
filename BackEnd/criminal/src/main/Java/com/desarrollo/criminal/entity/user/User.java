@@ -1,12 +1,15 @@
 package com.desarrollo.criminal.entity.user;
 
+import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.routine.Routine;
+import com.desarrollo.criminal.entity.tracking.Tracking;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,9 +36,6 @@ public class User {
     @Column(length = 15)
     private String phone;
 
-    @Column(name = "credit_expiration")
-    private LocalDate creditExpiration;
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -44,6 +44,13 @@ public class User {
 
     @OneToOne
     private Routine routine;
+
+    @OneToOne
+    @JoinColumn(name = "package_id")
+    private Package aPackage;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Tracking> trackings;
 
     private User(){
 
