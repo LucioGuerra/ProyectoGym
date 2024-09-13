@@ -40,40 +40,27 @@ export class AuthService {
     })
   }
 
-  public async handleAuthentication(): Promise<void> {
-    try {
-      const authResult = await this.parseHashPromise({ hash: window.location.hash });
+  public handleAuthentication(): void {
+    const queryParams = new URLSearchParams(window.location.hash.substring(1));
+    const urlParams = new URLSearchParams(queryParams);
 
-      if (authResult && authResult.accessToken) {
-        console.log('Authentication successfully');
-        this.auth0Client.setSession(authResult);
-        console.log('User authenticated:', authResult);
+    if(urlParams){
+      try{
+        const accessToken = urlParams.get("access_token");
+        const expiresIn = urlParams.get("expires_in");
+
+        this.setSession(accessToken, expiresIn);
+      } catch(error){
+        console.error(error);
       }
-    } catch (err) {
-      console.error('Error parsing hash:', err);
     }
   }
 
-    /*this.auth0Client.parseHash({ hash: window.location.hash }, function (err, authResult){
-    if (err) {
-      console.error('Error parsing hash:', err);
-      return;
-    }
-    if (authResult && authResult.accessToken) {
-      console.log('Authentication successfully');
-      this.auth0Client.setSession(authResult);
-      console.log('User authenticated:', authResult);
-    }
-    });
-
-
-  }*/
-
-  private setSession(authResult: any): void {
-    console.log('User authenticated:', authResult.accessToken);
-    console.log('token expire:', authResult.expires_at);
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('expires_at', authResult.expires_at);
+  private setSession(accessToken: any, expiresIn: any): void {
+    console.log('User authenticated:', accessToken);
+    console.log('token expire:', expiresIn);
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('expires_at', expiresIn);
   }
 
   private logout(): void {

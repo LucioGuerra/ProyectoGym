@@ -41,6 +41,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(private el: ElementRef, private router: Router) {}
   ngOnInit(): void {
 
+
     this.auth0.handleAuthentication();
     /*this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
