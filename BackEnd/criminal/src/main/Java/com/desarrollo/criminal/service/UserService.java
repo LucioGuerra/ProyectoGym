@@ -29,26 +29,20 @@ public class UserService {
         }
     }
 
-
-
     public ResponseEntity<User> getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        
+
         if (user.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(user.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    
-
 
     public ResponseEntity<User> createUser(User user) {
         User savedUser = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
-    
-
 
     public ResponseEntity<User> updateUser(Long id, User userDetail) {
         Optional<User> optionalUser = userRepository.findById(id);
@@ -72,8 +66,6 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
-
     
     private User saveUser(User user) {
         return userRepository.save(user);
