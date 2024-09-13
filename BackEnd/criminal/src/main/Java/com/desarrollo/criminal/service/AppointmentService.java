@@ -27,8 +27,12 @@ public class AppointmentService {
         return ResponseEntity.status(HttpStatus.OK).body(appointment);
     }
 
-    public ResponseEntity<AppointmentDTO> createAppointment(AppointmentDTO appointmentDTO) {
+    public ResponseEntity<?> createAppointment(AppointmentDTO appointmentDTO) {
 
+        if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("The start time must be before the end time");
+        }
         Appointment appointment = new Appointment();
         appointment.setDate(appointmentDTO.getDate());
         appointment.setActivity(appointmentDTO.getActivity());
@@ -36,7 +40,6 @@ public class AppointmentService {
         appointment.setStartTime(appointmentDTO.getStartTime());
         appointment.setEndTime(appointmentDTO.getEndTime());
         appointment.setCreatedAt(LocalDate.now().atStartOfDay());
-
         appointmentRepository.save(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

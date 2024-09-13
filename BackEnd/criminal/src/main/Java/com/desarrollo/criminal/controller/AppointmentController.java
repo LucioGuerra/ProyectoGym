@@ -28,7 +28,7 @@ public class AppointmentController {
 
     //@PreAuthorize("ADMIN")
     @PostMapping
-    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
     }
 
