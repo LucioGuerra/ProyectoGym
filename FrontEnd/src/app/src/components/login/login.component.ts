@@ -47,8 +47,6 @@ export class LoginComponent {
       const json = this.formGroup.value;
       console.log(json); //Esto se borra después, es para corroborar q se esta mandando to do ok
       this.auth0.login(json.email?.toString(), json.password?.toString());
-      this.auth0.handleAuthentication();
-      console.log(localStorage.getItem("access_token"));
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();

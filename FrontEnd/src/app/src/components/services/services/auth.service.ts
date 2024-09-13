@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import {environment} from "../../../../../environments/environment";
+import { environment } from "../../../../../environments/environment";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
 
@@ -32,12 +32,20 @@ export class AuthService {
     })
   }
 
-  private signup(email: string, password: string): void {
+  public signup(email: string | undefined, password: string | undefined): void {
     this.auth0Client.signup({
       email: email,
       password: password,
-      connection: environment.auth0.database
-    })
+      connection: environment.auth0.database,
+    }, (err: any, result: any) => {
+      if (err) {
+        console.error('Error al registrar:', err);
+        // Maneja el error aquí
+      } else {
+        console.log('Usuario registrado exitosamente:', result);
+        // Maneja el éxito aquí
+      }
+    });
   }
 
   public handleAuthentication(): void {
@@ -71,17 +79,4 @@ export class AuthService {
       returnTo: 'http://localhost:4200/home'
     })
   }
-
-  private parseHashPromise(options: any): Promise<any> {
-  return new Promise((resolve, reject) => {
-    this.auth0Client.parseHash(options, (err: any, authResult: any) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(authResult);
-      }
-    });
-  });
-}
-
 }
