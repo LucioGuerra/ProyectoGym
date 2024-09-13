@@ -21,7 +21,8 @@ export class AuthService {
     this.auth0Client.login({
       email: email,
       password: password,
-      realm: environment.auth0.database
+      realm: environment.auth0.database,
+      audience: environment.auth0.audience
     });
   }
 

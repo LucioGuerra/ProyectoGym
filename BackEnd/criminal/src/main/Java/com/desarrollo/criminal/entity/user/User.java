@@ -49,7 +49,7 @@ public class User {
     @JoinColumn(name = "package_id")
     private Package aPackage;
 
-    @OneToMany(mappedBy = "tracking", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Tracking> trackings;
 
     private User(){
