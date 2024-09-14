@@ -1,80 +1,83 @@
+
 <app-toolbar>
-  <ng-container toolbar-action-button>
-    <button mat-flat-button class="logout-button" (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Log out
+      <ng-container toolbar-action-button>
+        <button mat-flat-button class="logout-button" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+                    Log out
+        </button>
+      </ng-container>
+  </app-toolbar>
+
+
+  <br> <br> <br> <br> <br> <br>
+
+  <form class="user-edit-container">
+    
+    <button mat-icon-button class="back-btn" aria-label="Go back" (click)="homePage()">
+      <mat-icon>chevron_left</mat-icon>
     </button>
-  </ng-container>
-</app-toolbar>
+    
+    <div class="avatar-role-container">
+      <div class="user-avatar">
+        <mat-card class="user-avatar">
+          <img class="user-avatar" [src]="userImage" alt="User Image">
+        </mat-card>
+      </div>
 
-<br> <br> <br> <br> <br> <br>
+      <div class="role-badge">
+        <label class="role-label" for="role">Role</label>
+            <select id="role" [(ngModel)]="user.role" [compareWith]="compareRoles">
+               <option *ngFor="let role of roles" [ngValue]="role">{{ role.name }}</option>
+            </select>
+      </div>
 
-<div class="user-edit-container">
-  <button mat-icon-button class="back-btn" aria-label="Go back" (click)="homePage()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  
-  <div class="avatar-role-container">
-    <div class="user-avatar">
-      <img [src]="userImage" alt="User Avatar" />
-    </div>
-  
-    <div class="role-badge">
-      {{ user.role.name }}
-    </div>
-  </div>
-
-  <hr>
-
-  <div class="user-data">
-
-    <div class="form-group">
-      <label for="firstName">name</label>
-      <input id="firstName" type="text" [(ngModel)]="user.firstName" />
     </div>
 
-    <div class="form-group">
-      <label for="lastName">surname</label>
-      <input id="lastName" type="text" [(ngModel)]="user.lastName" />
+    <hr>
+
+    <div class="user-data">
+
+      <div class="form-group">
+        <label for="firstName">Name</label>
+        <input id="firstName" type="text" [value]="user.firstName" />
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Surname</label>
+        <input id="lastName" type="text" [value]="user.lastName" />
+      </div>
+
+      <div class="form-group">
+        <label for="dni">DNI</label>
+        <input id="dni" type="text" [value]="user.id" />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <button class="email" (click)="email()">
+          {{ user.email }}
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Mobile</label>
+        <input id="phone" type="tel" [value]="user.phone" />
+      </div>
+
+      <div class="password-section">
+        <button class="edit-password-btn" (click)="PasswordChange()">
+          Change password
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      
+      <div class="save-changes">
+        <button mat-flat-button class="save-button" type="submit" (click)="saveChanges()">
+          Save
+        </button>
+      </div>
+
     </div>
+  </form>
 
-    <div class="form-group">
-      <label for="dni">DNI</label>
-      <input id="dni" type="text" [value]="user.id" />
-    </div>
-
-    <div class="form-group">
-      <label>email</label>
-      <button class="email" (click)="email()">
-        <mat-icon class="icon">lock</mat-icon>
-        {{user.email}}
-      </button>
-    </div>
-
-    <div class="form-group">
-      <label for="phone">mobile</label>
-      <input id="phone" type="tel" [(ngModel)]="user.phone" />
-    </div>
-
-    <div class="password-section">
-      <button class="edit-password-btn" (click)="onPasswordChange()">
-        change password
-      </button>
-    </div>
-
-    <div class="save-changes">
-      <button mat-flat-button class="save-button" (click)="saveChanges()">
-        save
-      </button>
-    </div>
-   
-
-  </div>
-
-  
-
-
-
-
- 
 
