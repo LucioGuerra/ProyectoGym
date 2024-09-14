@@ -1,12 +1,9 @@
 package com.desarrollo.criminal.entity.exercise;
 
-import com.desarrollo.criminal.entity.routine.ExercisesGroup;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Getter
 @Entity

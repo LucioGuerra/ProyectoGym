@@ -1,6 +1,6 @@
 package com.desarrollo.criminal.entity.routine;
 
-import com.desarrollo.criminal.entity.exercise.ExerciseReps;
+import com.desarrollo.criminal.entity.exercise.ExercisesGroup;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -22,7 +22,7 @@ public abstract class Routine {
     private LocalDateTime updatedAt;
 
     @OneToMany
-    private List<ExercisesGroup> exercises;
+    private List<ExercisesGroup> blocks;
 
     @PrePersist
     protected void onCreate() {

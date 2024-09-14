@@ -14,5 +14,7 @@ public class BuildingRoutine extends Routine{
     @OneToOne
     private User user;
 
+    private Day day;
+
     private BuildingRoutine(){}
 }
