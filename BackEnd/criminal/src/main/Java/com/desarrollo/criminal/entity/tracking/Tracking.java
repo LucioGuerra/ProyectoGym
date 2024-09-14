@@ -3,6 +3,7 @@ package com.desarrollo.criminal.entity.tracking;
 import com.desarrollo.criminal.entity.exercise.Exercise;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@Setter
 public class Tracking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +31,7 @@ public class Tracking {
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
-    private Tracking(){
+    public Tracking(){
         this.dateWeight = new ArrayList<>();
     }
 

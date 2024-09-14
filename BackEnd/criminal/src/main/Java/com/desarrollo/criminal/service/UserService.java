@@ -1,5 +1,8 @@
 package com.desarrollo.criminal.service;
 
+import com.desarrollo.criminal.dto.request.ExcerciseTrackingDTO;
+import com.desarrollo.criminal.entity.tracking.DateWeight;
+import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -16,7 +19,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final TrackingService trackingService;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -29,14 +32,9 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<User> getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow( () -> new RuntimeException("User not found"));
 
-        if (user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(user.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     public ResponseEntity<User> createUser(User user) {
@@ -69,7 +67,15 @@ public class UserService {
     private User saveUser(User user) {
         return userRepository.save(user);
     }
- 
+
+    public ResponseEntity<User> createTracking(Long userID, ExcerciseTrackingDTO exerciseTrackingDTO) {
+        Optional<User> user = userRepository.findById(userID);
+        Tracking tracking = trackingService.SearchTrackingByUserIDAndExerciseID(userID, exerciseTrackingDTO.getExcerciseID());
+        DateWeight dateWeight = new DateWeight();
+        dateWeight.setWeight(exerciseTrackingDTO.getWeight());
+        dateWeight.setDate(exerciseTrackingDTO.getDate());
+
+    }
 }
 
 
