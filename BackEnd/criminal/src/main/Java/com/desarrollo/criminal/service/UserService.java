@@ -68,13 +68,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<User> createTracking(Long userID, ExcerciseTrackingDTO exerciseTrackingDTO) {
-        Optional<User> user = userRepository.findById(userID);
-        Tracking tracking = trackingService.SearchTrackingByUserIDAndExerciseID(userID, exerciseTrackingDTO.getExcerciseID());
+    public ResponseEntity<?> createTracking(Long userID, ExcerciseTrackingDTO exerciseTrackingDTO) {
+
+        User user = getUserById(userID);
+
         DateWeight dateWeight = new DateWeight();
         dateWeight.setWeight(exerciseTrackingDTO.getWeight());
         dateWeight.setDate(exerciseTrackingDTO.getDate());
 
+        Tracking tracking = trackingService.SearchTrackingByUserIDAndExerciseID(userID, exerciseTrackingDTO.getExcerciseID());
+        tracking.addDateWeight(dateWeight);
+
+        user.addTracking(tracking);
+        saveUser(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
 

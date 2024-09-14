@@ -13,11 +13,11 @@ import java.util.Optional;
 public class TrackingService {
     private final TrackingRepository trackingRepository;
     private final ExerciseService exerciseService;
-    public void createTracking(TrackingDTO trackingDTO){
+    public Tracking createTracking(TrackingDTO trackingDTO){
         Tracking tracking = new Tracking();
-
         tracking.setExercise(exerciseService.getExerciseById(trackingDTO.getExerciseID()));
         trackingRepository.save(tracking);
+        return tracking;
     }
 
     public void deleteTracking(Long id){
@@ -28,14 +28,13 @@ public class TrackingService {
     }
 
     public Tracking SearchTrackingByUserIDAndExerciseID(Long userID, Long exerciseID) {
-        Optional tracking = trackingRepository.findTrackingByUserIDAndExerciseID(userID, exerciseID);
+        Optional<Tracking> tracking = trackingRepository.findTrackingByUserIDAndExerciseID(userID, exerciseID);
         if (tracking.isPresent()) {
             return (Tracking) tracking.get();
         } else {
             TrackingDTO trackingDTO = new TrackingDTO();
             trackingDTO.setExerciseID(exerciseID);
-            createTracking(trackingDTO);
-            return ;
+            return createTracking(trackingDTO);
         }
     }
 }

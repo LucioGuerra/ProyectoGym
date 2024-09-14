@@ -46,4 +46,8 @@ public class Tracking {
     private void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public void addDateWeight(DateWeight dateWeight){
+        this.dateWeight.add(dateWeight);
+    }
 }

@@ -27,9 +27,9 @@ public class ExerciseService {
         return ResponseEntity.status(HttpStatus.OK).body(exercises);
     }
 
-    public ResponseEntity<Exercise> getExerciseById(Long id){
+    public Exercise getExerciseById(Long id){
         Exercise exercise = exerciseRepository.findById(id).get();
-        return ResponseEntity.status(HttpStatus.OK).body(exercise);
+        return exercise;
     }
 
     public ResponseEntity<Exercise> updateExercise(Long id, Exercise exercise){

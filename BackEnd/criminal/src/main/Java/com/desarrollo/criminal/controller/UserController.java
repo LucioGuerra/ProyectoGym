@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}/tracking")
-    public ResponseEntity<User> createTracking(@RequestParam Long id,
+    public ResponseEntity<?> createTracking(@RequestParam Long id,
                                                @RequestBody ExcerciseTrackingDTO excerciseTrackingDTO){
         return userService.createTracking(id, excerciseTrackingDTO);
     }
