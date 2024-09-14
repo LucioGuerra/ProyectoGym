@@ -26,8 +26,10 @@
 
       <div class="role-badge">
         <label class="role-label" for="role">Role</label>
-            <select id="role" [(ngModel)]="user.role" [compareWith]="compareRoles">
-               <option *ngFor="let role of roles" [ngValue]="role">{{ role.name }}</option>
+            <select id="role">
+               <option>{{user.role.name}}</option>
+               <option>{{optionrole()}}</option>
+
             </select>
       </div>
 

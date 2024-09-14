@@ -42,14 +42,19 @@ export class UserEditComponent implements OnInit {
     };
   }
 
+  optionrole() {
+    if (this.user.role.name == "Admin")
+      return "User"
+    else
+      return "Admin"
+  }
+
+
+
   ngOnInit(): void {
     this.auth.user$.subscribe((profile: any) => {
       this.userImage = profile.picture;
     });
-  }
-
-  compareRoles(role1: any, role2: any): boolean {
-    return role1 && role2 ? role1.id === role2.id : role1 === role2;
   }
 
   PasswordChange(): void {
