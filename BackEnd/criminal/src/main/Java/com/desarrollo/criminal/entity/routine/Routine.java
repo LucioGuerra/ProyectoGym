@@ -1,9 +1,11 @@
 package com.desarrollo.criminal.entity.routine;
 
+import com.desarrollo.criminal.entity.exercise.ExerciseReps;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -18,6 +20,9 @@ public abstract class Routine {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany
+    private List<ExercisesGroup> exercises;
 
     @PrePersist
     protected void onCreate() {

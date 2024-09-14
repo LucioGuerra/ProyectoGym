@@ -17,7 +17,4 @@ public class ActivityRoutine extends Routine{
     @ManyToOne
     @JoinColumn(name = "activity_id", nullable = false)
     private Activity activity;
-
-    @OneToMany
-    private List<Exercise> exercises;
 }

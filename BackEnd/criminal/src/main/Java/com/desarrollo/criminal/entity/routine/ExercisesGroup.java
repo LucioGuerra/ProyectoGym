@@ -1,6 +1,5 @@
 package com.desarrollo.criminal.entity.routine;
 
-import com.desarrollo.criminal.entity.exercise.Exercise;
 import com.desarrollo.criminal.entity.exercise.ExerciseReps;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,12 +9,12 @@ import java.util.List;
 
 @Getter
 @Entity
-public class DayRoutine {
+public class ExercisesGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -24,11 +23,10 @@ public class DayRoutine {
     @JoinColumn(name = "routine_id", nullable = false)
     private Routine routine;
 
-    @OneToMany
+    @ManyToMany
     private List<ExerciseReps> exercises;
 
-    private Day day;
-
+    @PrePersist
     private void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
