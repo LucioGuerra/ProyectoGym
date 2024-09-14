@@ -57,7 +57,6 @@ public class UserService {
             user.setDni(userDetail.getDni());
             user.setRole(userDetail.getRole());
             user.setPhone(userDetail.getPhone());
-            user.setCreditExpiration(userDetail.getCreditExpiration());
 
             User updatedUser = userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
