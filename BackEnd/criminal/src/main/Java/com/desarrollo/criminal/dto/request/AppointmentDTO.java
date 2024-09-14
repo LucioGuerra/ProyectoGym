@@ -15,20 +15,16 @@ import java.time.LocalTime;
 public class AppointmentDTO {
     @NotNull(message = "The date is required")
     @FutureOrPresent(message = "The date must be in the present or future")
-    @Valid
     private LocalDate date;
 
     @NotNull(message = "The start time is required")
-    @Valid
     private LocalTime startTime;
 
     @NotNull(message = "The end time is required")
-    @Valid
     private LocalTime endTime;
 
     @NotNull(message = "The activity is required")
-    @Valid
-    private Activity activity;
+    private long activityID;
 
     private long instructorID;
 

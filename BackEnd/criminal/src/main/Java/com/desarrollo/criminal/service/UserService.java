@@ -29,14 +29,9 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<User> getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-
-        if (user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(user.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("User not found"));
     }
 
     public ResponseEntity<User> createUser(User user) {

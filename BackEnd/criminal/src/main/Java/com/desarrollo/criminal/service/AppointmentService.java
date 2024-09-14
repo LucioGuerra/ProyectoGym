@@ -16,6 +16,8 @@ import java.util.Optional;
 @Service
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
+    private final ActivityService activityService;
+    private final UserService userService;
 
     public ResponseEntity<Appointment> getAppointmentById(Long appointmentId) {
         Optional<Appointment> appointment = appointmentRepository.findById(appointmentId);
@@ -33,13 +35,12 @@ public class AppointmentService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("The start time must be before the end time");
         }
+
         Appointment appointment = new Appointment();
-        appointment.setDate(appointmentDTO.getDate());
-        appointment.setActivity(appointmentDTO.getActivity());
-        appointment.setInstructor(appointmentDTO.getInstructor());
+        appointment.setActivity(activityService.getActivityById(appointmentDTO.getActivityID()));
+        appointment.setInstructor(userService.getUserById(appointmentDTO.getInstructorID()));
         appointment.setStartTime(appointmentDTO.getStartTime());
         appointment.setEndTime(appointmentDTO.getEndTime());
-        appointment.setCreatedAt(LocalDate.now().atStartOfDay());
         appointmentRepository.save(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -52,10 +53,14 @@ public class AppointmentService {
 
     public ResponseEntity<?> updateAllAppointment(AppointmentDTO appointmentDTO) {
 
+        if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("The start time must be before the end time");
+        }
+
         Appointment appointment = new Appointment();
-        appointment.setDate(appointmentDTO.getDate());
-        appointment.setActivity(appointmentDTO.getActivity());
-        appointment.setInstructor(appointmentDTO.getInstructor());
+        appointment.setActivity(activityService.getActivityById(appointmentDTO.getActivityID()));
+        appointment.setInstructor(userService.getUserById(appointmentDTO.getInstructorID()));
         appointment.setStartTime(appointmentDTO.getStartTime());
         appointment.setEndTime(appointmentDTO.getEndTime());
         appointment.setCreatedAt(LocalDate.now().atStartOfDay());
