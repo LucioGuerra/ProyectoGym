@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TrackingRepository extends JpaRepository<Tracking, Long>{
 
-    @Query("SELECT t FROM Tracking t JOIN User u WHERE u.id = ?1 AND t.exercise.id = ?2")
+    @Query("SELECT t FROM User u JOIN u.trackings t WHERE u.id = ?1 AND t.exercise.id = ?2")
     Optional<Tracking> findTrackingByUserIDAndExerciseID(Long userID, Long exerciseID);
 
 }

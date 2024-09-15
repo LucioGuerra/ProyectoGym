@@ -6,6 +6,7 @@ import com.desarrollo.criminal.repository.TrackingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -36,5 +37,14 @@ public class TrackingService {
             trackingDTO.setExerciseID(exerciseID);
             return createTracking(trackingDTO);
         }
+    }
+
+    public Tracking SearchTrackingOfUserByExerciseID(List<Tracking> trackings, Long exerciseID) {
+        for (Tracking tracking : trackings) {
+            if (tracking.getExercise().getId().equals(exerciseID)) {
+                return tracking;
+            }
+        }
+        return null;
     }
 }
