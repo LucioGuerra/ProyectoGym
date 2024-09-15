@@ -30,10 +30,10 @@ public class UserController {
     }
 
     @PostMapping("/{id}/tracking")
-    public ResponseEntity<?> createTracking(@PathVariable Long id,
+    public ResponseEntity<?> trackWeight(@PathVariable Long id,
                                             @RequestBody ExerciseTrackingDTO exerciseTrackingDTO){
         //return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created");
-        return userService.createTracking(id, exerciseTrackingDTO);
+        return userService.trackDateWeight(id, exerciseTrackingDTO);
     }
 
 

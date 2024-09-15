@@ -69,22 +69,23 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public ResponseEntity<?> createTracking(Long userID, ExerciseTrackingDTO exerciseTrackingDTO) {
+    public ResponseEntity<?> trackDateWeight(Long userID, ExerciseTrackingDTO exerciseTrackingDTO) {
 
         User user = getUserById(userID);
 
-        DateWeight dateWeight = new DateWeight();
+        DateWeight dateWeight = new DateWeight(); //deberia mandar un DateWeightDTO para crear el DateWeight en el
+        // service?
         dateWeight.setWeight(exerciseTrackingDTO.getWeight());
         dateWeight.setDate(exerciseTrackingDTO.getDate());
 
         Tracking tracking = trackingService.SearchTrackingOfUserByExerciseID(user.getTrackings(),
                 exerciseTrackingDTO.getExerciseID());
         if (tracking == null) {
-            tracking = new Tracking();
+            tracking = new Tracking(); //trackingService.createTracking(new TrackingDTO(exerciseTrackingDTO.getExerciseID())); ???
             tracking.setExercise(exerciseService.getExerciseById(exerciseTrackingDTO.getExerciseID()));
             user.addTracking(tracking);
         }
-        dateWeight.setTracking(tracking);
+        dateWeight.setTracking(tracking); //esto para mi no va
         tracking.addDateWeight(dateWeight);
 
         saveUser(user);
