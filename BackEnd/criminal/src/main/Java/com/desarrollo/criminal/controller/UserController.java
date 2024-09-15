@@ -1,6 +1,6 @@
 package com.desarrollo.criminal.controller;
 
-import com.desarrollo.criminal.dto.request.ExcerciseTrackingDTO;
+import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +30,10 @@ public class UserController {
     }
 
     @PostMapping("/{id}/tracking")
-    public ResponseEntity<?> createTracking(@RequestParam Long id,
-                                               @RequestBody ExcerciseTrackingDTO excerciseTrackingDTO){
+    public ResponseEntity<?> createTracking(@PathVariable Long id,
+                                            @RequestBody ExerciseTrackingDTO exerciseTrackingDTO){
         //return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created");
-        return userService.createTracking(id, excerciseTrackingDTO);
+        return userService.createTracking(id, exerciseTrackingDTO);
     }
 
 

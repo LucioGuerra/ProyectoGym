@@ -8,8 +8,8 @@ import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ExcerciseTrackingDTO {
+public class ExerciseTrackingDTO {
     private Double weight;
     private Date date;
-    private Long ExcerciseID;
+    private Long ExerciseID;
 }

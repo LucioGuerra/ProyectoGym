@@ -1,6 +1,6 @@
 package com.desarrollo.criminal.service;
 
-import com.desarrollo.criminal.dto.request.ExcerciseTrackingDTO;
+import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
 import com.desarrollo.criminal.entity.tracking.DateWeight;
 import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.desarrollo.criminal.entity.user.User;
@@ -20,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TrackingService trackingService;
+    private final ExerciseService exerciseService;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -64,11 +65,11 @@ public class UserService {
         }
     }
     
-    private User saveUser(User user) {
-        return userRepository.save(user);
+    private void saveUser(User user) {
+        userRepository.save(user);
     }
 
-    public ResponseEntity<?> createTracking(Long userID, ExcerciseTrackingDTO exerciseTrackingDTO) {
+    public ResponseEntity<?> createTracking(Long userID, ExerciseTrackingDTO exerciseTrackingDTO) {
 
         User user = getUserById(userID);
 
@@ -76,10 +77,16 @@ public class UserService {
         dateWeight.setWeight(exerciseTrackingDTO.getWeight());
         dateWeight.setDate(exerciseTrackingDTO.getDate());
 
-        Tracking tracking = trackingService.SearchTrackingByUserIDAndExerciseID(userID, exerciseTrackingDTO.getExcerciseID());
+        Tracking tracking = trackingService.SearchTrackingOfUserByExerciseID(user.getTrackings(),
+                exerciseTrackingDTO.getExerciseID());
+        if (tracking == null) {
+            tracking = new Tracking();
+            tracking.setExercise(exerciseService.getExerciseById(exerciseTrackingDTO.getExerciseID()));
+            user.addTracking(tracking);
+        }
+        dateWeight.setTracking(tracking);
         tracking.addDateWeight(dateWeight);
 
-        user.addTracking(tracking);
         saveUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created successfully");
