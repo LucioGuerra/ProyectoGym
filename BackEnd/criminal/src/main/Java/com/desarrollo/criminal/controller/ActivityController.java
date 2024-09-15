@@ -1,9 +1,11 @@
 package com.desarrollo.criminal.controller;
 
+import com.desarrollo.criminal.dto.request.ActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.service.ActivityService;
+
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,27 +18,28 @@ import java.util.Optional;
 public class ActivityController {
     private final ActivityService activityService;
 
-    @GetMapping
-    public ResponseEntity<List<Activity>> getAllActivities(){
-        List<Activity> allActivities = activityService.getAllActivities();
-        return ResponseEntity.status(HttpStatus.OK).body(allActivities);
+    /*@GetMapping
+    public  ResponseEntity<List<Activity>> getAllActivities(){
+        return activityService.getAllActivities();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
-        Optional<Activity> activity = activityService.getActivityById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(activity.orElse(null));
-    }
+        return activityService.getActivityById(id);
+    }*/
 
     @PostMapping
-    public ResponseEntity<Activity> createActivity(@RequestBody Activity activity) {
-        Activity savedActivity = activityService.createActivity(activity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedActivity);
+    public ResponseEntity<Activity> createActivity(@RequestBody ActivityDTO activityDTO) {
+        return activityService.createActivity(activityDTO);
+    }
+/*
+    @PatchMapping
+    public ResponseEntity<Activity> updateActivity(@RequestBody ActivityDTO activityDTO) {
+        return activityService.updateActivity(activityDTO);
     }
 
     @DeleteMapping
-    public ResponseEntity<Activity> deleteActivity(@RequestBody Activity activity) {
-        activityService.deleteActivity(activity);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+    public ResponseEntity<Activity> deleteActivity(@RequestBody ActivityDTO activityDTO) {
+        return activityService.deleteActivity(activityDTO);
+    }*/
 }

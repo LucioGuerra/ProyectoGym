@@ -1,12 +1,13 @@
 package com.desarrollo.criminal.entity;
 
-import com.desarrollo.criminal.entity.routine.ActivityRoutine;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+
+@Setter
 @Getter
 @Entity
 public class Activity {
@@ -26,15 +27,7 @@ public class Activity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
-    private List<ActivityRoutine> routines;
-
-    private Activity(){
-    }
-
-    public Activity(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Activity() {
     }
 
     @PrePersist

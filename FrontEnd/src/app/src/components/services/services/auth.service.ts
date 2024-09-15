@@ -76,5 +76,6 @@ export class AuthService {
     this.auth0Client.logout({
       returnTo: 'http://localhost:4200/home'
     })
+
   }
 }
