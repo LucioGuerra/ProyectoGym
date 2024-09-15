@@ -12,7 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/public/users")
 
 public class UserController {
     private final UserService userService;
@@ -32,6 +32,7 @@ public class UserController {
     @PostMapping("/{id}/tracking")
     public ResponseEntity<?> createTracking(@RequestParam Long id,
                                                @RequestBody ExcerciseTrackingDTO excerciseTrackingDTO){
+        //return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created");
         return userService.createTracking(id, excerciseTrackingDTO);
     }
 

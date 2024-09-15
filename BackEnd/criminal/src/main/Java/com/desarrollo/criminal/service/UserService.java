@@ -82,7 +82,7 @@ public class UserService {
         user.addTracking(tracking);
         saveUser(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created successfully");
     }
 }
 
