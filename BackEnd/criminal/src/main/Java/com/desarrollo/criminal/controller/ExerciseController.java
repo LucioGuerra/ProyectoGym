@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/exercises")
+@RequestMapping("/api/admin/exercises")
 public class ExerciseController{
     private final ExerciseService exerciseService;
 

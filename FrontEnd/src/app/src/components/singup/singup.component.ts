@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 
@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { Router } from '@angular/router';
+import { AuthService } from "../services/services/auth.service";
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -28,9 +29,11 @@ export class SingupComponent {
   error = false;//El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
+  auth0 = inject(AuthService);
+
   emailFormControl = new FormControl("", [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
-  
+
   formGroup = new FormGroup({
     email: this.emailFormControl,
     firstName: new FormControl("", Validators.required),
@@ -50,7 +53,8 @@ export class SingupComponent {
       if (this.validacionPassword()) {
         this.error = false
         const json = this.formGroup.value;
-        console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok 
+        console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok
+        this.auth0.signup(json.email?.toString(), json.password?.toString());
       } else {
         this.error = true;
         this.formGroup.markAsTouched();
@@ -59,7 +63,7 @@ export class SingupComponent {
       this.formGroup.markAsTouched();
     }
   }
-  
+
   constructor(private router: Router) {}
   volver(){
     this.router.navigate(['/login']);
