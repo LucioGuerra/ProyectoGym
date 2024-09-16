@@ -6,6 +6,7 @@ export interface User {
     role: Role;
     phone: number;
     password: string;
+    dni: number;
     //photo: blob;
     creditExpiration: Date;
 }

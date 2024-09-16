@@ -1,188 +1,306 @@
-:host {
-  display: block;
+.mainPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #222222;
   height: 100%;
-  padding: 0%;
-  color: #222222;
-
-  .user-edit-container {
-    background-color: #66645E;
-    padding: 3.3%;
-    border-radius: 2%;
-    display: flex;
-    flex-direction: column;
-    max-width: 50%;
-    max-height: 60%;
-    margin: 0 auto;
-    text-align: left;
-
-    .user-data {
-      display: grid;
-      grid-template-columns: 47% minmax(25%, 46%);
-      gap: 5%;
-      margin-top: 8%;
-      column-gap: 7%;
-
-      .form-group {
-        display: flex;
-        flex-direction: column;
-
-        label {
-          font-weight: bold;
-          margin-bottom: 2%;
-        }
-
-        input {
-          padding: 2.5% 2%;
-          border: 1px solid transparent;
-          border-radius: 7px;
-          background-color: #d0d0d0;
-          font-family: Arial, Helvetica, sans-serif;
-          font-size: 95%;
-          font-weight: bold;
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
-
-          &:hover {
-            background-color: #f6c90e;
-          }
-        }
-      }
-    }
-
-    .avatar-role-container {
-      display: flex;
-      justify-content:center;
-      align-items: center;
-      margin-top: 2rem;
-      position: absolute;
-      top: 14%;
-      right: 50%;
-      left: 52%;
-      transform: translate(-50%, 1%);
-    
-      .user-avatar {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        background-color: #B9A552;
-        position: relative;
-        align-items: center;
-      }
-    
-      .role-badge {
-        background-color: transparent;
-        border-radius: 7px;
-        padding: 9.5% 60%;
-        color: #222222;
-        font-weight: bold;
-        font-size: 90%;
-        text-align: center;
-        position: relative;
-        margin-left: 0; 
-        right: auto; 
-        left: 50%;
-        transform: translate(282%, 90%); 
-        flex-direction: column;
-      }
-    }
-
-    .password-section {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      margin-top: 8%;
-
-      .edit-password-btn {
-        background-color: transparent;
-        color: #d0d0d0;
-        border: 1.5px solid #d0d0d0;
-        padding: 0.25% 25%;
-        border-radius: 7px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-size: 95%;
-        font-weight: bold;
-
-        &:hover {
-          background-color: #222222;
-          color: #d0d0d0;
-          border-color: #d0d0d0;
-        }
-      }
-    }
-
-    .back-btn {
-      background-color: transparent;
-      color: #222222;
-      border-radius: 50%;
-      padding: 1%;
-      position: relative;
-      top: -1cm;
-      left: -6%;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        align-items: center;
-      }
-
-      mat-icon {
-        font-size: 120%;
-      }
-    }
-  }
+  width: 100%;
 }
 
-hr {
-  background-color: #222222;
-  border: none;
-  height: 0.5%;
-  width: 50.5%;
+.tarjeta {
+  background-color: #66645E;
+  color: #222222;
+  font-weight: bold;
+  height: 72vh; 
+  width: 40%;
+  padding: 1rem; 
+  box-sizing: border-box; 
+  max-width: 100%; 
+  max-height: 82%;
+  overflow: visible; 
+}
+
+.header {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;  
+  align-items: center; 
+  width: 100%;
+  position: relative;   
+  padding: 0.15rem;
+  height: auto;
+}
+
+.avatar-container {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-0.5cm);
+}
+
+.user-avatar {
+  width: 10vw;              
+  max-width: 120px; 
+  height: auto;
+  border-radius: 50%;
+  background-color: transparent;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.role-container {
+  background-color: transparent;
   position: absolute;
-  right: 50%;
-  left: 50%;
-  transform: translate(-50%, 12.5vh);
+  pointer-events: all;
+  bottom: calc(5% + 0.1cm);           
+  right: 1rem;  
+  padding: 0%;         
+}
+
+.role-badge {
+  font-weight: bold;
+  background-color: transparent;
+  border-radius: 20px;
+  font-size: 10rem; 
+}
+
+
+mat-button-toggle-group {
+  display: flex;
+  background-color: #F6C90E; 
+  border-radius: 90px; 
+  color: #222222;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8); 
+  padding: 0%;
+}
+
+mat-button-toggle {
+  height: calc(1.5rem + 0.2cm); 
+  border-radius: 10px; 
+  border: none;
+  margin: 1px; 
+  justify-content: center;
+  align-items: center;
+}
+
+mat-button-toggle.mat-button-toggle-checked {
+  background-color: #66645E;
+  color: #222222; 
+}
+
+
+
+
+.back-btn {
+  background-color: transparent;
+  color: #222222;
+  border-radius: 50%;
+  padding: 1%;
+  position: relative;
+  top: -1.5cm;
+  left: -9%;
+  transform: translateX(-3.4cm);
+}
+
+.divisor {
+  transform: translateY(0.35cm);
+}
+
+input {
+  padding: 1% 1%; 
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background-color: #d0d0d0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 95%;
+  font-weight: bold;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
+  width: 100%;
+}
+
+mat-form-field {
+  flex: 1;
+  margin-bottom: 0; 
+}
+
+label {
+  font-size: 95%;
+  font-weight: bold;
+}
+
+.user-content {
+  background-color: transparent;
+}
+
+.fila {
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  gap: 4%; 
+  margin-bottom: -5%; 
 }
 
 .email {
   background-color: #222222;
   color: #66645E;
   border: 1px solid black;
-  border-radius: 5px;
-  padding: 2.5%;
+  border-radius: 8px;
+  padding: 3%;
   cursor: pointer;
-  font-size: 95%;
+  font-size: 85%;
   font-weight: bold;
-  text-align: left;
+  width: 100%;   
+  box-sizing: border-box;
+}
 
-  &:hover .save {
-    position: absolute;
-    right: 50%;
-    transform: translate(-50%, -170%);
-    color: #B9A552;
+button[mat-raised-button] {
+  display: flex;
+  text-align: right;
+  width: 100%; 
+  max-width: auto;
+  padding: 1% 2%;
+  color: #d0d0d0;
+  background-color: transparent;
+  border: 1px solid #d0d0d0;
+  border-radius: 7px;
+  box-sizing: border-box;
+  transform: translateY(66%);
+  height: auto; 
+  align-items: center;
+}
+
+
+#fila3 {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem; 
+}
+
+
+#fila4 {
+  display: flex;
+  float: right;
+  max-width: 30%;
+  background-color:transparent;
+  align-items: flex-start;
+}
+
+.custom-button {
+  background-color: #222222;  
+  color: white;              
+  padding: 2px 28px;          
+  border-radius: 7px;
+  transform: translateY(-30%);  
+  left:20%;
+
+
+  &:hover {
+    background-color:#222222;  
+  }
+
+  &:active {
+    background-color: #F6C90E;
+    color: #222222;
+    font-weight: bold;
   }
 }
 
-option, select {
-  background-color: #B9A552;
-  color: black;
-  font-weight: bold;
-  padding: 2% 30%;
-  border-radius: 7px;
-  font-family: Arial, Helvetica, sans-serif;
-  display: flex;
+.icon-right {
+  margin-left: 20px; 
+  display: flex;  
+  align-items: center;
 }
 
-select {
-  background-color: #d0d0d0;
-  display: flex;
-  text-align: left;
-  justify-content: flex-start;
+
+
+
+
+///////////////////////////////////////////////////////////////////////
+
+
+@media (max-width: 1024px) {
+  .tarjeta {
+    width: 80%; 
+    height: auto; 
+  }
+
+  .fila {
+    gap: 2%; 
+  }
+
+  .user-avatar {
+    width: 15vw; 
+    max-width: 100px;
+  }
+
+  .role-container {
+    bottom: calc(5% + 0.5cm);
+    right: 0.5rem; 
+  }
+
+  .role-badge {
+    font-size: 0.75rem; 
+    padding: 0.2rem 0.3rem;
+  }
 }
 
-.role-label {
-  display: flex;
+///////////////////////////////////////////////////////////////
 
+
+@media (max-width: 768px) {
+  .tarjeta {
+    width: 95%; 
+    height: auto;
+    max-height: none; 
+  }
+
+  .fila {
+    flex-direction: column; 
+    gap: 0.5rem; 
+  }
+
+  .user-avatar {
+    width: 25vw; 
+    max-width: 80px;
+  }
+
+  .role-container {
+    bottom: calc(5% + 0.5cm);
+    right: 0.5rem;
+  }
+
+  .role-badge {
+    font-size: 0.5rem; 
+    padding: 0.1rem 0.2rem;
+  }
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+@media (max-width: 480px) {
+  .tarjeta {
+    width: 100%;
+    height: auto; 
+    max-height: none; 
+  }
+
+  .fila {
+    gap: 0.3rem; 
+  }
+
+  .user-avatar {
+    width: 30vw; 
+    max-width: 70px;
+  }
+
+  .role-badge {
+    font-size: 0.4rem; 
+    padding: 0.05rem 0.1rem;
+  }
 }
