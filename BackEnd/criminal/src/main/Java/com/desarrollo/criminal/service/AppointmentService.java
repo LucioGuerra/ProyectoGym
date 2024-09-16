@@ -3,6 +3,7 @@ package com.desarrollo.criminal.service;
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.repository.AppointmentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class AppointmentService {
     private final UserService userService;
 
     public ResponseEntity<Appointment> getAppointmentById(Long appointmentId) {
-        Optional<Appointment> appointment = appointmentRepository.findById(appointmentId);
-        return ResponseEntity.status(HttpStatus.OK).body(appointment.orElse(null));
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
+        return ResponseEntity.status(HttpStatus.OK).body(appointment);
     }
 
     public ResponseEntity<List<Appointment>> getAppointmentByDate(LocalDate date) {
