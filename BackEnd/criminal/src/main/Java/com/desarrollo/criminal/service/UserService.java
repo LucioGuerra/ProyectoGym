@@ -2,7 +2,7 @@ package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
 import com.desarrollo.criminal.entity.tracking.DateWeight;
-import com.desarrollo.criminal.entity.tracking.Tracking;
+
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TrackingService trackingService;
-    private final ExerciseService exerciseService;
+
+    private final DateWeightService dateWeightService;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -73,20 +74,9 @@ public class UserService {
 
         User user = getUserById(userID);
 
-        DateWeight dateWeight = new DateWeight(); //deberia mandar un DateWeightDTO para crear el DateWeight en el
-        // service?
-        dateWeight.setWeight(exerciseTrackingDTO.getWeight());
-        dateWeight.setDate(exerciseTrackingDTO.getDate());
+        DateWeight dateWeight = dateWeightService.createDateWeight(exerciseTrackingDTO.getWeight(), exerciseTrackingDTO.getDate());
 
-        Tracking tracking = trackingService.SearchTrackingOfUserByExerciseID(user.getTrackings(),
-                exerciseTrackingDTO.getExerciseID());
-        if (tracking == null) {
-            tracking = new Tracking(); //trackingService.createTracking(new TrackingDTO(exerciseTrackingDTO.getExerciseID())); ???
-            tracking.setExercise(exerciseService.getExerciseById(exerciseTrackingDTO.getExerciseID()));
-            user.addTracking(tracking);
-        }
-        dateWeight.setTracking(tracking); //esto para mi no va
-        tracking.addDateWeight(dateWeight);
+        trackingService.updateTracking(userID, exerciseTrackingDTO.getExerciseID(), dateWeight);
 
         saveUser(user);
 

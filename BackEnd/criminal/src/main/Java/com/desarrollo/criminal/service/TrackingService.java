@@ -1,23 +1,27 @@
 package com.desarrollo.criminal.service;
 
-import com.desarrollo.criminal.dto.request.TrackingDTO;
+
+import com.desarrollo.criminal.entity.tracking.DateWeight;
 import com.desarrollo.criminal.entity.tracking.Tracking;
+import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.TrackingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+
 
 @AllArgsConstructor
 @Service
 public class TrackingService {
     private final TrackingRepository trackingRepository;
     private final ExerciseService exerciseService;
-    public Tracking createTracking(TrackingDTO trackingDTO){
+    private final UserService userService;
+
+    public Tracking createTrackingForUser(User user, long exerciseId){
         Tracking tracking = new Tracking();
-        tracking.setExercise(exerciseService.getExerciseById(trackingDTO.getExerciseID()));
+        tracking.setExercise(exerciseService.getExerciseById(exerciseId));
         trackingRepository.save(tracking);
+        user.addTracking(tracking);
         return tracking;
     }
 
@@ -25,26 +29,18 @@ public class TrackingService {
         trackingRepository.deleteById(id);
     }
 
-    public void updateTracking(Long id, Tracking tracking){
+    public void updateTracking(Long userId, Long exerciseId, DateWeight dateWeight){
+        User user = userService.getUserById(userId);
+        Tracking tracking = getTrackingOfUserByExerciseId(user, exerciseId);
+        tracking.addDateWeight(dateWeight);
     }
 
-    public Tracking SearchTrackingByUserIDAndExerciseID(Long userID, Long exerciseID) {
-        Optional<Tracking> tracking = trackingRepository.findTrackingByUserIDAndExerciseID(userID, exerciseID);
-        if (tracking.isPresent()) {
-            return (Tracking) tracking.get();
-        } else {
-            TrackingDTO trackingDTO = new TrackingDTO();
-            trackingDTO.setExerciseID(exerciseID);
-            return createTracking(trackingDTO);
-        }
-    }
-
-    public Tracking SearchTrackingOfUserByExerciseID(List<Tracking> trackings, Long exerciseID) {
-        for (Tracking tracking : trackings) {
+    public Tracking getTrackingOfUserByExerciseId(User user, Long exerciseID) {
+        for (Tracking tracking : user.getTrackings()) {
             if (tracking.getExercise().getId().equals(exerciseID)) {
                 return tracking;
             }
         }
-        return null;
+        return createTrackingForUser(user, exerciseID);
     }
 }
