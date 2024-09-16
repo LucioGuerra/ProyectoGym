@@ -3883,7 +3883,7 @@ fresh@0.5.2:
     "@angular/platform-browser-dynamic" "^18.1.0"
     "@angular/router" "^18.1.0"
     "@auth0/auth0-angular" "2.2.3"
-    front-end "file:C:/Users/lucio/AppData/Local/Yarn/Cache/v6/npm-front-end-0.0.0-4fde18d5-1921-4e23-bffb-3168f924dc55-1726100972639/node_modules/front-end"
+    front-end "file:C:/Users/lucio/AppData/Local/Yarn/Cache/v6/npm-front-end-0.0.0-9090a575-98fd-477b-8909-e5f9bbb5e71e-1726239665181/node_modules/front-end"
     rxjs "~7.8.0"
     tslib "^2.3.0"
     zone.js "~0.14.3"
