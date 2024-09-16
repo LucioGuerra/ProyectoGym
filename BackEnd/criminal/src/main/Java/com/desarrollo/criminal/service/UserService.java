@@ -6,6 +6,7 @@ import com.desarrollo.criminal.entity.tracking.DateWeight;
 import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow( () -> new RuntimeException("User not found"));
-
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public ResponseEntity<User> createUser(User user) {
