@@ -2,6 +2,7 @@ package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
+import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.AppointmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -33,8 +34,7 @@ public class AppointmentService {
     public ResponseEntity<?> createAppointment(AppointmentDTO appointmentDTO) {
 
         if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("The start time must be before the end time");
+            throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
         Appointment appointment = new Appointment();
