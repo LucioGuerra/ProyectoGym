@@ -3,6 +3,7 @@ package com.desarrollo.criminal.service;
 import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
 import com.desarrollo.criminal.entity.tracking.DateWeight;
 
+import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -76,7 +77,14 @@ public class UserService {
 
         DateWeight dateWeight = dateWeightService.createDateWeight(exerciseTrackingDTO.getWeight(), exerciseTrackingDTO.getDate());
 
-        trackingService.updateTracking(userID, exerciseTrackingDTO.getExerciseID(), dateWeight);
+        Tracking tracking = trackingService.getTrackingOfUserByExerciseId(user.getTrackings(),
+                exerciseTrackingDTO.getExerciseID());
+        if(tracking == null){
+            tracking = trackingService.createTracking(exerciseTrackingDTO.getExerciseID());
+            user.addTracking(tracking);
+        }
+
+        trackingService.updateTracking(tracking, dateWeight);
 
         saveUser(user);
 
