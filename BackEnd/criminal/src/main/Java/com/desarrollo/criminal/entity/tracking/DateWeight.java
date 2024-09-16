@@ -21,9 +21,5 @@ public class DateWeight {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne
-    @JoinColumn(name = "tracking_id", nullable = false)
-    private Tracking tracking;
-
     public DateWeight() {}
 }
