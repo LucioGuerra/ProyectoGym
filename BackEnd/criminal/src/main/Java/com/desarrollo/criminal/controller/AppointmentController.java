@@ -5,6 +5,7 @@ import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.AppointmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class AppointmentController {
         return appointmentService.getAppointmentByDate(date);
     }
 
-    //@PreAuthorize("ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
