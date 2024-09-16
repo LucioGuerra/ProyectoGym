@@ -6,6 +6,8 @@ import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.AppointmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final ActivityService activityService;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     public ResponseEntity<Appointment> getAppointmentById(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
@@ -37,11 +40,8 @@ public class AppointmentService {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
-        Appointment appointment = new Appointment();
-        appointment.setActivity(activityService.getActivityById(appointmentDTO.getActivityID()));
-        appointment.setInstructor(userService.getUserById(appointmentDTO.getInstructorID()));
-        appointment.setStartTime(appointmentDTO.getStartTime());
-        appointment.setEndTime(appointmentDTO.getEndTime());
+        Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
+
         appointmentRepository.save(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -59,12 +59,7 @@ public class AppointmentService {
                     .body("The start time must be before the end time");
         }
 
-        Appointment appointment = new Appointment();
-        appointment.setActivity(activityService.getActivityById(appointmentDTO.getActivityID()));
-        appointment.setInstructor(userService.getUserById(appointmentDTO.getInstructorID()));
-        appointment.setStartTime(appointmentDTO.getStartTime());
-        appointment.setEndTime(appointmentDTO.getEndTime());
-        appointment.setCreatedAt(LocalDate.now().atStartOfDay());
+        Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
 
         appointmentRepository.save(appointment);
 
