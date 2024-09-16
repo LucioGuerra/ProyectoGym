@@ -1,13 +1,16 @@
 package com.desarrollo.criminal.service;
 
 
+import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
 import com.desarrollo.criminal.entity.tracking.DateWeight;
 import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.desarrollo.criminal.repository.TrackingRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @AllArgsConstructor
@@ -15,6 +18,7 @@ import java.util.List;
 public class TrackingService {
     private final TrackingRepository trackingRepository;
     private final ExerciseService exerciseService;
+
 
 
     public Tracking createTracking(long exerciseId){
@@ -28,16 +32,19 @@ public class TrackingService {
         trackingRepository.deleteById(id);
     }
 
-    public void updateTracking(Tracking tracking, DateWeight dateWeight){
+    public void updateTracking(Tracking tracking, ExerciseTrackingDTO exerciseTrackingDTO){
+        DateWeight dateWeight = new DateWeight();
+        dateWeight.setWeight(exerciseTrackingDTO.getWeight());
+        dateWeight.setDate(exerciseTrackingDTO.getDate());
         tracking.addDateWeight(dateWeight);
     }
 
-    public Tracking getTrackingOfUserByExerciseId(List<Tracking> trackingList, Long exerciseID) {
+    public Optional<Tracking> getTrackingOfUserByExerciseId(List<Tracking> trackingList, Long exerciseID) {
         for (Tracking tracking : trackingList) {
             if (tracking.getExercise().getId().equals(exerciseID)) {
-                return tracking;
+                return Optional.of(tracking);
             }
         }
-        return null;
+        return Optional.empty();
     }
 }

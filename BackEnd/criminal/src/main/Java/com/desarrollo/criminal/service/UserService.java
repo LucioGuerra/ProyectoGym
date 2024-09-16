@@ -22,8 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TrackingService trackingService;
-
-    private final DateWeightService dateWeightService;
+    private final ExerciseService exerciseService;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -72,19 +71,23 @@ public class UserService {
     }
 
     public ResponseEntity<?> trackDateWeight(Long userID, ExerciseTrackingDTO exerciseTrackingDTO) {
-
         User user = getUserById(userID);
+        List<Tracking> trackings = user.getTrackings();
+        Tracking tracking;
 
-        DateWeight dateWeight = dateWeightService.createDateWeight(exerciseTrackingDTO.getWeight(), exerciseTrackingDTO.getDate());
-
-        Tracking tracking = trackingService.getTrackingOfUserByExerciseId(user.getTrackings(),
-                exerciseTrackingDTO.getExerciseID());
-        if(tracking == null){
+        if(trackings.isEmpty()){
             tracking = trackingService.createTracking(exerciseTrackingDTO.getExerciseID());
             user.addTracking(tracking);
+        } else {
+            Optional<Tracking> trackingOP = trackingService.getTrackingOfUserByExerciseId(trackings, exerciseTrackingDTO.getExerciseID());
+            if(trackingOP.isPresent()){
+                tracking = trackingOP.get();
+            } else {
+                tracking = trackingService.createTracking(exerciseTrackingDTO.getExerciseID());
+                user.addTracking(tracking);
+            }
         }
-
-        trackingService.updateTracking(tracking, dateWeight);
+        trackingService.updateTracking(tracking, exerciseTrackingDTO);
 
         saveUser(user);
 
