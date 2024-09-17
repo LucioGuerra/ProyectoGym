@@ -8,12 +8,12 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
-import { DrawerComponent } from '../drawer/drawer.component';
 import { CommonModule } from '@angular/common';
 import { MatOption } from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DrawerComponent } from '../drawer/drawer.component';
 
 
 @Component({
@@ -72,7 +72,15 @@ export class UserEditComponent implements OnInit {
     alert('Warning: The email cannot be modified.');
   }
 
- 
+  adminRole() {
+    this.user.role = { id: 1, name: 'Admin' };
+  }
+
+  userRole() {
+    this.user.role = { id: 2, name: 'User' };
+  } 
+
+
   saveChanges() {
 
     if (!this.user.firstName || this.user.firstName.trim() === '') {
@@ -90,7 +98,7 @@ export class UserEditComponent implements OnInit {
       return;
     }
 
-    if (isNaN(this.user.dni) || this.user.dni.toString().length !== 8) {
+    if (isNaN(this.user.dni) || this.user.dni.toString().length !== 8 || this.user.dni < 0) {
       alert('DNI must be an 8 digit number');
       return;
     }
@@ -100,13 +108,19 @@ export class UserEditComponent implements OnInit {
       return;
     }
 
+    if (this.user.phone < 0) {
+      alert('Mobile cannot be a negative number')
+      return;
+    }
+
     if (isNaN(this.user.phone)) {
       alert('Mobile must be a number');
       return;
     }
-
+ 
     alert('Changes were successfully saved.');
-
+    console.log("diccionario del usuario: ");
+    console.dir(this.user);
   }
 }
 

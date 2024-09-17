@@ -10,9 +10,7 @@
 
             <div class="avatar-container">
               <div class="user-avatar">
-                <mat-card class="user-avatar">
-                  <img class="user-avatar" [src]="userImage" alt="User Image">
-                </mat-card>
+                <img class="user-avatar-img" [src]="userImage" alt="User Image">
               </div>
             </div>
 
@@ -21,8 +19,8 @@
                 name="role"
                 aria-label="role"
                 [(ngModel)]="user.role.name" required>
-                <mat-button-toggle value="Admin">Admin</mat-button-toggle>
-                <mat-button-toggle value="User">User</mat-button-toggle>
+                <mat-button-toggle (click)="adminRole()" value="Admin">Admin</mat-button-toggle>
+                <mat-button-toggle (click)="userRole()" value="User">User</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
           </div>
@@ -32,64 +30,65 @@
 
         <mat-card-content>
           <div class="user-content">
-            <form #userForm="ngForm">
 
-              <div class="fila">
-                
-                <mat-form-field>
-                  <label>Name</label>
-                  <input matInput class="column1" id="firstName" type="text" [(ngModel)]="user.firstName" name="firstName"/>
-                </mat-form-field>
 
-                
-                <mat-form-field>
-                  <label>Surname</label>
-                  <input matInput id="lastName" type="text" [(ngModel)]="user.lastName" name="lastName"/>
-                </mat-form-field>
+            <div class="fila" id="fila1">
 
+              <div>
+                <label>Name</label>
+                <input id="firstName" type="text" [(ngModel)]="user.firstName" name="firstName"/>
+              </div>
+              
+              <div>
+                <label>Surname</label>
+                <input id="lastName" type="text" [(ngModel)]="user.lastName" name="lastName"/>
               </div>
 
-              <div class="fila">
-                
-                <mat-form-field>
-                  <label>DNI</label>
-                  <input matInput class="column1" id="dni" type="text" [(ngModel)]="user.dni" name="dni"/>
-                </mat-form-field>
+            </div>
 
-                
-                <mat-form-field>
-                  <label>Email</label>
-                  <button class="email" (click)="email()">
-                    {{ user.email }}
-                  </button>
-                </mat-form-field>
+
+            <div class="fila" id="fila2">
+
+              <div>
+                <label>DNI</label>
+                <input id="dni" type="text" [(ngModel)]="user.dni" name="dni"/>
+              </div>
+              
+              <div id="columna22">
+                <label>Email</label>
+                <button class="email" (click)="email()">
+                  {{ user.email }}
+                </button>
               </div>
 
-              <div class="fila" id="fila3">
-                
-                <mat-form-field>
-                  <label>Mobile</label>
-                  <input matInput class="column1" id="phone" type="tel" [(ngModel)]="user.phone" name="phone"/>
-                </mat-form-field>
+            </div>
 
-                <mat-form-field>
-                  <button mat-raised-button color="primary" (click)="PasswordChange()">
-                    Change password
-                    <mat-icon class="icon-right">chevron_right</mat-icon>
-                  </button>
-                </mat-form-field>
+
+            <div class="fila" id="fila3">
+
+              <div>
+                <label>Mobile</label>
+                <input id="phone" type="tel" [(ngModel)]="user.phone" name="phone"/>
               </div>
 
-              <div class="fila" id="fila4">
-      
-                <mat-form-field>
-                  <button mat-button class="custom-button" type="submit" [disabled]="userForm.invalid" (click)="saveChanges()">
-                    Save
-                  </button>
-                </mat-form-field>
-              </div>
+              <div id="columna32">
+                <button mat-raised-button color="primary" (click)="PasswordChange()">
+                  Change password
+                  <mat-icon class="icon-right">chevron_right</mat-icon>
+                </button>
+            </div>
 
-            </form>
+
+            </div>
+
+            <div class="fila" id="fila4">
+
+              <button mat-button class="custom-button" type="submit" (click)="saveChanges()">
+                Save
+              </button>
+              
+            </div>
+
           </div>
         </mat-card-content>
       </mat-card>
