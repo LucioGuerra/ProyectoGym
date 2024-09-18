@@ -1,156 +1,157 @@
 span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .opciones {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 0.7;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.7;
 
-    mat-divider {
-        flex: 1;
-        margin: 0 20px;
-    }
+  mat-divider {
+    flex: 1;
+    margin: 0 5%;
+  }
 }
 
 .formas-login {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    button-login {
-        margin: 0 20px;
-    }   
-    .button-image{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 60px;
-        height: 60px;
-        margin: 0 20px;
-        cursor: pointer;
-        border-radius: 50px;
-        img {
-            width: 100%;
-            height: 100%;
-        }
-        .facebookimg{
-            width: 90%;
-            height: 90%;
-        }
-    }
-}   
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 
-mat-card-content {
+  button-login {
+    margin: 0 5%;
+  }
+
+  .button-image {
     display: flex;
     flex-direction: column;
-
-    justify-items: center;
+    justify-content: center;
     align-items: center;
+    width: 15%;
+    height: 15%;
+    margin: 0 5%;
+    cursor: pointer;
+    border-radius: 13%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .facebookimg {
+      width: 90%;
+      height: 90%;
+    }
+  }
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
 }
 
 mat-card {
-    border-radius: 20px;
-    border: 0.001px solid rgb(18, 18, 18);
-    padding: 40px;
-
-    padding: 20px;
-    width: 550px;
-    height: auto;
-    min-width: 550px;
-    max-width: 550px;
-
-    background-color: rgba(0, 0, 0, 0.872);
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5%;
+  border: 0.001px solid rgb(18, 18, 18);
+  padding: 2.5%;
+  width: 35%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.872);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
 .botones {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .titulo {
-    font-size: 30px;
-    font-weight: bold;
-    margin-top: 0px;
-    margin-left: 25px;
-    margin-bottom: 20px;
+  font-size: 200%;
+  font-weight: bold;
+  margin-top: 0;
+  margin-left: 5%;
+  margin-bottom: 5%;
 }
 
 #singup {
-    width: 205px;
-    margin-top: 20px;
+  width: 49%;
+  margin-top: 5%;
 }
 
 #login {
-    width: 205px;
-    margin-top: 20px;
+  width: 49%;
+  margin-top: 5%;
 }
 
 #volver {
-    width: 100%;
-    margin-top: 20px;
-    border: #B9A552 2px solid;
+  width: 100%;
+  margin-top: 5%;
+  border: #B9A552 2px solid;
 }
 
 mat-card-header {
-    justify-items: center;
+  justify-items: center;
 }
 
 .example-form {
-    width: 100%;
+  width: 100%;
 }
 
 .example-full-width {
-    width: 100%;
+  width: 100%;
 }
 
 #email {
-    margin-bottom: 5px;
+  margin-bottom: 1%;
 }
 
 button {
-    font-size: 16px;
-    height: 55px;
-    border-radius: 10px;
+  font-size: 100%;
+  height: 3.5em;
+  border-radius: 10px;
+}
+
+botones {
+  height: 100%
 }
 
 .mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align {
-    height: 0px !important;
+  height: 0 !important;
 }
 
 :host {
-    display: block;
-    width: 100%;
-    height: 100vh;
-    backdrop-filter: blur(10px);
-    background: url('/assets/background.png') no-repeat center center / cover;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  background: url('/assets/background.png') no-repeat center center / cover;
 }
 
 .forgot {
-    color: #b9a552;
-    font-style: italic;
-    margin-bottom: 6px;
-    margin-left: 290px;
-    text-decoration: underline;
+  color: #b9a552;
+  font-style: italic;
+  margin-bottom: 3%;
+  margin-left: 69%;
+  text-decoration: underline;
 }
 
 #olvidaste {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .forgot:hover {
-    color: #a3903f;
-    cursor: pointer;
+  color: #a3903f;
+  cursor: pointer;
 }
 
 ::ng-deep #password .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
-    height: 0px !important;
-    margin: 3px !important;
+  height: 0 !important;
+  margin: 1% !important;
 }
