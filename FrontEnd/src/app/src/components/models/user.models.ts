@@ -8,9 +8,8 @@ export interface User {
     password: string;
     dni: number;
     //photo: blob;
-    creditExpiration: Date;
 }
-export interface Role {
-    id: number;
-    name: string;
+export enum Role {
+     ADMIN = 'ADMIN',
+     CLIENT = 'CLIENT' 
 }

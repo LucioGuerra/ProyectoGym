@@ -18,9 +18,15 @@
               <mat-button-toggle-group
                 name="role"
                 aria-label="role"
-                [(ngModel)]="user.role.name" required>
-                <mat-button-toggle (click)="adminRole()" value="Admin">Admin</mat-button-toggle>
-                <mat-button-toggle (click)="userRole()" value="User">User</mat-button-toggle>
+                [(ngModel)]="user.role" required>
+                
+                @for (role of roles; track $index) {
+                  <mat-button-toggle [value]="role" (click)="changeRole(role)">
+                    {{ role.toLowerCase() }}
+                  </mat-button-toggle>
+                }
+                
+                
               </mat-button-toggle-group>
             </div>
           </div>
@@ -32,7 +38,7 @@
           <div class="user-content">
 
 
-            <div class="fila" id="fila1">
+            <div class="fila common-rows" id="fila1">
 
               <div>
                 <label>Name</label>
@@ -47,31 +53,29 @@
             </div>
 
 
-            <div class="fila" id="fila2">
+            <div class="fila common-rows" id="fila2">
 
               <div>
                 <label>DNI</label>
                 <input id="dni" type="text" [(ngModel)]="user.dni" name="dni"/>
               </div>
               
-              <div id="columna22">
+              <div id="special-column">
                 <label>Email</label>
-                <button class="email" (click)="email()">
-                  {{ user.email }}
-                </button>
+                <input class="mail" id="email" type="text" [(ngModel)]="user.email" name="email" disabled/>
               </div>
 
             </div>
 
 
-            <div class="fila" id="fila3">
+            <div class="fila common-rows" id="fila3">
 
               <div>
                 <label>Mobile</label>
                 <input id="phone" type="tel" [(ngModel)]="user.phone" name="phone"/>
               </div>
 
-              <div id="columna32">
+              <div id="special-column">
                 <button mat-raised-button color="primary" (click)="PasswordChange()">
                   Change password
                   <mat-icon class="icon-right">chevron_right</mat-icon>
@@ -81,7 +85,7 @@
 
             </div>
 
-            <div class="fila" id="fila4">
+            <div class="fila common-rows" id="fila4">
 
               <button mat-button class="custom-button" type="submit" (click)="saveChanges()">
                 Save

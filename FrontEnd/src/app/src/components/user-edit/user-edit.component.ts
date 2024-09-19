@@ -1,16 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { ToolbarComponent } from '../toolbar/toolbar.component';
-import { User, Role } from '../models/user.models';
+import { Role, User } from '../models/user.models';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
-import { CommonModule } from '@angular/common';
-import { MatOption } from '@angular/material/core';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DrawerComponent } from '../drawer/drawer.component';
@@ -20,7 +15,7 @@ import { DrawerComponent } from '../drawer/drawer.component';
   selector: 'app-user-edit',
   standalone: true,
 
-  imports: [ToolbarComponent, MatIconModule, FormsModule, MatIconButton, MatButtonModule, MatFormField, MatCard, DrawerComponent, CommonModule, MatLabel, MatOption, ReactiveFormsModule, MatSelect, MatDividerModule, MatCardHeader,MatCardContent, MatButtonToggleModule, MatSelectModule],
+  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader,MatCardContent, MatButtonToggleModule, ],
   
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss', 
@@ -29,11 +24,9 @@ import { DrawerComponent } from '../drawer/drawer.component';
 
 export class UserEditComponent implements OnInit {
   user: User;  
+  roles = Object.values(Role);
   userImage: string | undefined;  
-  roles: { id: number; name: string }[] = [
-    { id: 1, name: 'Admin' },
-    { id: 2, name: 'User' }
-  ];
+ 
 
   constructor(public auth: AuthService, private router: Router) {
     
@@ -42,10 +35,9 @@ export class UserEditComponent implements OnInit {
       firstName: 'Martin',
       lastName: 'Eliseche',
       email: 'tinchoeliseche@gmail.com',
-      role: { id: 1, name: 'Admin' },
+      role: Role.ADMIN,
       phone: 2262369000,
       password: '1234',
-      creditExpiration: new Date(),
       dni: 12093847,
     };
   }
@@ -67,18 +59,13 @@ export class UserEditComponent implements OnInit {
     this.router.navigate(['/change-password']);
   }
 
+
+  changeRole(selectedRole: Role) {
+    if (this.user.role !== selectedRole) {
+      this.user.role = selectedRole;
+    }
+  }
   
-  email() {
-    alert('Warning: The email cannot be modified.');
-  }
-
-  adminRole() {
-    this.user.role = { id: 1, name: 'Admin' };
-  }
-
-  userRole() {
-    this.user.role = { id: 2, name: 'User' };
-  } 
 
 
   saveChanges() {
