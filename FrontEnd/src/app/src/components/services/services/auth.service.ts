@@ -1,18 +1,21 @@
-import { Injectable } from "@angular/core";
+import {Injectable, signal} from "@angular/core";
 import { environment } from "../../../../../environments/environment";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({providedIn: "root"})
 export class AuthService {
   private auth0Client: auth0.WebAuth;
+  public isAuthenticated = signal<boolean>(false);
+  public isAdmin = signal<boolean>(false);
 
   constructor() {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
       redirectUri: "http://localhost:4200/home",
-      responseType: 'token',
+      responseType: 'token id_token',
       cookieDomain: "."
     })
   }
@@ -54,19 +57,22 @@ export class AuthService {
       try{
         const accessToken = urlParams.get("access_token");
         const expiresIn = urlParams.get("expires_in");
+        const idToken = urlParams.get("id_token");
 
-        this.setSession(accessToken, expiresIn);
+        this.setSession(accessToken, expiresIn, idToken);
       } catch(error){
         console.error(error);
       }
     }
   }
 
-  private setSession(accessToken: any, expiresIn: any): void {
-    console.log('User authenticated:', accessToken);
-    console.log('token expire:', expiresIn);
+  private setSession(accessToken: any, expiresIn: any, idToken: any): void {
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('expires_at', expiresIn);
+    localStorage.setItem('idToken', idToken);
+
+    this.isAuthenticated.set(true);
+    this.setRole(idToken);
   }
 
   private logout(): void {
@@ -76,6 +82,22 @@ export class AuthService {
     this.auth0Client.logout({
       returnTo: 'http://localhost:4200/home'
     })
+
+  }
+
+  private setRole(idToken: any) {
+    // @ts-ignore
+    const role = jwtDecode(idToken)['https://criminal-cross.com/roles'];
+    if(role){
+      if(role == 'ADMIN'){
+        this.isAdmin.set(true);
+      }
+      else{
+       this.isAdmin.set(false);
+      }
+    }else{
+      console.error("No hay ningun rol asignado")
+    }
 
   }
 }

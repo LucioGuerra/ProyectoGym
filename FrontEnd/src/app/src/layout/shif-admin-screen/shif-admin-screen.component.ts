@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '@auth0/auth0-angular';
+import { AuthService } from '../../components/services/services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { ToolbarComponent } from '../../components/index';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
@@ -26,6 +26,8 @@ import { Activity } from '../../components/index';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShifAdminScreenComponent {
+
+  private auth0 = inject(AuthService);
 
   public activities = [{
     name: 'Crossfit',
@@ -185,19 +187,19 @@ export class ShifAdminScreenComponent {
   selectedDate = signal<Date>(new Date(Date.now()));
   selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
 
-  constructor(private auth: AuthService) {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
+  constructor() {
+    this.auth0.isAuthenticated$.subscribe((isAuthenticated: any) => {
       console.log('isAuthenticated:', isAuthenticated);
       if (!isAuthenticated) {
-        this.auth.loginWithRedirect();
+        this.auth0.loginWithRedirect();
       } else {
-        this.auth.user$.subscribe(user => {
+        this.auth0.user$.subscribe((user: any) => {
           console.log('User:', user);
         });
       }
     });
   }
-  
+
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
