@@ -35,45 +35,77 @@
         <mat-divider class="divisor"></mat-divider>
 
         <mat-card-content>
-          <div class="user-content">
+          <form [formGroup]="form" (ngSubmit)="saveChanges()">
+            <div class="user-content">
 
 
             <div class="fila common-rows" id="fila1">
 
-              <div>
-                <label>Name</label>
-                <input id="firstName" type="text" [(ngModel)]="user.firstName" name="firstName"/>
-              </div>
+              <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input matInput id="firstName" type="text" formControlName="firstName" [errorStateMatcher]="matcher"/>
               
-              <div>
-                <label>Surname</label>
-                <input id="lastName" type="text" [(ngModel)]="user.lastName" name="lastName"/>
-              </div>
+                @if ("form.get('firstName')?.hasError('required') && (form.get('firstName')?.touched || form.get('firstName')?.dirty") {
+                  <mat-error>
+                    First name is required
+                  </mat-error>
+                }
+              </mat-form-field>
+              
+
+              <mat-form-field>
+                <mat-label> Surname</mat-label>
+                <input matInput id="lastName" type="text" formControlName="lastName" [errorStateMatcher]="matcher"/>
+              
+                @if ("form.get('lastName')?.hasError('required') && (form.get('lastName')?.touched || form.get('lastName')?.dirty") {
+                  <mat-error>
+                     Surname is required
+                  </mat-error>
+                }
+              </mat-form-field>
 
             </div>
 
 
             <div class="fila common-rows" id="fila2">
 
-              <div>
-                <label>DNI</label>
-                <input id="dni" type="text" [(ngModel)]="user.dni" name="dni"/>
-              </div>
+              <mat-form-field>
+                <mat-label> DNI</mat-label>
+                <input matInput id="dni" type="text" formControlName="dni" [errorStateMatcher]="matcher"/>
               
-              <div id="special-column">
-                <label>Email</label>
-                <input class="mail" id="email" type="text" [(ngModel)]="user.email" name="email" disabled/>
-              </div>
+                @if ("form.get('dni')?.hasError('required') && (form.get('dni')?.touched") {
+                  <mat-error>
+                     DNI is required
+                  </mat-error>
+                }
+
+              </mat-form-field>
+
+              
+              <mat-form-field>
+                
+                <mat-label>Email</mat-label>
+                <input matInput id="email" type="text" formControlName="email" [errorStateMatcher]="matcher"/>
+
+              </mat-form-field>
 
             </div>
 
 
             <div class="fila common-rows" id="fila3">
 
-              <div>
-                <label>Mobile</label>
-                <input id="phone" type="tel" [(ngModel)]="user.phone" name="phone"/>
-              </div>
+
+              <mat-form-field>
+                <mat-label>Mobile</mat-label>
+                <input matInput id="phone" type="text" formControlName="phone" [errorStateMatcher]="matcher"/>
+              
+                @if ("form.get('phone')?.hasError('required') && (form.get('phone')?.touched || form.get('phone')?.dirty") {
+                  <mat-error>
+                     Mobile is required
+                  </mat-error>
+                }
+              </mat-form-field>
+
 
               <div id="special-column">
                 <button mat-raised-button color="primary" (click)="PasswordChange()">
@@ -87,13 +119,14 @@
 
             <div class="fila common-rows" id="fila4">
 
-              <button mat-button class="custom-button" type="submit" (click)="saveChanges()">
+              <button mat-button class="custom-button" type="submit">
                 Save
               </button>
               
             </div>
 
-          </div>
+           </div>
+          </form>
         </mat-card-content>
       </mat-card>
     </span>

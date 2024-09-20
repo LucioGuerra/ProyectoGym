@@ -12,12 +12,11 @@
   background-color: #66645E;
   color: #222222;
   font-weight: bold;
-  height: 69vh;
+  height: 75vh;
   width: 40%;
   padding: 1rem;
   box-sizing: border-box;
   max-width: 100%;
-  max-height: 82%;
   overflow: visible;
 }
 
@@ -110,19 +109,6 @@ mat-button-toggle.mat-button-toggle-checked {
   transform: translateY(0.8cm);
 }
 
-input {
-  padding: 1% 1%;
-  border: 1px solid transparent;
-  border-radius: 7px;
-  background-color: #d0d0d0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 95%;
-  font-weight: bold;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
-  width: 100%;
-  flex: 1;
-  margin-bottom: 0; 
-}
 
 label {
   font-size: 95%;
@@ -137,7 +123,7 @@ label {
   flex-direction: row;
   background-color: transparent;
   gap: 0%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.2rem ;
   align-items: center;
 }
 
@@ -155,7 +141,7 @@ button[mat-raised-button] {
   text-align: center;
   width: 100%;
   max-width: auto;
-  padding: 1% 1%;
+  padding: 8.8% 1%;
   color: #d0d0d0;
   background-color: transparent;
   border: 1px solid #d0d0d0;
@@ -164,7 +150,7 @@ button[mat-raised-button] {
   height: auto;
   align-items: center;
   transform: translateX(60%);
-  transform: translateY(55%);
+  transform: translateY(3%);
 }
 
 .common-rows {
@@ -189,7 +175,7 @@ button[mat-raised-button] {
 #fila3 {          
   justify-content: space-between;
   align-items: center;               
-  margin: 1 2rem; 
+  margin: 1 1rem; 
   gap: 4%;
 }
 
@@ -201,7 +187,7 @@ button[mat-raised-button] {
 #special-column {
   background-color: transparent;
   width: 33vh;
-  transform: translateX(2%);
+  transform: translateY(-20%);
 }
 
 
@@ -211,7 +197,7 @@ button[mat-raised-button] {
   padding: 7px 20px;
   border-radius: 7px;
   transform: translateY(10%);
-  transform: translateX(7.5%);
+  transform: translateX(-0.2%);
   left: 20%;
   height: 100%;
 }
@@ -226,6 +212,21 @@ button[mat-raised-button] {
   font-weight: bold;
 }
 
+mat-form {
+  background-color: #222222;
+}
+
+mat-label {
+  color: #222222;
+  font-weight: bold;
+  font-size: large;
+}
+
+mat-error {
+  color: #d0d0d0;
+  font-weight: bold;
+  font-size: 120%;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

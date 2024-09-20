@@ -2,20 +2,26 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Role, User } from '../models/user.models';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DrawerComponent } from '../drawer/drawer.component';
+import { FormGroup } from '@angular/forms';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+
+
 
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
 
-  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader,MatCardContent, MatButtonToggleModule, ],
+  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader,MatCardContent, MatButtonToggleModule, MatError, MatInput, MatFormField, MatLabel],
   
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss', 
@@ -26,9 +32,13 @@ export class UserEditComponent implements OnInit {
   user: User;  
   roles = Object.values(Role);
   userImage: string | undefined;  
+  form: FormGroup;
+  matcher = new ErrorStateMatcher();
+
+
  
 
-  constructor(public auth: AuthService, private router: Router) {
+  constructor(public auth: AuthService, private router: Router, private fb: FormBuilder) {
     
     this.user = {
       id: 123,
@@ -40,6 +50,19 @@ export class UserEditComponent implements OnInit {
       password: '1234',
       dni: 12093847,
     };
+
+    this.form = this.fb.group({
+      firstName: [this.user.firstName, Validators.required],
+      lastName: [this.user.lastName, Validators.required],
+
+      dni: [this.user.dni, [Validators.required, 
+                            Validators.minLength(8), 
+                            Validators.maxLength(8)],
+                          ],
+
+      email: [{value: this.user.email, disabled: true}],
+      phone: [this.user.phone, Validators.required]
+    });
   }
 
   ngOnInit(): void {
@@ -67,47 +90,25 @@ export class UserEditComponent implements OnInit {
   }
   
 
-
   saveChanges() {
 
-    if (!this.user.firstName || this.user.firstName.trim() === '') {
-      alert('Name cannot be empty');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    if (!this.user.lastName || this.user.lastName.trim() === '') {
-      alert('Surname cannot be empty');
-      return;
-    }
 
-    if (!this.user.dni) {
-      alert('DNI cannot be empty');
-      return;
-    }
+    if (this.form.valid) {
+      this.user = {
+        ...this.user,
+        ...this.form.value
+      };
 
-    if (isNaN(this.user.dni) || this.user.dni.toString().length !== 8 || this.user.dni < 0) {
-      alert('DNI must be an 8 digit number');
-      return;
-    }
-
-    if (!this.user.phone) {
-      alert('Mobile cannot be empty');
-      return;
-    }
-
-    if (this.user.phone < 0) {
-      alert('Mobile cannot be a negative number')
-      return;
-    }
-
-    if (isNaN(this.user.phone)) {
-      alert('Mobile must be a number');
-      return;
-    }
- 
-    alert('Changes were successfully saved.');
+      
+    alert("changes were successfully saved.")
     console.log("diccionario del usuario: ");
     console.dir(this.user);
+    }
+
   }
 }
-
