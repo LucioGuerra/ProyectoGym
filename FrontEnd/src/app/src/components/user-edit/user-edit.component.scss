@@ -9,10 +9,10 @@
 }
 
 .tarjeta {
-  background-color: #66645E;
+  background-color: #66645e;
   color: #222222;
   font-weight: bold;
-  height: 75vh;
+  height: 67vh;
   width: 40%;
   padding: 1rem;
   box-sizing: border-box;
@@ -60,34 +60,52 @@
   position: absolute;
   pointer-events: all;
   bottom: calc(5% + 0.1cm);
+  transform: translateX(10%);
   right: 1rem;
   padding: 0%;
 }
 
+
 mat-button-toggle-group {
   display: flex;
-  background-color: #F6C90E;
+  background-color: #d0d0d0;
   border-radius: 90px;
   color: #222222;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
   padding: 0%;
+  width: 100%;
 }
+
 
 mat-button-toggle {
   height: calc(1.5rem + 0.2cm);
-  border-radius: 20px;
-  border: none;
+  border-radius: 90px;
+  border: 0%;
+  border-color: transparent;
   margin: 1px;
   justify-content: center;
   align-items: center;
+  background-color: #d0d0d0; 
   color: #222222;
   font-weight: bold;
+  width: 50%;
 }
 
+
 mat-button-toggle.mat-button-toggle-checked {
-  background-color: #222222;
-  color: #d0d0d0;
+  background-color: #F6C90E; 
+  color: #222222; 
+  width: 60%;
 }
+
+
+mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-label-content::after {
+  content: 0%;
+}
+
+
+
+
 
 .back-btn {
   background-color: transparent;
@@ -123,34 +141,28 @@ label {
   flex-direction: row;
   background-color: transparent;
   gap: 0%;
-  margin-bottom: 0.2rem ;
+  margin-bottom: 0.5rem ;
   align-items: center;
 }
 
 
-.mail {
-  background-color: #222222;
-  box-shadow: none;
-  color: #66645E;
-  border: 1px solid black;
-  box-sizing: border-box;
-}
+
 
 button[mat-raised-button] {
   display: flex;
   text-align: center;
   width: 100%;
   max-width: auto;
-  padding: 8.8% 1%;
-  color: #d0d0d0;
+  padding: 5.2% 1%;
+  color: #222222;
   background-color: transparent;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #222222;
   border-radius: 7px;
   box-sizing: border-box;
   height: auto;
   align-items: center;
   transform: translateX(60%);
-  transform: translateY(3%);
+  transform: translateY(-2%);
 }
 
 .common-rows {
@@ -192,41 +204,46 @@ button[mat-raised-button] {
 
 
 .custom-button {
-  background-color: #222222;
-  color: white;
+  background-color: #B9A552;
   padding: 7px 20px;
+  color: #222222 !important;
+  font-weight: bold;
   border-radius: 7px;
-  transform: translateY(10%);
-  transform: translateX(-0.2%);
+  transform: translateY(-0.3cm);
   left: 20%;
   height: 100%;
 }
 
-.custom-button:hover {
-  background-color: #222222;
-}
-
-.custom-button:active {
-  background-color: #F6C90E;
-  color: #222222;
-  font-weight: bold;
-}
-
-mat-form {
-  background-color: #222222;
-}
 
 mat-label {
   color: #222222;
-  font-weight: bold;
   font-size: large;
+  font-weight: bold;
 }
 
 mat-error {
-  color: #d0d0d0;
+  color: #222222;
   font-weight: bold;
   font-size: 120%;
 }
+
+
+
+.email {
+  font-size: 85%;
+}
+
+::ng-deep .mat-mdc-form-field-flex {
+  height: 42px !important;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////

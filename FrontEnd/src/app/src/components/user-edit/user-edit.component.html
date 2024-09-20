@@ -41,9 +41,9 @@
 
             <div class="fila common-rows" id="fila1">
 
-              <mat-form-field>
+              <mat-form-field appearance="outline">
                 <mat-label>First Name</mat-label>
-                <input matInput id="firstName" type="text" formControlName="firstName" [errorStateMatcher]="matcher"/>
+                <input matInput class="custom-input" id="firstName" type="text" formControlName="firstName" [errorStateMatcher]="matcher"/>
               
                 @if ("form.get('firstName')?.hasError('required') && (form.get('firstName')?.touched || form.get('firstName')?.dirty") {
                   <mat-error>
@@ -53,7 +53,7 @@
               </mat-form-field>
               
 
-              <mat-form-field>
+              <mat-form-field appearance="outline">
                 <mat-label> Surname</mat-label>
                 <input matInput id="lastName" type="text" formControlName="lastName" [errorStateMatcher]="matcher"/>
               
@@ -69,8 +69,8 @@
 
             <div class="fila common-rows" id="fila2">
 
-              <mat-form-field>
-                <mat-label> DNI</mat-label>
+              <mat-form-field appearance="outline">
+                <mat-label>DNI</mat-label>
                 <input matInput id="dni" type="text" formControlName="dni" [errorStateMatcher]="matcher"/>
               
                 @if ("form.get('dni')?.hasError('required') && (form.get('dni')?.touched") {
@@ -82,10 +82,10 @@
               </mat-form-field>
 
               
-              <mat-form-field>
+              <mat-form-field appearance="outline" class="email">
                 
                 <mat-label>Email</mat-label>
-                <input matInput id="email" type="text" formControlName="email" [errorStateMatcher]="matcher"/>
+                <input matInput id="email" type="text" [value]="user.email" disabled/>
 
               </mat-form-field>
 
@@ -95,7 +95,7 @@
             <div class="fila common-rows" id="fila3">
 
 
-              <mat-form-field>
+              <mat-form-field appearance="outline">
                 <mat-label>Mobile</mat-label>
                 <input matInput id="phone" type="text" formControlName="phone" [errorStateMatcher]="matcher"/>
               

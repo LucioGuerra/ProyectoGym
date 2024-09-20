@@ -60,7 +60,6 @@ export class UserEditComponent implements OnInit {
                             Validators.maxLength(8)],
                           ],
 
-      email: [{value: this.user.email, disabled: true}],
       phone: [this.user.phone, Validators.required]
     });
   }
