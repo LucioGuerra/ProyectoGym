@@ -8,7 +8,7 @@ import {BehaviorSubject} from "rxjs";
 @Injectable({ providedIn: "root" })
 export class AuthService {
   private auth0Client: auth0.WebAuth;
-  private isAuthenticated = new BehaviorSubject<boolean>(false);
+  isAuthenticated = new BehaviorSubject<boolean>(false);
   private isAdmin = new BehaviorSubject<boolean>(false);
 
   isAuthenticated$ = this.isAuthenticated.asObservable();
@@ -22,6 +22,7 @@ export class AuthService {
       responseType: 'token id_token',
       cookieDomain: "."
     })
+    this.loadSession();
   }
 
   public login(email: string | undefined, password: string | undefined): void {
@@ -33,7 +34,7 @@ export class AuthService {
     });
   }
 
-  public loginWithThirdParty(provider: string){
+  public loginWithThirdParty(provider: string) {
     this.auth0Client.authorize({
       connection: provider
     })
@@ -57,14 +58,14 @@ export class AuthService {
     const queryParams = new URLSearchParams(window.location.hash.substring(1));
     const urlParams = new URLSearchParams(queryParams);
 
-    if(urlParams.get("access_token")){
-      try{
+    if (urlParams.get("access_token")) {
+      try {
         const accessToken = urlParams.get("access_token");
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
 
         this.setSession(accessToken, expiresIn, idToken);
-      } catch(error){
+      } catch (error) {
         console.error(error);
       }
     }
@@ -98,25 +99,34 @@ export class AuthService {
   private setRole(idToken: any) {
     // @ts-ignore
     const role = jwtDecode(idToken)['https://criminal-cross.com/roles'];
-    if(role){
-      if(role == 'ADMIN'){
+    if (role) {
+      if (role == 'ADMIN') {
         this.isAdmin.next(true);
         console.log("Es admin");
+      } else {
+        this.isAdmin.next(false);
+        console.log("No es admin");
       }
-      else{
-       this.isAdmin.next(false);
-       console.log("No es admin");
-      }
-    }else{
+    } else {
       console.error("No hay ningun rol asignado")
     }
   }
 
-  public getIsAuthenticated(): boolean {
-    return this.isAuthenticated.value;
-  }
+  private loadSession() {
+    const accessToken = localStorage.getItem('access_token');
+    const expiresAt = localStorage.getItem('expires_at');
+    const idToken = localStorage.getItem('idToken');
 
-  public getIsAdmin(): boolean {
-    return this.isAdmin.value;
+    if (accessToken && expiresAt && idToken) {
+      //const expiresAtDate = new Date(parseInt(expiresAt));
+      //const currentDate = new Date();
+
+      //if (currentDate < expiresAtDate) {
+        this.isAuthenticated.next(true);
+        this.setRole(idToken);
+      //} else {
+        //this.logout();
+      //}
+    }
   }
 }

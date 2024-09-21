@@ -41,7 +41,10 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private el: ElementRef, private router: Router, private auth0: AuthService) {}
   ngOnInit(): void {
-    this.auth0.handleAuthentication(); //Automaticamente despues de logout me vuelve a logear
+    if (!this.auth0.isAuthenticated) {
+      this.auth0.handleAuthentication();
+    }
+
     const auhtSub = this.auth0.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
       if (isAuthenticated) {
@@ -54,10 +57,8 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         });
         this.subscription.add(adminSub);
-      } else {
-
-        }
-      });
+      }
+    });
     this.subscription.add(auhtSub);
   }
 
