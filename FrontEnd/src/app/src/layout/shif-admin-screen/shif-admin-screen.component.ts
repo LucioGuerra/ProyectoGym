@@ -1,4 +1,9 @@
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component, OnDestroy,
+  OnInit,
+  signal
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../components/services/services/auth.service';
@@ -16,6 +21,8 @@ import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { Activity } from '../../components/index';
+import {Router} from "@angular/router";
+import {Subscription} from "rxjs";
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
@@ -25,9 +32,9 @@ import { Activity } from '../../components/index';
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShifAdminScreenComponent {
+export class ShifAdminScreenComponent implements OnInit, OnDestroy {
 
-  private auth0 = inject(AuthService);
+  private subscription = new Subscription();
 
   public activities = [{
     name: 'Crossfit',
@@ -187,19 +194,32 @@ export class ShifAdminScreenComponent {
   selectedDate = signal<Date>(new Date(Date.now()));
   selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
 
-  constructor() {
-    this.auth0.isAuthenticated$.subscribe((isAuthenticated: any) => {
+
+
+  constructor(private auth0: AuthService, private router: Router) {
+  }
+  ngOnInit() {
+    const authSub = this.auth0.isAuthenticated$.subscribe((isAuthenticated: boolean) => {
       console.log('isAuthenticated:', isAuthenticated);
-      if (!isAuthenticated) {
-        this.auth0.loginWithRedirect();
-      } else {
-        this.auth0.user$.subscribe((user: any) => {
-          console.log('User:', user);
+      if (isAuthenticated) {
+        const adminSub = this.auth0.isAdmin$.subscribe((isAdmin: boolean) => {
+          if(isAdmin){
+            //Se queda en la pagina
+          }else{
+            //todo: redirigir a la pagina de inicio
+          }
         });
+        this.subscription.add(adminSub);
+      } else {
+        this.router.navigate(['/login']);
       }
     });
+    this.subscription.add(authSub);
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);

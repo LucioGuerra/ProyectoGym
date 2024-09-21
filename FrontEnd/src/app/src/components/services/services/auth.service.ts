@@ -3,12 +3,16 @@ import { environment } from "../../../../../environments/environment";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
 import { jwtDecode } from "jwt-decode";
+import {BehaviorSubject} from "rxjs";
 
-@Injectable({providedIn: "root"})
+@Injectable({ providedIn: "root" })
 export class AuthService {
   private auth0Client: auth0.WebAuth;
-  public isAuthenticated = signal<boolean>(false);
-  public isAdmin = signal<boolean>(false);
+  private isAuthenticated = new BehaviorSubject<boolean>(false);
+  private isAdmin = new BehaviorSubject<boolean>(false);
+
+  isAuthenticated$ = this.isAuthenticated.asObservable();
+  isAdmin$ = this.isAdmin.asObservable();
 
   constructor() {
     this.auth0Client = new auth0.WebAuth({
@@ -53,7 +57,7 @@ export class AuthService {
     const queryParams = new URLSearchParams(window.location.hash.substring(1));
     const urlParams = new URLSearchParams(queryParams);
 
-    if(urlParams){
+    if(urlParams.get("access_token")){
       try{
         const accessToken = urlParams.get("access_token");
         const expiresIn = urlParams.get("expires_in");
@@ -71,13 +75,19 @@ export class AuthService {
     localStorage.setItem('expires_at', expiresIn);
     localStorage.setItem('idToken', idToken);
 
-    this.isAuthenticated.set(true);
+    this.isAuthenticated.next(true);
     this.setRole(idToken);
   }
 
-  private logout(): void {
+  public logout(): void {
+    console.log("Entra al logout")
     localStorage.removeItem('accessToken');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('idToken');
+
+    this.isAuthenticated.next(false);
+    console.log("me Deslogea");
+    this.isAdmin.next(false);
 
     this.auth0Client.logout({
       returnTo: 'http://localhost:4200/home'
@@ -90,14 +100,23 @@ export class AuthService {
     const role = jwtDecode(idToken)['https://criminal-cross.com/roles'];
     if(role){
       if(role == 'ADMIN'){
-        this.isAdmin.set(true);
+        this.isAdmin.next(true);
+        console.log("Es admin");
       }
       else{
-       this.isAdmin.set(false);
+       this.isAdmin.next(false);
+       console.log("No es admin");
       }
     }else{
       console.error("No hay ningun rol asignado")
     }
+  }
 
+  public getIsAuthenticated(): boolean {
+    return this.isAuthenticated.value;
+  }
+
+  public getIsAdmin(): boolean {
+    return this.isAdmin.value;
   }
 }

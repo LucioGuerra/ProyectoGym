@@ -5,7 +5,7 @@ import {
   ElementRef,
   AfterViewInit,
   OnInit,
-  inject
+  inject, OnDestroy
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CurrencyPipe } from '@angular/common';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { Router } from '@angular/router';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-home-page',
@@ -23,9 +24,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePageComponent implements OnInit, AfterViewInit {
+export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
   private sections: HTMLElement[] = [];
-  private auth0 = inject(AuthService);
+  private subscription = new Subscription();
 
   public activities = [
     {id: 1, name: 'Actividad 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.', img: 'https://via.placeholder.com/150'},
@@ -38,27 +39,30 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     {id: 3, name: 'Pack 3', price:'35000',description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.'},
   ]
 
-  constructor(private el: ElementRef, private router: Router) {}
+  constructor(private el: ElementRef, private router: Router, private auth0: AuthService) {}
   ngOnInit(): void {
-
-
-    this.auth0.handleAuthentication();
-    /*this.auth.isAuthenticated$.subscribe(isAuthenticated => {
+    this.auth0.handleAuthentication(); //Automaticamente despues de logout me vuelve a logear
+    const auhtSub = this.auth0.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
       if (isAuthenticated) {
-        this.router.navigate(['admin/agenda']);
-      } else {
-        this.auth.user$.subscribe(user => {
-          if (user) {
-            console.log('User is authenticated based on getUser:', user);
+        const adminSub = this.auth0.isAdmin$.subscribe(isAdmin => {
+          console.log('isAdmin:', isAdmin);
+          if (isAdmin) {
             this.router.navigate(['admin/agenda']);
           } else {
-            console.log('User is not authenticated', user);
+            //todo redirect to client page
           }
         });
-      }
-    });
-     */
+        this.subscription.add(adminSub);
+      } else {
+
+        }
+      });
+    this.subscription.add(auhtSub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -82,5 +86,9 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 
   login() {
     this.router.navigate(['/login']);
+  }
+
+  redirect() {
+    this.router.navigate(['/admin/agenda']);
   }
 }
