@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  Component, OnDestroy,
-  OnInit,
+  Component, effect,
   signal
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +31,7 @@ import {Subscription} from "rxjs";
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShifAdminScreenComponent implements OnInit, OnDestroy {
+export class ShifAdminScreenComponent{
 
   private subscription = new Subscription();
 
@@ -197,29 +196,18 @@ export class ShifAdminScreenComponent implements OnInit, OnDestroy {
 
 
   constructor(private auth0: AuthService, private router: Router) {
-  }
-  ngOnInit() {
-    const authSub = this.auth0.isAuthenticated$.subscribe((isAuthenticated: boolean) => {
-      console.log('isAuthenticated:', isAuthenticated);
-      if (isAuthenticated) {
-        const adminSub = this.auth0.isAdmin$.subscribe((isAdmin: boolean) => {
-          if(isAdmin){
-            //Se queda en la pagina
-          }else{
-            //todo: redirigir a la pagina de inicio
-          }
-        });
-        this.subscription.add(adminSub);
-      } else {
+    effect(() => {
+      if(this.auth0.isAuthenticated()){
+        if(this.auth0.isAdmin()){
+        }
+        //todo redirect to client page
+      }
+      else{
         this.router.navigate(['/login']);
       }
     });
-    this.subscription.add(authSub);
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);

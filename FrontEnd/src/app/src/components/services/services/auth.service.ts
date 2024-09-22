@@ -8,11 +8,8 @@ import {BehaviorSubject} from "rxjs";
 @Injectable({ providedIn: "root" })
 export class AuthService {
   private auth0Client: auth0.WebAuth;
-  isAuthenticated = new BehaviorSubject<boolean>(false);
-  private isAdmin = new BehaviorSubject<boolean>(false);
-
-  isAuthenticated$ = this.isAuthenticated.asObservable();
-  isAdmin$ = this.isAdmin.asObservable();
+  isAuthenticated = signal<boolean>(false);
+  isAdmin = signal<boolean>(false);
 
   constructor() {
     this.auth0Client = new auth0.WebAuth({
@@ -22,7 +19,7 @@ export class AuthService {
       responseType: 'token id_token',
       cookieDomain: "."
     })
-    this.loadSession();
+    //this.loadSession();
   }
 
   public login(email: string | undefined, password: string | undefined): void {
@@ -76,7 +73,7 @@ export class AuthService {
     localStorage.setItem('expires_at', expiresIn);
     localStorage.setItem('idToken', idToken);
 
-    this.isAuthenticated.next(true);
+    this.isAuthenticated.set(true);
     this.setRole(idToken);
   }
 
@@ -86,9 +83,9 @@ export class AuthService {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('idToken');
 
-    this.isAuthenticated.next(false);
+    this.isAuthenticated.set(false);
     console.log("me Deslogea");
-    this.isAdmin.next(false);
+    this.isAdmin.set(false);
 
     this.auth0Client.logout({
       returnTo: 'http://localhost:4200/home'
@@ -101,10 +98,10 @@ export class AuthService {
     const role = jwtDecode(idToken)['https://criminal-cross.com/roles'];
     if (role) {
       if (role == 'ADMIN') {
-        this.isAdmin.next(true);
+        this.isAdmin.set(true);
         console.log("Es admin");
       } else {
-        this.isAdmin.next(false);
+        this.isAdmin.set(false);
         console.log("No es admin");
       }
     } else {
@@ -112,7 +109,7 @@ export class AuthService {
     }
   }
 
-  private loadSession() {
+  /*private loadSession() {
     const accessToken = localStorage.getItem('access_token');
     const expiresAt = localStorage.getItem('expires_at');
     const idToken = localStorage.getItem('idToken');
@@ -122,11 +119,11 @@ export class AuthService {
       //const currentDate = new Date();
 
       //if (currentDate < expiresAtDate) {
-        this.isAuthenticated.next(true);
+        this.isAuthenticated.set(true);
         this.setRole(idToken);
       //} else {
         //this.logout();
       //}
     }
-  }
+  }*/
 }

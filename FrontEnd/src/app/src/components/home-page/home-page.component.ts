@@ -4,8 +4,7 @@ import {
   HostListener,
   ElementRef,
   AfterViewInit,
-  OnInit,
-  inject, OnDestroy
+  effect
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,7 +23,7 @@ import {Subscription} from "rxjs";
   styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HomePageComponent implements AfterViewInit {
   private sections: HTMLElement[] = [];
   private subscription = new Subscription();
 
@@ -39,31 +38,23 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
     {id: 3, name: 'Pack 3', price:'35000',description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.'},
   ]
 
-  constructor(private el: ElementRef, private router: Router, private auth0: AuthService) {}
-  ngOnInit(): void {
-    if (!this.auth0.isAuthenticated) {
-      this.auth0.handleAuthentication();
-    }
+  constructor(private el: ElementRef, private router: Router, private auth0: AuthService) {
 
-    const auhtSub = this.auth0.isAuthenticated$.subscribe(isAuthenticated => {
-      console.log('isAuthenticated:', isAuthenticated);
-      if (isAuthenticated) {
-        const adminSub = this.auth0.isAdmin$.subscribe(isAdmin => {
-          console.log('isAdmin:', isAdmin);
-          if (isAdmin) {
-            this.router.navigate(['admin/agenda']);
-          } else {
-            //todo redirect to client page
-          }
-        });
-        this.subscription.add(adminSub);
+    effect(() => {
+      if(this.auth0.isAuthenticated()){
+        if(this.auth0.isAdmin()){
+          console.log("Me redirige a admin/agenda")
+          this.router.navigate(['admin/agenda']);
+        }
+        else {
+          //todo redirect to client page
+        }
       }
-    });
-    this.subscription.add(auhtSub);
-  }
+      else{
+        this.auth0.handleAuthentication();
+      }
+    }, { allowSignalWrites: true });
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
