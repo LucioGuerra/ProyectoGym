@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.dto.request.UserDTO;
 import com.desarrollo.criminal.service.UserService;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +33,9 @@ public class UserController {
 
 
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping("/create")
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+        return userService.createUser(userDTO);
     }
     
 
