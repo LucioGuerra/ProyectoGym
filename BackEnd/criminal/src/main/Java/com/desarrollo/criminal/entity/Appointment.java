@@ -32,13 +32,16 @@ public class Appointment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
 
     public Appointment(){
     }

@@ -2,10 +2,13 @@ package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.ActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
+import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.ActivityService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +21,20 @@ import java.util.Optional;
 public class ActivityController {
     private final ActivityService activityService;
 
-    /*@GetMapping
+    @GetMapping
     public  ResponseEntity<List<Activity>> getAllActivities(){
         return activityService.getAllActivities();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
-        return activityService.getActivityById(id);
-    }*/
+        try {
+            Activity activity = activityService.getActivityById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(activity);
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Activity> createActivity(@RequestBody ActivityDTO activityDTO) {
