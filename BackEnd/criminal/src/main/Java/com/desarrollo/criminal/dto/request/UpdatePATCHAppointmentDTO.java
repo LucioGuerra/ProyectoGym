@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-public class UpdateAppointmentDTO {
+public class UpdatePATCHAppointmentDTO {
 
     @FutureOrPresent(message = "The date must be in the present or future")
     private LocalDate date;
@@ -22,6 +22,6 @@ public class UpdateAppointmentDTO {
 
     private Long instructorID;
 
-    private UpdateAppointmentDTO() {}
+    private UpdatePATCHAppointmentDTO() {}
 }
 

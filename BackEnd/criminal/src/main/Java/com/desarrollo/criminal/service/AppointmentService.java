@@ -1,7 +1,7 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
-import com.desarrollo.criminal.dto.request.UpdateAppointmentDTO;
+import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
@@ -115,7 +115,7 @@ public class AppointmentService {
         }
     }
 
-    public ResponseEntity<?> updateAppointment(Long id, UpdateAppointmentDTO updateAppointmentDTO) {
+    public ResponseEntity<?> updateAppointment(Long id, UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         try {
             Appointment appointment = this.getAppointmentById(id);
             // modelMapper.map(updateAppointmentDTO, appointment);

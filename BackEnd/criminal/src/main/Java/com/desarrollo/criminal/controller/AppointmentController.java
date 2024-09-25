@@ -1,7 +1,7 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
-import com.desarrollo.criminal.dto.request.UpdateAppointmentDTO;
+import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.AppointmentService;
 import jakarta.persistence.EntityNotFoundException;
@@ -40,28 +40,28 @@ public class AppointmentController {
         return appointmentService.getAppointmentByDate(date);
     }
 
-    /*@PreAuthorize("hasRole('ROLE_ADMIN')")*/
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
     }
 
-    /*@PreAuthorize("hasRole('ROLE_ADMIN')")*/
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
         return appointmentService.deleteAppointment(id);
     }
 
-    /*@PreAuthorize("hasRole('ROLE_ADMIN')")*/
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAllAppointment(@PathVariable Long id, @RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.updateAllAppointment(id, appointmentDTO);
     }
 
-    /*@PreAuthorize("hasRole('ROLE_ADMIN')")*/
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Long id,
-                                               @RequestBody UpdateAppointmentDTO updateAppointmentDTO) {
+                                               @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
 }
