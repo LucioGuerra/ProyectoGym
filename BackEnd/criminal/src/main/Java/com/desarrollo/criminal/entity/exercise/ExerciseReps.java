@@ -3,6 +3,8 @@ package com.desarrollo.criminal.entity.exercise;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.Duration;
+
 @Getter
 @Entity
 public class ExerciseReps {
@@ -14,11 +16,11 @@ public class ExerciseReps {
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
-    @Column(nullable = false)
     private Integer series;
 
-    @Column(nullable = false)
     private Integer reps;
+
+    private Duration duration;
 
     private ExerciseReps() {}
 }

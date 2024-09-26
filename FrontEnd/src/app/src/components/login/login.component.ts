@@ -1,15 +1,17 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
 
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { AuthService } from "../services/services/auth.service";
 
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -29,9 +31,11 @@ export class LoginComponent {
   error = false; //El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
+  auth0 = inject(AuthService);
+
   emailFormControl = new FormControl("",[Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
-  
+
   formGroup = new FormGroup({
     email: this.emailFormControl,
     password: new FormControl("",Validators.required),
@@ -41,7 +45,8 @@ export class LoginComponent {
     if (this.formGroup.valid) {
       this.error = false
       const json = this.formGroup.value;
-      console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok
+      console.log(json); //Esto se borra después, es para corroborar q se esta mandando to do ok
+      this.auth0.login(json.email?.toString(), json.password?.toString());
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();
@@ -59,14 +64,14 @@ export class LoginComponent {
     this.router.navigate(['/forgot']);
   }
 
-  //Esto lo dejo asi como para que se sepa q se tiene q hacer algo con esto, pero dsp se encarga el q tenga la incidencia de auth0
+
   google(){
-    this.router.navigate(['/google']);
+    this.auth0.loginWithThirdParty("google-oauth2")
   }
   facebook(){
-    this.router.navigate(['/facebook']);
+    this.auth0.loginWithThirdParty("facebook")
   }
   microsoft(){
-    this.router.navigate(['/microsoft']);
+    this.auth0.loginWithThirdParty("windowslive")
   }
 }
