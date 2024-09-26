@@ -3,26 +3,28 @@ package com.desarrollo.criminal.entity.routine;
 import com.desarrollo.criminal.entity.exercise.ExercisesGroup;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Routine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 
     @OneToMany
-    private List<ExercisesGroup> blocks;
+    protected List<ExercisesGroup> blocks;
 
     @PrePersist
     protected void onCreate() {

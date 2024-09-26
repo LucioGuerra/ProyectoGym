@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.controller;
 
+import com.desarrollo.criminal.dto.request.RoutineDTO;
 import com.desarrollo.criminal.entity.routine.Routine;
 import com.desarrollo.criminal.service.RoutineService;
 
@@ -27,10 +28,10 @@ public class RoutineController {
         return routineService.getRoutineById(id);
     }
 
-//    @PostMapping
-//    public ResponseEntity<Routine> createRoutine(@RequestBody Routine routine) {
-//        return routineService.createRoutine(routine);
-//    }
+   @PostMapping
+   public ResponseEntity<Routine> createRoutine(@RequestBody RoutineDTO routineDTO) {
+        return routineService.createRoutine(routineDTO);
+   }
 
     @PutMapping("/id")
     public ResponseEntity<Routine> updateRoutine(@PathVariable Long id, @RequestBody Routine routine) {
