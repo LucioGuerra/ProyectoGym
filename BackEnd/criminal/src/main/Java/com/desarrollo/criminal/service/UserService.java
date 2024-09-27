@@ -2,7 +2,6 @@ package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
@@ -30,8 +29,14 @@ public class UserService {
         }
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public ResponseEntity<User> getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     public ResponseEntity<User> createUser(User user) {

@@ -4,7 +4,6 @@ import com.desarrollo.criminal.dto.request.ActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.repository.ActivityRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -24,11 +23,16 @@ public class ActivityService {
         List<Activity> activities = activityRepository.findAll();
         return ResponseEntity.ok(activities);
     }
-*/
-    public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
 
+    public ResponseEntity<Activity> getActivityById(Long id) {
+        Optional<Activity> activity = activityRepository.findById(id);
+        if (activity.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(activity.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+*/
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
         Activity activity = new Activity();
 
