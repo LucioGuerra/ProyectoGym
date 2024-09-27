@@ -40,6 +40,7 @@ public class AppointmentService {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
+        //Todo: Create ModelMapper configuration to use here
         Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
 
         appointmentRepository.save(appointment);
