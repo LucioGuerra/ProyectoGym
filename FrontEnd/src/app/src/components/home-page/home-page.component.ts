@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, HostListener, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  ElementRef,
+  AfterViewInit,
+  OnInit,
+  inject
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '@auth0/auth0-angular';
+import { AuthService } from '../services/services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { CurrencyPipe } from '@angular/common';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
@@ -17,6 +25,8 @@ import { Router } from '@angular/router';
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
   private sections: HTMLElement[] = [];
+  private auth0 = inject(AuthService);
+
   public activities = [
     {id: 1, name: 'Actividad 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.', img: 'https://via.placeholder.com/150'},
     {id: 2, name: 'Actividad 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.', img: 'https://via.placeholder.com/150'},
@@ -28,9 +38,12 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     {id: 3, name: 'Pack 3', price:'35000',description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.'},
   ]
 
-  constructor(private auth: AuthService, private el: ElementRef, private router: Router) {}
+  constructor(private el: ElementRef, private router: Router) {}
   ngOnInit(): void {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
+
+
+    this.auth0.handleAuthentication();
+    /*this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
       if (isAuthenticated) {
         this.router.navigate(['admin/agenda']);
@@ -45,6 +58,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
         });
       }
     });
+     */
   }
 
   ngAfterViewInit(): void {
