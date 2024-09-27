@@ -6,17 +6,15 @@ import com.desarrollo.criminal.repository.ActivityRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @AllArgsConstructor
 @Service
 public class ActivityService {
-
+    private static ModelMapper modelMapper;
     private final ActivityRepository activityRepository;
 /*
     public ResponseEntity<List<Activity>> getAllActivities() {
@@ -71,4 +69,8 @@ public class ActivityService {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
     }*/
+
+    public static Activity convertToEntity(ActivityDTO activityDTO) {
+        return modelMapper.map(activityDTO, Activity.class);
+    }
 }

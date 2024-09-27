@@ -1,13 +1,11 @@
 package com.desarrollo.criminal.entity.routine;
 
 import com.desarrollo.criminal.entity.Activity;
-import com.desarrollo.criminal.entity.exercise.Exercise;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter

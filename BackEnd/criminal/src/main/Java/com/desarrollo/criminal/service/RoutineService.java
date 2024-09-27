@@ -16,8 +16,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class RoutineService {
+    private final UserService userService;
     private final RoutineRepository RoutineRepository;
-    private final RoutineRepository routineRepository;
 
     public ResponseEntity<List<Routine>> getAllRoutines() {
         List<Routine> routines = RoutineRepository.findAll();
@@ -37,25 +37,25 @@ public class RoutineService {
         if (routineDTO.getRoutineType().equals(RoutineType.ACTIVITY)) {
             ActivityRoutine activityRoutine;
             activityRoutine = new ActivityRoutine();
-            activityRoutine.setActivity(routineDTO.getActivity());
+            activityRoutine.setActivity(ActivityService.convertToEntity(routineDTO.getActivity()));
             commonAttributes(activityRoutine, routineDTO);
 
-            routineRepository.save(activityRoutine);
+            RoutineRepository.save(activityRoutine);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             BuildingRoutine buildingRoutine;
             buildingRoutine = new BuildingRoutine();
-            buildingRoutine.setUser(routineDTO.getUser());
+            buildingRoutine.setUser(userService.getUserById(routineDTO.getUserID()).getBody ());
             buildingRoutine.setDay(routineDTO.getDay());
             commonAttributes(buildingRoutine, routineDTO);
 
-            routineRepository.save(buildingRoutine);
+            RoutineRepository.save(buildingRoutine);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
     }
 
     private static void commonAttributes(Routine routine, RoutineDTO routineDTO) {
-        routine.setBlocks(routineDTO.getBlocks());
+        routine.setBlocks(ExercisesGroupService.convertToEntity(routineDTO.getBlocks()));
     }
 
     public ResponseEntity<Routine> updateRoutine(Long ignoredId, Routine ignoredRoutine) {
