@@ -238,6 +238,13 @@
   dependencies:
     tslib "^2.3.0"
 
+"@angular/material@^18.2.3":
+  version "18.2.3"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-18.2.3.tgz#69b6b5528081be70e0a6be2db22e61f5b4f1b870"
+  integrity sha512-JFfvXaMHMhskncaxxus4sDvie9VYdMkfYgfinkLXpZlPFyn1IzjDw0c1BcrcsuD7UxQVZ/v5tucCgq1FQfGRpA==
+  dependencies:
+    tslib "^2.3.0"
+
 "@angular/platform-browser-dynamic@^18.1.0":
   version "18.2.1"
   resolved "https://registry.npmjs.org/@angular/platform-browser-dynamic/-/platform-browser-dynamic-18.2.1.tgz"
@@ -262,6 +269,14 @@
 "@auth0/auth0-angular@2.2.3":
   version "2.2.3"
   resolved "https://registry.npmjs.org/@auth0/auth0-angular/-/auth0-angular-2.2.3.tgz"
+  integrity sha512-4VI8VOPQe33Q5LSCjKHFGFB8+81HBw/6px3inOe8GRj/seim3F+QhMiz7vw7kcJkRu8ONiykAg6WDS/kVJ7rLg==
+  dependencies:
+    "@auth0/auth0-spa-js" "^2.0.1"
+    tslib "^2.0.0"
+
+"@auth0/auth0-angular@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@auth0/auth0-angular/-/auth0-angular-2.2.3.tgz#5eb3372251fc54433be6793cf7f7b92f136bca81"
   integrity sha512-4VI8VOPQe33Q5LSCjKHFGFB8+81HBw/6px3inOe8GRj/seim3F+QhMiz7vw7kcJkRu8ONiykAg6WDS/kVJ7rLg==
   dependencies:
     "@auth0/auth0-spa-js" "^2.0.1"
@@ -3113,6 +3128,11 @@ cookiejar@^2.1.3:
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.4.tgz#ee669c1fea2cf42dc31585469d193fef0d65771b"
   integrity sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==
 
+cookie@~0.4.1:
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/cookie/-/cookie-0.4.2.tgz"
+  integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
+
 copy-anything@^2.0.1:
   version "2.0.6"
   resolved "https://registry.npmjs.org/copy-anything/-/copy-anything-2.0.6.tgz"
@@ -3288,6 +3308,7 @@ define-lazy-prop@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/define-lazy-prop/-/define-lazy-prop-3.0.0.tgz"
   integrity sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==
+
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -3883,7 +3904,7 @@ fresh@0.5.2:
     "@angular/platform-browser-dynamic" "^18.1.0"
     "@angular/router" "^18.1.0"
     "@auth0/auth0-angular" "2.2.3"
-    front-end "file:C:/Users/lucio/AppData/Local/Yarn/Cache/v6/npm-front-end-0.0.0-9090a575-98fd-477b-8909-e5f9bbb5e71e-1726239665181/node_modules/front-end"
+    front-end "file:../../../../AppData/Local/Yarn/Cache/v6/npm-front-end-0.0.0-d95eade4-ad00-4f8c-ab3d-b442c8184dc0-1726150332823/node_modules/front-end"
     rxjs "~7.8.0"
     tslib "^2.3.0"
     zone.js "~0.14.3"
@@ -4487,6 +4508,17 @@ istanbul-lib-instrument@^5.1.0:
     istanbul-lib-coverage "^3.2.0"
     semver "^6.3.0"
 
+istanbul-lib-instrument@^5.1.0:
+  version "5.2.1"
+  resolved "https://registry.npmjs.org/istanbul-lib-instrument/-/istanbul-lib-instrument-5.2.1.tgz"
+  integrity sha512-pzqtp31nLv/XFOzXGuvhCb8qhjmTVo5vjVk19XE4CRlSWz0KoeJ3bw9XsA7nOp9YBf4qHjwBxkDzKcME/J29Yg==
+  dependencies:
+    "@babel/core" "^7.12.3"
+    "@babel/parser" "^7.14.7"
+    "@istanbuljs/schema" "^0.1.2"
+    istanbul-lib-coverage "^3.2.0"
+    semver "^6.3.0"
+
 istanbul-lib-report@^3.0.0:
   version "3.0.1"
   resolved "https://registry.npmjs.org/istanbul-lib-report/-/istanbul-lib-report-3.0.1.tgz"
@@ -4935,6 +4967,7 @@ mime-db@1.52.0:
   version "1.53.0"
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.53.0.tgz"
   integrity sha512-oHlN/w+3MQ3rba9rqFr6V/ypF10LSkdwUysQL7GkXoTgIWeV+tcXGA852TBxH+gsh8UWoyhR1hKcoMJTuWflpg==
+
 
 mime-types@^2.1.12, mime-types@^2.1.27, mime-types@^2.1.31, mime-types@~2.1.17, mime-types@~2.1.24, mime-types@~2.1.34:
   version "2.1.35"
