@@ -19,7 +19,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -52,10 +52,10 @@ public class UserService {
 
         UserDTO responseDTO = modelMapper.map(savedUser, UserDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        }
+       
 
 
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new CriminalCrossException("USER_CREATION_ERROR", 
                                              "Error while creating user", 
                                               e);
