@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 
@@ -52,13 +53,11 @@ public class UserService {
 
         UserDTO responseDTO = modelMapper.map(savedUser, UserDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-       
+    
 
-
-        } catch (Exception e) {
-            throw new CriminalCrossException("USER_CREATION_ERROR", 
-                                             "Error while creating user", 
-                                              e);
+        } catch (MappingException e) {
+            log.error("Error mapping user", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
