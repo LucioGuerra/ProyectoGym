@@ -14,23 +14,24 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class ActivityService {
-    private static ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     private final ActivityRepository activityRepository;
-/*
-    public ResponseEntity<List<Activity>> getAllActivities() {
-        List<Activity> activities = activityRepository.findAll();
-        return ResponseEntity.ok(activities);
-    }
 
-    public ResponseEntity<Activity> getActivityById(Long id) {
-        Optional<Activity> activity = activityRepository.findById(id);
-        if (activity.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(activity.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).build();
+    /*
+        public ResponseEntity<List<Activity>> getAllActivities() {
+            List<Activity> activities = activityRepository.findAll();
+            return ResponseEntity.ok(activities);
         }
-    }
-*/
+
+        public ResponseEntity<Activity> getActivityById(Long id) {
+            Optional<Activity> activity = activityRepository.findById(id);
+            if (activity.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(activity.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
+        }
+    */
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
         Activity activity = new Activity();
 
@@ -70,7 +71,7 @@ public class ActivityService {
         }
     }*/
 
-    public static Activity convertToEntity(ActivityDTO activityDTO) {
+    public Activity convertToEntity(ActivityDTO activityDTO) {
         return modelMapper.map(activityDTO, Activity.class);
     }
 }

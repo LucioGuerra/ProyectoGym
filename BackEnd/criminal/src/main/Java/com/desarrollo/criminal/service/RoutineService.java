@@ -38,30 +38,39 @@ public class RoutineService {
 
     public ResponseEntity<Routine> createRoutine(RoutineDTO routineDTO) {
         if (routineDTO.getRoutineType().equals(RoutineType.ACTIVITY)) {
-            ActivityRoutine activityRoutine;
-            activityRoutine = new ActivityRoutine();
-            activityRoutine.setActivity(ActivityService.convertToEntity(routineDTO.getActivity()));
-            commonAttributes(activityRoutine, routineDTO);
-
-            routineRepository.save(activityRoutine);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            createActivityRoutine(routineDTO);
         } else {
-            BuildingRoutine buildingRoutine;
-            buildingRoutine = new BuildingRoutine();
-            buildingRoutine.setUser(userService.getUserById(routineDTO.getUserID()).getBody());
-            buildingRoutine.setDay(routineDTO.getDay());
-            commonAttributes(buildingRoutine, routineDTO);
-
-            routineRepository.save(buildingRoutine);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            createBuildingRoutine(routineDTO);
         }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    private void commonAttributes(Routine routine, RoutineDTO routineDTO) {
+    private void createActivityRoutine(RoutineDTO routineDTO) {
+        ActivityRoutine activityRoutine = new ActivityRoutine();
+        activityRoutine.setActivity(activityService.convertToEntity(routineDTO.getActivity()));
+
+        assignBlocksToRoutine(activityRoutine, routineDTO);
+
+        routineRepository.save(activityRoutine);
+    }
+
+    private void createBuildingRoutine(RoutineDTO routineDTO) {
+        BuildingRoutine buildingRoutine = new BuildingRoutine();
+
+        buildingRoutine.setUser(userService.getUserById(routineDTO.getUserID()).getBody());
+        buildingRoutine.setDay(routineDTO.getDay());
+
+        assignBlocksToRoutine(buildingRoutine, routineDTO);
+
+        routineRepository.save(buildingRoutine);
+    }
+
+    private void assignBlocksToRoutine(Routine routine, RoutineDTO routineDTO) {
+        for (var block : routineDTO.getBlocks()) {
+            exercisesGroupService.createExercisesGroup(block);
+        }
         routine.setBlocks(exercisesGroupService.convertToEntity(routineDTO.getBlocks()));
     }
 
-    public ResponseEntity<Routine> updateRoutine(Long ignoredId, Routine ignoredRoutine) {
-        return null;
-    }
+    //public ResponseEntity<Routine> updateRoutine(Long ignoredId, Routine ignoredRoutine) {}
 }

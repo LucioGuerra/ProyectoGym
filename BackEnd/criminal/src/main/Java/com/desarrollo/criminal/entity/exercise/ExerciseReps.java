@@ -2,9 +2,11 @@ package com.desarrollo.criminal.entity.exercise;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 
+@Setter
 @Getter
 @Entity
 public class ExerciseReps {
@@ -22,5 +24,6 @@ public class ExerciseReps {
 
     private Duration duration;
 
-    private ExerciseReps() {}
+    public ExerciseReps() {
+    }
 }

@@ -28,13 +28,13 @@ public class RoutineController {
         return routineService.getRoutineById(id);
     }
 
-   @PostMapping
-   public ResponseEntity<Routine> createRoutine(@RequestBody RoutineDTO routineDTO) {
+    @PostMapping
+    public ResponseEntity<Routine> createRoutine(@RequestBody RoutineDTO routineDTO) {
         return routineService.createRoutine(routineDTO);
-   }
-
-    @PutMapping("/id")
-    public ResponseEntity<Routine> updateRoutine(@PathVariable Long id, @RequestBody Routine routine) {
-        return routineService.updateRoutine(id,routine);
     }
+
+//    @PutMapping("/id")
+//    public ResponseEntity<Routine> updateRoutine(@PathVariable Long id, @RequestBody Routine routine) {
+//        return routineService.updateRoutine(id,routine);
+//    }
 }
