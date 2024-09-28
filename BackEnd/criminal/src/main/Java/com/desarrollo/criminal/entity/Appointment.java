@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,6 +40,14 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;
+
+    @ManyToMany
+    @JoinTable(
+            name = "participants",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> participants;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
