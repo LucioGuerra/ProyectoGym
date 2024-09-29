@@ -39,17 +39,7 @@ public class ActivityService {
         }
     */
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
-        //Activity activity = new Activity();
-
-        /*
-        activity.setName(activityDTO.getName());
-        activity.setDescription(activityDTO.getDescription());
-        activity.setPrice(activityDTO.getPrice());
-        activity.setCredits(activityDTO.getCredits());
-        */
-
         activityRepository.save(modelMapper.map(activityDTO, Activity.class));
-
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 /*

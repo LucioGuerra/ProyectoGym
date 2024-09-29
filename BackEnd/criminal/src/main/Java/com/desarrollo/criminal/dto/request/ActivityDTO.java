@@ -24,4 +24,5 @@ public class ActivityDTO {
 
     @NotNull(message = "Credits cannot be null.")
     private Integer credits;
+
 }

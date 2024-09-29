@@ -26,7 +26,6 @@ public class Activity {
     private Float price;
 
     @Column(nullable = false)
-    @AssertTrue
     private Integer credits;
 
     @Column(name = "created_at", updatable = false)
@@ -40,7 +39,7 @@ public class Activity {
         createdAt = LocalDateTime.now();
     }
 
-    @AssertTrue(message = "Credit must be a multiple of 10")
+    @AssertTrue(message = "Credits must be a multiple of 10")
     public boolean isCreditValid() {
         return credits % 10 ==  0;
     }
