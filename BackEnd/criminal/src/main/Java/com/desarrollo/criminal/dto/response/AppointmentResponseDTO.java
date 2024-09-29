@@ -1,6 +1,5 @@
 package com.desarrollo.criminal.dto.response;
 
-import com.desarrollo.criminal.entity.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ResponseAppointmentDTO {
+public class AppointmentResponseDTO {
     private Long id;
 
     private LocalDate date;
@@ -25,5 +24,5 @@ public class ResponseAppointmentDTO {
 
     private List<AppointmentUserDTO> participants;
 
-    private ResponseAppointmentDTO() {}
+    private AppointmentResponseDTO() {}
 }
