@@ -21,4 +21,7 @@ public class ActivityDTO {
     @Digits(integer = 6, fraction = 2, message = "Price must have a maximum of 6 integer digits and 2 decimal digits.")
     @PositiveOrZero(message = "Price cannot be negative.")
     private float price;
+
+    @NotNull(message = "Credits cannot be null.")
+    private Integer credits;
 }

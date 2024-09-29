@@ -31,6 +31,9 @@ public class Package {
     @Column(nullable = false)
     private Integer credits;
 
+    @Column(nullable = false)
+    private Float price;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -54,11 +57,10 @@ public class Package {
 
     }
 
-    public Package(String name, String description, Integer credits) {
+    public Package(String name, String description) {
         this.name = name;
         this.description = description;
-        this.expirationDate = LocalDate.now().plusDays(30);
-        this.credits = credits;
+        this.expirationDate = LocalDate.now().plusDays(31);
         this.activities = new HashSet<>();
     }
 

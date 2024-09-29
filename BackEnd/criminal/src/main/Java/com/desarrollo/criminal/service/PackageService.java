@@ -1,10 +1,10 @@
 package com.desarrollo.criminal.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.desarrollo.criminal.dto.request.ActivitiesPackageDTO;
 import com.desarrollo.criminal.dto.request.PackageDTO;
 import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
@@ -41,8 +41,12 @@ public class PackageService {
         Package aPackage = this.convertToEntity(packageDTO);
         aPackage.setUser(user);
 
-        Set<Activity> activities = activityService.getActivitiesByIds(packageDTO.getActivities());
+        List<Long> activitiesIds = packageDTO.getActivities().stream().map(ActivitiesPackageDTO::getActivityId).toList();
+        Set<Activity> activities = activityService.getActivitiesByIds(activitiesIds);
+
         aPackage.setActivities(activities);
+        aPackage.setPrice(this.calculatePrice(activities.stream().toList(), packageDTO.getActivities().stream().map(ActivitiesPackageDTO::getQuantity).toList()));
+        aPackage.setCredits(this.calculateCredits(activities.stream().toList(), packageDTO.getActivities().stream().map(ActivitiesPackageDTO::getQuantity).toList()));
 
         user.setAPackage(aPackage);
         packageRepository.save(aPackage);
@@ -50,6 +54,9 @@ public class PackageService {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
+
 
     public ResponseEntity<List<GetPackageDTO>> getAllPackages(){
         List<Package> packages = packageRepository.findAll();
@@ -96,12 +103,29 @@ public class PackageService {
         }
     }
 
-
-
     private Package convertToEntity(PackageDTO packageDTO){
         return new Package(
                 packageDTO.getName(),
-                packageDTO.getDescription(),
-                packageDTO.getCredits());
+                packageDTO.getDescription());
+    }
+
+
+    private Float calculatePrice(List<Activity> activities, List<Integer> quantities){
+        Float price = 0.00F;
+
+        for (int i = 0; i < activities.size(); i++){
+            price += activities.get(i).getPrice() * quantities.get(i) * 4;
+        }
+        return price;
+    }
+
+    private Integer calculateCredits(List<Activity> activities, List<Integer> quantities){
+        Integer credits = 0;
+
+        for (int i = 0; i < activities.size(); i++){
+            credits += activities.get(i).getCredits() * quantities.get(i) * 4;
+        }
+
+        return credits;
     }
 }
