@@ -49,6 +49,8 @@ public class Appointment {
     )
     private List<User> participants;
 
+    private Long recurrenceId;
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
 
