@@ -56,6 +56,10 @@ public class User {
 
     }
 
+    public void deletePackage(){
+        this.aPackage = null;
+    }
+
     @PrePersist
     private void onCreate() {
         LocalDateTime now = LocalDateTime.now();

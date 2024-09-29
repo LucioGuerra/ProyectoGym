@@ -66,6 +66,10 @@ public class Package {
         return activities.stream().map(Activity::getName).toList();
     }
 
+    public void deleteUser(){
+        this.user = null;
+    }
+
     @PrePersist
     private void onCreate() {
         LocalDateTime now = LocalDateTime.now();

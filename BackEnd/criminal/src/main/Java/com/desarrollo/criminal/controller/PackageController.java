@@ -38,4 +38,10 @@ public class PackageController {
     public ResponseEntity<Package> updatePackage(@RequestParam Long id, @RequestBody Package aPackage){
         return packageService.updatePackage(id, aPackage);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Package> deletePackage(){
+        packageService.deleteExpiredPackages();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

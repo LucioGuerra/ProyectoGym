@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,9 +10,11 @@ import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.exception.CriminalCrossException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.desarrollo.criminal.repository.PackageRepository;
@@ -59,6 +62,18 @@ public class PackageService {
 
     public ResponseEntity<Package> updatePackage(Long id, Package aPackage){
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteExpiredPackages(){
+        List<Package> packages = packageRepository.findExpiredToday();
+
+        for(Package aPackage : packages){
+            User user = aPackage.getUser();
+            user.deletePackage();
+            userService.save(user);
+        }
     }
 
 
