@@ -1,7 +1,8 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.entity.user.User;
-import com.desarrollo.criminal.dto.request.UserDTO;
+import com.desarrollo.criminal.dto.request.UserRequestDTO;
+import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
 import com.desarrollo.criminal.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,18 +46,17 @@ public class UserService {
 
 
 
-    public ResponseEntity<UserDTO> createUser(UserDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {
 
         try {
-        User user = modelMapper.map(userDTO, User.class);
+        User user = modelMapper.map(userRequestDTO, User.class);
         User savedUser = userRepository.save(user);
 
-        UserDTO responseDTO = modelMapper.map(savedUser, UserDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        UserResponseDTO userResponseDTO = modelMapper.map(savedUser, UserResponseDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     
 
         } catch (MappingException e) {
-            log.error("Error mapping user", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
