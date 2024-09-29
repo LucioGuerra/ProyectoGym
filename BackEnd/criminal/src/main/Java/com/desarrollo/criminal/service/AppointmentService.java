@@ -65,24 +65,56 @@ public class AppointmentService {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
-        //el modelmapper me da error
-        // Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
-        Appointment appointment = new Appointment();
-        appointment.setDate(appointmentDTO.getDate());
-        appointment.setStartTime(appointmentDTO.getStartTime());
-        appointment.setEndTime(appointmentDTO.getEndTime());
-
-        Activity activity = activityRepository.findById(appointmentDTO.getActivityID())
-                .orElseThrow(EntityNotFoundException::new);
-        appointment.setActivity(activity);
-
-        if (appointmentDTO.getInstructorID() != null) {
-            User instructor = userRepository.findById(appointmentDTO.getInstructorID())
-                    .orElseThrow(EntityNotFoundException::new);
-            appointment.setInstructor(instructor);
+        if (appointmentDTO.getEndDate() != null && appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())){
+            throw new CriminalCrossException("INVALID_DATE_RANGE", "The end date must be after the start date");
         }
 
-        appointmentRepository.save(appointment);
+        //el modelmapper me da error
+        // Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
+        Activity activity = activityRepository.findById(appointmentDTO.getActivityID())
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found with id: " + appointmentDTO.getActivityID()));
+
+        User instructor = null; // el instructor es opcional asi que puede ser null, no te preocupes
+        if(appointmentDTO.getInstructorID() != null) {
+            instructor = userRepository.findById(appointmentDTO.getInstructorID())
+                    .orElseThrow(() -> new EntityNotFoundException("Instructor not found with id: " + appointmentDTO.getInstructorID()));
+        }
+
+        if (appointmentDTO.getAppointmentWeekDays() != null && appointmentDTO.getEndDate() != null && !appointmentDTO.getAppointmentWeekDays().isEmpty()) {
+            Long recurrenceId = null; //esto se usa para guardar el id de la primera cita que se crea, no se guarda como null
+
+            LocalDate appointmentDate = appointmentDTO.getDate();
+
+            while (appointmentDate.isBefore(appointmentDTO.getEndDate())) {
+                if (appointmentDTO.getAppointmentWeekDays().contains(appointmentDate.getDayOfWeek())) {
+
+                    Appointment appointment = new Appointment();
+                    appointment.setDate(appointmentDate);
+                    appointment.setStartTime(appointmentDTO.getStartTime());
+                    appointment.setEndTime(appointmentDTO.getEndTime());
+                    appointment.setActivity(activity);
+                    appointment.setInstructor(instructor);
+
+                    if (recurrenceId == null) {
+                        appointment = appointmentRepository.save(appointment);
+                        recurrenceId = appointment.getId(); // Get the generated ID
+                        appointment.setRecurrenceId(recurrenceId); // Set recurrenceId to its own ID
+                        appointmentRepository.save(appointment); // Update the appointment with recurrenceId
+                    } else {
+                        appointment.setRecurrenceId(recurrenceId); // Set recurrenceId for subsequent appointments
+                        appointmentRepository.save(appointment);
+                    }
+                }
+                appointmentDate = appointmentDate.plusDays(1);
+            }
+        } else {
+            Appointment appointment = new Appointment();
+            appointment.setDate(appointmentDTO.getDate());
+            appointment.setStartTime(appointmentDTO.getStartTime());
+            appointment.setEndTime(appointmentDTO.getEndTime());
+            appointment.setActivity(activity);
+            appointmentRepository.save(appointment);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
