@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class GetPackageDTO {
     private String name;
     private String description;
     private Integer credits;
-    private LocalTime expirationDate;
+    private LocalDate expirationDate;
     private Long userId;
     private List<String> activities;
 

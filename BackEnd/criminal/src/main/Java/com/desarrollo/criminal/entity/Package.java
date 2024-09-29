@@ -2,14 +2,13 @@ package com.desarrollo.criminal.entity;
 
 import com.desarrollo.criminal.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -38,6 +37,7 @@ public class Package {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Getter
     @ManyToMany
     @JoinTable(
             name = "package_activity",
@@ -60,6 +60,10 @@ public class Package {
         this.expirationDate = LocalDate.now().plusDays(30);
         this.credits = credits;
         this.activities = new HashSet<>();
+    }
+
+    public List<String> getActivitiesNames(){
+        return activities.stream().map(Activity::getName).toList();
     }
 
     @PrePersist

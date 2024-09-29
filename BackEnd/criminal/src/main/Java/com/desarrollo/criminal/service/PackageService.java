@@ -1,6 +1,5 @@
 package com.desarrollo.criminal.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,9 +47,9 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<List<Package>> getAllPackages(){
+    public ResponseEntity<List<GetPackageDTO>> getAllPackages(){
         List<Package> packages = packageRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(packages);
+        return ResponseEntity.status(HttpStatus.OK).body(packages.stream().map(aPackage -> modelMapper.map(aPackage, GetPackageDTO.class)).toList());
     }
 
     public ResponseEntity<GetPackageDTO> getPackageById(Long id){

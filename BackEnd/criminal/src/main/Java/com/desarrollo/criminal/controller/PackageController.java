@@ -25,7 +25,7 @@ public class PackageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Package>> getAllPackage(){
+    public ResponseEntity<List<GetPackageDTO>> getAllPackage(){
         return packageService.getAllPackages();
     }
 
@@ -34,7 +34,7 @@ public class PackageController {
         return packageService.getPackageById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Package> updatePackage(@RequestParam Long id, @RequestBody Package aPackage){
         return packageService.updatePackage(id, aPackage);
     }
