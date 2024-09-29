@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/public/users")
 
 public class UserController {
     private final UserService userService;
@@ -27,8 +27,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
-        User user = userService.getUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        try {
+            User user = userService.getUserById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 
