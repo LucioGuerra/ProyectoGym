@@ -2,6 +2,9 @@ package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
+import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
+import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
+import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
@@ -30,17 +33,30 @@ public class AppointmentService {
     private final UserRepository userRepository;
 
     public Appointment getAppointmentById(Long appointmentId) {
-        return appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
+        return appointmentRepository.findById(appointmentId).orElseThrow(() -> new EntityNotFoundException(
+                "Appointment not found with id: " + appointmentId));
     }
 
-    public ResponseEntity<List<Appointment>> getAppointmentByDate(LocalDate date) {
-        List<Appointment> appointment = appointmentRepository.findByDate(date);
-        return ResponseEntity.status(HttpStatus.OK).body(appointment);
+    public ResponseEntity<List<AppointmentListResponseDTO>> getAppointmentByDate(LocalDate date) {
+        List<Appointment> appointments = appointmentRepository.findByDate(date);
+        return getListResponseEntity(appointments);
     }
 
-    public ResponseEntity<List<Appointment>> getAllAppointments() {
-        List<Appointment> appointment = appointmentRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(appointment);
+    private ResponseEntity<List<AppointmentListResponseDTO>> getListResponseEntity(List<Appointment> appointments) {
+        List<AppointmentListResponseDTO> responseAppointments = appointments.stream()
+                .map(appointment -> {
+                    AppointmentListResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentListResponseDTO.class);
+                    responseAppointmentDTO.setActivity(appointment.getActivity().getName());
+                    return responseAppointmentDTO;
+                })
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseAppointments);
+    }
+
+    public ResponseEntity<List<AppointmentListResponseDTO>> getAllAppointments() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return getListResponseEntity(appointments);
     }
 
     public ResponseEntity<?> createAppointment(AppointmentDTO appointmentDTO) {
@@ -150,6 +166,48 @@ public class AppointmentService {
 
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
+        try {
+            Appointment appointment = this.getAppointmentById(id);
+            AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
+            responseAppointmentDTO.setActivity(appointment.getActivity().getName());
+            if(appointment.getInstructor() != null) {
+                responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(responseAppointmentDTO);
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    public ResponseEntity<?> addParticipant(Long appointmentId, Long userId) {
+        try {
+            Appointment appointment = this.getAppointmentById(appointmentId);
+            User user = userService.getUserById(userId);
+            appointment.getParticipants().add(user);
+            appointmentRepository.save(appointment);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
+    public ResponseEntity<?> removeParticipant(Long appointmentId, Long userId) {
+        try{
+            Appointment appointment = this.getAppointmentById(appointmentId);
+            User user = userService.getUserById(userId);
+            if (!appointment.getParticipants().contains(user)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user is not registered in this appointment");
+            }
+            appointment.getParticipants().remove(user);
+            appointmentRepository.save(appointment);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
     }
 }

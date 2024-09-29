@@ -2,10 +2,13 @@ package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
+import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
+import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.AppointmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,24 +22,20 @@ import java.util.List;
 @RequestMapping("/api/public/appointments")
 public class AppointmentController {
     private final AppointmentService appointmentService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> getAppointmentById(@PathVariable Long id) {
-        try {
-            Appointment appointment = appointmentService.getAppointmentById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(appointment);
-        }catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<AppointmentResponseDTO> getAppointmentById(@PathVariable Long id) {
+        return appointmentService.getResponseAppointmentById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<Appointment>> getAllAppointments() {
+    public ResponseEntity<List<AppointmentListResponseDTO>> getAllAppointments() {
         return appointmentService.getAllAppointments();
     }
 
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<Appointment>> getAppointmentByDate(@PathVariable LocalDate date) {
+    public ResponseEntity<List<AppointmentListResponseDTO>> getAppointmentByDate(@PathVariable LocalDate date) {
         return appointmentService.getAppointmentByDate(date);
     }
 
@@ -64,6 +63,17 @@ public class AppointmentController {
                                                @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
+
+    @GetMapping("/{appointmentId}/user/{userId}")
+    public ResponseEntity<?> addParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
+        return appointmentService.addParticipant(appointmentId, userId);
+    }
+
+    @DeleteMapping("/{appointmentId}/user/{userId}")
+    public ResponseEntity<?> removeParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
+        return appointmentService.removeParticipant(appointmentId, userId);
+    }
+
 }
 
 
