@@ -18,14 +18,13 @@ import java.util.Optional;
 public class TrackingService {
     private final TrackingRepository trackingRepository;
     private final ExerciseService exerciseService;
-
+    private final DateWeightService dateWeightService;
 
 
     public Tracking createTracking(long exerciseId){
         Tracking tracking = new Tracking();
         tracking.setExercise(exerciseService.getExerciseById(exerciseId));
-        trackingRepository.save(tracking);
-        return tracking;
+        return trackingRepository.save(tracking);
     }
 
     public void deleteTracking(Long id){
@@ -33,9 +32,7 @@ public class TrackingService {
     }
 
     public void updateTracking(Tracking tracking, ExerciseTrackingDTO exerciseTrackingDTO){
-        DateWeight dateWeight = new DateWeight();
-        dateWeight.setWeight(exerciseTrackingDTO.getWeight());
-        dateWeight.setDate(exerciseTrackingDTO.getDate());
+        DateWeight dateWeight = this.dateWeightService.createDateWeight(exerciseTrackingDTO.getWeight(), exerciseTrackingDTO.getDate());
         tracking.addDateWeight(dateWeight);
     }
 
