@@ -4,12 +4,15 @@ import com.desarrollo.criminal.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@Setter
 @Getter
 @Entity
 public class Package {
@@ -51,9 +54,11 @@ public class Package {
 
     }
 
-    public Package(String name, String description){
+    public Package(String name, String description, Integer credits) {
         this.name = name;
         this.description = description;
+        this.expirationDate = LocalDate.now().plusDays(30);
+        this.credits = credits;
         this.activities = new HashSet<>();
     }
 

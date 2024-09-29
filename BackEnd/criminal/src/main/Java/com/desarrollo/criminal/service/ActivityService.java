@@ -4,6 +4,7 @@ import com.desarrollo.criminal.dto.request.ActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.repository.ActivityRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -71,4 +73,8 @@ public class ActivityService {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
     }*/
+
+    public Set<Activity> getActivitiesByIds(List<Long> ids) {
+        return activityRepository.findAllById(ids);
+    }
 }
