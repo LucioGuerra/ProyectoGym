@@ -6,11 +6,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.desarrollo.criminal.dto.request.PackageDTO;
+import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.exception.CriminalCrossException;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import com.desarrollo.criminal.repository.PackageRepository;
 import com.desarrollo.criminal.entity.Package;
 
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Service
@@ -60,7 +61,26 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(aPackage, GetPackageDTO.class));
     }
 
-    public ResponseEntity<Package> updatePackage(Long id, Package aPackage){
+    public ResponseEntity<Package> updatePackage(Long id, UpdatePackageDTO aPackage){
+        Package packageToUpdate = packageRepository.findById(id).orElseThrow(() -> new CriminalCrossException("PACKAGE_NOT_FOUND","Package not found"));
+
+        if (aPackage.getName() != null){
+            packageToUpdate.setName(aPackage.getName());
+        }
+        if (aPackage.getDescription() != null){
+            packageToUpdate.setDescription(aPackage.getDescription());
+        }
+        if (aPackage.getCredits() != null){
+            packageToUpdate.setCredits(aPackage.getCredits());
+        }
+        if (aPackage.getActivities() != null){
+            packageToUpdate.setActivities(activityService.getActivitiesByIds(aPackage.getActivities()));
+        }
+        if(aPackage.getExpirationDate() != null){
+            packageToUpdate.setExpirationDate(aPackage.getExpirationDate());
+        }
+
+        packageRepository.save(packageToUpdate);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

@@ -3,6 +3,7 @@ package com.desarrollo.criminal.controller;
 import java.util.List;
 
 import com.desarrollo.criminal.dto.request.PackageDTO;
+import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,8 @@ public class PackageController {
         return packageService.getPackageById(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Package> updatePackage(@RequestParam Long id, @RequestBody Package aPackage){
+    @PatchMapping("/{id}")
+    public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody UpdatePackageDTO aPackage){
         return packageService.updatePackage(id, aPackage);
     }
 
