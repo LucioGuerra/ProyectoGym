@@ -7,8 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +29,10 @@ public class AppointmentDTO {
     private Long activityID;
 
     private Long instructorID;
+
+    private List<DayOfWeek> appointmentWeekDays;
+
+    private LocalDate endDate;
 
     private AppointmentDTO() {}
 
