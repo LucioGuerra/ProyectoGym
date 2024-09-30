@@ -16,9 +16,8 @@ public class ModelMapperConfig {
    @Bean
    public ModelMapper modelMapper(){
        ModelMapper modelMapper = new ModelMapper();
-       TypeMap<Package, GetPackageDTO> typeMap = modelMapper.createTypeMap(Package.class, GetPackageDTO.class);
+       //TypeMap<Package, GetPackageDTO> typeMap = modelMapper.createTypeMap(Package.class, GetPackageDTO.class);
 
-       typeMap.addMapping(src -> src.getActivitiesNames() != null ? src.getActivitiesNames(): Collections.emptyList(), GetPackageDTO::setActivities);
 
        return modelMapper;
    }

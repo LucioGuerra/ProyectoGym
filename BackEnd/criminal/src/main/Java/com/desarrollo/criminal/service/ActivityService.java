@@ -28,16 +28,12 @@ public class ActivityService {
             List<Activity> activities = activityRepository.findAll();
             return ResponseEntity.ok(activities);
         }
-
-        public ResponseEntity<Activity> getActivityById(Long id) {
-            Optional<Activity> activity = activityRepository.findById(id);
-            if (activity.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(activity.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.OK).build();
-            }
-        }
     */
+
+    public Activity getActivityById(Long id) {
+        return activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+    }
+
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
         activityRepository.save(modelMapper.map(activityDTO, Activity.class));
         return ResponseEntity.status(HttpStatus.CREATED).build();

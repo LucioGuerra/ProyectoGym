@@ -25,9 +25,6 @@ public class Activity {
     @Column(nullable = false)
     private Float price;
 
-    @Column(nullable = false)
-    private Integer credits;
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -37,11 +34,6 @@ public class Activity {
     @PrePersist
     private void onCreate() {
         createdAt = LocalDateTime.now();
-    }
-
-    @AssertTrue(message = "Credits must be a multiple of 10")
-    public boolean isCreditValid() {
-        return credits % 10 ==  0;
     }
 
 }

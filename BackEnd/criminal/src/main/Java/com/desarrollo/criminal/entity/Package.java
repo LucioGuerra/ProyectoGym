@@ -29,9 +29,6 @@ public class Package {
     private LocalDate expirationDate;
 
     @Column(nullable = false)
-    private Integer credits;
-
-    @Column(nullable = false)
     private Float price;
 
     @Column(name = "created_at", updatable = false)
@@ -40,14 +37,9 @@ public class Package {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Getter
-    @ManyToMany
-    @JoinTable(
-            name = "package_activity",
-            joinColumns = @JoinColumn(name = "package_id"),
-            inverseJoinColumns = @JoinColumn(name = "activity_id")
-    )
-    private Set<Activity> activities;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "package_id")
+    private Set<PackageActivity> packageActivities;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -61,16 +53,12 @@ public class Package {
         this.name = name;
         this.description = description;
         this.expirationDate = LocalDate.now().plusDays(31);
-        this.activities = new HashSet<>();
     }
 
+    /*
     public List<String> getActivitiesNames(){
         return activities.stream().map(Activity::getName).toList();
-    }
-
-    public void deleteUser(){
-        this.user = null;
-    }
+    }*/
 
     @PrePersist
     private void onCreate() {
