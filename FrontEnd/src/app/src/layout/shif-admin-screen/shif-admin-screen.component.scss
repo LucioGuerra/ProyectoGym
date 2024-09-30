@@ -137,7 +137,7 @@ ng-container {
       border-radius: 10px;
       height: 40px;
     }
-    
+
   }
 }
 
@@ -272,13 +272,13 @@ mat-divider {
         justify-content: center;
         align-items: center;
         .progress-bar {
-          height: 10px;    
+          height: 10px;
            /* Ajustar la posición x deseada */
           .progress-bar-inner {
             height: 100%;
             width: 50%;
             background-color: variables.$light-gold-color;
-            
+
           }
         }
       }
@@ -298,6 +298,7 @@ mat-divider {
           flex-direction: row;
           justify-content: end;
           align-items: center;
+          margin: 0;
           mat-icon{
             font-size: 20px;
             height: 20px;
@@ -332,7 +333,7 @@ mat-divider {
     }
   }
   .quick-actions {
-    
+
     .quickstart-buttons {
       .button-class:nth-child(n + 4) {
         display: none;

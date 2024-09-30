@@ -5,7 +5,7 @@ export interface Appointment {
     endTime: string,
     activity: string,
     max_capacity: number,
-    participantsCount?: number,
+    participantsCount: number,
     participants?: AppointmentUser[],
     instructor?: string,
 }

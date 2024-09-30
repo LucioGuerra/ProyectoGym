@@ -114,15 +114,15 @@
                         class="progress-bar"
                         mode="determinate"
                         value="{{
-                          (apointment.participantsCount! * 100) /
-                            apointment.max_capacity!
+                          (apointment.participantsCount * 100) /
+                            apointment.max_capacity
                         }}"
                       ></mat-progress-bar>
                     </div>
                     <div class="user-quantity">
                       <p class="user-quantity-text">
-                        {{ apointment.participantsCount! }} /
-                        {{ apointment.max_capacity! }}
+                        {{ apointment.participantsCount }} /
+                        {{ apointment.max_capacity }}
                         <mat-icon>person</mat-icon>
                       </p>
                     </div>
