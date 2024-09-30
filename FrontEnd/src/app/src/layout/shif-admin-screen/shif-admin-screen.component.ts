@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@auth0/auth0-angular';
 import { MatCardModule } from '@angular/material/card';
-import { ToolbarComponent } from '../../components/index';
+import {Appointment, ToolbarComponent} from '../../components';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
 
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -15,7 +15,6 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
-import { Activity } from '../../components/index';
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
@@ -59,16 +58,15 @@ export class ShifAdminScreenComponent {
   },
   ];
 
-  public apointments: Activity[] = [{
+  public appointments: Appointment[] = [{
     id: 1,
     date: new Date(Date.now()),
     startTime: '10:00',
     endTime: '11:00',
     activity: 'Crossfit',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
   },
   {
     id: 2,
@@ -77,9 +75,8 @@ export class ShifAdminScreenComponent {
     endTime: '12:00',
     activity: 'Yoga',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
   },
   {
     date: new Date(2023, 2, 10),
@@ -87,9 +84,8 @@ export class ShifAdminScreenComponent {
     endTime: '13:00',
     activity: 'Pilates',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Smith', 'Jane Smith', 'John Doe'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 0
   },
   {
@@ -99,9 +95,8 @@ export class ShifAdminScreenComponent {
     endTime: '14:00',
     activity: 'Spinning',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
   },
   {
     date: new Date(Date.now()),
@@ -109,9 +104,8 @@ export class ShifAdminScreenComponent {
     endTime: '15:00',
     activity: 'Zumba',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 4,
   },
   {
@@ -120,9 +114,8 @@ export class ShifAdminScreenComponent {
     endTime: '16:00',
     activity: 'Boxing',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 5,
   },
   {
@@ -131,9 +124,8 @@ export class ShifAdminScreenComponent {
     endTime: '17:00',
     activity: 'MMA',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 6,
   },
   {
@@ -142,9 +134,8 @@ export class ShifAdminScreenComponent {
     endTime: '18:00',
     activity: 'Kickboxing',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 7,
   },
   {
@@ -153,9 +144,8 @@ export class ShifAdminScreenComponent {
     endTime: '19:00',
     activity: 'Judo',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 8,
   },
   {
@@ -164,9 +154,8 @@ export class ShifAdminScreenComponent {
     endTime: '20:00',
     activity: 'Karate',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 9,
   },
   {
@@ -175,9 +164,8 @@ export class ShifAdminScreenComponent {
     endTime: '21:00',
     activity: 'Crossfit',
     max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
+    participants_count: 10,
+    instructor: 'John Doe',
     id: 10,
   },
   ];
@@ -197,7 +185,7 @@ export class ShifAdminScreenComponent {
       }
     });
   }
-  
+
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
@@ -208,28 +196,24 @@ export class ShifAdminScreenComponent {
     // alert(`quantity selectioned: ${this.selectedActivities().length}, activities: ${this.selectedActivities()}`);
   }
   noActivities(): Boolean {
-    if (this.apointments.filter(apointment =>
-      this.selectedActivities().includes(apointment.activity) && apointment.date.toDateString() == this.selectedDate().toDateString()
-    ).length == 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.appointments.filter(appointment =>
+      this.selectedActivities().includes(appointment.activity) && appointment.date.toDateString() == this.selectedDate().toDateString()
+    ).length == 0;
   }
-  open_apointment($event: Event, apointment: Activity) {
+  open_apointment($event: Event, appointment: Appointment) {
     $event.stopPropagation();
     $event.preventDefault();
-    alert(`opening apointment id: ${apointment.id}`);
+    alert(`opening appointment id: ${appointment.id}`);
   }
-  edit_apointment($event: Event, apointment: Activity) {
+  edit_apointment($event: Event, appointment: Appointment) {
     $event.stopPropagation();
     $event.preventDefault();
-    alert(`editing apointment id: ${apointment.id}`);
+    alert(`editing appointment id: ${appointment.id}`);
   }
-  cancel_apointment($event: MouseEvent, apointment: Activity) {
+  cancel_apointment($event: MouseEvent, appointment: Appointment) {
     $event.stopPropagation();
     $event.preventDefault();
-    alert(`canceling apointment id: ${apointment.id}`);
+    alert(`canceling appointment id: ${appointment.id}`);
   }
   newShift($event: MouseEvent) {
     alert('new shift');

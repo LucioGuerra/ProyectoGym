@@ -28,7 +28,7 @@
           </div>
           <div class="quick-actions">
             <div class="title-section">
-              <mat-icon style="padding: 0 0px 0 10px; color: #f6c90e"
+              <mat-icon style="padding: 0 0 0 10px; color: #f6c90e"
                 >auto_awesome</mat-icon
               >
               <h1 class="quickactions-title">Quick actions</h1>
@@ -61,7 +61,7 @@
         <section class="botom-section">
           <div class="agenda">
             <div class="title-section">
-              <mat-icon style="padding: 0 0px 0 10px; color: #f6c90e"
+              <mat-icon style="padding: 0 0 0 10px; color: #f6c90e"
                 >calendar_view_day</mat-icon
               >
               <h1 class="agenda-title">Agenda</h1>
@@ -82,7 +82,7 @@
             <mat-divider></mat-divider>
             <div class="scrollable-section">
               <mat-action-list>
-                @for (apointment of apointments; track apointment) { @if
+                @for (apointment of appointments; track apointment) { @if
                 (selectedActivities().includes(apointment.activity) && apointment.date.toDateString() == selectedDate().toDateString()) {
                 <button [value]='apointment' mat-list-item (click)="open_apointment($event, apointment)">
                   <div class="apointments">
@@ -114,14 +114,14 @@
                         class="progress-bar"
                         mode="determinate"
                         value="{{
-                          (apointment.users.length * 100) /
+                          (apointment.participants_count * 100) /
                             apointment.max_capacity
                         }}"
                       ></mat-progress-bar>
                     </div>
                     <div class="user-quantity">
                       <p class="user-quantity-text">
-                        {{ apointment.users.length }} /
+                        {{ apointment.participants_count }} /
                         {{ apointment.max_capacity }}
                         <mat-icon>person</mat-icon>
                       </p>
@@ -139,7 +139,7 @@
                   </div>
                 </button>
                 }}
-                @if(apointments.length == 0 || noActivities()) {
+                @if(appointments.length == 0 || noActivities()) {
                   <button mat-list-item>
                     <div class="no-apointments">
                       <p>No hay citas para este día</p>
