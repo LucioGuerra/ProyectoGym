@@ -5,7 +5,7 @@ export interface Appointment {
     endTime: string,
     activity: string,
     max_capacity: number,
-    participants_count?: number,
+    participantsCount?: number,
     participants?: AppointmentUser[],
     instructor?: string,
 }
@@ -44,4 +44,11 @@ export enum DayOfWeek {
   FRIDAY = 'FRIDAY',
   SATURDAY = 'SATURDAY',
   SUNDAY = 'SUNDAY'
+}
+
+export interface Activity {
+  id?: number,
+  name: string,
+  description?: string,
+  price?: number,
 }

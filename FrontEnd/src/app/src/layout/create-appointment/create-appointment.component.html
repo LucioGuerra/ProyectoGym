@@ -1,7 +1,28 @@
 <app-drawer>
   <ng-container main-content>
     <div class="main-container">
-
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [(ngModel)]="range" [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <ngb-timepicker [(ngModel)]="time"/>
+      <ngb-timepicker [(ngModel)]="time"/>
+      <mat-form-field>
+        <mat-label>Select an option</mat-label>
+        <mat-select [(ngModel)]="activityID">
+          @for (activity of activities; track activity.id) {
+            <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button (click)="createAppointment()">Create appointment</button>
     </div>
+
   </ng-container>
 </app-drawer>
