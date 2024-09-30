@@ -22,6 +22,8 @@ public class UpdatePATCHAppointmentDTO {
 
     private Long instructorID;
 
+    private Boolean updateAllFutureAppointments;
+
     private UpdatePATCHAppointmentDTO() {}
 }
 

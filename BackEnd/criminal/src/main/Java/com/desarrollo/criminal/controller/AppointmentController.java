@@ -39,25 +39,25 @@ public class AppointmentController {
         return appointmentService.getAppointmentByDate(date);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
-        return appointmentService.deleteAppointment(id);
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}/deleteAllFutureAppointments={deleteAllFutureAppointments}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long id, @PathVariable Boolean deleteAllFutureAppointments) {
+        return appointmentService.deleteAppointment(id, deleteAllFutureAppointments);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAllAppointment(@PathVariable Long id, @RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.updateAllAppointment(id, appointmentDTO);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Long id,
                                                @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {

@@ -4,15 +4,13 @@ import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
-import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.exception.CriminalCrossException;
-import com.desarrollo.criminal.repository.ActivityRepository;
 import com.desarrollo.criminal.repository.AppointmentRepository;
-import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -20,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,8 +28,7 @@ public class AppointmentService {
     private final ActivityService activityService;
     private final UserService userService;
     private final ModelMapper modelMapper;
-    private final ActivityRepository activityRepository;
-    private final UserRepository userRepository;
+
 
     public Appointment getAppointmentById(Long appointmentId) {
         return appointmentRepository.findById(appointmentId).orElseThrow(() -> new EntityNotFoundException(
@@ -38,7 +36,7 @@ public class AppointmentService {
     }
 
     public ResponseEntity<List<AppointmentListResponseDTO>> getAppointmentByDate(LocalDate date) {
-        List<Appointment> appointments = appointmentRepository.findByDate(date);
+        List<Appointment> appointments = appointmentRepository.findByDateAndDeletedFalse(date);
         return getListResponseEntity(appointments);
     }
 
@@ -59,25 +57,24 @@ public class AppointmentService {
         return getListResponseEntity(appointments);
     }
 
+    @Transactional
     public ResponseEntity<?> createAppointment(AppointmentDTO appointmentDTO) {
 
         if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
-        if (appointmentDTO.getEndDate() != null && appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())){
+        if (appointmentDTO.getEndDate() == null || appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())){
             throw new CriminalCrossException("INVALID_DATE_RANGE", "The end date must be after the start date");
         }
 
         //el modelmapper me da error
         // Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
-        Activity activity = activityRepository.findById(appointmentDTO.getActivityID())
-                .orElseThrow(() -> new EntityNotFoundException("Activity not found with id: " + appointmentDTO.getActivityID()));
+        Activity activity = activityService.getActivityById(appointmentDTO.getActivityID());
 
         User instructor = null; // el instructor es opcional asi que puede ser null, no te preocupes
         if(appointmentDTO.getInstructorID() != null) {
-            instructor = userRepository.findById(appointmentDTO.getInstructorID())
-                    .orElseThrow(() -> new EntityNotFoundException("Instructor not found with id: " + appointmentDTO.getInstructorID()));
+            instructor = userService.getUserById(appointmentDTO.getInstructorID());
         }
 
         if (appointmentDTO.getAppointmentWeekDays() != null && appointmentDTO.getEndDate() != null && !appointmentDTO.getAppointmentWeekDays().isEmpty()) {
@@ -118,11 +115,18 @@ public class AppointmentService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<?> deleteAppointment(Long id) {
+    public ResponseEntity<?> deleteAppointment(Long id, boolean deleteAllFutureAppointments) {
         try {
             Appointment appointment = this.getAppointmentById(id);
             appointment.setDeleted(true);
             appointmentRepository.save(appointment);
+            if(deleteAllFutureAppointments) {
+                List<Appointment> futureAppointments = appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
+                futureAppointments.forEach(futureAppointment -> {
+                    futureAppointment.setDeleted(true);
+                    appointmentRepository.save(futureAppointment);
+                });
+            }
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -138,19 +142,15 @@ public class AppointmentService {
         try {
             Appointment appointment = this.getAppointmentById(id);
 
-            //modelMapper.map(appointmentDTO, appointment);
-
             appointment.setDate(appointmentDTO.getDate());
             appointment.setStartTime(appointmentDTO.getStartTime());
             appointment.setEndTime(appointmentDTO.getEndTime());
 
-            Activity activity = activityRepository.findById(appointmentDTO.getActivityID())
-                    .orElseThrow(EntityNotFoundException::new);
+            Activity activity = activityService.getActivityById(appointmentDTO.getActivityID());
             appointment.setActivity(activity);
 
             if (appointmentDTO.getInstructorID() != null) {
-                User instructor = userRepository.findById(appointmentDTO.getInstructorID())
-                        .orElseThrow(EntityNotFoundException::new);
+                User instructor = userService.getUserById(appointmentDTO.getInstructorID());
                 appointment.setInstructor(instructor);
             }
 
@@ -163,11 +163,13 @@ public class AppointmentService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> updateAppointment(Long id, UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         try {
             Appointment appointment = this.getAppointmentById(id);
             // modelMapper.map(updateAppointmentDTO, appointment);
 
+            LocalDate originalDate = appointment.getDate();
             if (updateAppointmentDTO.getDate() != null) {
                 appointment.setDate(updateAppointmentDTO.getDate());
             }
@@ -181,18 +183,48 @@ public class AppointmentService {
             }
 
             if (updateAppointmentDTO.getActivityID() != null) {
-                Activity activity = activityRepository.findById(updateAppointmentDTO.getActivityID())
-                        .orElseThrow(EntityNotFoundException::new);
+                Activity activity = activityService.getActivityById(updateAppointmentDTO.getActivityID());
                 appointment.setActivity(activity);
             }
 
             if (updateAppointmentDTO.getInstructorID() != null) {
-                User instructor = userRepository.findById(updateAppointmentDTO.getInstructorID())
-                        .orElseThrow(EntityNotFoundException::new);
+                User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
                 appointment.setInstructor(instructor);
             }
-
             appointmentRepository.save(appointment);
+
+            if (updateAppointmentDTO.getUpdateAllFutureAppointments()){
+
+                List<Appointment> futureAppointments =
+                        appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
+                futureAppointments.forEach(futureAppointment -> {
+
+                    if (updateAppointmentDTO.getDate() != null) {
+                        long daysDifference = ChronoUnit.DAYS.between(originalDate, updateAppointmentDTO.getDate());
+                        futureAppointment.setDate(futureAppointment.getDate().plusDays(daysDifference));
+                    }
+
+                    if (updateAppointmentDTO.getStartTime() != null) {
+                        futureAppointment.setStartTime(updateAppointmentDTO.getStartTime());
+                    }
+
+                    if (updateAppointmentDTO.getEndTime() != null) {
+                        futureAppointment.setEndTime(updateAppointmentDTO.getEndTime());
+                    }
+
+                    if (updateAppointmentDTO.getActivityID() != null) {
+                        Activity activity = activityService.getActivityById(updateAppointmentDTO.getActivityID());
+                        futureAppointment.setActivity(activity);
+                    }
+
+                    if (updateAppointmentDTO.getInstructorID() != null) {
+                        User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
+                        futureAppointment.setInstructor(instructor);
+                    }
+                    appointmentRepository.save(futureAppointment);
+
+                });
+            }
 
             return ResponseEntity.status(HttpStatus.OK).build();
 
@@ -200,6 +232,8 @@ public class AppointmentService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
 
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
         try {
