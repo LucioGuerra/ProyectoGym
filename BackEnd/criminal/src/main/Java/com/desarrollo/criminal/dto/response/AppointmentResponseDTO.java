@@ -22,6 +22,8 @@ public class AppointmentResponseDTO {
 
     private String instructor;
 
+    private Integer participantsCount;
+
     private List<AppointmentUserDTO> participants;
 
     private AppointmentResponseDTO() {}

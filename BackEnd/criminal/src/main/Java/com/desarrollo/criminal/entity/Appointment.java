@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -47,7 +48,7 @@ public class Appointment {
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> participants;
+    private List<User> participants = new ArrayList<>();
 
     private Long recurrenceId;
 
@@ -55,6 +56,10 @@ public class Appointment {
     private boolean deleted = false;
 
     public Appointment(){
+    }
+
+    public int getParticipantsCount() {
+        return participants.size();
     }
 
     @PrePersist

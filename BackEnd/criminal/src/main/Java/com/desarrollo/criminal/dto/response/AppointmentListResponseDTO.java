@@ -20,5 +20,7 @@ public class AppointmentListResponseDTO {
 
     private String activity;
 
+    private Integer participantsCount;
+
     private AppointmentListResponseDTO() {}
 }

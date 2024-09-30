@@ -45,6 +45,7 @@ public class AppointmentService {
                 .map(appointment -> {
                     AppointmentListResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentListResponseDTO.class);
                     responseAppointmentDTO.setActivity(appointment.getActivity().getName());
+                    responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
                     return responseAppointmentDTO;
                 })
                 .toList();
@@ -243,6 +244,7 @@ public class AppointmentService {
             if(appointment.getInstructor() != null) {
                 responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
             }
+            responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
             return ResponseEntity.status(HttpStatus.OK).body(responseAppointmentDTO);
         }catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
