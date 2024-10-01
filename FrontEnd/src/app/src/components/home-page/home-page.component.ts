@@ -79,8 +79,4 @@ export class HomePageComponent implements AfterViewInit {
   login() {
     this.router.navigate(['/login']);
   }
-
-  redirect() {
-    this.router.navigate(['/admin/agenda']);
-  }
 }
