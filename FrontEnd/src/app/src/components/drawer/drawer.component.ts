@@ -22,33 +22,14 @@ export class DrawerComponent {
 
 
   constructor(@Inject(DOCUMENT) public document: Document, private auth0: AuthService) {
-    /*this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      console.log('isAuthenticated:', isAuthenticated);
-      if(!isAuthenticated) {
-        this.auth.loginWithRedirect();
-      }else{
-        this.auth.user$.subscribe(user => {
-          console.log('User:', user);
-        });
-      }
-    });
 
-     */
   }
 
   menu() {
     alert('menu');
   }
+
   logout() {
     this.auth0.logout();
-    /*this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      console.log('user is authenticated: ' + isAuthenticated);
-
-      if (isAuthenticated && confirm('Are you sure you want to logout?')) {
-        this.auth.logout({ logoutParams: { returnTo: document.location.origin } });
-      }
-    });
-
-     */
   }
 }
