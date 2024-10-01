@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     public ResponseEntity<User> createUser(User user) {
@@ -61,10 +61,9 @@ public class UserService {
         }
     }
     
-    private User saveUser(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
- 
 }
 
 
