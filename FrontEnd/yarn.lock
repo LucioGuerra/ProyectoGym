@@ -231,10 +231,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/material@18.2.1":
-  version "18.2.1"
-  resolved "https://registry.npmjs.org/@angular/material/-/material-18.2.1.tgz"
-  integrity sha512-DBSJGqLttT9vYpLGWTuuRoOKd1mNelS0jnNo7jNZyMpjcGfuhNzmPtYiBkXfNsAl7YoXoUmX8+4uh1JZspQGqA==
+"@angular/material@^18.2.3":
+  version "18.2.3"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-18.2.3.tgz#69b6b5528081be70e0a6be2db22e61f5b4f1b870"
+  integrity sha512-JFfvXaMHMhskncaxxus4sDvie9VYdMkfYgfinkLXpZlPFyn1IzjDw0c1BcrcsuD7UxQVZ/v5tucCgq1FQfGRpA==
   dependencies:
     tslib "^2.3.0"
 
@@ -3878,13 +3878,14 @@ fresh@0.5.2:
     "@angular/compiler" "^18.1.0"
     "@angular/core" "^18.1.0"
     "@angular/forms" "^18.1.0"
-    "@angular/material" "18.2.1"
+    "@angular/material" "^18.2.3"
     "@angular/platform-browser" "^18.1.0"
     "@angular/platform-browser-dynamic" "^18.1.0"
     "@angular/router" "^18.1.0"
     "@auth0/auth0-angular" "2.2.3"
     auth0-js "^9.26.1"
-    front-end "file:../../../../AppData/Local/Yarn/Cache/v6/npm-front-end-0.0.0-59fa04e2-324c-4338-904d-e222181c243b-1726842822112/node_modules/front-end"
+    front-end "file:C:/Users/lucio/AppData/Local/Yarn/Cache/v6/npm-front-end-0.0.0-67e0a24e-af05-4037-8e3c-01d8f127e8e4-1727745013765/node_modules/front-end"
+    jwt-decode "^4.0.0"
     rxjs "~7.8.0"
     tslib "^2.3.0"
     zone.js "~0.14.3"

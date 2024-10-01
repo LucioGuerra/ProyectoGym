@@ -29,6 +29,9 @@ public class Package {
     private LocalDate expirationDate;
 
     @Column(nullable = false)
+    private Boolean active;
+
+    @Column(nullable = false)
     private Float price;
 
     @Column(name = "created_at", updatable = false)
@@ -53,6 +56,7 @@ public class Package {
         this.name = name;
         this.description = description;
         this.expirationDate = LocalDate.now().plusDays(31);
+        this.active = true;
     }
 
     @PrePersist

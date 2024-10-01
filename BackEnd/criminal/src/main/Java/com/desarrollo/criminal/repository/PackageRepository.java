@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface PackageRepository extends JpaRepository<Package, Long>{
 
-    @Query("SELECT p FROM Package p WHERE p.expirationDate = CURRENT_DATE")
-    List<Package> findExpiredToday();
+    @Query("SELECT p FROM Package p WHERE p.expirationDate <= CURRENT_DATE AND p.active = true")
+    List<Package> findExpiredTodayAndActive();
 
 }

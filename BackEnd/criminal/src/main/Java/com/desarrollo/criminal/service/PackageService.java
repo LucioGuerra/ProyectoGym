@@ -96,12 +96,16 @@ public class PackageService {
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredPackages(){
-        List<Package> packages = packageRepository.findExpiredToday();
+        List<Package> packages = packageRepository.findExpiredTodayAndActive();
 
         for(Package aPackage : packages){
             User user = aPackage.getUser();
-            user.deletePackage();
-            userService.save(user);
+            if(user.getAPackage().getId() == aPackage.getId()){
+                user.deletePackage();
+                userService.save(user);
+                aPackage.setActive(false);
+                packageRepository.save(aPackage);
+            }
         }
     }
 
