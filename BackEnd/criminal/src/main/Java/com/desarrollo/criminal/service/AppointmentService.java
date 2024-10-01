@@ -92,6 +92,7 @@ public class AppointmentService {
                     appointment.setEndTime(appointmentDTO.getEndTime());
                     appointment.setActivity(activity);
                     appointment.setInstructor(instructor);
+                    appointment.setMax_capacity(appointmentDTO.getMax_capacity());
 
                     if (recurrenceId == null) {
                         appointment = appointmentRepository.save(appointment);
@@ -111,6 +112,7 @@ public class AppointmentService {
             appointment.setStartTime(appointmentDTO.getStartTime());
             appointment.setEndTime(appointmentDTO.getEndTime());
             appointment.setActivity(activity);
+            appointment.setMax_capacity(appointmentDTO.getMax_capacity());
             appointmentRepository.save(appointment);
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -146,6 +148,7 @@ public class AppointmentService {
             appointment.setDate(appointmentDTO.getDate());
             appointment.setStartTime(appointmentDTO.getStartTime());
             appointment.setEndTime(appointmentDTO.getEndTime());
+            appointment.setMax_capacity(appointmentDTO.getMax_capacity());
 
             Activity activity = activityService.getActivityById(appointmentDTO.getActivityID());
             appointment.setActivity(activity);
@@ -188,6 +191,10 @@ public class AppointmentService {
                 appointment.setActivity(activity);
             }
 
+            if (updateAppointmentDTO.getMax_capacity() != null) {
+                appointment.setMax_capacity(updateAppointmentDTO.getMax_capacity());
+            }
+
             if (updateAppointmentDTO.getInstructorID() != null) {
                 User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
                 appointment.setInstructor(instructor);
@@ -203,6 +210,10 @@ public class AppointmentService {
                     if (updateAppointmentDTO.getDate() != null) {
                         long daysDifference = ChronoUnit.DAYS.between(originalDate, updateAppointmentDTO.getDate());
                         futureAppointment.setDate(futureAppointment.getDate().plusDays(daysDifference));
+                    }
+
+                    if (updateAppointmentDTO.getMax_capacity() != null) {
+                        futureAppointment.setMax_capacity(updateAppointmentDTO.getMax_capacity());
                     }
 
                     if (updateAppointmentDTO.getStartTime() != null) {

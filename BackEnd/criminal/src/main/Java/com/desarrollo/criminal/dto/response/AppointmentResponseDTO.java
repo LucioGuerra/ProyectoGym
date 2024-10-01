@@ -22,6 +22,8 @@ public class AppointmentResponseDTO {
 
     private String instructor;
 
+    private Long max_capacity;
+
     private Integer participantsCount;
 
     private List<AppointmentUserDTO> participants;

@@ -30,6 +30,8 @@ public class AppointmentDTO {
 
     private Long instructorID;
 
+    private Long max_capacity;
+
     private List<DayOfWeek> appointmentWeekDays;
 
     private LocalDate endDate;
