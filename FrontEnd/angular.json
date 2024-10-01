@@ -33,6 +33,9 @@
               }
             ],
             "styles": [
+              "src/primeng-theme.scss",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
               "src/styles.scss"
             ],
             "scripts": []
