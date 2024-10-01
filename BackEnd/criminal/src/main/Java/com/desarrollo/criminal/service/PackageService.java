@@ -59,12 +59,21 @@ public class PackageService {
 
     public ResponseEntity<List<GetPackageDTO>> getAllPackages(){
         List<Package> packages = packageRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(packages.stream().map(aPackage -> modelMapper.map(aPackage, GetPackageDTO.class)).toList());
+
+        List<GetPackageDTO> packagesDTO = packages.stream().map(aPackage -> {
+            GetPackageDTO dto = modelMapper.map(aPackage, GetPackageDTO.class);
+            dto.setCreatedAt(aPackage.getCreatedAt().toLocalDate());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(packagesDTO);
     }
 
     public ResponseEntity<GetPackageDTO> getPackageById(Long id){
         Package aPackage = packageRepository.findById(id).orElseThrow(() -> new CriminalCrossException("PACKAGE_NOT_FOUND","Package not found"));
-        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(aPackage, GetPackageDTO.class));
+        GetPackageDTO packageDTO = modelMapper.map(aPackage, GetPackageDTO.class);
+        packageDTO.setCreatedAt(aPackage.getCreatedAt().toLocalDate());
+        return ResponseEntity.status(HttpStatus.OK).body(packageDTO);
     }
 
     public ResponseEntity<Package> updatePackage(Long id, UpdatePackageDTO aPackage){
@@ -102,7 +111,7 @@ public class PackageService {
 
         for (ActivitiesPackageDTO packageDTO : activitiesPackageDTO) {
             Activity activity = activityService.getActivityById(packageDTO.getActivityId());
-            Integer quantity = packageDTO.getQuantity();
+            Integer quantity = (packageDTO.getQuantity() * 4);
 
             packageActivities.add(new PackageActivity(activity, quantity, aPackage));
         }
@@ -124,7 +133,7 @@ public class PackageService {
             Activity activity = activityService.getActivityById(packageDTO.getActivityId());
             Integer quantity = packageDTO.getQuantity();
 
-            price += activity.getPrice() * quantity * 4;
+            price += (activity.getPrice() * quantity * 4);
         }
         return price;
     }

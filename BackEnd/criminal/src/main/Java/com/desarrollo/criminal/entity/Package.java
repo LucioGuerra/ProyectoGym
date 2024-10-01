@@ -55,11 +55,6 @@ public class Package {
         this.expirationDate = LocalDate.now().plusDays(31);
     }
 
-    /*
-    public List<String> getActivitiesNames(){
-        return activities.stream().map(Activity::getName).toList();
-    }*/
-
     @PrePersist
     private void onCreate() {
         LocalDateTime now = LocalDateTime.now();
