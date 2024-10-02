@@ -20,7 +20,7 @@ public class UpdatePATCHAppointmentDTO {
 
     private Long activityID;
 
-    private Long max_capacity;
+    private Integer max_capacity;
 
     private Long instructorID;
 
