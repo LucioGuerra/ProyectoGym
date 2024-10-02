@@ -1,11 +1,9 @@
 package com.desarrollo.criminal.dto.request;
 
-import com.desarrollo.criminal.entity.Activity;
-import jakarta.validation.Valid;
+
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +34,7 @@ public class AppointmentDTO {
     @Positive
     private Integer max_capacity;
 
+    @NotNull
     private List<DayOfWeek> appointmentWeekDays;
 
     private LocalDate endDate;

@@ -77,7 +77,7 @@ public class AppointmentService {
         Optional<User> instructorOptional = Optional.ofNullable(appointmentDTO.getInstructorID())
                 .map(userService::getUserById);
 
-        if (appointmentDTO.getAppointmentWeekDays() != null && appointmentDTO.getEndDate() != null && !appointmentDTO.getAppointmentWeekDays().isEmpty()) {
+        if (appointmentDTO.getEndDate() != null && !appointmentDTO.getAppointmentWeekDays().isEmpty()) {
             Long recurrenceId = null; //esto se usa para guardar el id de la primera cita que se crea, no se guarda como null
 
             LocalDate appointmentDate = appointmentDTO.getDate();
