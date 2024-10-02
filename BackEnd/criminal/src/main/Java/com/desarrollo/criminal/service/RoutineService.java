@@ -27,13 +27,9 @@ public class RoutineService {
         return ResponseEntity.ok(routines);
     }
 
-    public ResponseEntity<Optional<Routine>> getRoutineById(Long id) {
+    public ResponseEntity<Routine> getRoutineById(Long id) {
         Optional<Routine> routine = routineRepository.findById(id);
-        if (routine.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(routine);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return routine.map(value -> ResponseEntity.status(HttpStatus.OK).body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     public ResponseEntity<Routine> createRoutine(RoutineDTO routineDTO) {

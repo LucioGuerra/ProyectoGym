@@ -24,7 +24,7 @@ public class RoutineController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Routine>> getRoutineById(@PathVariable Long id) {
+    public ResponseEntity<Routine> getRoutineById(@PathVariable Long id) {
         return routineService.getRoutineById(id);
     }
 
