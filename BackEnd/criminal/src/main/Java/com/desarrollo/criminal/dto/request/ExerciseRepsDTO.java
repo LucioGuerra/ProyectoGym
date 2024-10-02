@@ -3,13 +3,11 @@ package com.desarrollo.criminal.dto.request;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Duration;
 
-@Getter
-@Setter
+@Data
 public class ExerciseRepsDTO {
     @NotBlank(message = "Exercise ID cannot be blank.")
     private Long exerciseID;
