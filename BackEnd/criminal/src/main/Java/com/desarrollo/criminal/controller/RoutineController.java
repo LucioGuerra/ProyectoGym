@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/routines")
+@RequestMapping("/api/public/routines")
 public class RoutineController {
     private final RoutineService routineService;
 
