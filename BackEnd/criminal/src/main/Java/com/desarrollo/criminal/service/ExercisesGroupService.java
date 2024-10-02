@@ -25,8 +25,4 @@ public final class ExercisesGroupService {
         }
         exercisesGroup.setExercises(exerciseRepsService.convertToEntity(exercisesGroupDTO.getExercises()));
     }
-
-    public List<ExercisesGroup> convertToEntity(List<ExercisesGroupDTO> blocks) {
-        return blocks.stream().map(block -> modelMapper.map(block, ExercisesGroup.class)).toList();
-    }
 }

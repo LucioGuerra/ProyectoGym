@@ -2,12 +2,14 @@ package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.ExercisesGroupDTO;
 import com.desarrollo.criminal.dto.request.RoutineDTO;
+import com.desarrollo.criminal.entity.exercise.ExercisesGroup;
 import com.desarrollo.criminal.entity.routine.ActivityRoutine;
 import com.desarrollo.criminal.entity.routine.BuildingRoutine;
 import com.desarrollo.criminal.entity.routine.RoutineType;
 import com.desarrollo.criminal.entity.routine.Routine;
 import com.desarrollo.criminal.repository.RoutineRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class RoutineService {
+    private final ModelMapper modelMapper;
     private final UserService userService;
     private final ActivityService activityService;
     private final ExercisesGroupService exercisesGroupService;
@@ -66,7 +69,7 @@ public class RoutineService {
         for ( ExercisesGroupDTO block : routineDTO.getBlocks()) {
             exercisesGroupService.createExercisesGroup(block);
         }
-        routine.setBlocks(exercisesGroupService.convertToEntity(routineDTO.getBlocks()));
+        routine.setBlocks( routineDTO.getBlocks().stream().map(block -> modelMapper.map(block, ExercisesGroup.class)).toList() );
     }
 
     //public ResponseEntity<Routine> updateRoutine(Long ignoredId, Routine ignoredRoutine) {}
