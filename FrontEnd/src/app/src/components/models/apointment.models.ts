@@ -20,6 +20,12 @@ export interface AppointmentList {
     appointments: Appointment[];
 }
 
+export interface Instructor {
+  id: number,
+  firstName: string,
+  lastName: string,
+}
+
 export interface AppointmentRequest {
   date?: Date;
   startTime?: LocalTime;
