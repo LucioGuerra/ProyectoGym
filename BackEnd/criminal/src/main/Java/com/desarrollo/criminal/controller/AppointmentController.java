@@ -4,14 +4,9 @@ import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
-import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.AppointmentService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -63,7 +58,7 @@ public class AppointmentController {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
 
-    @GetMapping("/{appointmentId}/user/{userId}")
+    @PostMapping("/{appointmentId}/user/{userId}")
     public ResponseEntity<?> addParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
         return appointmentService.addParticipant(appointmentId, userId);
     }
