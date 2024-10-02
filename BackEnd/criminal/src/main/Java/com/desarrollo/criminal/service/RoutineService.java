@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.service;
 
+import com.desarrollo.criminal.dto.request.ExercisesGroupDTO;
 import com.desarrollo.criminal.dto.request.RoutineDTO;
 import com.desarrollo.criminal.entity.routine.ActivityRoutine;
 import com.desarrollo.criminal.entity.routine.BuildingRoutine;
@@ -62,7 +63,7 @@ public class RoutineService {
     }
 
     private void assignBlocksToRoutine(Routine routine, RoutineDTO routineDTO) {
-        for (var block : routineDTO.getBlocks()) {
+        for ( ExercisesGroupDTO block : routineDTO.getBlocks()) {
             exercisesGroupService.createExercisesGroup(block);
         }
         routine.setBlocks(exercisesGroupService.convertToEntity(routineDTO.getBlocks()));
