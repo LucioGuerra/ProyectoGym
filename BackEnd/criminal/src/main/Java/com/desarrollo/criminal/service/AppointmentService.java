@@ -136,8 +136,7 @@ public class AppointmentService {
     public ResponseEntity<?> updateAllAppointment(Long id, AppointmentDTO appointmentDTO) {
 
         if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("The start time must be before the end time");
+            throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
         try {
             Appointment appointment = this.getAppointmentById(id);
