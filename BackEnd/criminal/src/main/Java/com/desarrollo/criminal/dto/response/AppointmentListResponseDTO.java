@@ -20,7 +20,7 @@ public class AppointmentListResponseDTO {
 
     private String activity;
 
-    private Long max_capacity;
+    private Integer max_capacity;
 
     private Integer participantsCount;
 
