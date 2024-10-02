@@ -22,7 +22,6 @@ import java.util.List;
 @RequestMapping("/api/public/appointments")
 public class AppointmentController {
     private final AppointmentService appointmentService;
-    private final ModelMapper modelMapper;
 
     @GetMapping("/{id}")
     public ResponseEntity<AppointmentResponseDTO> getAppointmentById(@PathVariable Long id) {
