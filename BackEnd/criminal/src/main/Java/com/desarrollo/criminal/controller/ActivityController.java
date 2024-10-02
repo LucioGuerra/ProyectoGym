@@ -28,12 +28,8 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
-        try {
             Activity activity = activityService.getActivityById(id);
             return ResponseEntity.status(HttpStatus.OK).body(activity);
-        }catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @PostMapping

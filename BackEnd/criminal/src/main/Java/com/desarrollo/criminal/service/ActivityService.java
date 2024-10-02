@@ -26,7 +26,7 @@ public class ActivityService {
     }
 
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity not found"));
     }
 
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
