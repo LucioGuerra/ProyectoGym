@@ -1,14 +1,20 @@
-import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, signal, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { CalendarModule } from 'primeng/calendar';
+import {MatInputModule} from "@angular/material/input";
+import {MatIconModule} from "@angular/material/icon";
+import {MatCardModule} from "@angular/material/card";
+import {NgForOf} from "@angular/common";
+import {MatSelectModule} from "@angular/material/select";
+import {Activity, AppointmentRequest, LocalTime} from "../models";
 
 @Component({
   selector: 'app-create-appointment-form',
   standalone: true,providers: [provideNativeDateAdapter()],
-  imports: [MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule, CalendarModule],
+  imports: [MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule, CalendarModule, MatInputModule, MatIconModule, MatCardModule, NgForOf, MatSelectModule],
   templateUrl: './create-appointment-form.component.html',
   styleUrl: './create-appointment-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,6 +29,14 @@ export class CreateAppointmentFormComponent {
 
   startTime: Date | null = null;
   endTime: Date | null = null;
+
+  activities: Activity[] = [
+    { id: 1, name: 'Yoga'},
+    { id: 2, name: 'Pilates'},
+    { id: 3, name: 'Crossfit'},
+  ];
+
+  selectedActivityId= signal<number>(0);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['appointmentId'] && this.appointmentId) {
@@ -66,5 +80,20 @@ export class CreateAppointmentFormComponent {
       console.log('Hora de fin:', this.endTime);
       // Aquí iría la lógica para crear el turno en el backend
     }
+  }
+
+
+  createAppointment() {
+    const stTime: LocalTime = {hour: this.startTime?.getHours()!, minute: this.startTime?.getMinutes()!};
+    const eTime: LocalTime = {hour: this.endTime?.getHours()!, minute: this.endTime?.getMinutes()!};
+    const appointmentData:AppointmentRequest = {
+      date: this.range.value.start!,
+      endDate: this.range.value.end!,
+      startTime: stTime,
+      endTime: eTime,
+      activityID: this.selectedActivityId().valueOf(),
+    };
+
+    alert('Turno creado: ' + JSON.stringify(appointmentData));
   }
 }
