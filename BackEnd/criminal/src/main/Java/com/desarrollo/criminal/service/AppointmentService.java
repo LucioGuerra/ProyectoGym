@@ -262,6 +262,9 @@ public class AppointmentService {
         try {
             Appointment appointment = this.getAppointmentById(appointmentId);
             User user = userService.getUserById(userId);
+            if (appointment.getParticipants().contains(user)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("The user is already registered in this appointment");
+            }
             appointment.getParticipants().add(user);
             appointmentRepository.save(appointment);
             return ResponseEntity.status(HttpStatus.OK).build();
