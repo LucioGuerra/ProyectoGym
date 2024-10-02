@@ -33,9 +33,15 @@ public class ExercisesGroup {
 
     private Duration duration;
 
-
     @PrePersist
     private void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public ExercisesGroup() {}
+
+    public ExercisesGroup(String title, Duration duration) {
+        this.title = title;
+        this.duration = duration;
     }
 }

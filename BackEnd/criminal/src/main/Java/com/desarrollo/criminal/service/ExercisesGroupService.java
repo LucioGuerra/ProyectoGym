@@ -15,10 +15,7 @@ public final class ExercisesGroupService {
     private final ExerciseRepsService exerciseRepsService;
 
     public void createExercisesGroup(ExercisesGroupDTO exercisesGroupDTO) {
-        ExercisesGroup exercisesGroup = new ExercisesGroup();
-
-        exercisesGroup.setTitle(exercisesGroupDTO.getTitle());
-        exercisesGroup.setDuration(exercisesGroupDTO.getDuration());
+        ExercisesGroup exercisesGroup = new ExercisesGroup(exercisesGroupDTO.getTitle(), exercisesGroupDTO.getDuration());
         for (var exercise : exercisesGroupDTO.getExercises()) {
             exerciseRepsService.createExerciseReps(exercise);
         }
