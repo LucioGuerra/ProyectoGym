@@ -279,7 +279,7 @@ public class AppointmentService {
             Appointment appointment = this.getAppointmentById(appointmentId);
             User user = userService.getUserById(userId);
             if (!appointment.getParticipants().contains(user)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user is not registered in this appointment");
+                throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
             }
             appointment.getParticipants().remove(user);
             appointmentRepository.save(appointment);
