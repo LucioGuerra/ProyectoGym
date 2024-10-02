@@ -13,9 +13,6 @@ public class DateWeightService {
     private final DateWeightRepository dateWeightRepository;
 
     public DateWeight createDateWeight(Double weight, Date date) {
-        DateWeight dateWeight = new DateWeight();
-        dateWeight.setWeight(weight);
-        dateWeight.setDate(date);
-        return dateWeightRepository.save(dateWeight);
+        return dateWeightRepository.save(new DateWeight(weight, date));
     }
 }

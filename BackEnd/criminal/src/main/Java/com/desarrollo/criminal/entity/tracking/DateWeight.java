@@ -22,4 +22,9 @@ public class DateWeight {
     private Date date;
 
     public DateWeight() {}
+
+    public DateWeight(Double weight, Date date) {
+        this.weight = weight;
+        this.date = date;
+    }
 }
