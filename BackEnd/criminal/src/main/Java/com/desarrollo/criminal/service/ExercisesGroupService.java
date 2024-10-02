@@ -1,13 +1,12 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.ExercisesGroupDTO;
+import com.desarrollo.criminal.entity.exercise.ExerciseReps;
 import com.desarrollo.criminal.entity.exercise.ExercisesGroup;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -23,6 +22,6 @@ public final class ExercisesGroupService {
         for (var exercise : exercisesGroupDTO.getExercises()) {
             exerciseRepsService.createExerciseReps(exercise);
         }
-        exercisesGroup.setExercises(exerciseRepsService.convertToEntity(exercisesGroupDTO.getExercises()));
+        exercisesGroup.setExercises(exercisesGroupDTO.getExercises().stream().map(block -> modelMapper.map(block, ExerciseReps.class)).toList());
     }
 }

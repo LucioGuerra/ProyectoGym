@@ -53,8 +53,4 @@ public class ExerciseRepsService {
         exerciseReps.setDuration(exerciseRepsDTO.getDuration());
         exerciseRepsRepository.save(exerciseReps);
     }
-
-    public List<ExerciseReps> convertToEntity(List<ExerciseRepsDTO> blocks) {
-        return blocks.stream().map(block -> modelMapper.map(block, ExerciseReps.class)).toList();
-    }
 }
