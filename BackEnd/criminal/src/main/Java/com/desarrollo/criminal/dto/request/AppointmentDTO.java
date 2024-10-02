@@ -4,6 +4,8 @@ import com.desarrollo.criminal.entity.Activity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +32,9 @@ public class AppointmentDTO {
 
     private Long instructorID;
 
-    private Long max_capacity;
+    @NotNull
+    @Positive
+    private Integer max_capacity;
 
     private List<DayOfWeek> appointmentWeekDays;
 
