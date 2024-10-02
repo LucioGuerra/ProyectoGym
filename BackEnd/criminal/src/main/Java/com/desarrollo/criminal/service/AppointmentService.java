@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -73,10 +74,8 @@ public class AppointmentService {
         // Appointment appointment = modelMapper.map(appointmentDTO, Appointment.class);
         Activity activity = activityService.getActivityById(appointmentDTO.getActivityID());
 
-        User instructor = null; // el instructor es opcional asi que puede ser null, no te preocupes
-        if(appointmentDTO.getInstructorID() != null) {
-            instructor = userService.getUserById(appointmentDTO.getInstructorID());
-        }
+        Optional<User> instructorOptional = Optional.ofNullable(appointmentDTO.getInstructorID())
+                .map(userService::getUserById);
 
         if (appointmentDTO.getAppointmentWeekDays() != null && appointmentDTO.getEndDate() != null && !appointmentDTO.getAppointmentWeekDays().isEmpty()) {
             Long recurrenceId = null; //esto se usa para guardar el id de la primera cita que se crea, no se guarda como null
@@ -91,7 +90,9 @@ public class AppointmentService {
                     appointment.setStartTime(appointmentDTO.getStartTime());
                     appointment.setEndTime(appointmentDTO.getEndTime());
                     appointment.setActivity(activity);
-                    appointment.setInstructor(instructor);
+                    if (instructorOptional.isPresent()) {
+                        appointment.setInstructor(instructorOptional.get());
+                    }
                     appointment.setMax_capacity(appointmentDTO.getMax_capacity());
 
                     if (recurrenceId == null) {
