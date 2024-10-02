@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {DrawerComponent} from "../../components/drawer/drawer.component";
 import {
   CreateAppointmentFormComponent
 } from "../../components/create-appointment-form/create-appointment-form.component";
 import {MatDividerModule} from "@angular/material/divider";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-appointment',
@@ -17,6 +18,12 @@ import {MatDividerModule} from "@angular/material/divider";
   styleUrl: './create-appointment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateAppointmentComponent {
+export class CreateAppointmentComponent implements OnInit {
+  appointmentID: string | null = null;
 
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.appointmentID = this.route.snapshot.paramMap.get('id');
+  }
 }

@@ -14,4 +14,5 @@ export const routes: Routes = [
     { path: 'admin/agenda', component: ShifAdminScreenComponent },
     { path: 'edit', component: UserEditComponent},
     {path: 'admin/appointment', component: CreateAppointmentComponent},
+    {path: 'admin/appointment/:id', component: CreateAppointmentComponent},
 ];
