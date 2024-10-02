@@ -263,7 +263,7 @@ public class AppointmentService {
             Appointment appointment = this.getAppointmentById(appointmentId);
             User user = userService.getUserById(userId);
             if (appointment.getParticipants().contains(user)) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("The user is already registered in this appointment");
+                throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
             }
             appointment.getParticipants().add(user);
             appointmentRepository.save(appointment);
