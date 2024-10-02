@@ -30,13 +30,15 @@ public class AppointmentDTO {
 
     private Long instructorID;
 
-    @NotNull
+    @NotNull(message = "The max capacity is required")
     @Positive
     private Integer max_capacity;
 
-    @NotNull
+    @NotNull(message = "The appointment week days are required")
     private List<DayOfWeek> appointmentWeekDays;
 
+    @NotNull(message = "The start date is required")
+    @FutureOrPresent(message = "The date must be in the present or future")
     private LocalDate endDate;
 
     private AppointmentDTO() {}

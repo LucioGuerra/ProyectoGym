@@ -66,7 +66,7 @@ public class AppointmentService {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
-        if (appointmentDTO.getEndDate() != null && !appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())){
+        if (appointmentDTO.getDate().isAfter(appointmentDTO.getEndDate())) {
             throw new CriminalCrossException("INVALID_DATE_RANGE", "The end date must be after the start date");
         }
 
@@ -89,7 +89,7 @@ public class AppointmentService {
         appointment.setRecurrenceId(recurrenceId);
         appointmentRepository.save(appointment);
 
-        if (appointmentDTO.getEndDate() != null && !appointmentDTO.getAppointmentWeekDays().isEmpty()) {
+        if (!appointmentDTO.getAppointmentWeekDays().isEmpty() && appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())) {
 
             LocalDate appointmentDate = appointmentDTO.getDate().plusDays(1);
 
