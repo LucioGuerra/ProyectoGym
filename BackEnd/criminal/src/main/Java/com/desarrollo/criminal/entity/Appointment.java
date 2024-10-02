@@ -50,7 +50,7 @@ public class Appointment {
     )
     private List<User> participants = new ArrayList<>();
 
-    private Long max_capacity;
+    private Integer max_capacity;
 
     private Long recurrenceId;
 
