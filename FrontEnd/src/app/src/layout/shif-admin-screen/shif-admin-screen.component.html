@@ -131,7 +131,7 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="edit_apointment($event, apointment)">Edit</button>
+                        <button mat-menu-item (click)="edit_apointment($event, apointment.id)">Edit</button>
                         <button mat-menu-item (click)="open_apointment($event, apointment)">Open</button>
                         <button mat-menu-item (click)="cancel_apointment($event, apointment)">Cancel</button>
                       </mat-menu>

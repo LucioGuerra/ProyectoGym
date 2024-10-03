@@ -15,6 +15,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
@@ -173,7 +174,7 @@ export class ShifAdminScreenComponent {
   selectedDate = signal<Date>(new Date(Date.now()));
   selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private router: Router) {
     this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       console.log('isAuthenticated:', isAuthenticated);
       if (!isAuthenticated) {
@@ -205,10 +206,10 @@ export class ShifAdminScreenComponent {
     $event.preventDefault();
     alert(`opening appointment id: ${appointment.id}`);
   }
-  edit_apointment($event: Event, appointment: Appointment) {
+  edit_apointment($event: Event, appointmentID: number) {
     $event.stopPropagation();
     $event.preventDefault();
-    alert(`editing appointment id: ${appointment.id}`);
+    this.router.navigate([`/admin/appointment/${appointmentID}`]);
   }
   cancel_apointment($event: MouseEvent, appointment: Appointment) {
     $event.stopPropagation();
