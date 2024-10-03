@@ -12,39 +12,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.desarrollo.criminal.dto.request.AnnouncementDTO;
 import com.desarrollo.criminal.entity.Announcement;
 import com.desarrollo.criminal.service.AnnouncementService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/announcements")
 public class AnnouncementController{
+
     private final AnnouncementService announcementService;
 
+
     @PostMapping
-    public ResponseEntity<Announcement> createAnnouncement(@RequestBody Announcement announcement){
-        return announcementService.createAnnouncement(announcement);
+    public ResponseEntity<com.desarrollo.criminal.dto.request.AnnouncementDTO> createAnnouncement(@Valid @RequestBody AnnouncementDTO announcementDTO){
+
+        return announcementService.createAnnouncement(announcementDTO);
     }
 
+
     @GetMapping
-    public ResponseEntity<List<Announcement>> getAllAnnouncement(){
+    public ResponseEntity<List<AnnouncementDTO>> getAllAnnouncement(){
         return announcementService.getAllAnnouncement();
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<Announcement> getAnnouncementById(@RequestParam Long id){
+    public ResponseEntity<AnnouncementDTO> getAnnouncementById(@PathVariable Long id){
         return announcementService.getAnnouncementById(id);
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Announcement> deleteAnnouncement(@RequestParam Long id){
+    public ResponseEntity<AnnouncementDTO> deleteAnnouncement(@PathVariable Long id){
         return announcementService.deleteAnnouncement(id);
     }
 
+    
     @PutMapping("/{id}")
-    public ResponseEntity<Announcement> updateAnnouncement(@RequestParam Long id, @RequestBody Announcement announcement){
-        return announcementService.updateAnnouncement(id, announcement);
+    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable Long id, @Valid @RequestBody AnnouncementDTO announcementDTO){
+        return announcementService.updateAnnouncement(id, announcementDTO);
     }
+    
 }
