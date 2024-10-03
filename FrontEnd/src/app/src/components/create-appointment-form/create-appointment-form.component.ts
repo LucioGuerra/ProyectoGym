@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, signal, OnInit, SimpleChanges} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -7,28 +7,34 @@ import { CalendarModule } from 'primeng/calendar';
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCardModule} from "@angular/material/card";
-import {NgForOf, NgIf} from "@angular/common";
 import {MatSelectModule} from "@angular/material/select";
-import {Activity, AppointmentRequest, DayOfWeek, Instructor, LocalTime} from "../models";
+import {Activity, Appointment, AppointmentRequest, DayOfWeek, Instructor, LocalTime} from "../models";
 import { MatButtonModule } from "@angular/material/button";
 import {MatChipListbox, MatChipListboxChange, MatChipOption} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-appointment-form',
   standalone: true,
   providers: [provideNativeDateAdapter()],
-  imports: [MatButtonModule, MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule, CalendarModule, MatInputModule, MatIconModule, MatCardModule, NgForOf, MatSelectModule, NgIf, MatChipListbox, MatChipOption, MatCheckboxModule],
+  imports: [MatButtonModule, MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule, CalendarModule, MatInputModule, MatIconModule, MatCardModule, MatSelectModule, MatChipListbox, MatChipOption, MatCheckboxModule],
   templateUrl: './create-appointment-form.component.html',
   styleUrl: './create-appointment-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateAppointmentFormComponent implements OnInit {
+export class CreateAppointmentFormComponent implements OnInit{
   @Input() appointmentId: string | null = null;
 
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
+    startTime: new FormControl<string | null>(null),
+    endTime: new FormControl<string | null>(null),
+    maxCapacity: new FormControl<number | null>(null),
+    activity: new FormControl<number | null>(null),
+    instructor: new FormControl<number | null>(null),
+    daysOfWeek: new FormControl<DayOfWeek[] | []>([]),
   });
 
   startTime: string = this.formatTime(new Date());
@@ -51,6 +57,7 @@ export class CreateAppointmentFormComponent implements OnInit {
   maxCapacity = 20;
 
   dateRange = false;
+  multiple = false;
 
   instructors: Instructor[] = [
     { id: 1, firstName: 'John', lastName: 'Doe' },
@@ -65,35 +72,86 @@ export class CreateAppointmentFormComponent implements OnInit {
 
   selectedWeekDays = signal<DayOfWeek[]>([]);
 
+  constructor(private fb: FormBuilder, private router: Router) {
+    this.range = this.fb.group({
+      start: ['', Validators.required],
+      end: ['', Validators.required],
+      maxCapacity: [20, [Validators.required, Validators.min(1), Validators.max(100)]],
+      activity: [null, Validators.required],
+      instructor: [null, Validators.required],
+      daysOfWeek: [null],
+      startTime: [this.formatTime(new Date()), Validators.required],
+      endTime: [this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1))), Validators.required],
+    }, { validators: this.dateRangeValidator });
+  }
+
   ngOnInit(): void {
-    // Si `appointmentId` está presente en la inicialización, cargar datos
     if (this.appointmentId) {
       this.loadAppointmentData(this.appointmentId);
+
+    } else {
+      this.loadAppointmentData();
     }
   }
 
-  // Implementar `ngOnChanges` para escuchar cambios en `appointmentId`
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['appointmentId'] && changes['appointmentId'].currentValue) {
-      this.loadAppointmentData(changes['appointmentId'].currentValue);
-    }
-  }
-
-  private loadAppointmentData(id: string): void {
-
-    const appointmentData = {
-      start: new Date(),
-      end: new Date(),
-      startTime: new Date(),
-      endTime: new Date(),
+  private loadAppointmentData(id?: string): void {
+    // Simulación de datos para actualizar el formulario
+    const appointmentData: Appointment = {
+      date: new Date(new Date().setDate(new Date().getDate() - 10)),
+      startTime: '15:00',
+      endTime: '16:00',
+      activity: "Yoga",
+      max_capacity: 20,
+      participantsCount: 10,
+      participants: [],
+      instructor: 'John Doe',
+      id: 5,
     };
 
+
+    // Rellenar el formulario con los datos obtenidos
     this.range.patchValue({
-      start: appointmentData.start,
-      end: appointmentData.end,
+      start: appointmentData.date,
+      end: appointmentData.date,
+      maxCapacity: appointmentData.max_capacity,
+      activity: this.activities.find(activity => activity.name === appointmentData.activity)?.id,
+      instructor: this.instructors.find(instructor => instructor.firstName == appointmentData.instructor?.split(" ")[0])?.id,
+      daysOfWeek: [],
+      startTime: appointmentData.startTime,
+      endTime: appointmentData.endTime,
     });
-    this.startTime = this.formatTime(appointmentData.startTime);
-    this.endTime = this.formatTime(appointmentData.endTime);
+
+    this.selectedActivityId = this.activities.find(activity => activity.name === appointmentData.activity)?.id!;
+
+    this.maxCapacity = appointmentData.max_capacity;
+
+    this.selectedInstructorId = this.instructors.find(instructor => instructor.firstName === appointmentData.instructor!.split(" ")[0])?.id!;
+    console.log( "instructor id"+ this.selectedInstructorId + "activity id" + this.selectedActivityId);
+    this.startTime = appointmentData.startTime;
+
+    this.endTime = appointmentData.endTime;
+
+    // Para actualización, puedes ajustar las validaciones si son diferentes
+    this.applyUpdateValidators();
+  }
+
+  private applyUpdateValidators(): void {
+    // Ejemplo: solo algunos campos son requeridos para actualización
+    this.range.get('start')?.setValidators([Validators.required]);
+    this.range.get('end')?.setValidators([Validators.required, Validators.nullValidator]);
+    // Agregar otras validaciones necesarias para actualización
+    this.range.updateValueAndValidity();
+  }
+
+  // Validador personalizado para rango de fechas
+  private dateRangeValidator(group: FormGroup): { [key: string]: boolean } | null {
+    const start = group.get('start')?.value;
+    const end = group.get('end')?.value;
+
+    if (start && end && start > end) {
+      return { dateRangeInvalid: true };
+    }
+    return null;
   }
 
 
@@ -144,5 +202,9 @@ export class CreateAppointmentFormComponent implements OnInit {
 
   updateAppointment() {
 
+  }
+
+  Cancel() {
+    this.router.navigate(['/admin/agenda']);
   }
 }
