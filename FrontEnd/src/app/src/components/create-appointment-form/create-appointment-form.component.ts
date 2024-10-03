@@ -1,6 +1,15 @@
 import {ChangeDetectionStrategy, Component, Input, signal, OnInit, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {provideNativeDateAdapter} from '@angular/material/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  FormsModule, NgForm,
+  ReactiveFormsModule, ValidatorFn,
+  Validators
+} from '@angular/forms';
+import {ErrorStateMatcher, provideNativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {CalendarModule} from 'primeng/calendar';
@@ -26,16 +35,26 @@ import {Router} from "@angular/router";
 export class CreateAppointmentFormComponent implements OnInit {
   @Input() appointmentId: string | null = null;
 
-  readonly range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-    startTime: new FormControl<string | null>(null),
-    endTime: new FormControl<string | null>(null),
-    maxCapacity: new FormControl<number | null>(null),
-    activity: new FormControl<number | null>(null),
-    instructor: new FormControl<number | null>(null),
+  readonly range: FormGroup = new FormGroup({
+    start: new FormControl<Date | null>(null, [Validators.required]),
+    end: new FormControl<Date | null>(null, [Validators.required]),
+    maxCapacity: new FormControl<number | null>(20, [Validators.required, Validators.min(1), Validators.max(100)]),
+    activity: new FormControl<number | null>(null, [Validators.required, this.activityValidator]),
+    instructor: new FormControl<number | null>(null, [Validators.required]),
     daysOfWeek: new FormControl<DayOfWeek[] | []>([]),
-  });
+    startTime: new FormControl<string | null>(this.formatTime(new Date()), [Validators.required]),
+    endTime: new FormControl<string | null>(this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1))), [Validators.required]),
+    multiple: new FormControl<boolean | null>(false),
+  }, {validators: Validators.compose([this.dateRangeValidator.bind(this), this.timeRangeValidator.bind(this)])});
+
+
+  private activityValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.value;
+    if (value === null || value === -1) {
+      return { activityInvalid: true };
+    }
+    return null;
+  }
 
   startTime: string = this.formatTime(new Date());
   endTime: string = this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1)));
@@ -73,23 +92,12 @@ export class CreateAppointmentFormComponent implements OnInit {
   selectedWeekDays = signal<DayOfWeek[]>([]);
   public timeRangeInvalid: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.range = this.fb.group({
-      start: ['', Validators.required],
-      end: ['', Validators.required],
-      maxCapacity: [20, [Validators.required, Validators.min(1), Validators.max(100)]],
-      activity: [null, Validators.required],
-      instructor: [null, Validators.required],
-      daysOfWeek: [null],
-      startTime: [this.formatTime(new Date()), Validators.required],
-      endTime: [this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1))), Validators.required],
-    }, {validators: [this.dateRangeValidator, this.timeRangeValidator]});
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
     if (this.appointmentId) {
       this.loadAppointmentData(this.appointmentId);
-
     } else {
       this.loadAppointmentData();
     }
@@ -116,7 +124,7 @@ export class CreateAppointmentFormComponent implements OnInit {
         end: appointmentData.date,
         maxCapacity: appointmentData.max_capacity,
         activity: this.activities.find(activity => activity.name === appointmentData.activity)?.id,
-        instructor: this.instructors.find(instructor => instructor.firstName == appointmentData.instructor?.split(" ")[0])?.id,
+        instructor: this.instructors.find(instructor => instructor.firstName === appointmentData.instructor?.split(" ")[0])?.id,
         daysOfWeek: [],
         startTime: appointmentData.startTime,
         endTime: appointmentData.endTime,
@@ -127,7 +135,7 @@ export class CreateAppointmentFormComponent implements OnInit {
       this.maxCapacity = appointmentData.max_capacity;
 
       this.selectedInstructorId = this.instructors.find(instructor => instructor.firstName === appointmentData.instructor!.split(" ")[0])?.id!;
-      console.log("instructor id" + this.selectedInstructorId + "activity id" + this.selectedActivityId);
+      console.log("instructor id" + this.selectedInstructorId + " activity id" + this.selectedActivityId);
       this.startTime = appointmentData.startTime;
 
       this.endTime = appointmentData.endTime;
@@ -148,14 +156,21 @@ export class CreateAppointmentFormComponent implements OnInit {
       // Para creación, puedes ajustar las validaciones si son diferentes
       this.applyCreateValidators();
     }
+    this.range.setValidators(this.timeRangeValidator as ValidatorFn);
   }
 
-  private timeRangeValidator(group: FormGroup): { [key: string]: boolean } | null {
+  private timeRangeValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const group = control as FormGroup;
     const startTime = group.get('startTime')?.value;
     const endTime = group.get('endTime')?.value;
 
-    if (startTime && endTime && startTime >= endTime) {
-      return { timeRangeInvalid: true };
+    if (startTime && endTime && startTime > endTime) {
+      group.get('startTime')?.setErrors({timeRangeInvalid: true});
+      group.get('endTime')?.setErrors({timeRangeInvalid: true});
+      return {timeRangeInvalid: true};
+    } else {
+      group.get('startTime')?.setErrors(null);
+      group.get('endTime')?.setErrors(null);
     }
     return null;
   }
@@ -169,9 +184,9 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   // Validador personalizado para rango de fechas
-  private dateRangeValidator(group: FormGroup): { [key: string]: boolean } | null {
-    const start = group.get('start')?.value;
-    const end = group.get('end')?.value;
+  private dateRangeValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const start = control.get('start')?.value;
+    const end = control.get('end')?.value;
 
     if (start && end && start > end && start >= Date.now()) {
       return {dateRangeInvalid: true};
@@ -179,32 +194,32 @@ export class CreateAppointmentFormComponent implements OnInit {
     return null;
   }
 
-
   createAppointment() {
-    const [startHour, startMinute] = this.startTime.split(':').map(Number);
-    const [endHour, endMinute] = this.endTime.split(':').map(Number);
+    if (this.range.valid) {
+      const [startHour, startMinute] = this.range.value.startTime.split(':').map(Number);
+      const [endHour, endMinute] = this.range.value.endTime.split(':').map(Number);
 
-    const stTime: LocalTime = {hour: startHour, minute: startMinute};
-    const eTime: LocalTime = {hour: endHour, minute: endMinute};
-    const appointmentData: AppointmentRequest = {
-      date: this.range.value.start!,
-      endDate: this.range.value.end!,
-      startTime: stTime,
-      endTime: eTime,
-      activityID: this.selectedActivityId,
-      instructorID: this.selectedInstructorId,
-      max_capacity: this.maxCapacity,
-      appointmentWeekDays: Array.from(this.selectedWeekDays().values()),
-    };
+      const stTime: LocalTime = {hour: startHour, minute: startMinute};
+      const eTime: LocalTime = {hour: endHour, minute: endMinute};
+      const appointmentData: AppointmentRequest = {
+        date: this.range.value.start!,
+        endDate: this.range.value.end!,
+        startTime: stTime,
+        endTime: eTime,
+        activityID: this.range.value.activity,
+        instructorID: this.activities.find(activity => activity.id === this.range.value.activity)?.name === 'Kinesiology' ? null : this.range.value.activity (this.range.value.instructor ? this.range.value.instructor : null),
+        max_capacity: this.range.value.maxCapacity,
+        appointmentWeekDays: Array.from(this.selectedWeekDays().values()),
+      };
 
-    alert('Turno creado: ' + JSON.stringify(appointmentData));
+      alert('Turno creado: ' + JSON.stringify(appointmentData));
+    }
   }
-
 
   isKinesiologySelected(): boolean {
     return (
-      this.selectedActivityId !== null &&
-      this.activities.find(activity => activity.id === this.selectedActivityId)?.name === 'Kinesiology'
+      this.range.get("activity") !== null &&
+      this.activities.find(activity => activity.id === this.range.get("activity")?.value)?.name === 'Kinesiology'
     );
   }
 
@@ -218,15 +233,25 @@ export class CreateAppointmentFormComponent implements OnInit {
     this.selectedWeekDays.set($event.value);
   }
 
-  protected readonly DayOfWeek = DayOfWeek;
-
   dateChangeEvent(change: string, $event: MatDatepickerInputEvent<any, any>) {
-    this.range.value.start = $event.value;
-    this.range.value.end = $event.value;
+    this.range.patchValue({start: $event.value, end: $event.value});
   }
 
   updateAppointment() {
+    if (this.range.valid) {
+      const [startHour, startMinute] = this.range.value.startTime.split(':').map(Number);
+      const [endHour, endMinute] = this.range.value.endTime.split(':').map(Number);
 
+      const stTime: LocalTime = {hour: startHour, minute: startMinute};
+      const eTime: LocalTime = {hour: endHour, minute: endMinute};
+      const appointmentData: AppointmentRequest = {
+        date: this.range.value.start!,
+        endDate: this.range.value.end!,
+        startTime: stTime,
+        endTime: eTime,
+        activityID: this.range.value.activity,
+      }
+    }
   }
 
   Cancel() {
@@ -245,8 +270,8 @@ export class CreateAppointmentFormComponent implements OnInit {
   today: Date = new Date();
 
   validateTimeRange() {
-    if (this.startTime && this.endTime) {
-      this.timeRangeInvalid = this.startTime >= this.endTime;
+    if (this.range.get("endTime") && this.range.get("startTime")) {
+      this.timeRangeInvalid = this.range.get("startTime")?.value >= this.range.get("endTime")?.value;
       console.log(this.timeRangeInvalid);
     }
   }

@@ -1,125 +1,133 @@
 <div class="main-container">
+  <!-- Agregar el formGroup al contenedor principal -->
+  <form [formGroup]="range">
     <div class="row">
-        @if (dateRange) {
-            <mat-form-field appearance="outline">
-                <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [min]="today">
-                    <input matStartDate formControlName="start" placeholder="Start date">
-                    <input matEndDate formControlName="end" placeholder="End date">
-                </mat-date-range-input>
-                <mat-hint [style.font-size.px]="10">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-                @if (range.controls.start.hasError('matStartDateInvalid')) {
-                    <mat-error>Invalid start date</mat-error>
-                }
-                @if (range.controls.end.hasError('matEndDateInvalid')) {
-                    <mat-error>Invalid end date</mat-error>
-                }
-            </mat-form-field>
-        } @else {
-            <mat-form-field appearance="outline">
-                <mat-label>Choose a date</mat-label>
-                <input matInput [value]="range.value.start" [matDatepicker]="picker"
-                       (dateChange)="dateChangeEvent('change', $event)" [min]="today">
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-        }
-        @if (appointmentId) {
-            <mat-checkbox [(ngModel)]="dateRange" disabled>Multiple appointments</mat-checkbox>
-        } @else {
-            <mat-checkbox [(ngModel)]="dateRange">Multiple appointments</mat-checkbox>
-        }
-    </div>
-    <div class="row2">
+      @if (dateRange) {
         <mat-form-field appearance="outline">
-            <mat-label>Capacity</mat-label>
-            <input matInput type="number" [(ngModel)]="maxCapacity" [min]="0">
-          @if (range.controls.start.hasError('matStartDateInvalid')) {
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [min]="today">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+          </mat-date-range-input>
+          <mat-hint [style.font-size.px]="10">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          @if ("range.get('start').hasError('matStartDateInvalid')") {
             <mat-error>Invalid start date</mat-error>
           }
-          @if (range.controls.end.hasError('matEndDateInvalid')) {
+          @if ("range.get('end').hasError('matEndDateInvalid')") {
             <mat-error>Invalid end date</mat-error>
           }
         </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="start"
+                 (dateChange)="dateChangeEvent('change', $event)" [min]="today">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      }
+      @if (appointmentId) {
+        <!-- Usar [(ngModel)] para manejar dateRange como independiente -->
+        <mat-checkbox [(ngModel)]="dateRange" [ngModelOptions]="{standalone: true}" disabled>
+          Multiple appointments
+        </mat-checkbox>
+      } @else {
+        <!-- Usar [(ngModel)] para manejar dateRange como independiente -->
+        <mat-checkbox [(ngModel)]="dateRange" [ngModelOptions]="{standalone: true}">
+          Multiple appointments
+        </mat-checkbox>
+      }
+    </div>
+    <div class="row2">
+      <mat-form-field appearance="outline">
+        <mat-label>Capacity</mat-label>
+        <input matInput type="number" formControlName="maxCapacity" [min]="0">
+        @if (range.get('maxCapacity')?.value < 0) {
+          <mat-error>Capacity can't be negative</mat-error>
+        }
+      </mat-form-field>
     </div>
     <div class="row4">
-        <mat-form-field appearance="outline" class="start-time">
-            <mat-label>Start</mat-label>
-            <input matInput type="time" [(ngModel)]="startTime" (input)="validateTimeRange()">
-          @if (timeRangeInvalid) {
-            <mat-error>Invalid start time</mat-error>
-          }
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="end-time">
-            <mat-label>End</mat-label>
-            <input matInput type="time" [(ngModel)]="endTime" [min]="startTime" (input)="validateTimeRange()">
-          @if (timeRangeInvalid) {
-            <mat-error>Invalid end time</mat-error>
-          }
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="start-time" [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
+        <mat-label>Start</mat-label>
+        <input matInput type="time" formControlName="startTime" (input)="validateTimeRange()">
+        @if (range.hasError('timeRangeInvalid')) {
+          <mat-error>Invalid start time</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="end-time" [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
+        <mat-label>End</mat-label>
+        <input matInput type="time" formControlName="endTime" [min]="startTime" (input)="validateTimeRange()">
+        @if (range.hasError('timeRangeInvalid')) {
+          <mat-error>Invalid end time</mat-error>
+        }
+      </mat-form-field>
     </div>
     <div class="row3">
-        <mat-form-field appearance="outline">
-            <mat-label>Activity</mat-label>
-            <mat-select [(value)]="selectedActivityId">
-                <mat-option value="-1"></mat-option>
-                @for (activity of activities; track activity.id) {
-                    <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field appearance="outline" [class.mat-form-field-invalid]="range.get('activity')?.invalid && (range.get('activity')?.touched || range.get('activity')?.dirty)">
+        <mat-label>Activity</mat-label>
+        <mat-select formControlName="activity">
+          @for (activity of activities; track activity.id) {
+            <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
+          }
+        </mat-select>
+        @if (range.get('activity')?.hasError('activityInvalid')) {
+          <mat-error>Activity is required</mat-error>
+        }
+      </mat-form-field>
     </div>
     @if (!isKinesiologySelected()) {
-        <div class="row3">
-            <mat-form-field appearance="outline" class="instructor">
-                <mat-label>Instructor</mat-label>
-                <mat-select [(value)]="selectedInstructorId">
-                    <mat-option value="-1"></mat-option>
-                    @for (instructor of instructors; track instructor.id) {
-                        <mat-option [value]="instructor.id">{{ instructor.firstName }} {{ instructor.lastName }}
-                        </mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-        </div>
+      <div class="row3">
+        <mat-form-field appearance="outline" class="instructor" [class.mat-form-field-invalid]="range.get('instructor')?.invalid && (range.get('instructor')?.touched || range.get('instructor')?.dirty)">
+          <mat-label>Instructor</mat-label>
+          <mat-select formControlName="instructor">
+            <mat-option value="null"></mat-option>
+            @for (instructor of instructors; track instructor.id) {
+              <mat-option [value]="instructor.id">{{ instructor.firstName }} {{ instructor.lastName }}</mat-option>
+            }
+          </mat-select>
+          @if (range.get('instructor')?.hasError('instructorInvalid')) {
+            <mat-error>Instructor is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
     }
     @if (dateRange && !appointmentId) {
-        <div class="day-container">
-            <mat-chip-listbox
-                    class="days"
-                    multiple="true"
-                    aria-label="select activities"
-                    (change)="chipsChangeEvent('change', $event)"
-            >
-                @for (day of daysOfWeek; track day) {
-                    <mat-chip-option [value]="day">
-                        {{ day }}
-                    </mat-chip-option>
-                }
-            </mat-chip-listbox>
-        </div>
+      <div class="day-container">
+        <mat-chip-listbox
+          class="days"
+          multiple="true"
+          aria-label="select activities"
+          (change)="chipsChangeEvent('change', $event)">
+          @for (day of daysOfWeek; track day) {
+            <mat-chip-option [value]="day">
+              {{ day }}
+            </mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </div>
     }
     @if (appointmentId) {
-        <div class="check">
-            <mat-checkbox labelPosition="before" [(ngModel)]="multiple">Edit all forward</mat-checkbox>
-        </div>
+      <div class="check">
+        <mat-checkbox formControlName="multiple" labelPosition="before">Edit all forward</mat-checkbox>
+      </div>
     }
     <div class="button-container">
-        @if (appointmentId) {
-
-            <button mat-stroked-button [style.margin-right.px]="20" (click)="Cancel()">Cancel</button>
-            <button mat-flat-button (click)="updateAppointment()">
-                <mat-icon>add</mat-icon>
-                Update
-            </button>
-        } @else {
-            <button mat-flat-button (click)="createAppointment()">
-                <mat-icon>add</mat-icon>
-                Create
-            </button>
-        }
+      @if (appointmentId) {
+        <button mat-stroked-button [style.margin-right.px]="20" (click)="Cancel()">Cancel</button>
+        <button mat-flat-button (click)="updateAppointment()">
+          <mat-icon>add</mat-icon>
+          Update
+        </button>
+      } @else {
+        <button mat-flat-button (click)="createAppointment()">
+          <mat-icon>add</mat-icon>
+          Create
+        </button>
+      }
     </div>
+  </form>
 </div>
