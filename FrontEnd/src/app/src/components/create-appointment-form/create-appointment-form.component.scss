@@ -182,3 +182,7 @@
     justify-content: start;
 
 }
+
+.ng-invalid .mat-form-field-outline {
+  border-color: red !important;
+}
