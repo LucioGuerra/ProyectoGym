@@ -1,1 +1,10 @@
-<p>announcement-carousel works!</p>
+<mat-tab-group [selectedIndex]="currentIndex()" (selectedTabChange)="onTabChange($event)" class="custom-tab-group">
+  @for (announcement of announcements; track announcement) {
+    <mat-tab [label]="announcement.date.toDateString()">
+      <div class="carousel-content">
+        <h3> {{ announcement.title }} </h3>
+        <p>{{ announcement.description }}</p>
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>

@@ -1,1 +1,116 @@
-<p>shif-client-screen works!</p>
+<app-drawer>
+  <ng-container main-content>
+    <div class="main-div">
+      <section class="main-section">
+        <section class="top-section">
+          <div class="calendar">
+            <div class="title-section">
+              <mat-icon style="padding: 0 5px 0 10px; color: #f6c90e"
+              >calendar_month</mat-icon
+              >
+              <h1 class="datepicker-title">Select date</h1>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-form-field>
+              <mat-label>MM/DD/YYYY</mat-label>
+              <input
+                [value]="selectedDate()"
+                matInput
+                [matDatepicker]="picker"
+                (dateChange)="datePickerChangeEvent('change', $event)"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <app-announcement-carousel></app-announcement-carousel>
+        </section>
+        <section class="botom-section">
+          <div class="agenda">
+            <div class="title-section">
+              <mat-icon style="padding: 0 0px 0 10px; color: #f6c90e"
+              >calendar_view_day</mat-icon
+              >
+              <h1 class="agenda-title">Agenda</h1>
+              <mat-chip-listbox
+                class="activities-cards"
+                multiple="true"
+                aria-label="select activities"
+                (change)="chipsChangeEvent('change', $event)"
+              >
+                @for (activity of activities; track activity) {
+                  <mat-chip-option [value]="activity.name" selected>
+                    {{ activity.name }}
+                  </mat-chip-option>
+                }
+              </mat-chip-listbox>
+            </div>
+
+            <mat-divider></mat-divider>
+            <div class="scrollable-section">
+              <mat-action-list>
+                @for (apointment of apointments; track apointment) { @if
+                (selectedActivities().includes(apointment.activity) && apointment.date.toDateString() == selectedDate().toDateString()) {
+                  <button [value]='apointment' mat-list-item (click)="open_apointment($event, apointment)">
+                    <div class="apointments">
+                      <div class="apointment-title">
+                        <p class="date">
+                          @switch(apointment.date.getDay()){ @case(1){ Lunes }
+                            @case(2){ Martes } @case(3){ Miercoles } @case(4){
+                              Jueves } @case(5){ Viernes } @case(6){ Sabado }
+                            @case(0){ Domingo } } {{ apointment.date.getDate() }} de
+                          @switch(apointment.date.getMonth()){ @case(0){ Enero }
+                            @case(1){ Febrero } @case(2){ Marzo } @case(3){ Abril }
+                            @case(4){ Mayo } @case(5){ Junio } @case(6){ Julio }
+                            @case(7){ Agosto } @case(8){ Septiembre } @case(9){
+                              Octubre } @case(10){ Noviembre } @case(11){ Diciembre }
+                          } de
+                          {{ apointment.date.getFullYear() }}
+                        </p>
+                        <p class="time">
+                          {{ apointment.startTime }} - {{ apointment.endTime }}
+                        </p>
+                      </div>
+                      <div class="card-container">
+                        <mat-chip class="apointment-activity-card">{{
+                            apointment.activity
+                          }}</mat-chip>
+                      </div>
+                      <div class="progress-bar-container">
+                        <mat-progress-bar
+                          class="progress-bar"
+                          mode="determinate"
+                          value="{{
+                          (apointment.users.length * 100) /
+                            apointment.max_capacity
+                        }}"
+                        ></mat-progress-bar>
+                      </div>
+                      <div class="user-quantity">
+                        <p class="user-quantity-text">
+                          {{ apointment.users.length }} /
+                          {{ apointment.max_capacity }}
+                          <mat-icon>person</mat-icon>
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                }}
+                @if(apointments.length == 0 || noActivities()) {
+                  <button mat-list-item>
+                    <div class="no-apointments">
+                      <p>No hay citas para este día</p>
+                    </div>
+                  </button>
+                }
+              </mat-action-list>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </ng-container>
+</app-drawer>

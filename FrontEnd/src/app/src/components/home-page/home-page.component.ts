@@ -47,7 +47,7 @@ export class HomePageComponent implements AfterViewInit {
           this.router.navigate(['admin/agenda']);
         }
         else {
-          //todo redirect to client page
+          this.router.navigate(['cliente/agenda']);
         }
       }
       else{
