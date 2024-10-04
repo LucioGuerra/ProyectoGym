@@ -231,6 +231,7 @@ export class ShifClientScreenComponent {
       return false;
     }
   }
+
   open_apointment($event: Event, apointment: Activity) {
     $event.stopPropagation();
     $event.preventDefault();
@@ -261,4 +262,5 @@ export class ShifClientScreenComponent {
   shop($event: MouseEvent) {
     alert('shop');
   }
+
 }
