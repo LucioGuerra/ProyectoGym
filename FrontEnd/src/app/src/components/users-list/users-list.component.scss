@@ -1,0 +1,60 @@
+.contenedora {
+  display: flex;
+  transform: translateY(15vh);
+  align-content: center;
+  justify-content: center;
+}
+
+#principal{
+  width: 80%;
+  background-color: rgba(34, 34, 34, 0.67);
+}
+
+mat-card-title{
+  font-size: xx-large;
+  font-weight: 500;
+  color: rgb(208, 208, 208);
+  margin: 20px 0 20px 10px;
+}
+
+mat-table{
+  width: 100%;
+  background-color: #66645e;
+}
+
+#boton {
+  display: flex;
+  color: #222222;
+}
+
+.derecha{
+  display: flex;
+  justify-content: right;
+  flex-direction: row;
+}
+
+button {
+  font-size: 20px;
+  margin-bottom: 5px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.update {
+  background-color: rgb(255, 187, 0);
+}
+
+.delete:hover {
+  background-color: rgba(228, 42, 42, 0.795);
+}
+
+.delete {
+  background-color: #580000;
+  color: white;
+  cursor: pointer;
+}
+
+.update:hover {
+  background-color: #ffdb3a;
+  cursor: pointer;
+}
