@@ -3,16 +3,13 @@ package com.desarrollo.criminal.dto.request;
 import com.desarrollo.criminal.entity.user.Role;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import lombok.AllArgsConstructor;
 
 
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserRequestDTO {
     
     @NotBlank(message = "First name cannot be empty.")
@@ -40,5 +37,8 @@ public class UserRequestDTO {
 
     @NotBlank(message = "Phone cannot be empty.")
     private String phone;
+
+
+    private UserRequestDTO(){}
 
 }
