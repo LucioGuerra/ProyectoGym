@@ -63,7 +63,7 @@ export class UsersListComponent {
   }
 
   updateUser(id: bigint){
-    //Cuando vuelva a modificar esto voy a hacer el constructor para el router y dirigir al usuario a la pagina de edicion
+
   }
 
 }

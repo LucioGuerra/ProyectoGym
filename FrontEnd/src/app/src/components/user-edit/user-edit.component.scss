@@ -85,7 +85,7 @@ mat-button-toggle {
   margin: 1px;
   justify-content: center;
   align-items: center;
-  background-color: #d0d0d0; 
+  background-color: #d0d0d0;
   color: #222222;
   font-weight: bold;
   width: 50%;
@@ -93,8 +93,8 @@ mat-button-toggle {
 
 
 mat-button-toggle.mat-button-toggle-checked {
-  background-color: #F6C90E; 
-  color: #222222; 
+  background-color: #F6C90E;
+  color: #222222;
   width: 60%;
 }
 
@@ -167,27 +167,27 @@ button[mat-raised-button] {
 
 .common-rows {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   flex: 1;
   background-color: transparent;
 }
 
-#fila1 {         
+#fila1 {
   justify-content: space-between;
-  align-items: center;              
-  margin: 1 2rem; 
+  align-items: center;
+  margin: 1 2rem;
 }
 
-#fila2 {            
+#fila2 {
   justify-content: space-between;
-  align-items: center;              
-  margin: 1 2rem; 
+  align-items: center;
+  margin: 1 2rem;
 }
 
-#fila3 {          
+#fila3 {
   justify-content: space-between;
-  align-items: center;               
-  margin: 1 1rem; 
+  align-items: center;
+  margin: 1 1rem;
   gap: 4%;
 }
 
