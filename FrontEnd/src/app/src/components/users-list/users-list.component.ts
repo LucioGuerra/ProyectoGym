@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {DrawerComponent} from "../drawer/drawer.component";
+import { User } from '../models';
+import {UserService} from "../services/services/user.service";
+import {Router} from "@angular/router";
+import { Role } from '../models';
 
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -8,30 +12,30 @@ import {MatTableModule} from "@angular/material/table";
 import {MatActionList} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-
-export interface User {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
+export interface ProvisionalUser {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
 }
 
-const USERS: User[] = [
-  { id: 1, firstname: 'John', lastname: 'Doe', email: 'JohnDoe@gmail.com' },
-  { id: 2, firstname: 'Jane', lastname: 'Smith', email: 'JaneSmith@gmail.com' },
-  { id: 3, firstname: 'Michael', lastname: 'Johnson', email: 'MichaelJohnson@gmail.com' },
-  { id: 4, firstname: 'Emily', lastname: 'Davis', email: 'EmilyDavis@gmail.com' },
-  { id: 5, firstname: 'Chris', lastname: 'Brown', email: 'ChrisBrown@gmail.com' },
-  { id: 6, firstname: 'Sarah', lastname: 'Wilson', email: 'SarahWilson@gmail.com' },
-  { id: 7, firstname: 'David', lastname: 'Martinez', email: 'DavidMartinez@gmail.com' },
-  { id: 8, firstname: 'Sophia', lastname: 'Anderson', email: 'SophiaAnderson@gmail.com' },
-  { id: 9, firstname: 'James', lastname: 'Taylor', email: 'JamesTaylor@gmail.com' },
-  { id: 10, firstname: 'Olivia', lastname: 'Thomas', email: 'OliviaThomas@gmail.com' },
-  { id: 11, firstname: 'Daniel', lastname: 'Moore', email: 'DanielMoore@gmail.com' },
-  { id: 12, firstname: 'Mia', lastname: 'Jackson', email: 'MiaJackson@gmail.com' },
-  { id: 13, firstname: 'Robert', lastname: 'White', email: 'RobertWhite@gmail.com' },
-  { id: 14, firstname: 'Ava', lastname: 'Harris', email: 'AvaHarris@gmail.com' },
-  { id: 15, firstname: 'Alexander', lastname: 'Lewis', email: 'AlexanderLewis@gmail.com' }
+// Esto se reemplaza despues, cuando este funcionando el endpoint de usuarios
+const provisionalUsers: ProvisionalUser[] = [
+  { id: 1, firstName: 'John', lastName: 'Doe', email: 'JohnDoe@gmail.com' },
+  { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'JaneSmith@gmail.com' },
+  { id: 3, firstName: 'Michael', lastName: 'Johnson', email: 'MichaelJohnson@gmail.com' },
+  { id: 4, firstName: 'Emily', lastName: 'Davis', email: 'EmilyDavis@gmail.com' },
+  { id: 5, firstName: 'Chris', lastName: 'Brown', email: 'ChrisBrown@gmail.com' },
+  { id: 6, firstName: 'Sarah', lastName: 'Wilson', email: 'SarahWilson@gmail.com' },
+  { id: 7, firstName: 'David', lastName: 'Martinez', email: 'DavidMartinez@gmail.com' },
+  { id: 8, firstName: 'Sophia', lastName: 'Anderson', email: 'SophiaAnderson@gmail.com' },
+  { id: 9, firstName: 'James', lastName: 'Taylor', email: 'JamesTaylor@gmail.com' },
+  { id: 10, firstName: 'Olivia', lastName: 'Thomas', email: 'OliviaThomas@gmail.com' },
+  { id: 11, firstName: 'Daniel', lastName: 'Moore', email: 'DanielMoore@gmail.com' },
+  { id: 12, firstName: 'Mia', lastName: 'Jackson', email: 'MiaJackson@gmail.com' },
+  { id: 13, firstName: 'Robert', lastName: 'White', email: 'RobertWhite@gmail.com' },
+  { id: 14, firstName: 'Ava', lastName: 'Harris', email: 'AvaHarris@gmail.com' },
+  { id: 15, firstName: 'Alexander', lastName: 'Lewis', email: 'AlexanderLewis@gmail.com' }
 ];
 
 @Component({
@@ -53,17 +57,49 @@ const USERS: User[] = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersListComponent {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = USERS;
-  protected readonly USERS = USERS;
+  users: User[] = [];
+  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'buttons'];
+  dataSource = provisionalUsers;
+  protected readonly USERS = provisionalUsers;
 
+  constructor(
+      private userService: UserService,
+      private router: Router) { }
 
-  deleteUser(id: bigint){
-    //Usar el service para eliminar el user por id
+  ngOnInit() {
+    // this.userService.getAllUsers().subscribe({
+    //   next: (users: any) => {
+    //     this.users = users.map((users: any) => ({
+    //         id: users.id,
+    //         firstName: users.firstName,
+    //         lastName: users.lastName,
+    //         email: users.email
+    //     }));
+    // //   },
+    //   error: (error: any) => {
+    //     console.error(error);
+    //   },
+    //   complete: () => {
+    //     console.log('Request completed');
+    //   }
+    // });
   }
 
-  updateUser(id: bigint){
+  // Falta implementar el soft-delete del user en el BackEnd
 
+  // deleteUser(id: bigint) {
+  //   this.userService.deleteUser(id).subscribe(() => {
+  //     this.users = this.users.filter(
+  //         (user: any) => user.id !== id
+  //     );
+  //   });
+  // }
+
+  updateUser(id: bigint) {
+    this.router.navigate(['/edit', id]);
+  }
+
+  deleteUser(id: bigint) {
   }
 
 }

@@ -13,5 +13,6 @@ export const routes: Routes = [
     { path: 'singup', component: SingupComponent },
     { path: 'admin/agenda', component: ShifAdminScreenComponent },
     { path: 'edit', component: UserEditComponent },
-    { path: 'admin/users', component: UsersListComponent }
+    { path: 'update-announcement/:id', component: UserEditComponent },
+    { path: 'admin/users', component: UsersListComponent },
 ];
