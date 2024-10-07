@@ -1,11 +1,15 @@
 <app-drawer>
-    <ng-container main-content>
-      <div class="contenedora">
-        <mat-card id="principal">
-          <mat-card-header>
-            <mat-card-title>Users</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
+  <ng-container main-content>
+    <div class="contenedora">
+      <mat-card id="principal">
+        <mat-card-header>
+          <div class="title-section">
+          <mat-icon class="icon">people</mat-icon>
+          <h1>Users</h1>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-container">
             <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
               <ng-container matColumnDef="position">
                 <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
@@ -17,23 +21,22 @@
                 <mat-cell *matCellDef="let element"> {{element.lastname}} </mat-cell>
               </ng-container>
 
-              <!-- Weight Column -->
               <ng-container matColumnDef="weight">
                 <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
               </ng-container>
 
-              <!-- Symbol Column -->
               <ng-container matColumnDef="symbol">
-                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <div class="derecha">
-                    <div id="boton">
-                      <button class="delete" type="submit"
-                              (click)="deleteUser(element.id)">Delete</button>
-                      <button type="submit" class="update"
-                              (click)="updateUser(element.id)">Update</button>
-                    </div>
+                <mat-header-cell class="derecha" *matHeaderCellDef></mat-header-cell>
+                <mat-cell class="derecha" *matCellDef="let element">
+                  <div class="button-container">
+                    <button (click)="$event.stopPropagation()" mat-icon-button class="edit" [matMenuTriggerFor]="menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="updateUser(element.id)">Update</button>
+                      <button mat-menu-item (click)="deleteUser(element.id)">Delete</button>
+                    </mat-menu>
                   </div>
                 </mat-cell>
               </ng-container>
@@ -41,8 +44,9 @@
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </ng-container>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
 </app-drawer>

@@ -6,6 +6,8 @@ import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {MatActionList} from "@angular/material/list";
+import {MatIcon} from "@angular/material/icon";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 export interface User {
   id: number;
@@ -40,7 +42,11 @@ const USERS: User[] = [
     MatCardModule,
     MatButtonModule,
     MatTableModule,
-    MatActionList
+    MatActionList,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
@@ -51,10 +57,13 @@ export class UsersListComponent {
   dataSource = USERS;
   protected readonly USERS = USERS;
 
+
   deleteUser(id: bigint){
+    //Usar el service para eliminar el user por id
   }
 
   updateUser(id: bigint){
+    //Cuando vuelva a modificar esto voy a hacer el constructor para el router y dirigir al usuario a la pagina de edicion
   }
 
 }
