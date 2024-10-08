@@ -63,7 +63,7 @@ export class UsersListComponent {
   protected readonly USERS = provisionalUsers;
 
   constructor(
-      private userService: UserService,
+      // private userService: UserService,
       private router: Router) { }
 
   ngOnInit() {
@@ -75,7 +75,7 @@ export class UsersListComponent {
     //         lastName: users.lastName,
     //         email: users.email
     //     }));
-    // //   },
+    //   },
     //   error: (error: any) => {
     //     console.error(error);
     //   },
@@ -98,8 +98,4 @@ export class UsersListComponent {
   updateUser(id: bigint) {
     this.router.navigate(['/edit', id]);
   }
-
-  deleteUser(id: bigint) {
-  }
-
 }
