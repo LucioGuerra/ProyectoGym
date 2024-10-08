@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.controller;
 
+import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,13 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.service.UserService;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/public/users")
 
 public class UserController {
     private final UserService userService;
@@ -27,15 +26,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
-        User user = userService.getUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
 
+    @PostMapping("/{id}/tracking")
+    public ResponseEntity<?> trackWeight(@PathVariable Long id,
+                                            @RequestBody ExerciseTrackingDTO exerciseTrackingDTO){
+        //return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created");
+        return userService.trackDateWeight(id, exerciseTrackingDTO);
+    }
 
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        return userService.createUser(user);
+        userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     
 

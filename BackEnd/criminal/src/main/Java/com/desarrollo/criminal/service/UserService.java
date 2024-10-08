@@ -1,5 +1,9 @@
 package com.desarrollo.criminal.service;
 
+import com.desarrollo.criminal.dto.request.ExerciseTrackingDTO;
+import com.desarrollo.criminal.entity.tracking.DateWeight;
+
+import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +21,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final TrackingService trackingService;
+    private final ExerciseService exerciseService;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -61,10 +66,33 @@ public class UserService {
         }
     }
     
-    private User saveUser(User user) {
-        return userRepository.save(user);
+    private void saveUser(User user) {
+        userRepository.save(user);
     }
- 
+
+    public ResponseEntity<?> trackDateWeight(Long userID, ExerciseTrackingDTO exerciseTrackingDTO) {
+        User user = getUserById(userID);
+        List<Tracking> trackings = user.getTrackings();
+        Tracking tracking;
+
+        if(trackings.isEmpty()){
+            tracking = trackingService.createTracking(exerciseTrackingDTO.getExerciseID());
+            user.addTracking(tracking);
+        } else {
+            Optional<Tracking> trackingOP = trackingService.getTrackingOfUserByExerciseId(trackings, exerciseTrackingDTO.getExerciseID());
+            if(trackingOP.isPresent()){
+                tracking = trackingOP.get();
+            } else {
+                tracking = trackingService.createTracking(exerciseTrackingDTO.getExerciseID());
+                user.addTracking(tracking);
+            }
+        }
+        trackingService.updateTracking(tracking, exerciseTrackingDTO);
+
+        saveUser(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Tracking created successfully");
+    }
 }
 
 
