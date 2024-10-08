@@ -4,8 +4,7 @@ import {
   HostListener,
   ElementRef,
   AfterViewInit,
-  OnInit,
-  inject
+  effect
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CurrencyPipe } from '@angular/common';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { Router } from '@angular/router';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-home-page',
@@ -23,9 +23,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePageComponent implements OnInit, AfterViewInit {
+export class HomePageComponent implements AfterViewInit {
   private sections: HTMLElement[] = [];
-  private auth0 = inject(AuthService);
+  private subscription = new Subscription();
 
   public activities = [
     {id: 1, name: 'Actividad 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.', img: 'https://via.placeholder.com/150'},
@@ -38,27 +38,23 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     {id: 3, name: 'Pack 3', price:'35000',description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac enim eget eros pulvinar fermentum.'},
   ]
 
-  constructor(private el: ElementRef, private router: Router) {}
-  ngOnInit(): void {
+  constructor(private el: ElementRef, private router: Router, private auth0: AuthService) {
 
-
-    this.auth0.handleAuthentication();
-    /*this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      console.log('isAuthenticated:', isAuthenticated);
-      if (isAuthenticated) {
-        this.router.navigate(['admin/agenda']);
-      } else {
-        this.auth.user$.subscribe(user => {
-          if (user) {
-            console.log('User is authenticated based on getUser:', user);
-            this.router.navigate(['admin/agenda']);
-          } else {
-            console.log('User is not authenticated', user);
-          }
-        });
+    effect(() => {
+      if(this.auth0.isAuthenticated()){
+        if(this.auth0.isAdmin()){
+          console.log("Me redirige a admin/agenda")
+          this.router.navigate(['admin/agenda']);
+        }
+        else {
+          //todo redirect to client page
+        }
       }
-    });
-     */
+      else{
+        this.auth0.handleAuthentication();
+      }
+    }, { allowSignalWrites: true });
+
   }
 
   ngAfterViewInit(): void {
