@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, OnInit} from '@angular/core';
 import {DrawerComponent} from "../../components/drawer/drawer.component";
 import {
   CreateAppointmentFormComponent
 } from "../../components/create-appointment-form/create-appointment-form.component";
 import {MatDividerModule} from "@angular/material/divider";
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from "../../components/services/services/auth.service";
 
 @Component({
   selector: 'app-create-appointment',
@@ -21,9 +22,23 @@ import { ActivatedRoute } from '@angular/router';
 export class CreateAppointmentComponent implements OnInit {
   appointmentID: string | null = null;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private auth0: AuthService, private router: Router, private route: ActivatedRoute) {
+    effect(() => {
+      if(this.auth0.isAuthenticated()){
+        if(this.auth0.isAdmin()){
+        }
+        //todo redirect to client page
+      }
+      else{
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.appointmentID = this.route.snapshot.paramMap.get('id');
   }
+
+
+
 }
