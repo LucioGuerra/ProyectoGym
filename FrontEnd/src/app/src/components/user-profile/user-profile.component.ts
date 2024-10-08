@@ -13,8 +13,6 @@ import { NgIf, AsyncPipe } from '@angular/common';
 
 export class UserProfileComponent {
   constructor(public auth: AuthService) {
-    this.auth.user$.subscribe((user) => {
-      console.log('el usuario es:', user);});
   }
 
 }
