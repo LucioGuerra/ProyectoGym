@@ -19,14 +19,14 @@ import java.util.Optional;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
-/*
+
     public ResponseEntity<List<Activity>> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
         return ResponseEntity.ok(activities);
     }
-*/
+
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity not found"));
     }
 
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
@@ -34,6 +34,7 @@ public class ActivityService {
 
         activity.setName(activityDTO.getName());
         activity.setDescription(activityDTO.getDescription());
+        activity.setPrice(activityDTO.getPrice());
 
         activityRepository.save(activity);
 
