@@ -1,13 +1,13 @@
 import {
   ChangeDetectionStrategy,
-  Component, effect,
+  Component, effect, OnInit,
   signal
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../components/services/services/auth.service';
 import { MatCardModule } from '@angular/material/card';
-import {Appointment, ToolbarComponent} from '../../components';
+import {ActivityService, Appointment, AppointmentService, ToolbarComponent} from '../../components';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
 
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -15,177 +15,38 @@ import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {provideNativeDateAdapter, MAT_DATE_LOCALE} from '@angular/material/core';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { Activity } from '../../components/index';
 import {Router} from "@angular/router";
 import {Subscription} from "rxjs";
+
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
   imports: [MatMenuModule, MatProgressBarModule, MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
   templateUrl: './shif-admin-screen.component.html',
-  providers: [provideNativeDateAdapter()],
+  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },],
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShifAdminScreenComponent{
+export class ShifAdminScreenComponent implements OnInit {
 
   private subscription = new Subscription();
 
-  public activities = [{
-    name: 'Crossfit',
-  },
-  {
-    name: 'Yoga',
-  },
-  {
-    name: 'Pilates',
-  },
-  {
-    name: 'Spinning',
-  },
-  {
-    name: 'Zumba',
-  },
-  {
-    name: 'Boxing',
-  },
-  {
-    name: 'MMA',
-  },
-  {
-    name: 'Kickboxing',
-  },
-  {
-    name: 'Judo',
-  },
-  {
-    name: 'Karate',
-  },
-  ];
+  public activities: Activity[] = [];
 
-  public appointments: Appointment[] = [{
-    id: 1,
-    date: new Date(Date.now()),
-    startTime: '10:00',
-    endTime: '11:00',
-    activity: 'Crossfit',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-  },
-  {
-    id: 2,
-    date: new Date(2023, 2, 10),
-    startTime: '11:00',
-    endTime: '12:00',
-    activity: 'Yoga',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '12:00',
-    endTime: '13:00',
-    activity: 'Pilates',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 0
-  },
-  {
-    id: 3,
-    date: new Date(Date.now()),
-    startTime: '13:00',
-    endTime: '14:00',
-    activity: 'Spinning',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '14:00',
-    endTime: '15:00',
-    activity: 'Zumba',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 4,
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '15:00',
-    endTime: '16:00',
-    activity: 'Boxing',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 5,
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '16:00',
-    endTime: '17:00',
-    activity: 'MMA',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 6,
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '17:00',
-    endTime: '18:00',
-    activity: 'Kickboxing',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 7,
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '18:00',
-    endTime: '19:00',
-    activity: 'Judo',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 8,
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '19:00',
-    endTime: '20:00',
-    activity: 'Karate',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 9,
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '20:00',
-    endTime: '21:00',
-    activity: 'Crossfit',
-    max_capacity: 20,
-    participantsCount: 10,
-    instructor: 'John Doe',
-    id: 10,
-  },
-  ];
+  public appointments: Appointment[] = [];
 
-  selectedDate = signal<Date>(new Date(Date.now()));
-  selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
+  selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate() - 1)));
+  selectedActivities = signal<string[]>([]);
 
 
 
-  constructor(private auth0: AuthService, private router: Router) {
-    effect(() => {
+  constructor(private auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+    /*effect(() => {
       if(this.auth0.isAuthenticated()){
         if(this.auth0.isAdmin()){
         }
@@ -194,11 +55,62 @@ export class ShifAdminScreenComponent{
       else{
         this.router.navigate(['/login']);
       }
-    });
+    });*/
+    /*this.appointmentService.getAppointmentByDate(this.selectedDate().toDateString()).subscribe(appointments => {
+      this.appointments = appointments;
+    });*/
+    console.log('Fecha en el componente:', this.selectedDate().toISOString().split('T')[0]);
+    this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
+      (data: Appointment[]) => {
+        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
+        this.appointments = data;
+
+        // Este console.log se ejecutará después de que los datos hayan sido asignados
+        console.log('Datos en el componente después de la asignación:', this.appointments);
+      },
+      (error) => {
+        console.error('Error al obtener las citas', error);
+      }
+    );
+
+    // Este console.log se ejecuta inmediatamente, antes de recibir los datos de la API
+    console.log('Datos en el componente antes de la asignación:', this.appointments);
+
+    this.activityService.getActivities().subscribe(
+      (data: Activity[]) => {
+        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
+        this.activities = data;
+        this.selectedActivities.set(this.activities.map(activity => activity.name));
+        // Este console.log se ejecutará después de que los datos hayan sido asignados
+        console.log('Datos en el componente después de la asignación:', this.activities);
+      },
+      (error) => {
+        console.error('Error al obtener las actividades', error);
+      }
+    );
+  }
+
+  ngOnInit(): void {
+
   }
 
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
+    this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
+      (data: Appointment[]) => {
+        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
+        this.appointments = data;
+
+        // Este console.log se ejecutará después de que los datos hayan sido asignados
+        console.log('Datos en el componente después de la asignación:', this.appointments);
+      },
+      (error) => {
+        console.error('Error al obtener las citas', error);
+      }
+    );
+    /*this.appointmentService.getAppointmentByDate(this.selectedDate().toDateString()).subscribe(appointments => {
+      this.appointments = appointments;
+    });*/
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
   }
   chipsChangeEvent(arg0: string, $event: MatChipListboxChange) {
@@ -207,9 +119,11 @@ export class ShifAdminScreenComponent{
     // alert(`quantity selectioned: ${this.selectedActivities().length}, activities: ${this.selectedActivities()}`);
   }
   noActivities(): Boolean {
-    return this.appointments.filter(appointment =>
-      this.selectedActivities().includes(appointment.activity) && appointment.date.toDateString() == this.selectedDate().toDateString()
+    let len = this.appointments.filter(appointment =>
+      appointment.date.toDateString() == this.selectedDate().toDateString() && this.selectedActivities().includes(appointment.activity)
     ).length == 0;
+    console.log('No activities:', this.selectedActivities(), 'activity:', this.appointments[0].activity, 'date:', this.appointments[0].date, 'is equal?', this.selectedActivities().includes(this.appointments[0].activity));
+    return len;
   }
   open_apointment($event: Event, appointment: Appointment) {
     $event.stopPropagation();

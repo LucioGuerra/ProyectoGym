@@ -57,4 +57,5 @@ export interface Activity {
   name: string,
   description?: string,
   price?: number,
+  createdAt?: Date,
 }

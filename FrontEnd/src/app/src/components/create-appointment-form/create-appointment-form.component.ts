@@ -105,15 +105,13 @@ export class CreateAppointmentFormComponent implements OnInit {
   private loadAppointmentData(id?: string): void {
     // Simulación de datos para actualizar el formulario
     const appointmentData: Appointment = {
-      date: new Date(new Date().setDate(new Date().getDate() - 10)),
-      startTime: '15:00',
-      endTime: '16:00',
-      activity: "Yoga",
-      max_capacity: 20,
-      participantsCount: 10,
-      participants: [],
-      instructor: 'John Doe',
-      id: 5,
+      activity: "",
+      date: new Date(),
+      endTime: "",
+      id: 0,
+      max_capacity: 0,
+      participantsCount: 0,
+      startTime: ""
     };
 
     if (id) {

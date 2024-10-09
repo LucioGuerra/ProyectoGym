@@ -1,6 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {AppointmentRequest, environment} from '../../index';
+import { Appointment, AppointmentRequest } from '../../index'; // Ajusta según tus rutas
+import { Observable} from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { environment } from '../../../../../index';
 
 @Injectable({
   providedIn: 'root'
@@ -8,40 +11,25 @@ import {AppointmentRequest, environment} from '../../index';
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) {}
 
-  getAllAppointment() {
-    return this.http.get(this.apiUrl);
+  getAppointments(): Observable<Appointment[]> {
+    return this.http.get<any[]>(this.apiUrl).pipe(
+      map((appointments: any[]) => appointments.map(appointment => ({
+        ...appointment,
+        date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+      })))
+    );
   }
 
-  getAppointmentById(id: number) {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getAppointmentsByDate(date: Date): Observable<Appointment[]> {
+    console.log('Fecha en el servicio:', date.toISOString().split('T')[0]);
+    return this.http.get<any[]>(`${this.apiUrl}/date/${date.toISOString().split('T')[0]}`).pipe(
+      map((appointments: any[]) => appointments.map(appointment => ({
+        ...appointment,
+        date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+      })))
+    );
   }
-
-  getAppointmentByDate(date: string) {
-    return this.http.get(`${this.apiUrl}/date/${date}`);
-  }
-
-  createAppointment(appointment: AppointmentRequest) {
-    return this.http.post(this.apiUrl, appointment);
-  }
-
-  updateAppointment(appointment: AppointmentRequest) {
-    return this.http.patch(this.apiUrl, appointment);
-  }
-
-  deleteAppointment(id: number, deleteAllFutureAppointments: boolean) {
-    return this.http.delete(`${this.apiUrl}/${id}/deleteAllFutureAppointments=${deleteAllFutureAppointments}`);
-  }
-
-  addParticipant(appointmentId: number, userId: number) {
-    return this.http.post(`${this.apiUrl}/${appointmentId}/user/${userId}`, {});
-  }
-
-  removeParticipant(appointmentId: number, userId: number) {
-    return this.http.delete(`${this.apiUrl}/${appointmentId}/user/${userId}`);
-  }
-
-
 
 }
