@@ -1,7 +1,11 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component, effect,
+  signal
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '@auth0/auth0-angular';
+import { AuthService } from '../../components/services/services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { ToolbarComponent } from '../../components/index';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
@@ -16,6 +20,8 @@ import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { Activity } from '../../components/index';
+import {Router} from "@angular/router";
+import {Subscription} from "rxjs";
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
@@ -25,7 +31,9 @@ import { Activity } from '../../components/index';
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShifAdminScreenComponent {
+export class ShifAdminScreenComponent{
+
+  private subscription = new Subscription();
 
   public activities = [{
     name: 'Crossfit',
@@ -185,19 +193,21 @@ export class ShifAdminScreenComponent {
   selectedDate = signal<Date>(new Date(Date.now()));
   selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
 
-  constructor(private auth: AuthService) {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      console.log('isAuthenticated:', isAuthenticated);
-      if (!isAuthenticated) {
-        this.auth.loginWithRedirect();
-      } else {
-        this.auth.user$.subscribe(user => {
-          console.log('User:', user);
-        });
+
+
+  constructor(private auth0: AuthService, private router: Router) {
+    effect(() => {
+      if(this.auth0.isAuthenticated()){
+        if(this.auth0.isAdmin()){
+        }
+        //todo redirect to client page
+      }
+      else{
+        this.router.navigate(['/login']);
       }
     });
   }
-  
+
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);

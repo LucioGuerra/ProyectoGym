@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.entity.user.User;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/public/users")
 
 public class UserController {
     private final UserService userService;
@@ -29,12 +30,18 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
-        return userService.getUserById(id);
+        try {
+            User user = userService.getUserById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 
+
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO  
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO
     userRequestDTO) {
 
         return userService.createUser(userRequestDTO);

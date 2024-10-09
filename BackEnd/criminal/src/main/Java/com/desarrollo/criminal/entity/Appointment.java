@@ -2,13 +2,14 @@ package com.desarrollo.criminal.entity;
 
 import com.desarrollo.criminal.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,15 +34,34 @@ public class Appointment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    private Appointment(){
+    @ManyToMany
+    @JoinTable(
+            name = "participants",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> participants = new ArrayList<>();
+
+    private Integer max_capacity;
+
+    private Long recurrenceId;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
+    public Appointment(){
+    }
+
+    public int getParticipantsCount() {
+        return participants.size();
     }
 
     @PrePersist

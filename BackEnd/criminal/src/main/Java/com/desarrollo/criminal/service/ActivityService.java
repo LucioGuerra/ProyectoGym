@@ -4,6 +4,7 @@ import com.desarrollo.criminal.dto.request.ActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.repository.ActivityRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -18,26 +19,22 @@ import java.util.Optional;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
-/*
+
     public ResponseEntity<List<Activity>> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
         return ResponseEntity.ok(activities);
     }
 
-    public ResponseEntity<Activity> getActivityById(Long id) {
-        Optional<Activity> activity = activityRepository.findById(id);
-        if (activity.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(activity.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
+    public Activity getActivityById(Long id) {
+        return activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity not found"));
     }
-*/
+
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
         Activity activity = new Activity();
 
         activity.setName(activityDTO.getName());
         activity.setDescription(activityDTO.getDescription());
+        activity.setPrice(activityDTO.getPrice());
 
         activityRepository.save(activity);
 
