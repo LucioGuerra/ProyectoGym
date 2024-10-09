@@ -56,10 +56,14 @@ export class ShifAdminScreenComponent implements OnInit {
         this.router.navigate(['/login']);
       }
     });*/
-    /*this.appointmentService.getAppointmentByDate(this.selectedDate().toDateString()).subscribe(appointments => {
-      this.appointments = appointments;
-    });*/
-    console.log('Fecha en el componente:', this.selectedDate().toISOString().split('T')[0]);
+  }
+
+  ngOnInit(): void {
+    this.loadAppointment();
+    this.loadActivities();
+  }
+
+  loadAppointment() {
     this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
       (data: Appointment[]) => {
         console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
@@ -72,10 +76,9 @@ export class ShifAdminScreenComponent implements OnInit {
         console.error('Error al obtener las citas', error);
       }
     );
+  }
 
-    // Este console.log se ejecuta inmediatamente, antes de recibir los datos de la API
-    console.log('Datos en el componente antes de la asignación:', this.appointments);
-
+  loadActivities() {
     this.activityService.getActivities().subscribe(
       (data: Activity[]) => {
         console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
@@ -90,27 +93,9 @@ export class ShifAdminScreenComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-
-  }
-
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
-    this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
-      (data: Appointment[]) => {
-        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
-        this.appointments = data;
-
-        // Este console.log se ejecutará después de que los datos hayan sido asignados
-        console.log('Datos en el componente después de la asignación:', this.appointments);
-      },
-      (error) => {
-        console.error('Error al obtener las citas', error);
-      }
-    );
-    /*this.appointmentService.getAppointmentByDate(this.selectedDate().toDateString()).subscribe(appointments => {
-      this.appointments = appointments;
-    });*/
+    this.loadAppointment();
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
   }
   chipsChangeEvent(arg0: string, $event: MatChipListboxChange) {

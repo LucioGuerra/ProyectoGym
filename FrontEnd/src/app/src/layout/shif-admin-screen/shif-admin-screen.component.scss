@@ -118,13 +118,13 @@ ng-container {
   }
 
   .quickstart-buttons {
-    margin: 15px 0 0 0;
+    margin: 15px 20px 0 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     overflow: hidden;
-    justify-content: center;
+    justify-content: space-evenly;
     align-content: center;
     .button-class {
       background-color: variables.$light-gold-color;
@@ -232,7 +232,7 @@ mat-divider {
         color: variables.$white-color;
         width: auto;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: end;
         text-align: start;
         font-weight: 500;
@@ -322,6 +322,12 @@ mat-divider {
         }
       }
     }
+  }
+}
+
+@media (max-width: 1300px) {
+  .apointment-title{
+    flex-direction: row;
   }
 }
 
