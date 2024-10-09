@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -18,11 +17,12 @@ import java.util.Optional;
 public class ActivityController {
     private final ActivityService activityService;
 
-    /*@GetMapping
-    public  ResponseEntity<List<Activity>> getAllActivities(){
-        return activityService.getAllActivities();
+    @GetMapping
+    public ResponseEntity<List<Activity>> getAllActivities () {
+        return activityService.getAllActivities ( );
     }
 
+    /*
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
         return activityService.getActivityById(id);

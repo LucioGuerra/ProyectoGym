@@ -2,6 +2,7 @@ package com.desarrollo.criminal.dto.request;
 
 import com.desarrollo.criminal.entity.routine.Day;
 import com.desarrollo.criminal.entity.routine.RoutineType;
+import com.desarrollo.criminal.entity.user.User;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class RoutineDTO {
-    private ActivityDTO activity;
+    private long activityID;
 
     private long userID;
 

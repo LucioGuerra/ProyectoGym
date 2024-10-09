@@ -1,13 +1,14 @@
 package com.desarrollo.criminal.dto.request;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class ActivityDTO {
 
     @NotBlank(message = "Activity name cannot be empty.")
@@ -21,4 +22,8 @@ public class ActivityDTO {
     @Digits(integer = 6, fraction = 2, message = "Price must have a maximum of 6 integer digits and 2 decimal digits.")
     @PositiveOrZero(message = "Price cannot be negative.")
     private float price;
+
+    private ActivityDTO(){
+
+    }
 }

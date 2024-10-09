@@ -17,4 +17,8 @@ public class ActivityRoutine extends Routine{
     @ManyToOne
     @JoinColumn(name = "activity_id", nullable = false)
     private Activity activity;
+
+    public ActivityRoutine(){
+
+    }
 }

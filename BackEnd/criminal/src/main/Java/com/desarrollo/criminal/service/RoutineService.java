@@ -47,7 +47,7 @@ public class RoutineService {
 
     private void createActivityRoutine(RoutineDTO routineDTO) {
         ActivityRoutine activityRoutine = new ActivityRoutine();
-        activityRoutine.setActivity(activityService.convertToEntity(routineDTO.getActivity()));
+        activityRoutine.setActivity(activityService.getActivityById(routineDTO.getActivityID()).getBody());
 
         assignBlocksToRoutine(activityRoutine, routineDTO);
 
@@ -63,7 +63,7 @@ public class RoutineService {
     }
 
     private void assignBlocksToRoutine(Routine routine, RoutineDTO routineDTO) {
-        for ( ExercisesGroupDTO block : routineDTO.getBlocks()) {
+        for (ExercisesGroupDTO block : routineDTO.getBlocks()) {
             exercisesGroupService.createExercisesGroup(block);
         }
         routine.setBlocks( routineDTO.getBlocks().stream().map(block -> modelMapper.map(block, ExercisesGroup.class)).toList() );

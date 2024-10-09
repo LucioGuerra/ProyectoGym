@@ -2,9 +2,11 @@ package com.desarrollo.criminal.entity.exercise;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @Entity
 public class Exercise {
@@ -27,7 +29,14 @@ public class Exercise {
     @Column(name = "muscle_group")
     private MuscleGroup muscleGroup;
 
-    private Exercise() {
+    public Exercise () {
+
+    }
+
+    public Exercise (String name, String description, MuscleGroup muscleGroup) {
+        this.name = name;
+        this.description = description;
+        this.muscleGroup = muscleGroup;
     }
 
     @PrePersist

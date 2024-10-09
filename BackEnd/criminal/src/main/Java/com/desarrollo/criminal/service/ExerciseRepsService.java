@@ -1,56 +1,31 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.ExerciseRepsDTO;
+import com.desarrollo.criminal.entity.exercise.Exercise;
 import com.desarrollo.criminal.entity.exercise.ExerciseReps;
 import com.desarrollo.criminal.repository.ExerciseRepsRepository;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class ExerciseRepsService {
-    private final ModelMapper modelMapper;
     private final ExerciseRepsRepository exerciseRepsRepository;
+    private final ExerciseService exerciseService;
 
     public void createExerciseReps(ExerciseRepsDTO exerciseRepsDTO) {
-        ExerciseReps exerciseReps = new ExerciseReps();
-
-        if (exerciseRepsDTO.getDuration() != null) {
-            if (!existsExerciseRepsDuration(exerciseRepsDTO)) {
-                generateNewExerciseWithDuration(exerciseRepsDTO, exerciseReps);
-
+        Exercise exercise = exerciseService.getExerciseById(exerciseRepsDTO.getExerciseID()).getBody();
+        if (Optional.ofNullable(exerciseRepsDTO.getDuration()).isPresent()) {
+            if (exerciseRepsRepository.findByDurationAndExerciseId(exerciseRepsDTO.getDuration(), exerciseRepsDTO.getExerciseID()).isPresent ()) {
+                ExerciseReps exerciseReps = new ExerciseReps(exerciseRepsDTO.getDuration(), exercise);
                 exerciseRepsRepository.save(exerciseReps);
             }
-        } else if (!existsExerciseRepsWithSeries(exerciseRepsDTO)) {
-            generateNewExerciseReps(exerciseRepsDTO, exerciseReps);
-
+        } else if (exerciseRepsRepository.findBySeriesAndRepsAndExerciseId(exerciseRepsDTO.getSeries(), exerciseRepsDTO.getReps(), exerciseRepsDTO.getExerciseID()).isPresent ()) {
+            ExerciseReps exerciseReps = new ExerciseReps(exerciseRepsDTO.getReps(), exerciseRepsDTO.getSeries(), exercise);
             exerciseRepsRepository.save(exerciseReps);
         }
-    }
-
-    public boolean existsExerciseRepsDuration(ExerciseRepsDTO exerciseRepsDTO) {
-        Optional<ExerciseReps> exerciseReps = exerciseRepsRepository.findByDurationAndExerciseId(exerciseRepsDTO.getDuration(), exerciseRepsDTO.getExerciseID());
-        return exerciseReps.isPresent();
-    }
-
-    public void generateNewExerciseReps(ExerciseRepsDTO exerciseRepsDTO, ExerciseReps exerciseReps) {
-        exerciseReps.setSeries(exerciseRepsDTO.getSeries());
-        exerciseReps.setReps(exerciseRepsDTO.getReps());
-    }
-
-    public boolean existsExerciseRepsWithSeries(ExerciseRepsDTO exerciseRepsDTO) {
-        Optional<ExerciseReps> exerciseReps = exerciseRepsRepository.findBySeriesAndRepsAndExerciseId(exerciseRepsDTO.getSeries(), exerciseRepsDTO.getReps(), exerciseRepsDTO.getExerciseID());
-        return exerciseReps.isPresent();
-    }
-
-    public void generateNewExerciseWithDuration(ExerciseRepsDTO exerciseRepsDTO, ExerciseReps exerciseReps) {
-        exerciseReps.setDuration(exerciseRepsDTO.getDuration());
-        exerciseRepsRepository.save(exerciseReps);
     }
 }

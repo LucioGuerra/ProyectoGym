@@ -11,32 +11,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class ActivityService {
     private final ModelMapper modelMapper;
     private final ActivityRepository activityRepository;
 
-    /*
-        public ResponseEntity<List<Activity>> getAllActivities() {
-            List<Activity> activities = activityRepository.findAll();
-            return ResponseEntity.ok(activities);
-        }
 
-        public ResponseEntity<Activity> getActivityById(Long id) {
-            Optional<Activity> activity = activityRepository.findById(id);
-            if (activity.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(activity.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.OK).build();
-            }
-        }
-    */
+    public ResponseEntity<List<Activity>> getAllActivities() {
+        List<Activity> activities = activityRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(activities);
+    }
+
+    public ResponseEntity<Activity> getActivityById(Long id) {
+        Optional<Activity> activity = activityRepository.findById(id);
+        return activity.map (value -> ResponseEntity.status(HttpStatus.OK).body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.OK).build());
+    }
+
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
         Activity activity = new Activity();
 
         activity.setName(activityDTO.getName());
         activity.setDescription(activityDTO.getDescription());
+        activity.setPrice(activityDTO.getPrice());
 
         activityRepository.save(activity);
 
@@ -70,8 +70,4 @@ public class ActivityService {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
     }*/
-
-    public Activity convertToEntity(ActivityDTO activityDTO) {
-        return modelMapper.map(activityDTO, Activity.class);
-    }
 }

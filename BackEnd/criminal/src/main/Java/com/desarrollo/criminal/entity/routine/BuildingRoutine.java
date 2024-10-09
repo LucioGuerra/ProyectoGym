@@ -18,5 +18,7 @@ public class BuildingRoutine extends Routine{
 
     private Day day;
 
-    public BuildingRoutine(){}
+    public BuildingRoutine(){
+
+    }
 }

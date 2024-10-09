@@ -1,7 +1,7 @@
 package com.desarrollo.criminal.dto.request;
 
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.time.Duration;
 
 @Data
 public class ExerciseRepsDTO {
-    @NotBlank(message = "Exercise ID cannot be blank.")
+    @NotNull(message = "Exercise ID cannot be null.")
     private Long exerciseID;
 
     @Digits(integer = 3, message = "Series must have a maximum of 3 integer digits.", fraction = 0)

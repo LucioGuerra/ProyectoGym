@@ -2,6 +2,7 @@ package com.desarrollo.criminal.controller;
 
 import java.util.List;
 
+import com.desarrollo.criminal.dto.request.ExerciseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,13 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/admin/exercises")
+@RequestMapping("/api/public/exercises")
 public class ExerciseController{
     private final ExerciseService exerciseService;
 
     @PostMapping
-    public ResponseEntity<Exercise> createExercise(@RequestBody Exercise exercise){
-        return exerciseService.createExercise(exercise);
+    public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO exerciseDTO){
+        return exerciseService.createExercise(exerciseDTO);
     }
 
     @GetMapping

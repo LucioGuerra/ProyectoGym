@@ -38,7 +38,9 @@ public class ExercisesGroup {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ExercisesGroup() {}
+    public ExercisesGroup() {
+
+    }
 
     public ExercisesGroup(String title, Duration duration) {
         this.title = title;
