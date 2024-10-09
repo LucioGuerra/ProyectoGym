@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.dto.request.UserRequestDTO;
+import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
 import com.desarrollo.criminal.service.UserService;
 
-import javax.swing.text.html.Option;
+import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +41,10 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO
+    userRequestDTO) {
+
+        return userService.createUser(userRequestDTO);
     }
     
 

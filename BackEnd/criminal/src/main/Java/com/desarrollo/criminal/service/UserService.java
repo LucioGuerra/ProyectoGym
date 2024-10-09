@@ -1,12 +1,17 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.dto.request.UserRequestDTO;
+import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.hibernate.MappingException;
+import org.modelmapper.ModelMapper;
+import com.desarrollo.criminal.exception.CriminalCrossException;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +22,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final ModelMapper modelMapper;
 
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -35,10 +40,25 @@ public class UserService {
                 new EntityNotFoundException("User not found with id: " + id));
     }
 
-    public ResponseEntity<User> createUser(User user) {
+
+
+    public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {
+
+        try {
+        User user = modelMapper.map(userRequestDTO, User.class);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+
+        UserResponseDTO userResponseDTO = modelMapper.map(savedUser, UserResponseDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
+    
+
+        } catch (MappingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
+
+
+
 
     public ResponseEntity<User> updateUser(Long id, User userDetail) {
         Optional<User> optionalUser = userRepository.findById(id);
