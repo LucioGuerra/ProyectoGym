@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public final class ExercisesGroupService {
@@ -18,13 +21,16 @@ public final class ExercisesGroupService {
     private final ExerciseRepsService exerciseRepsService;
     private final ExercisesGroupRepository exercisesGroupRepository;
 
-    public void createExercisesGroup(ExercisesGroupDTO exercisesGroupDTO) {
+    public ExercisesGroup createExercisesGroup( ExercisesGroupDTO exercisesGroupDTO) {
         ExercisesGroup exercisesGroup = new ExercisesGroup(exercisesGroupDTO.getTitle(), exercisesGroupDTO.getDuration());
-        for (ExerciseRepsDTO exercise : exercisesGroupDTO.getExercises()) {
-            exerciseRepsService.createExerciseReps(exercise);
-        }
-        exercisesGroup.setExercises(exercisesGroupDTO.getExercises().stream().map(block -> modelMapper.map(block, ExerciseReps.class)).toList());
+        List<ExerciseReps> persistedReps = new ArrayList<>();
 
-        exercisesGroupRepository.save(exercisesGroup);
+        for (ExerciseRepsDTO exercise : exercisesGroupDTO.getExercises()) {
+            ExerciseReps persistedRep = exerciseRepsService.createExerciseReps(exercise);
+            persistedReps.add(persistedRep);
+        }
+        exercisesGroup.setExercises(persistedReps);
+
+        return exercisesGroupRepository.save(exercisesGroup);
     }
 }

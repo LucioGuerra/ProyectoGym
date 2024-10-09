@@ -16,16 +16,19 @@ public class ExerciseRepsService {
     private final ExerciseRepsRepository exerciseRepsRepository;
     private final ExerciseService exerciseService;
 
-    public void createExerciseReps(ExerciseRepsDTO exerciseRepsDTO) {
+    public ExerciseReps createExerciseReps(ExerciseRepsDTO exerciseRepsDTO) {
         Exercise exercise = exerciseService.getExerciseById(exerciseRepsDTO.getExerciseID()).getBody();
+
         if (Optional.ofNullable(exerciseRepsDTO.getDuration()).isPresent()) {
-            if (exerciseRepsRepository.findByDurationAndExerciseId(exerciseRepsDTO.getDuration(), exerciseRepsDTO.getExerciseID()).isPresent ()) {
+            return exerciseRepsRepository.findByDurationAndExerciseId(exerciseRepsDTO.getDuration(), exerciseRepsDTO.getExerciseID()).orElseGet(() -> {
                 ExerciseReps exerciseReps = new ExerciseReps(exerciseRepsDTO.getDuration(), exercise);
-                exerciseRepsRepository.save(exerciseReps);
-            }
-        } else if (exerciseRepsRepository.findBySeriesAndRepsAndExerciseId(exerciseRepsDTO.getSeries(), exerciseRepsDTO.getReps(), exerciseRepsDTO.getExerciseID()).isPresent ()) {
-            ExerciseReps exerciseReps = new ExerciseReps(exerciseRepsDTO.getReps(), exerciseRepsDTO.getSeries(), exercise);
-            exerciseRepsRepository.save(exerciseReps);
+                return exerciseRepsRepository.save(exerciseReps);
+            });
+        } else {
+            return exerciseRepsRepository.findBySeriesAndRepsAndExerciseId(exerciseRepsDTO.getSeries(), exerciseRepsDTO.getReps(), exerciseRepsDTO.getExerciseID()).orElseGet(() -> {
+                ExerciseReps exerciseReps = new ExerciseReps(exerciseRepsDTO.getReps(), exerciseRepsDTO.getSeries(), exercise);
+                return exerciseRepsRepository.save(exerciseReps);
+            });
         }
     }
 }

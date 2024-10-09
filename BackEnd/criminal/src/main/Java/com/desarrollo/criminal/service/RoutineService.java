@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,10 +64,13 @@ public class RoutineService {
     }
 
     private void assignBlocksToRoutine(Routine routine, RoutineDTO routineDTO) {
+        List<ExercisesGroup> blocks = new ArrayList<>();
+
         for (ExercisesGroupDTO block : routineDTO.getBlocks()) {
-            exercisesGroupService.createExercisesGroup(block);
+            ExercisesGroup persistedGroup = exercisesGroupService.createExercisesGroup(block);
+            blocks.add(persistedGroup);
         }
-        routine.setBlocks( routineDTO.getBlocks().stream().map(block -> modelMapper.map(block, ExercisesGroup.class)).toList() );
+        routine.setBlocks(blocks);
     }
 
     //public ResponseEntity<Routine> updateRoutine(Long ignoredId, Routine ignoredRoutine) {}
