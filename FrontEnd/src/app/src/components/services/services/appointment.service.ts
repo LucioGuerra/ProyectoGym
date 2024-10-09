@@ -28,7 +28,22 @@ export class AppointmentService {
       map((appointments: any[]) => appointments.map(appointment => ({
         ...appointment,
         date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+        max_capacity: appointment.max_capacity || 0,
+        startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
+        endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
       })))
+    );
+  }
+
+  getAppointmentById(id: string): Observable<Appointment> {
+    return this.http.get<Appointment>(`${this.apiUrl}/${id}`).pipe(
+      map(appointment => ({
+        ...appointment,
+        date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+        max_capacity: appointment.max_capacity || 0,
+        startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
+        endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
+      }))
     );
   }
 

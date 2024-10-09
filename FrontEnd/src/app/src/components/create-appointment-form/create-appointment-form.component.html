@@ -44,7 +44,7 @@
     <div class="row2">
       <mat-form-field appearance="outline">
         <mat-label>Capacity</mat-label>
-        <input matInput type="number" formControlName="maxCapacity" [min]="0">
+        <input matInput type="number" formControlName="max_capacity" [min]="0">
         @if (range.get('maxCapacity')?.value < 0) {
           <mat-error>Capacity can't be negative</mat-error>
         }

@@ -133,7 +133,7 @@ ng-container {
       text-overflow: ellipsis;
       font-size: 0.8rem;
       margin: 0 10px;
-      padding: 0 10px 0 15px;
+      padding: 0 30px 0 30px;
       border-radius: 10px;
       height: 40px;
     }
@@ -325,26 +325,118 @@ mat-divider {
   }
 }
 
-@media (max-width: 1300px) {
-  .apointment-title{
-    flex-direction: row;
+
+
+ ::ng-deep .appointment-table {
+    background-color: variables.$grey-color !important;
+    border-radius: 10px !important;
+   overflow: hidden;
+   ::ng-deep .mat-column-date {
+     width: 20% !important;
+     height: 80px !important;
+   }
+   ::ng-deep .mat-column-activity {
+     width: 10% !important;
+   }
+   .appointment-title{
+    margin: 10px 0 0px 10px;
+    font-size: 1rem;
+    color: variables.$white-color;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    text-align: start;
+    font-weight: 500;
+    .date {
+      width: fit-content;
+      margin: 0;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1.1rem;
+    }
+    .time {
+      width: fit-content;
+      margin: -5px 0 0 0;
+      font-size: 0.9rem;
+      color: variables.$white-color;
+      opacity: 0.6;
+    }
   }
-}
+
+   ::ng-deep .mat-column-capacity {
+     width: 60% !important;
+   }
+   .cantidad {
+     display: flex;
+     flex-direction: row;
+     width: 100%;
+     flex: 1;
+     .progress-bar-container {
+       margin: 0;
+       width: 80%;
+       display: flex;
+       flex-direction: column;
+       justify-content: center;
+       align-items: center;
+       .progress-bar {
+         height: 10px;
+         /* Ajustar la posición x deseada */
+         .progress-bar-inner {
+           height: 100%;
+           width: 50%;
+           background-color: variables.$light-gold-color;
+
+         }
+       }
+     }
+
+     .user-quantity {
+       // margin: 15px 0 15px 20px;
+       font-size: 1rem;
+       color: variables.$white-color;
+       width: 100px;
+       display: flex;
+       flex-direction: column;
+       justify-content: center;
+       text-align: end;
+       font-weight: 500;
+       .user-quantity-text{
+         display: flex;
+         flex-direction: row;
+         justify-content: end;
+         align-items: center;
+         margin: 0;
+         mat-icon{
+           font-size: 20px;
+           height: 20px;
+           width: 20px;
+           margin: 0 0 0 5px;
+         }
+       }
+     }
+   }
+
+    ::ng-deep .mat-column-actions {
+      width: 5% !important;
+    }
+ }
+
+
 
 @media (max-width: 1000px) {
-  .progress-bar-container {
+  .button-class:nth-child(n + 4) {
     display: none;
-    .progress-bar{
-      display: none;
-    }
   }
-  .quick-actions {
-
-    .quickstart-buttons {
-      .button-class:nth-child(n + 4) {
-        display: none;
-      }
-    }
+  ::ng-deep .mat-column-date {
+    width: 40% !important;
+  }
+  ::ng-deep .mat-column-activity {
+    width: 20% !important;
+  }
+  ::ng-deep .mat-column-capacity {
+    width: 100% !important;
   }
 }
 
@@ -356,7 +448,7 @@ mat-divider {
 
 
 
-@media (max-width: 600px) {
+@media (max-width: 750px) {
   .main-div {
     .top-section{
       margin: 0;
@@ -371,6 +463,16 @@ mat-divider {
         width: 90%;
       }
     }
+    ::ng-deep .mat-column-date {
+      width: 30% !important;
+      height: 80px !important;
+    }
+    ::ng-deep .mat-column-activity {
+      width: 20% !important;
+    }
+    ::ng-deep .mat-column-capacity {
+      width: 20% !important;
+    }
     .quick-actions {
       display: none;
     }
@@ -381,15 +483,6 @@ mat-divider {
         width: 100%;
         margin: 0;
         border-radius: 0 0 10px 10px;
-        mat-icon{
-          display: none;
-        }
-        .button-container {
-          display: none;
-        }
-        .user-quantity {
-          display: none;
-        }
         .progress-bar-container {
           display: none;
           .progress-bar{
@@ -422,23 +515,9 @@ mat-divider {
   }
 }
 
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: rgba(0, 0, 0, 0.04); /* Cambia este color al que prefieras */
+  cursor: pointer; /* Cambia el cursor a pointer para indicar que es clicable */
+  transition: background-color 0.3s ease; /* Suaviza la transición del fondo */
+}
 
-
-// @media (max-width: 400px) {
-//   .card-container {
-//     flex: 1;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     .apointment-activity-card {
-//       padding: 0px 0px;
-//       height
-//       margin: 10px 0 10px 0px;
-//       background-color: transparent;
-//       border-color: variables.$white-color;
-//       color: variables.$white-color;
-//       border-radius: 10px;
-//     }
-//   }
-// }

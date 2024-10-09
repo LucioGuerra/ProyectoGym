@@ -13,6 +13,6 @@ export const routes: Routes = [
     { path: 'signup', component: SingupComponent },
     { path: 'admin/agenda', component: ShifAdminScreenComponent },
     { path: 'edit', component: UserEditComponent},
-    {path: 'admin/appointment', component: CreateAppointmentComponent},
-    {path: 'admin/appointment/:id', component: CreateAppointmentComponent},
+    {path: 'admin/appointment/create', component: CreateAppointmentComponent},
+    {path: 'admin/appointment/edit/:id', component: CreateAppointmentComponent},
 ];

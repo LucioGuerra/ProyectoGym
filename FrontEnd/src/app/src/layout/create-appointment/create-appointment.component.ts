@@ -23,7 +23,7 @@ export class CreateAppointmentComponent implements OnInit {
   appointmentID: string | null = null;
 
   constructor(private auth0: AuthService, private router: Router, private route: ActivatedRoute) {
-    effect(() => {
+    /*effect(() => {
       if(this.auth0.isAuthenticated()){
         if(this.auth0.isAdmin()){
         }
@@ -32,7 +32,7 @@ export class CreateAppointmentComponent implements OnInit {
       else{
         this.router.navigate(['/login']);
       }
-    });
+    });*/
   }
 
   ngOnInit(): void {

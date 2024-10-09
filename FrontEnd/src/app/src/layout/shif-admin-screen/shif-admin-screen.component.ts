@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component, effect, OnInit,
   signal
 } from '@angular/core';
@@ -22,17 +22,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Activity } from '../../components/index';
 import {Router} from "@angular/router";
 import {Subscription} from "rxjs";
+import {MatTableModule} from '@angular/material/table';
 
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
-  imports: [MatMenuModule, MatProgressBarModule, MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
+  imports: [MatTableModule, MatMenuModule, MatProgressBarModule, MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
   templateUrl: './shif-admin-screen.component.html',
   providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },],
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShifAdminScreenComponent implements OnInit {
+  displayedColumns: string[] = ['date', 'activity', 'capacity', 'actions'];
+  public filteredAppointments: Appointment[] = [];
 
   private subscription = new Subscription();
 
@@ -43,9 +46,20 @@ export class ShifAdminScreenComponent implements OnInit {
   selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate() - 1)));
   selectedActivities = signal<string[]>([]);
 
+  edit_appointment(id: number): void {
+    alert(`Editando cita con ID: ${id}`);
+  }
+
+  open_appointment(appointment: Appointment): void {
+    alert(`Abriendo cita con ID: ${appointment.id}`);
+  }
+
+  cancel_appointment(appointment: Appointment): void {
+    alert(`Cancelando cita con ID: ${appointment.id}`);
+  }
 
 
-  constructor(private auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
     /*effect(() => {
       if(this.auth0.isAuthenticated()){
         if(this.auth0.isAdmin()){
@@ -68,7 +82,7 @@ export class ShifAdminScreenComponent implements OnInit {
       (data: Appointment[]) => {
         console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
         this.appointments = data;
-
+        this.changeDetectorRef.markForCheck();
         // Este console.log se ejecutará después de que los datos hayan sido asignados
         console.log('Datos en el componente después de la asignación:', this.appointments);
       },
@@ -118,7 +132,7 @@ export class ShifAdminScreenComponent implements OnInit {
   edit_apointment($event: Event, appointmentID: number) {
     $event.stopPropagation();
     $event.preventDefault();
-    this.router.navigate([`/admin/appointment/${appointmentID}`]);
+    this.router.navigate([`/admin/appointment/edit/${appointmentID}`]);
   }
   cancel_apointment($event: MouseEvent, appointment: Appointment) {
     $event.stopPropagation();
