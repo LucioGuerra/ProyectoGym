@@ -31,11 +31,9 @@ public class UserResponseDTO {
 
     private String phone;
     
-    private Routine routine;
+    private Long routineId;
 
-    private Package aPackage;
-
-    private List<Tracking> trackings;
+    private Long aPackageId;
 
 
     private UserResponseDTO(){}

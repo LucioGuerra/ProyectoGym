@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.service;
 
+import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
@@ -9,9 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
-import com.desarrollo.criminal.exception.CriminalCrossException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +24,13 @@ public class UserService {
     private final ModelMapper modelMapper;
 
 
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> allUsers = userRepository.findAll();  
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<User> allUsers = userRepository.findAll();
 
-        if (allUsers.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(allUsers);
-        }
+        List<UserResponseDTO> usersDTO = allUsers.stream()
+                .map(user -> modelMapper.map(user, UserResponseDTO.class)).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(usersDTO);
     }
 
     public User getUserById(Long id) {
@@ -40,21 +38,20 @@ public class UserService {
                 new EntityNotFoundException("User not found with id: " + id));
     }
 
+    public ResponseEntity<UserResponseDTO> getUserDTOById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
 
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
 
     public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {
-
-        try {
         User user = modelMapper.map(userRequestDTO, User.class);
+        user.setRole(Role.CLIENT);
         User savedUser = userRepository.save(user);
 
         UserResponseDTO userResponseDTO = modelMapper.map(savedUser, UserResponseDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
-    
-
-        } catch (MappingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
     }
 
 
