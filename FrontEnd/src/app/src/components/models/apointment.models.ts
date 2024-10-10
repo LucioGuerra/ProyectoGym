@@ -36,6 +36,7 @@ export interface AppointmentRequest {
   appointmentWeekDays?: DayOfWeek[];
   endDate?: string,
   updateAllFutureAppointments?: boolean;
+  appointmentQuantity?: number;
 }
 
 export interface LocalTime {
