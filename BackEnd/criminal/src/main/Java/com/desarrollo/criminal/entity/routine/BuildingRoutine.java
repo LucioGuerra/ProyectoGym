@@ -14,6 +14,7 @@ import lombok.Setter;
 public class BuildingRoutine extends Routine{
 
     @OneToOne
+    @JoinColumn(name = "userid", nullable = false)
     private User user;
 
     private Day day;

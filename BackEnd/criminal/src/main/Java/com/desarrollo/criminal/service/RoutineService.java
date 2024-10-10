@@ -56,7 +56,10 @@ public class RoutineService {
     }
 
     private void createBuildingRoutine(RoutineDTO routineDTO) {
-        BuildingRoutine buildingRoutine = new BuildingRoutine(userService.getUserById(routineDTO.getUserID()).getBody(), routineDTO.getDay());
+        BuildingRoutine buildingRoutine = new BuildingRoutine(
+                userService.getUserById(routineDTO.getUserID()).getBody(),
+                routineDTO.getDay()
+        );
 
         assignBlocksToRoutine(buildingRoutine, routineDTO);
 

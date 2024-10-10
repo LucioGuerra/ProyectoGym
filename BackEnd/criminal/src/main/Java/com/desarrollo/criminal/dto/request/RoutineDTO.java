@@ -15,9 +15,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class RoutineDTO {
-    private long activityID;
+    private Long activityID;
 
-    private long userID;
+    private Long userID;
 
     private Day day;
 
