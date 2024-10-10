@@ -10,7 +10,7 @@
         </mat-card-header>
         <mat-card-content>
           <div class="table-container">
-            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <mat-table [dataSource]="users" class="mat-elevation-z8">
               <ng-container matColumnDef="firstName">
                 <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
