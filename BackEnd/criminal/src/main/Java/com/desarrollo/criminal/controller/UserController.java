@@ -17,30 +17,30 @@ import java.util.List;
 @RequestMapping("/api/public/users")
 
 public class UserController {
-    private final UserService userService;
 
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return userService.getAllUsers();
     }
-    
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
         return userService.getUserDTOById(id);
     }
 
-
+    @GetMapping("/email")
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam String email){
+        return userService.getUserByEmail(email);
+    }
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);
     }
-    
 
-
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
         return userService.updateUser(id, userUpdateDTO);
     }

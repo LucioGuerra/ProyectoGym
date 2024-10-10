@@ -46,6 +46,13 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
+    public ResponseEntity<UserResponseDTO> getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
+
     public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {
         User user = modelMapper.map(userRequestDTO, User.class);
         user.setRole(Role.CLIENT);
@@ -59,23 +66,23 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
-        if(Optional.ofNullable(userUpdateDTO.getFirstName()).isPresent()) {
-            user.setFirstName(userUpdateDTO.getFirstName());
+        if(Optional.ofNullable(userUpdateDTO.firstName()).isPresent()) {
+            user.setFirstName(userUpdateDTO.firstName());
         }
-        if(Optional.ofNullable(userUpdateDTO.getLastName()).isPresent()) {
-            user.setLastName(userUpdateDTO.getLastName());
+        if(Optional.ofNullable(userUpdateDTO.lastName()).isPresent()) {
+            user.setLastName(userUpdateDTO.lastName());
         }
-        if(Optional.ofNullable(userUpdateDTO.getEmail()).isPresent()) {
-            user.setEmail(userUpdateDTO.getEmail());
+        if(Optional.ofNullable(userUpdateDTO.email()).isPresent()) {
+            user.setEmail(userUpdateDTO.email());
         }
-        if(Optional.ofNullable(userUpdateDTO.getDni()).isPresent()) {
-            user.setDni(userUpdateDTO.getDni());
+        if(Optional.ofNullable(userUpdateDTO.dni()).isPresent()) {
+            user.setDni(userUpdateDTO.dni());
         }
-        if(Optional.ofNullable(userUpdateDTO.getPhone()).isPresent()) {
-            user.setPhone(userUpdateDTO.getPhone());
+        if(Optional.ofNullable(userUpdateDTO.phone()).isPresent()) {
+            user.setPhone(userUpdateDTO.phone());
         }
-        if(Optional.ofNullable(userUpdateDTO.getRole()).isPresent()) {
-            user.setRole(userUpdateDTO.getRole());
+        if(Optional.ofNullable(userUpdateDTO.role()).isPresent()) {
+            user.setRole(userUpdateDTO.role());
         }
 
         userRepository.save(user);
@@ -86,10 +93,3 @@ public class UserService {
         return userRepository.save(user);
     }
 }
-
-
-
-    
-    
-
-
