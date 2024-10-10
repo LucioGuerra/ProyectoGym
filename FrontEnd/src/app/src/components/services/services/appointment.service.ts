@@ -55,4 +55,7 @@ export class AppointmentService {
     return this.http.patch<any>(`${this.apiUrl}/${id}`, appointment);
   }
 
+  createKinesiologyAppointments(appointmentData: AppointmentRequest): any {
+    return this.http.post<any>(`${this.apiUrl}/kine`, appointmentData);
+  }
 }
