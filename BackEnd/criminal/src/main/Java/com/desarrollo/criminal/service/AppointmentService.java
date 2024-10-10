@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @AllArgsConstructor
 @Service
@@ -63,7 +64,9 @@ public class AppointmentService {
     @Transactional
     public ResponseEntity<?> createAppointment(AppointmentDTO appointmentDTO) {
 
-        if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
+        Integer appointmentsCreated = 0;
+
+        if (appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
 
@@ -89,6 +92,7 @@ public class AppointmentService {
         Long recurrenceId = appointment.getId();
         appointment.setRecurrenceId(recurrenceId);
         appointmentRepository.save(appointment);
+        appointmentsCreated++;
 
         if (!appointmentDTO.getAppointmentWeekDays().isEmpty() && appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())) {
 
@@ -108,27 +112,31 @@ public class AppointmentService {
                     appointment.setMax_capacity(appointmentDTO.getMax_capacity());
                     appointment.setRecurrenceId(recurrenceId);
                     appointmentRepository.save(appointment);
+                    appointmentsCreated++;
 
                 }
                 appointmentDate = appointmentDate.plusDays(1);
             }
         }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(appointmentsCreated);
     }
 
     public ResponseEntity<?> deleteAppointment(Long id, boolean deleteAllFutureAppointments) {
+        int appointmentsDeleted = 0;
         try {
             Appointment appointment = this.getAppointmentById(id);
             appointment.setDeleted(true);
             appointmentRepository.save(appointment);
-            if(deleteAllFutureAppointments) {
+            appointmentsDeleted++;
+            if (deleteAllFutureAppointments) {
                 List<Appointment> futureAppointments = appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
                 futureAppointments.forEach(futureAppointment -> {
                     futureAppointment.setDeleted(true);
                     appointmentRepository.save(futureAppointment);
                 });
+                appointmentsDeleted += futureAppointments.size();
             }
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(appointmentsDeleted);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -136,7 +144,7 @@ public class AppointmentService {
 
     public ResponseEntity<?> updateAllAppointment(Long id, AppointmentDTO appointmentDTO) {
 
-        if(appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
+        if (appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
         }
         try {
@@ -166,6 +174,7 @@ public class AppointmentService {
 
     @Transactional
     public ResponseEntity<?> updateAppointment(Long id, UpdatePATCHAppointmentDTO updateAppointmentDTO) {
+        AtomicInteger appointmentsUpdated = new AtomicInteger();
         try {
             Appointment appointment = this.getAppointmentById(id);
             // modelMapper.map(updateAppointmentDTO, appointment);
@@ -196,8 +205,9 @@ public class AppointmentService {
             }
 
             appointmentRepository.save(appointment);
+            appointmentsUpdated.getAndIncrement();
 
-            if (updateAppointmentDTO.getUpdateAllFutureAppointments()){
+            if (updateAppointmentDTO.getUpdateAllFutureAppointments()) {
                 Long recurrenceId = appointment.getId();
                 List<Appointment> futureAppointments =
                         appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
@@ -231,7 +241,7 @@ public class AppointmentService {
                     }
                     futureAppointment.setRecurrenceId(recurrenceId);
                     appointmentRepository.save(futureAppointment);
-
+                    appointmentsUpdated.getAndIncrement();
                 });
                 appointment.setRecurrenceId(appointment.getId());
                 appointmentRepository.save(appointment);
@@ -240,13 +250,12 @@ public class AppointmentService {
                 appointment.setRecurrenceId(appointment.getId());
                 appointmentRepository.save(appointment);
             }
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(appointmentsUpdated.get());
 
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
 
 
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
@@ -255,12 +264,12 @@ public class AppointmentService {
             AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
             responseAppointmentDTO.setActivity(appointment.getActivity().getName());
             responseAppointmentDTO.setDate(appointment.getDate().atTime(appointment.getStartTime()));
-            if(appointment.getInstructor() != null) {
+            if (appointment.getInstructor() != null) {
                 responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
             }
             responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
             return ResponseEntity.status(HttpStatus.OK).body(responseAppointmentDTO);
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -282,7 +291,7 @@ public class AppointmentService {
     }
 
     public ResponseEntity<?> removeParticipant(Long appointmentId, Long userId) {
-        try{
+        try {
             Appointment appointment = this.getAppointmentById(appointmentId);
             User user = userService.getUserById(userId);
             if (!appointment.getParticipants().contains(user)) {
