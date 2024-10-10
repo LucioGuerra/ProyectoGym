@@ -35,8 +35,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("User not found with id: " + id));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     public ResponseEntity<UserResponseDTO> getUserDTOById(Long id) {
@@ -46,12 +45,6 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
-    public ResponseEntity<UserResponseDTO> getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
-                new EntityNotFoundException("User not found with email: " + email));
-
-        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
-    }
 
     public ResponseEntity<List<GetPackageDTO>> getUserHistory(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
@@ -100,7 +93,7 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
     
-    private User saveUser(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 }

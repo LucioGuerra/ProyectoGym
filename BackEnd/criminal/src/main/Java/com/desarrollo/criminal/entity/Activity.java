@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Getter;
 import lombok.Setter;
 
