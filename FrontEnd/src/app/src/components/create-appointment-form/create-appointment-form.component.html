@@ -1,7 +1,7 @@
 <div class="main-container">
   <form [formGroup]="range">
     <div class="row">
-      @if (appointmentId){
+      @if (appointmentId) {
         <mat-form-field appearance="outline">
           <mat-label>Choose a date</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="start">
@@ -10,33 +10,33 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       } @else {
-      @if (dateRange) {
-        <mat-form-field appearance="outline">
-          <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [min]="today">
-            <input matStartDate formControlName="start" placeholder="Start date">
-            <input matEndDate formControlName="end" placeholder="End date">
-          </mat-date-range-input>
-          <mat-hint [style.font-size.px]="10">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-          @if ("range.get('start').hasError('matStartDateInvalid')") {
-            <mat-error>Invalid start date</mat-error>
-          }
-          @if ("range.get('end').hasError('matEndDateInvalid')") {
-            <mat-error>Invalid end date</mat-error>
-          }
-        </mat-form-field>
-      } @else {
-        <mat-form-field appearance="outline">
-          <mat-label>Choose a date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="start"
-                 (dateChange)="dateChangeEvent('change', $event)" [min]="today">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      }
+        @if (dateRange) {
+          <mat-form-field appearance="outline">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [min]="today">
+              <input matStartDate formControlName="start" placeholder="Start date">
+              <input matEndDate formControlName="end" placeholder="End date">
+            </mat-date-range-input>
+            <mat-hint [style.font-size.px]="10">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            @if ("range.get('start').hasError('matStartDateInvalid')") {
+              <mat-error>Invalid start date</mat-error>
+            }
+            @if ("range.get('end').hasError('matEndDateInvalid')") {
+              <mat-error>Invalid end date</mat-error>
+            }
+          </mat-form-field>
+        } @else {
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="start"
+                   (dateChange)="dateChangeEvent('change', $event)" [min]="today">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        }
       }
 
 
@@ -51,23 +51,35 @@
       }
     </div>
     <div class="row2">
-      <mat-form-field appearance="outline">
-        <mat-label>Capacity</mat-label>
-        <input matInput type="number" formControlName="max_capacity" [min]="0">
-        @if (range.get('maxCapacity')?.value < 0) {
-          <mat-error>Capacity can't be negative</mat-error>
-        }
-      </mat-form-field>
+      @if (isKinesiologySelected()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Number of appointments on this date</mat-label>
+          <input matInput type="number" formControlName="kinesiologyQuantity" [min]="0">
+          @if (range.get('max_capacity')?.value < 0) {
+            <mat-error>Capacity can't be negative</mat-error>
+          }
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline">
+          <mat-label>Capacity</mat-label>
+          <input matInput type="number" formControlName="max_capacity" [min]="0">
+          @if (range.get('maxCapacity')?.value < 0) {
+            <mat-error>Capacity can't be negative</mat-error>
+          }
+        </mat-form-field>
+      }
     </div>
     <div class="row4">
-      <mat-form-field appearance="outline" class="start-time" [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
+      <mat-form-field appearance="outline" class="start-time"
+                      [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
         <mat-label>Start</mat-label>
         <input matInput type="time" formControlName="startTime" (input)="validateTimeRange()">
         @if (range.hasError('timeRangeInvalid')) {
           <mat-error>Invalid start time</mat-error>
         }
       </mat-form-field>
-      <mat-form-field appearance="outline" class="end-time" [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
+      <mat-form-field appearance="outline" class="end-time"
+                      [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
         <mat-label>End</mat-label>
         <input matInput type="time" formControlName="endTime" (input)="validateTimeRange()">
         @if (range.hasError('timeRangeInvalid')) {
@@ -76,7 +88,8 @@
       </mat-form-field>
     </div>
     <div class="row3">
-      <mat-form-field appearance="outline" [class.mat-form-field-invalid]="range.get('activity')?.invalid && (range.get('activity')?.touched || range.get('activity')?.dirty)">
+      <mat-form-field appearance="outline"
+                      [class.mat-form-field-invalid]="range.get('activity')?.invalid && (range.get('activity')?.touched || range.get('activity')?.dirty)">
         <mat-label>Activity</mat-label>
         <mat-select formControlName="activity">
           @for (activity of activities; track activity.id) {
@@ -90,7 +103,8 @@
     </div>
     @if (!isKinesiologySelected()) {
       <div class="row3">
-        <mat-form-field appearance="outline" class="instructor" [class.mat-form-field-invalid]="range.get('instructor')?.invalid && (range.get('instructor')?.touched || range.get('instructor')?.dirty)">
+        <mat-form-field appearance="outline" class="instructor"
+                        [class.mat-form-field-invalid]="range.get('instructor')?.invalid && (range.get('instructor')?.touched || range.get('instructor')?.dirty)">
           <mat-label>Instructor</mat-label>
           <mat-select formControlName="instructor">
             <mat-option value="null"></mat-option>

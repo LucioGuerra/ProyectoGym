@@ -43,8 +43,9 @@ export class ShifAdminScreenComponent implements OnInit {
 
   public appointments: Appointment[] = [];
 
-  selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
-  selectedActivities = signal<string[]>([]);
+  public selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
+  public selectedActivities = signal<string[]>([]);
+  public appointmentList = signal<Appointment[]>([]);
 
   edit_appointment(id: number): void {
     alert(`Editando cita con ID: ${id}`);
@@ -60,16 +61,15 @@ export class ShifAdminScreenComponent implements OnInit {
 
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
-    /*effect(() => {
+    effect(() => {
       if(this.auth0.isAuthenticated()){
         if(this.auth0.isAdmin()){
         }
-        //todo redirect to client page
       }
       else{
         this.router.navigate(['/login']);
       }
-    });*/
+    });
   }
 
   ngOnInit(): void {
@@ -80,11 +80,10 @@ export class ShifAdminScreenComponent implements OnInit {
   loadAppointment() {
     this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
       (data: Appointment[]) => {
-        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
+        console.log('Datos en el componente:', data);
         this.appointments = data;
+        this.appointmentList.set(data);
         this.changeDetectorRef.markForCheck();
-        // Este console.log se ejecutará después de que los datos hayan sido asignados
-        console.log('Datos en el componente después de la asignación:', this.appointments);
       },
       (error) => {
         console.error('Error al obtener las citas', error);
@@ -115,6 +114,7 @@ export class ShifAdminScreenComponent implements OnInit {
   chipsChangeEvent(arg0: string, $event: MatChipListboxChange) {
     // this.selectedActivities.update(selectedActivities => [...selectedActivities, $event.value]);
     this.selectedActivities.set($event.value);
+    this.appointmentList.set(this.appointments.filter(appointment => this.selectedActivities().includes(appointment.activity)));
     // alert(`quantity selectioned: ${this.selectedActivities().length}, activities: ${this.selectedActivities()}`);
   }
   noActivities(): Boolean {
@@ -139,6 +139,7 @@ export class ShifAdminScreenComponent implements OnInit {
     $event.preventDefault();
     alert(`canceling appointment id: ${appointment.id}`);
   }
+
   newShift($event: MouseEvent) {
     this.router.navigate(['/admin/appointment/create']);
   }

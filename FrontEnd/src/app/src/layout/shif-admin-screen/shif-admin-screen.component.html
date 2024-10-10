@@ -86,10 +86,11 @@
             <div class="scrollable-section">
               <mat-action-list>
                 <div class="appointment-table">
-                  <table mat-table [dataSource]="appointments" class="appointment-table">
+                  <table mat-table [dataSource]="appointmentList()" class="appointment-table">
                     <ng-container matColumnDef="date">
                       <th mat-header-cell *matHeaderCellDef> Date</th>
                       <td mat-cell *matCellDef="let appointment">
+                        @if (selectedActivities().includes(appointment.activity)){
                         <div class="appointment-title">
                           <p class="date">
                             @switch (appointment.date.getDay()) {
@@ -159,9 +160,9 @@
                             {{ appointment.startTime }} - {{ appointment.endTime }}
                           </p>
                         </div>
+                        }
                       </td>
                     </ng-container>
-
                     <ng-container matColumnDef="activity">
                       <th mat-header-cell *matHeaderCellDef> No.</th>
                       <td mat-cell *matCellDef="let appointment">
@@ -223,7 +224,7 @@
                   </table>
 
                 </div>
-                @if (appointments.length == 0 || noActivities()) {
+                @if (appointmentList().length == 0 || noActivities()) {
                   <button mat-list-item>
                     <div class="no-apointments">
                       <p>No hay citas para este día</p>

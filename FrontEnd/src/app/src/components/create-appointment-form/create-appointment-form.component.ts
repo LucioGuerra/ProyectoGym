@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -19,7 +19,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatChipListbox, MatChipListboxChange, MatChipOption} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {Router} from "@angular/router";
-import {ActivityService, AppointmentService} from "../services/services";
+import {ActivityService, AppointmentService, AuthService} from "../services/services";
 import {MatDialog} from '@angular/material/dialog';
 import {ErrorDialogComponent} from '../dialog/error-dialog/error-dialog.component';
 import {HttpStatusCode} from "@angular/common/http";
@@ -45,7 +45,7 @@ export class CreateAppointmentFormComponent implements OnInit {
 
   @Input() appointmentId: string | null = null;
 
-  kinesiology: string = 'Kinesiología';
+  kinesiology: string = 'Kinesiologia';
 
   today: Date = new Date();
 
@@ -67,9 +67,10 @@ export class CreateAppointmentFormComponent implements OnInit {
     startTime: new FormControl<string | null>(this.formatTime(new Date()), [Validators.required]),
     endTime: new FormControl<string | null>(this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1))), [Validators.required]),
     multiple: new FormControl<boolean | null>(false),
+    kinesiologyQuantity: new FormControl<number | null>(4, [Validators.required, Validators.min(1), Validators.max(100)])
   }, {validators: Validators.compose([this.timeRangeValidator.bind(this)])});
 
-  constructor(private dialog: MatDialog, private router: Router, private activityService: ActivityService, private appointmentService: AppointmentService) {
+  constructor(private auth: AuthService, private dialog: MatDialog, private router: Router, private activityService: ActivityService, private appointmentService: AppointmentService) {
   }
 
   ngOnInit(): void {
@@ -225,12 +226,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           endDate: formatDate(end.toISOString(), 'YYYY-MM-DD', 'en-US'),
           startTime: this.range.value.startTime,
           endTime: this.range.value.endTime,
-          activityID: this.range.value.activity,
-          max_capacity: this.range.value.max_capacity,
           appointmentWeekDays: this.range.value.daysOfWeek,
+          appointmentQuantity: this.range.value.kinesiologyQuantity,
         };
         console.log('Turno creado: ' + JSON.stringify(appointmentData));
-        this.appointmentService.createAppointment(appointmentData).subscribe(
+        this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
           },
