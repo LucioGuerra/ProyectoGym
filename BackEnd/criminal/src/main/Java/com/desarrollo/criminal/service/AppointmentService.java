@@ -37,7 +37,7 @@ public class AppointmentService {
     }
 
     public ResponseEntity<List<AppointmentListResponseDTO>> getAppointmentByDate(LocalDate date) {
-        List<Appointment> appointments = appointmentRepository.findByDateAndDeletedFalse(date);
+        List<Appointment> appointments = appointmentRepository.findByDateAndDeletedFalseOrderByStartTime(date);
         return getListResponseEntity(appointments);
     }
 
@@ -45,6 +45,7 @@ public class AppointmentService {
         List<AppointmentListResponseDTO> responseAppointments = appointments.stream()
                 .map(appointment -> {
                     AppointmentListResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentListResponseDTO.class);
+                    responseAppointmentDTO.setDate(appointment.getDate().atTime(appointment.getStartTime()));
                     responseAppointmentDTO.setActivity(appointment.getActivity().getName());
                     responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
                     return responseAppointmentDTO;
@@ -93,7 +94,7 @@ public class AppointmentService {
 
             LocalDate appointmentDate = appointmentDTO.getDate().plusDays(1);
 
-            while (appointmentDate.isBefore(appointmentDTO.getEndDate())) {
+            while (appointmentDate.isBefore(appointmentDTO.getEndDate().plusDays(1))) {
                 if (appointmentDTO.getAppointmentWeekDays().contains(appointmentDate.getDayOfWeek())) {
 
                     appointment = new Appointment();
@@ -248,6 +249,7 @@ public class AppointmentService {
             Appointment appointment = this.getAppointmentById(id);
             AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
             responseAppointmentDTO.setActivity(appointment.getActivity().getName());
+            responseAppointmentDTO.setDate(appointment.getDate().atTime(appointment.getStartTime()));
             if(appointment.getInstructor() != null) {
                 responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
             }

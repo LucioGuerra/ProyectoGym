@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class AppointmentResponseDTO {
     private Long id;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     private LocalTime startTime;
 
