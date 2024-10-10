@@ -17,6 +17,7 @@ public class AnnouncementDTO {
     private String title;
 
     @NotBlank(message = "Body cannot be blank.")
+    @Size(min = 1, message = "Body must contain at least 1 character.")
     private String body;
 
     @NotNull(message = "Date cannot be null.")

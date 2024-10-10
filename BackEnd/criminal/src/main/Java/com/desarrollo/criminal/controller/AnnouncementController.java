@@ -47,7 +47,7 @@ public class AnnouncementController{
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AnnouncementDTO> deleteAnnouncement(@PathVariable Long id){
+    public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id){
         return announcementService.deleteAnnouncement(id);
     }
 

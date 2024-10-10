@@ -57,7 +57,8 @@ public class AnnouncementService {
 
         Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
 
-        if (announcement.isPresent()) {
+        if (optionalAnnouncement.isPresent()) {
+
             Announcement announcement = optionalAnnouncement.get();
             AnnouncementDTO announcementDTO = modelMapper.map(announcement, AnnouncementDTO.class);
             return ResponseEntity.status(HttpStatus.OK).body(announcementDTO);
@@ -69,7 +70,7 @@ public class AnnouncementService {
 
 
 
-    public ResponseEntity<AnnouncementDTO> deleteAnnouncement(Long id){
+    public ResponseEntity<Void> deleteAnnouncement(Long id){
         Optional<Announcement> announcement = announcementRepository.findById(id);
 
         if (announcement.isPresent()) {
@@ -86,7 +87,8 @@ public class AnnouncementService {
 
         Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
 
-        if (announcement.isPresent()) {
+        if (optionalAnnouncement.isPresent()) {
+            
             Announcement announcement = optionalAnnouncement.get();
 
             announcement.setTitle(newAnnouncementDTO.getTitle());
@@ -95,7 +97,7 @@ public class AnnouncementService {
             Announcement updatedAnnouncement = announcementRepository.save(announcement);
             AnnouncementDTO announcementDTO = modelMapper.map(updatedAnnouncement, AnnouncementDTO.class);
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(announcementDTO);
 
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
