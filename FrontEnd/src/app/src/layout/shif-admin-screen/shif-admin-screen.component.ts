@@ -43,7 +43,7 @@ export class ShifAdminScreenComponent implements OnInit {
 
   public appointments: Appointment[] = [];
 
-  selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate() - 1)));
+  selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
   selectedActivities = signal<string[]>([]);
 
   edit_appointment(id: number): void {

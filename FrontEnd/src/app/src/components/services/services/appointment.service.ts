@@ -47,4 +47,8 @@ export class AppointmentService {
     );
   }
 
+  createAppointment(appointment: AppointmentRequest): any {
+    return this.http.post<any>(this.apiUrl, appointment);
+  }
+
 }

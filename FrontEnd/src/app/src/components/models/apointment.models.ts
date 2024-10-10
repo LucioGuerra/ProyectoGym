@@ -27,14 +27,14 @@ export interface Instructor {
 }
 
 export interface AppointmentRequest {
-  date?: Date;
+  date?: string;
   startTime?: LocalTime;
   endTime?: LocalTime;
   activityID?: number
   instructorID?: number;
   max_capacity?: number,
   appointmentWeekDays?: DayOfWeek[];
-  endDate?: Date
+  endDate?: string
 }
 
 export interface LocalTime {

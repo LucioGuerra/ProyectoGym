@@ -1,7 +1,15 @@
 <div class="main-container">
-  <!-- Agregar el formGroup al contenedor principal -->
   <form [formGroup]="range">
     <div class="row">
+      @if (appointmentId){
+        <mat-form-field appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="start">
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle disabled matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      } @else {
       @if (dateRange) {
         <mat-form-field appearance="outline">
           <mat-label>Enter a date range</mat-label>
@@ -29,13 +37,14 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       }
+      }
+
+
       @if (appointmentId) {
-        <!-- Usar [(ngModel)] para manejar dateRange como independiente -->
         <mat-checkbox [(ngModel)]="dateRange" [ngModelOptions]="{standalone: true}" disabled>
           Multiple appointments
         </mat-checkbox>
       } @else {
-        <!-- Usar [(ngModel)] para manejar dateRange como independiente -->
         <mat-checkbox [(ngModel)]="dateRange" [ngModelOptions]="{standalone: true}">
           Multiple appointments
         </mat-checkbox>
@@ -60,7 +69,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="end-time" [class.mat-form-field-invalid]="range.hasError('timeRangeInvalid')">
         <mat-label>End</mat-label>
-        <input matInput type="time" formControlName="endTime" [min]="startTime" (input)="validateTimeRange()">
+        <input matInput type="time" formControlName="endTime" (input)="validateTimeRange()">
         @if (range.hasError('timeRangeInvalid')) {
           <mat-error>Invalid end time</mat-error>
         }
@@ -123,6 +132,7 @@
           Update
         </button>
       } @else {
+        <button mat-stroked-button [style.margin-right.px]="20" (click)="Cancel()">Volver</button>
         <button mat-flat-button (click)="createAppointment()">
           <mat-icon>add</mat-icon>
           Create
