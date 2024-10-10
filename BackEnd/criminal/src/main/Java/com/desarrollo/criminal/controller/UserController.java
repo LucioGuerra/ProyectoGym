@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
+import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,13 @@ public class UserController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam String email){
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestBody String email){
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<GetPackageDTO>> getUserHistory(@RequestBody Long id){
+        return userService.getUserHistory(id);
     }
 
     @PostMapping
