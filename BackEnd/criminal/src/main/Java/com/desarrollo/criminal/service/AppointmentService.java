@@ -175,11 +175,9 @@ public class AppointmentService {
                 appointment.setDate(updateAppointmentDTO.getDate());
             }
 
-            if (updateAppointmentDTO.getStartTime() != null) {
+            if (updateAppointmentDTO.getStartTime() != null && updateAppointmentDTO.getEndTime() != null &&
+                    updateAppointmentDTO.getStartTime().isBefore(updateAppointmentDTO.getEndTime())) {
                 appointment.setStartTime(updateAppointmentDTO.getStartTime());
-            }
-
-            if (updateAppointmentDTO.getEndTime() != null) {
                 appointment.setEndTime(updateAppointmentDTO.getEndTime());
             }
 
@@ -196,10 +194,11 @@ public class AppointmentService {
                 User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
                 appointment.setInstructor(instructor);
             }
+
             appointmentRepository.save(appointment);
 
             if (updateAppointmentDTO.getUpdateAllFutureAppointments()){
-
+                Long recurrenceId = appointment.getId();
                 List<Appointment> futureAppointments =
                         appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
                 futureAppointments.forEach(futureAppointment -> {
@@ -230,11 +229,17 @@ public class AppointmentService {
                         User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
                         futureAppointment.setInstructor(instructor);
                     }
+                    futureAppointment.setRecurrenceId(recurrenceId);
                     appointmentRepository.save(futureAppointment);
 
                 });
+                appointment.setRecurrenceId(appointment.getId());
+                appointmentRepository.save(appointment);
             }
-
+            if (updateAppointmentDTO.getStartTime() != null && updateAppointmentDTO.getEndTime() != null) {
+                appointment.setRecurrenceId(appointment.getId());
+                appointmentRepository.save(appointment);
+            }
             return ResponseEntity.status(HttpStatus.OK).build();
 
         } catch (EntityNotFoundException e) {
