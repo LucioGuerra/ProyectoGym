@@ -1,9 +1,10 @@
 package com.desarrollo.criminal.service;
 
+import com.desarrollo.criminal.dto.request.UserUpdateDTO;
 import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
-import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
+import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -54,35 +55,36 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
 
+    public ResponseEntity<UserResponseDTO> updateUser(Long id, UserUpdateDTO userUpdateDTO) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
 
-
-
-    public ResponseEntity<User> updateUser(Long id, User userDetail) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isPresent()) {
-
-            User user = optionalUser.get();
-
-            user.setFirstName(userDetail.getFirstName());
-            user.setLastName(userDetail.getLastName());
-            user.setEmail(userDetail.getEmail());
-            user.setDni(userDetail.getDni());
-            user.setRole(userDetail.getRole());
-            user.setPhone(userDetail.getPhone());
-
-            User updatedUser = userRepository.save(user);
-            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
-
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if(Optional.ofNullable(userUpdateDTO.getFirstName()).isPresent()) {
+            user.setFirstName(userUpdateDTO.getFirstName());
         }
+        if(Optional.ofNullable(userUpdateDTO.getLastName()).isPresent()) {
+            user.setLastName(userUpdateDTO.getLastName());
+        }
+        if(Optional.ofNullable(userUpdateDTO.getEmail()).isPresent()) {
+            user.setEmail(userUpdateDTO.getEmail());
+        }
+        if(Optional.ofNullable(userUpdateDTO.getDni()).isPresent()) {
+            user.setDni(userUpdateDTO.getDni());
+        }
+        if(Optional.ofNullable(userUpdateDTO.getPhone()).isPresent()) {
+            user.setPhone(userUpdateDTO.getPhone());
+        }
+        if(Optional.ofNullable(userUpdateDTO.getRole()).isPresent()) {
+            user.setRole(userUpdateDTO.getRole());
+        }
+
+        userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
     
     private User saveUser(User user) {
         return userRepository.save(user);
     }
- 
 }
 
 

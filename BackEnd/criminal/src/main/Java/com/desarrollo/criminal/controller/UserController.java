@@ -1,18 +1,16 @@
 package com.desarrollo.criminal.controller;
 
+import com.desarrollo.criminal.dto.request.UserUpdateDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
-import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
+import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.service.UserService;
 
 import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -43,9 +41,7 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetail) {
-        return userService.updateUser(id, userDetail);
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
+        return userService.updateUser(id, userUpdateDTO);
     }
-
-
 }

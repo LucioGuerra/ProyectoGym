@@ -1,11 +1,7 @@
 package com.desarrollo.criminal.configuration;
 
-import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
-import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
-import com.desarrollo.criminal.entity.Appointment;
+import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.entity.user.User;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
