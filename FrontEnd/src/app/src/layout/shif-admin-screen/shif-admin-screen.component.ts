@@ -140,7 +140,7 @@ export class ShifAdminScreenComponent implements OnInit {
     alert(`canceling appointment id: ${appointment.id}`);
   }
   newShift($event: MouseEvent) {
-    alert('new shift');
+    this.router.navigate(['/admin/appointment/create']);
   }
   newActivity($event: MouseEvent) {
     alert('new activity');

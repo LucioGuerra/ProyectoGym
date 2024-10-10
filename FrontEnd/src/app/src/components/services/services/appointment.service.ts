@@ -51,4 +51,8 @@ export class AppointmentService {
     return this.http.post<any>(this.apiUrl, appointment);
   }
 
+  updateAppointment(id: string, appointment: AppointmentRequest): any {
+    return this.http.patch<any>(`${this.apiUrl}/${id}`, appointment);
+  }
+
 }

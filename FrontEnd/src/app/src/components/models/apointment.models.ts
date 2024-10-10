@@ -34,7 +34,8 @@ export interface AppointmentRequest {
   instructorID?: number;
   max_capacity?: number,
   appointmentWeekDays?: DayOfWeek[];
-  endDate?: string
+  endDate?: string,
+  updateAllFutureAppointments?: boolean;
 }
 
 export interface LocalTime {

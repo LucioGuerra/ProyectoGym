@@ -20,15 +20,15 @@ import {MatChipListbox, MatChipListboxChange, MatChipOption} from "@angular/mate
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {Router} from "@angular/router";
 import {ActivityService, AppointmentService} from "../services/services";
-import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ErrorDialogComponent} from '../dialog/error-dialog/error-dialog.component';
 import {HttpStatusCode} from "@angular/common/http";
 import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-create-appointment-form',
   standalone: true,
-  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },],
+  providers: [provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},],
   imports: [MatButtonModule, MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatCardModule, MatSelectModule, MatChipListbox, MatChipOption, MatCheckboxModule],
   templateUrl: './create-appointment-form.component.html',
   styleUrl: './create-appointment-form.component.scss',
@@ -51,11 +51,7 @@ export class CreateAppointmentFormComponent implements OnInit {
 
   activities: Activity[] = []
 
-  max_capacity = 20;
-
   dateRange = false;
-
-  multiple = false;
 
   daysOfWeek = Object.values(DayOfWeek);
 
@@ -100,19 +96,17 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   private loadAppointmentData(id?: string): void {
-    // Si hay un `id`, se asume que es una actualización, por lo que se cargan los datos existentes.
     if (id) {
       this.appointmentService.getAppointmentById(id).subscribe(
         (data: Appointment) => {
           console.log('Datos en el componente:', data);
-
-          // Rellenar el formulario con los datos obtenidos
+          console.log('max_capacity:', data.max_capacity);
           this.range.patchValue({
             start: new Date(data.date),
             end: new Date(data.date),
-            maxCapacity: data.max_capacity,
+            max_capacity: data.max_capacity,
             activity: this.activities.find(activity => activity.name === data.activity)?.id,
-            instructor: this.instructors.find(instructor => instructor.firstName === data.instructor?.split(" ")[0])?.id,
+            instructor: this.instructors.find(instructor => instructor.firstName === data.instructor?.split(" ")[0])?.id || -1,
             daysOfWeek: [],
             startTime: data.startTime,
             endTime: data.endTime,
@@ -121,29 +115,22 @@ export class CreateAppointmentFormComponent implements OnInit {
 
         },
         (error) => {
-          // Comprobar si el error es un 404
           if (error.status === 404) {
-            // Mostrar un diálogo de error
             this.dialog.open(ErrorDialogComponent, {
               data: {
                 message: 'No se encontró la cita. Es posible que haya sido eliminada.',
               },
-              disableClose: true  // Deshabilitar el cierre del diálogo haciendo clic fuera de él
+              disableClose: true
             }).afterClosed().subscribe(() => {
-              // Redirigir al usuario de vuelta a la lista de citas o a otra página
               this.router.navigate(['/admin/agenda']);
             });
-
-            // Deshabilitar el formulario para que no se pueda utilizar
             this.range.disable();
           } else {
-            // Manejar otros tipos de errores si es necesario
             console.error('Error inesperado:', error);
           }
         }
       );
     } else {
-      // Si no hay `id`, se asume que es una creación nueva, por lo que se inicializan valores por defecto.
       this.range.patchValue({
         start: new Date(Date.now()),
         end: new Date(Date.now()),
@@ -168,7 +155,7 @@ export class CreateAppointmentFormComponent implements OnInit {
   private activityValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const value = control.value;
     if (value === null || value === -1) {
-      return { activityInvalid: true };
+      return {activityInvalid: true};
     }
     return null;
   }
@@ -227,7 +214,7 @@ export class CreateAppointmentFormComponent implements OnInit {
   createAppointment() {
     var start = new Date(this.range.value.start);
     var end = new Date(this.range.value.end);
-    if (!this.dateRange){
+    if (!this.dateRange) {
       end = new Date(this.range.value.start);
     }
     console.log('Fecha de inicio:', start.toISOString(), 'Fecha de fin:', end.toISOString());
@@ -299,17 +286,45 @@ export class CreateAppointmentFormComponent implements OnInit {
 
   updateAppointment() {
     if (this.range.valid) {
-      const [startHour, startMinute] = this.range.value.startTime.split(':').map(Number);
-      const [endHour, endMinute] = this.range.value.endTime.split(':').map(Number);
+      if (this.activities.find(activity => activity.id === this.range.value.activity)?.name === this.kinesiology) {
 
-      const stTime: LocalTime = {hour: startHour, minute: startMinute};
-      const eTime: LocalTime = {hour: endHour, minute: endMinute};
-      const appointmentData: AppointmentRequest = {
-        date: this.range.value.start!,
-        endDate: this.range.value.end!,
-        startTime: stTime,
-        endTime: eTime,
-        activityID: this.range.value.activity,
+      } else {
+        if (this.range.value.instructor === -1) {
+          const appointmentData: AppointmentRequest = {
+            startTime: this.range.value.startTime,
+            endTime: this.range.value.endTime,
+            max_capacity: this.range.value.max_capacity,
+            activityID: this.range.value.activity,
+            updateAllFutureAppointments: this.range.value.multiple,
+          }
+          console.log('Datos del formulario:', JSON.stringify(appointmentData), 'ID del turno:', this.appointmentId);
+          this.appointmentService.updateAppointment(this.appointmentId!, appointmentData).subscribe(
+            (data: any) => {
+              console.log('Datos de la respuesta:', data);
+            },
+            (error: any) => {
+              console.error('Error al actualizar la cita:', error);
+            }
+          );
+        } else {
+          const appointmentData: AppointmentRequest = {
+            startTime: this.range.value.startTime,
+            endTime: this.range.value.endTime,
+            max_capacity: this.range.value.max_capacity,
+            activityID: this.range.value.activity,
+            instructorID: this.range.value.instructor,
+            updateAllFutureAppointments: this.range.value.multiple,
+          }
+          console.log('Datos del formulario:', JSON.stringify(appointmentData), 'ID del turno:', this.appointmentId);
+          this.appointmentService.updateAppointment(this.appointmentId!, appointmentData).subscribe(
+            (data: any) => {
+              console.log('Datos de la respuesta:', data);
+            },
+            (error: any) => {
+              console.error('Error al actualizar la cita:', error);
+            }
+          );
+        }
       }
     }
   }
