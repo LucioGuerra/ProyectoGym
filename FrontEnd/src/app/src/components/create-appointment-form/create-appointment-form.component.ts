@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, effect, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, inject, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -24,6 +24,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ErrorDialogComponent} from '../dialog/error-dialog/error-dialog.component';
 import {HttpStatusCode} from "@angular/common/http";
 import {formatDate} from "@angular/common";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-appointment-form',
@@ -35,6 +36,7 @@ import {formatDate} from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateAppointmentFormComponent implements OnInit {
+  private _snackBar = inject(MatSnackBar);
 
   instructors: Instructor[] = [
     {id: 1, firstName: 'John', lastName: 'Doe'},
@@ -233,6 +235,9 @@ export class CreateAppointmentFormComponent implements OnInit {
         this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
+            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000}).afterDismissed().subscribe(() => {
+              this.router.navigate(['/admin/agenda']);
+            });
           },
           (error: any) => {
             console.error('Error al crear la cita:', error);
@@ -253,6 +258,9 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
+              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000}).afterDismissed().subscribe(() => {
+                this.router.navigate(['/admin/agenda']);
+              });
             },
             (error: any) => {
               console.error('Error al crear la cita:', error);
@@ -273,6 +281,9 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
+              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000}).afterDismissed().subscribe(() => {
+                this.router.navigate(['/admin/agenda']);
+              });
             },
             (error: any) => {
               console.error('Error al crear la cita:', error);
@@ -280,7 +291,7 @@ export class CreateAppointmentFormComponent implements OnInit {
           );
         }
       }
-      this.router.navigate(['/admin/agenda']);
+
     }
   }
 

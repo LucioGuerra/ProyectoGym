@@ -83,7 +83,7 @@ export class ShifAdminScreenComponent implements OnInit {
         console.log('Datos en el componente:', data);
         this.appointments = data;
         this.appointmentList.set(data);
-        this.changeDetectorRef.markForCheck();
+        // this.changeDetectorRef.markForCheck();
       },
       (error) => {
         console.error('Error al obtener las citas', error);
