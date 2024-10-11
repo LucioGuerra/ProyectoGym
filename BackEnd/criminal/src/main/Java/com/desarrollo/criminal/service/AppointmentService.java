@@ -39,7 +39,9 @@ public class AppointmentService {
     }
 
     public ResponseEntity<List<AppointmentListResponseDTO>> getAppointmentByDate(LocalDate date) {
-        List<Appointment> appointments = appointmentRepository.findByDateAndDeletedFalseOrderByStartTime(date);
+        List<Appointment> appointments =
+                appointmentRepository.findByDateAndActivity_NameNotAndDeletedFalseOrderByStartTime(date,
+                        "Kinesiologia");
         return getListResponseEntity(appointments);
     }
 
@@ -388,7 +390,8 @@ public class AppointmentService {
     }
 
     public ResponseEntity<List<AppointmentListResponseDTO>> getKinesiologyAppointmentByDate(LocalDate date) {
-        List<Appointment> appointments = appointmentRepository.findByDateAndDeletedFalseOrderByStartTime(date);
+        List<Appointment> appointments =
+                appointmentRepository.findByDateAndActivity_NameAndDeletedFalseOrderByStartTime(date, "Kinesiologia");
         return getListResponseEntity(appointments);
     }
 }
