@@ -1,13 +1,18 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
+import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.UserResponseDTO;
+import com.desarrollo.criminal.repository.PackageRepository;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +23,10 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-
 public class UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-
 
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
@@ -45,16 +48,11 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
+    public ResponseEntity<UserResponseDTO> getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
 
-    public ResponseEntity<List<GetPackageDTO>> getUserHistory(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("User not found with id: " + id));
-
-        List<Package> packages = re
-        List<GetPackageDTO> packagesDTO = packages.stream()
-                .map(package -> modelMapper.map(package, GetPackageDTO.class)).toList();
-
-        return ResponseEntity.status(HttpStatus.OK).body(packagesDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
     public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {

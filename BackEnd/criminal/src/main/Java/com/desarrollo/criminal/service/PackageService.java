@@ -14,6 +14,8 @@ import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,14 +32,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class PackageService {
     private final PackageRepository packageRepository;
     private final ActivityService activityService;
-    private final UserService userService;
+    private UserService userService;
     private final ModelMapper modelMapper;
     private final PackageActivityService packageActivityService;
 
     public ResponseEntity<Package> createPackage(PackageDTO packageDTO){
         User user = userService.getUserById(packageDTO.getUserId());
 
-        if (Optional.ofNullable(user.getAPackage()).isPresent()){
+        if (this.checkIfUserHasPackage(user)){
             throw new CriminalCrossException("USER_ALREADY_PACKAGE","User already has a package");
         }
 
@@ -49,13 +51,14 @@ public class PackageService {
 
         aPackage.setPrice(this.calculatePrice(packageDTO.getActivities().stream().toList()));
 
-        user.setAPackage(aPackage);
+        user.addAPackage(aPackage);
         packageRepository.save(aPackage);
         userService.save(user);
         packageActivityService.saveAll(aPackage.getPackageActivities().stream().toList());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 
     public ResponseEntity<List<GetPackageDTO>> getAllPackages(){
         List<Package> packages = packageRepository.findAll();
@@ -76,6 +79,19 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.OK).body(packageDTO);
     }
 
+    public ResponseEntity<List<GetPackageDTO>> getPackageHistoryByUserId(Long id){
+        User user = userService.getUserById(id);
+        List<Package> packages = packageRepository.findByUser(user);
+
+        List<GetPackageDTO> packagesDTO = packages.stream().map(aPackage -> {
+            GetPackageDTO dto = modelMapper.map(aPackage, GetPackageDTO.class);
+            dto.setCreatedAt(aPackage.getCreatedAt().toLocalDate());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(packagesDTO);
+    }
+
     public ResponseEntity<Package> updatePackage(Long id, UpdatePackageDTO aPackage){
         Package packageToUpdate = packageRepository.findById(id).orElseThrow(() -> new CriminalCrossException("PACKAGE_NOT_FOUND","Package not found"));
 
@@ -93,6 +109,7 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    /*
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredPackages(){
@@ -107,7 +124,11 @@ public class PackageService {
                 packageRepository.save(aPackage);
             }
         }
+    }*/
+    public List<Package> getUserHistory(User user){
+        return packageRepository.findByUser(user);
     }
+
 
     private Set<PackageActivity> createPackageActivity(List<ActivitiesPackageDTO> activitiesPackageDTO,
                                                        Package aPackage){
@@ -140,6 +161,15 @@ public class PackageService {
             price += (activity.getPrice() * quantity * 4);
         }
         return price;
+    }
+
+    private boolean checkIfUserHasPackage(User user) {
+        for(Package aPackage : user.getAPackage()){
+            if(aPackage.getActive()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

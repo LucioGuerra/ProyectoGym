@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.entity;
 
 import com.desarrollo.criminal.entity.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,9 +43,10 @@ public class Package {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "package_id")
+    @JsonBackReference
     private Set<PackageActivity> packageActivities;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

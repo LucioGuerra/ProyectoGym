@@ -3,12 +3,14 @@ package com.desarrollo.criminal.entity.user;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.routine.Routine;
 import com.desarrollo.criminal.entity.tracking.Tracking;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,19 +47,23 @@ public class User {
     @OneToOne
     private Routine routine;
 
-    @OneToOne
-    @JoinColumn(name = "package_id")
-    private Package aPackage;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Package> aPackage;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tracking> trackings;
 
     private User(){
-
+        aPackage = new ArrayList<>();
     }
 
     public void deletePackage(){
         this.aPackage = null;
+    }
+
+    public void addAPackage(Package aPackage){
+        this.aPackage.add(aPackage);
     }
 
     @PrePersist
@@ -71,4 +77,6 @@ public class User {
     private void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+
 }

@@ -36,11 +36,6 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
-    @GetMapping("/history")
-    public ResponseEntity<List<GetPackageDTO>> getUserHistory(@RequestBody Long id){
-        return userService.getUserHistory(id);
-    }
-
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);

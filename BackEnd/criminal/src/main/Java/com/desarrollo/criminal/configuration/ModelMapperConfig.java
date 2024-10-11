@@ -8,6 +8,7 @@ import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.PackageActivity;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,9 +35,9 @@ public class ModelMapperConfig {
            });
 
        TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
-         typeMapUser.addMappings(mapper -> {
+         typeMap03.addMappings(mapper -> {
             mapper.map(src -> src.getRoutine().getId() != null ? src.getRoutine().getId(): null, UserResponseDTO::setRoutineId);
-            mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
+            //mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
          });
 
        return modelMapper;

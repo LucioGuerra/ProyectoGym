@@ -23,12 +23,10 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ModelMapper modelMapper;
 
-    /*
-        public ResponseEntity<List<Activity>> getAllActivities() {
-            List<Activity> activities = activityRepository.findAll();
-            return ResponseEntity.ok(activities);
-        }
-    */
+    public ResponseEntity<List<Activity>> getAllActivities() {
+        List<Activity> activities = activityRepository.findAll();
+        return ResponseEntity.ok(activities);
+    }
 
     public Activity getActivityById(Long id) {
         return activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity not found"));
@@ -38,34 +36,6 @@ public class ActivityService {
         activityRepository.save(modelMapper.map(activityDTO, Activity.class));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-/*
-    public ResponseEntity<Activity> deleteActivity(ActivityDTO activityDTO) {
-        Optional<Activity> activity = activityRepository.findById(activityDTO.getId());
-
-        if (activity.isPresent()) {
-            activityRepository.delete(activity.get());
-            ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return null;
-    }
-
-    public ResponseEntity<Activity> updateActivity(ActivityDTO activityDTO) {
-        Optional<Activity> activity = activityRepository.findById(activityDTO.getId());
-
-        if (activity.isPresent()) {
-
-            activity.get().setName(activityDTO.getName());
-            activity.get().setDescription(activityDTO.getDescription());
-
-            activityRepository.save(activity.get());
-            return ResponseEntity.status(HttpStatus.OK).body(activity.get());
-
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-    }*/
 
     public Set<Activity> getActivitiesByIds(List<Long> ids) {
         return activityRepository.findAllById(ids);
