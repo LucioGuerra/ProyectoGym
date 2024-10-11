@@ -115,7 +115,10 @@ export class CreateAppointmentFormComponent implements OnInit {
             endTime: data.endTime,
           });
           this.range.get('start')?.disable();
-
+          if (data.activity === this.kinesiology) {
+            this.range.get('max_capacity')?.disable();
+            this.range.get('activity')?.disable();
+          }
         },
         (error) => {
           if (error.status === 404) {
@@ -224,8 +227,8 @@ export class CreateAppointmentFormComponent implements OnInit {
     if (this.range.valid) {
       if (this.activities.find(activity => activity.id === this.range.value.activity)?.name === this.kinesiology) {
         const appointmentData: AppointmentRequest = {
-          date: formatDate(start.toISOString(), 'YYYY-MM-DD', 'en-US'),
-          endDate: formatDate(end.toISOString(), 'YYYY-MM-DD', 'en-US'),
+          date: formatDate(start.toISOString(), 'yyyy-MM-dd', 'en-US'),
+          endDate: formatDate(end.toISOString(), 'yyyy-MM-dd', 'en-US'),
           startTime: this.range.value.startTime,
           endTime: this.range.value.endTime,
           appointmentWeekDays: this.range.value.daysOfWeek,
@@ -235,12 +238,11 @@ export class CreateAppointmentFormComponent implements OnInit {
         this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
-            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000}).afterDismissed().subscribe(() => {
-              this.router.navigate(['/admin/agenda']);
-            });
+            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
           },
           (error: any) => {
             console.error('Error al crear la cita:', error);
+            this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000})
           }
         );
       } else {
@@ -258,9 +260,7 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
-              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000}).afterDismissed().subscribe(() => {
-                this.router.navigate(['/admin/agenda']);
-              });
+              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
             },
             (error: any) => {
               console.error('Error al crear la cita:', error);
@@ -281,9 +281,7 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
-              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000}).afterDismissed().subscribe(() => {
-                this.router.navigate(['/admin/agenda']);
-              });
+              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
             },
             (error: any) => {
               console.error('Error al crear la cita:', error);

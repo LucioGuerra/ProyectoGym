@@ -51,11 +51,11 @@
       }
     </div>
     <div class="row2">
-      @if (isKinesiologySelected()) {
+      @if (isKinesiologySelected() && !appointmentId) {
         <mat-form-field appearance="outline">
           <mat-label>Number of appointments on this date</mat-label>
           <input matInput type="number" formControlName="kinesiologyQuantity" [min]="0">
-          @if (range.get('max_capacity')?.value < 0) {
+          @if (range.get('kinesiologyQuantity')?.value < 0) {
             <mat-error>Capacity can't be negative</mat-error>
           }
         </mat-form-field>
