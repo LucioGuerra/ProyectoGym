@@ -13,4 +13,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findByRecurrenceIdAndDateGreaterThan(Long recurrenceId, LocalDate date);
 
+    List<Appointment> findByRecurrenceIdAndDateGreaterThanEqual(Long recurrenceId, LocalDate date);
 }

@@ -40,6 +40,11 @@ public class ActivityService {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    public Activity getKinesiologyActivity() {
+        return activityRepository.findByName("Kinesiology").orElse(activityRepository.findByName("Kinesiologia").orElseThrow(
+                () -> new EntityNotFoundException("activity not found")));
+    }
 /*
     public ResponseEntity<Activity> deleteActivity(ActivityDTO activityDTO) {
         Optional<Activity> activity = activityRepository.findById(activityDTO.getId());

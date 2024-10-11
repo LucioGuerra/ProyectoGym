@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
+import com.desarrollo.criminal.dto.request.KinesiologyAppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
@@ -210,7 +211,7 @@ public class AppointmentService {
             if (updateAppointmentDTO.getUpdateAllFutureAppointments()) {
                 Long recurrenceId = appointment.getId();
                 List<Appointment> futureAppointments =
-                        appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
+                        appointmentRepository.findByRecurrenceIdAndDateGreaterThanEqual(appointment.getRecurrenceId(), appointment.getDate());
                 futureAppointments.forEach(futureAppointment -> {
 
                     if (updateAppointmentDTO.getDate() != null) {
@@ -303,5 +304,91 @@ public class AppointmentService {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
+    }
+
+    public ResponseEntity<?> createKinesiologyAppointment(KinesiologyAppointmentDTO kinesiologyAppointmentDTO) {
+        int appointmentsCreated = 0;
+        long firstAppointmentId = 0;
+
+        if (kinesiologyAppointmentDTO.getStartTime().isAfter(kinesiologyAppointmentDTO.getEndTime())) {
+            throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
+        }
+
+        if (kinesiologyAppointmentDTO.getDate().isAfter(kinesiologyAppointmentDTO.getEndDate())) {
+            throw new CriminalCrossException("INVALID_DATE_RANGE", "The end date must be after the start date");
+        }
+
+        Activity activity = activityService.getKinesiologyActivity();
+
+        if (!kinesiologyAppointmentDTO.getAppointmentWeekDays().isEmpty() && kinesiologyAppointmentDTO.getAppointmentWeekDays().contains(kinesiologyAppointmentDTO.getDate().getDayOfWeek())) {
+            Appointment appointment = new Appointment();
+            appointment.setDate(kinesiologyAppointmentDTO.getDate());
+            appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
+            appointment.setEndTime(kinesiologyAppointmentDTO.getEndTime());
+            appointment.setActivity(activity);
+            appointment.setMax_capacity(1);
+            Appointment firstAppointment = appointmentRepository.save(appointment);
+            firstAppointmentId = firstAppointment.getId();
+            firstAppointment.setRecurrenceId(firstAppointmentId);
+            appointmentRepository.save(firstAppointment);
+            appointmentsCreated++;
+            for (int i = 1; i < kinesiologyAppointmentDTO.getAppointmentQuantity(); i++) {
+                appointment = new Appointment();
+                appointment.setDate(kinesiologyAppointmentDTO.getDate());
+                appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
+                appointment.setEndTime(kinesiologyAppointmentDTO.getEndTime());
+                appointment.setActivity(activity);
+                appointment.setMax_capacity(1);
+                appointment.setRecurrenceId(firstAppointmentId);
+                appointmentRepository.save(appointment);
+                appointmentsCreated++;
+            }
+        }
+
+        if (!kinesiologyAppointmentDTO.getAppointmentWeekDays().isEmpty() && kinesiologyAppointmentDTO.getEndDate().isAfter(kinesiologyAppointmentDTO.getDate())) {
+
+            LocalDate appointmentDate = kinesiologyAppointmentDTO.getDate().plusDays(1);
+
+            while (appointmentDate.isBefore(kinesiologyAppointmentDTO.getEndDate().plusDays(1))) {
+                if (kinesiologyAppointmentDTO.getAppointmentWeekDays().contains(appointmentDate.getDayOfWeek())) {
+
+                    Appointment appointment = new Appointment();
+                    appointment.setDate(appointmentDate);
+                    appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
+                    appointment.setEndTime(kinesiologyAppointmentDTO.getEndTime());
+                    appointment.setActivity(activity);
+                    appointment.setMax_capacity(1);
+                    if (firstAppointmentId != 0) {
+                        appointment.setRecurrenceId(firstAppointmentId);
+                        appointmentRepository.save(appointment);
+                    } else {
+                        Appointment firstAppointment = appointmentRepository.save(appointment);
+                        firstAppointmentId = firstAppointment.getId();
+                        firstAppointment.setRecurrenceId(firstAppointmentId);
+                        appointmentRepository.save(firstAppointment);
+                    }
+                    appointmentsCreated++;
+
+                    for (int i = 1; i < kinesiologyAppointmentDTO.getAppointmentQuantity(); i++) {
+                        appointment = new Appointment();
+                        appointment.setDate(appointmentDate);
+                        appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
+                        appointment.setEndTime(kinesiologyAppointmentDTO.getEndTime());
+                        appointment.setActivity(activity);
+                        appointment.setMax_capacity(1);
+                        appointment.setRecurrenceId(firstAppointmentId);
+                        appointmentRepository.save(appointment);
+                        appointmentsCreated++;
+                    }
+                }
+                appointmentDate = appointmentDate.plusDays(1);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(appointmentsCreated);
+    }
+
+    public ResponseEntity<List<AppointmentListResponseDTO>> getKinesiologyAppointmentByDate(LocalDate date) {
+        List<Appointment> appointments = appointmentRepository.findByDateAndDeletedFalseOrderByStartTime(date);
+        return getListResponseEntity(appointments);
     }
 }

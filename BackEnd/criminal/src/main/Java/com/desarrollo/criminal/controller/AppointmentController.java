@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
+import com.desarrollo.criminal.dto.request.KinesiologyAppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
@@ -37,6 +38,16 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
+    }
+
+    @GetMapping("/kine/date/{date}")
+    public ResponseEntity<List<AppointmentListResponseDTO>> getKinesiologyAppointmentByDate(@PathVariable LocalDate date) {
+        return appointmentService.getKinesiologyAppointmentByDate(date);
+    }
+
+    @PostMapping("/kine")
+    public ResponseEntity<?> createKinesiologyAppointment(@RequestBody KinesiologyAppointmentDTO kinesiologyAppointmentDTO) {
+        return appointmentService.createKinesiologyAppointment(kinesiologyAppointmentDTO);
     }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
