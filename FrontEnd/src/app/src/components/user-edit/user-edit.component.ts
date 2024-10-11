@@ -3,11 +3,10 @@ import {AuthService} from '@auth0/auth0-angular';
 import {Role, User} from '../models';
 import {MatIconModule} from '@angular/material/icon';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatButtonModule} from '@angular/material/button';
 import {DrawerComponent} from '../drawer/drawer.component';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -18,7 +17,7 @@ import {TitleCasePipe} from "@angular/common";
   selector: 'app-user-edit',
   standalone: true,
 
-  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader, MatCardContent, MatButtonToggleModule, MatError, MatInput, MatFormField, MatLabel, TitleCasePipe],
+  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader, MatCardContent, MatError, MatInput, MatFormField, MatLabel, TitleCasePipe],
 
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss',
@@ -34,14 +33,14 @@ export class UserEditComponent implements OnInit {
 
   constructor(public auth: AuthService, private router: Router, private fb: FormBuilder) {
     this.user = {
-      id: 0,
-      firstName: '',
-      lastName: '',
-      email: '',
+      id: 12345678,
+      firstName: 'Nombre',
+      lastName: 'Apellido',
+      email: 'nombreapellido@gmail.com',
       role: Role.ADMIN,
-      phone: 0,
+      phone: 2211234567,
       password: '',
-      dni: 0,
+      dni: 1234567,
     };
 
     this.form = this.fb.group({

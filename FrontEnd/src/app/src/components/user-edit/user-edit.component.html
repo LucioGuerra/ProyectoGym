@@ -36,7 +36,7 @@
                 <div class="input-combo">
                 <mat-label>First Name</mat-label>
                 <mat-form-field appearance="outline" class="custom-text-color" placeholder="Enter your first name">
-                  <input formControlName="firstName" id="firstName" matInput type="text">
+                  <input formControlName="firstName" id="firstName" matInput ng type="text">
                 </mat-form-field>
                 </div>
 
@@ -63,11 +63,11 @@
                 </mat-form-field>
                 </div>
 
-                <div class="input-combo">
+                <div class="input-combo" id="email">
                   <mat-label>Email</mat-label>
-                <mat-form-field appearance="outline" class="email">
-                  <input [value]="user.email" disabled id="email" matInput type="text"/>
-                </mat-form-field>
+                  <button [value]="user.email" class="email" color="primary" mat-raised-button type="button">
+                    {{ user.email }}
+                  </button>
                 </div>
               </div>
 
@@ -98,7 +98,7 @@
 
               <div class="save-container">
                 <button class="custom-button" mat-button type="submit">
-                  Save
+                  Save changes
                 </button>
               </div>
            </div>
