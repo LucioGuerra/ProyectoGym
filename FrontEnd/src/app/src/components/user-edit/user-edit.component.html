@@ -3,6 +3,7 @@
     <span class="mainPage">
       <mat-card>
         <div class="header">
+          <div class="main-container">
         <mat-card-header>
           <div class="back">
             <button (click)="homePage()" aria-label="Go back" class="back-btn" mat-icon-button>
@@ -11,17 +12,21 @@
           </div>
 
           <div class="avatar-container">
-            <div class="user-avatar">
-              <img [src]="userImage" alt="User Image" class="user-avatar-img">
+            <div class="userModel-avatar">
+              @if (user().name) {
+                <img [src]="userImage" alt="User Image" class="userModel-avatar-img">
+              }
             </div>
           </div>
 
           <div class="role-container">
-            <select [(ngModel)]="user.role" class="role-select">
+            <select [(ngModel)]="userModel.role" class="role-select">
               @for (role of roles; track role) {
+                @if (user().name) {
                 <option class="option" [value]="role" (click)="changeRole(role)">
                   {{ role | titlecase }}
                 </option>
+                }
               }
             </select>
           </div>
@@ -31,7 +36,7 @@
 
         <mat-card-content>
           <form (ngSubmit)="saveChanges()" [formGroup]="form">
-            <div class="user-content">
+            <div class="userModel-content">
               <div class="row">
                 <div class="input-combo">
                 <mat-label>First Name</mat-label>
@@ -65,9 +70,11 @@
 
                 <div class="input-combo" id="email">
                   <mat-label>Email</mat-label>
-                  <button [value]="user.email" class="email" color="primary" mat-raised-button type="button">
-                    {{ user.email }}
-                  </button>
+                  @if (user().name) {
+                    <button [value]="userModel.email" class="email" color="primary" mat-raised-button type="button">
+                      {{ userModel.email }}
+                    </button>
+                  }
                 </div>
               </div>
 
@@ -104,6 +111,7 @@
            </div>
           </form>
         </mat-card-content>
+        </div>
       </mat-card>
     </span>
   </ng-container>
