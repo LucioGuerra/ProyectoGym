@@ -109,26 +109,17 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    /*
+
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredPackages(){
         List<Package> packages = packageRepository.findExpiredTodayAndActive();
 
         for(Package aPackage : packages){
-            User user = aPackage.getUser();
-            if(user.getAPackage().getId() == aPackage.getId()){
-                user.deletePackage();
-                userService.save(user);
-                aPackage.setActive(false);
-                packageRepository.save(aPackage);
-            }
+            aPackage.setActive(false);
+            packageRepository.save(aPackage);
         }
-    }*/
-    public List<Package> getUserHistory(User user){
-        return packageRepository.findByUser(user);
     }
-
 
     private Set<PackageActivity> createPackageActivity(List<ActivitiesPackageDTO> activitiesPackageDTO,
                                                        Package aPackage){
