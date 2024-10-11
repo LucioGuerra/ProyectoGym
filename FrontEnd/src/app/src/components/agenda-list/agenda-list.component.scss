@@ -490,6 +490,10 @@ mat-divider {
   }
 }
 
+::ng-deep mat-action-list{
+  padding: 0 !important;
+}
+
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: rgba(0, 0, 0, 0.04); /* Cambia este color al que prefieras */
   cursor: pointer; /* Cambia el cursor a pointer para indicar que es clicable */
