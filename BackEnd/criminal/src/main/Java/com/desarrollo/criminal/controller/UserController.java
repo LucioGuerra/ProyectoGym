@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/public/users")
-
 public class UserController {
 
     private final UserService userService;
@@ -34,6 +33,11 @@ public class UserController {
     @GetMapping("/email")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestBody String email){
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/history/{id}")
+    public ResponseEntity<List<GetPackageDTO>> getUserHistory(@PathVariable Long id){
+        return userService.getUserHistory(id);
     }
 
     @PostMapping

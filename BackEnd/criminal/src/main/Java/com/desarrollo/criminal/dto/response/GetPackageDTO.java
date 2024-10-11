@@ -17,6 +17,7 @@ public class GetPackageDTO {
     private LocalDate expirationDate;
     private LocalDate createdAt;
     private Long userId;
+    private Boolean active;
     private List<GetPackageActivityDTO> activities;
 
     private GetPackageDTO(){

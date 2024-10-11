@@ -35,11 +35,6 @@ public class PackageController {
         return packageService.getPackageById(id);
     }
 
-    @GetMapping("/user/history/{id}")
-    public ResponseEntity<List<GetPackageDTO>> getPackageHistoryByUserId(@PathVariable Long id){
-        return packageService.getPackageHistoryByUserId(id);
-    }
-
     @PatchMapping("/{id}")
     public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody UpdatePackageDTO aPackage){
         return packageService.updatePackage(id, aPackage);

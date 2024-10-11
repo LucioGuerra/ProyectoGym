@@ -55,6 +55,16 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
+    public ResponseEntity<List<GetPackageDTO>> getUserHistory(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
+
+        List<GetPackageDTO> packagesDTO = user.getAPackage().stream()
+                .map(aPackage -> modelMapper.map(aPackage, GetPackageDTO.class)).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(packagesDTO);
+    }
+
     public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {
         User user = modelMapper.map(userRequestDTO, User.class);
         user.setRole(Role.CLIENT);
