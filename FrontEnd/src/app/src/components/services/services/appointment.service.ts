@@ -24,7 +24,7 @@ export class AppointmentService {
 
   getAppointmentsByDate(date: Date): Observable<Appointment[]> {
     console.log('Fecha en el servicio:', date.toISOString().split('T')[0]);
-    return this.http.get<any[]>(`${this.apiUrl}/date/${date.toISOString().split('T')[0]}`).pipe(
+    return this.http.get<Appointment[]>(`${this.apiUrl}/date/${date.toISOString().split('T')[0]}`).pipe(
       map((appointments: any[]) => appointments.map(appointment => ({
         ...appointment,
         date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
@@ -57,5 +57,17 @@ export class AppointmentService {
 
   createKinesiologyAppointments(appointmentData: AppointmentRequest): any {
     return this.http.post<any>(`${this.apiUrl}/kine`, appointmentData);
+  }
+
+  getKinesiologyAppointmentsByDate(date: Date) {
+    return this.http.get<Appointment[]>(`${this.apiUrl}/kine/date/${date.toISOString().split('T')[0]}`).pipe(
+      map((appointments: any[]) => appointments.map(appointment => ({
+        ...appointment,
+        date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+        max_capacity: appointment.max_capacity || 0,
+        startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
+        endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
+      })))
+    );
   }
 }
