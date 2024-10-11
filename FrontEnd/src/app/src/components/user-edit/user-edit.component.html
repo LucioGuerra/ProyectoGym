@@ -1,130 +1,106 @@
 <app-drawer>
   <ng-container main-content>
     <span class="mainPage">
-      <mat-card class="tarjeta">
+      <mat-card>
+        <div class="header">
         <mat-card-header>
-          <div class="header">
-            <button mat-icon-button class="back-btn" aria-label="Go back" (click)="homePage()">
+          <div class="back">
+            <button (click)="homePage()" aria-label="Go back" class="back-btn" mat-icon-button>
               <mat-icon>chevron_left</mat-icon>
             </button>
+          </div>
 
-            <div class="avatar-container">
-              <div class="user-avatar">
-                <img class="user-avatar-img" [src]="userImage" alt="User Image">
-              </div>
-            </div>
-
-            <div class="role-container">
-              <mat-button-toggle-group
-                name="role"
-                aria-label="role"
-                [(ngModel)]="user.role" required>
-                
-                @for (role of roles; track $index) {
-                  <mat-button-toggle [value]="role" (click)="changeRole(role)">
-                    {{ role.toLowerCase() }}
-                  </mat-button-toggle>
-                }
-                
-                
-              </mat-button-toggle-group>
+          <div class="avatar-container">
+            <div class="user-avatar">
+              <img [src]="userImage" alt="User Image" class="user-avatar-img">
             </div>
           </div>
-        </mat-card-header>
 
-        <mat-divider class="divisor"></mat-divider>
+          <div class="role-container">
+            <select [(ngModel)]="user.role" class="role-select">
+              @for (role of roles; track role) {
+                <option class="option" [value]="role" (click)="changeRole(role)">
+                  {{ role | titlecase }}
+                </option>
+              }
+            </select>
+          </div>
+        </mat-card-header>
+        </div>
+        <mat-divider></mat-divider>
 
         <mat-card-content>
-          <form [formGroup]="form" (ngSubmit)="saveChanges()">
+          <form (ngSubmit)="saveChanges()" [formGroup]="form">
             <div class="user-content">
-
-
-            <div class="fila common-rows" id="fila1">
-
-              <mat-form-field appearance="outline">
+              <div class="row">
+                <div class="input-combo">
                 <mat-label>First Name</mat-label>
-                <input matInput class="custom-input" id="firstName" type="text" formControlName="firstName" [errorStateMatcher]="matcher"/>
-              
-                @if ("form.get('firstName')?.hasError('required') && (form.get('firstName')?.touched || form.get('firstName')?.dirty") {
-                  <mat-error>
-                    First name is required
-                  </mat-error>
-                }
-              </mat-form-field>
-              
+                <mat-form-field appearance="outline" class="custom-text-color" placeholder="Enter your first name">
+                  <input formControlName="firstName" id="firstName" matInput type="text">
+                </mat-form-field>
+                </div>
 
-              <mat-form-field appearance="outline">
-                <mat-label> Surname</mat-label>
-                <input matInput id="lastName" type="text" formControlName="lastName" [errorStateMatcher]="matcher"/>
-              
-                @if ("form.get('lastName')?.hasError('required') && (form.get('lastName')?.touched || form.get('lastName')?.dirty") {
-                  <mat-error>
-                     Surname is required
-                  </mat-error>
-                }
-              </mat-form-field>
+                <div class="input-combo">
+                  <mat-label>Last Name</mat-label>
+                <mat-form-field appearance="outline">
+                  <input [errorStateMatcher]="matcher" formControlName="lastName" id="lastName"
+                         matInput placeholder="Enter your last name" type="text"/>
+                </mat-form-field>
+                  </div>
+              </div>
 
-            </div>
+              <div class="row">
+                <div class="input-combo">
+                  <mat-label>DNI</mat-label>
+                  <mat-form-field appearance="outline">
+                  <input [errorStateMatcher]="matcher" formControlName="dni" id="dni" matInput
+                         placeholder="Enter your DNI" type="text"/>
+                    @if ("form.get('dni')?.hasError('required') && (form.get('dni')?.touched") {
+                      <mat-error>
+                       DNI is required
+                    </mat-error>
+                    }
+                </mat-form-field>
+                </div>
 
-
-            <div class="fila common-rows" id="fila2">
-
-              <mat-form-field appearance="outline">
-                <mat-label>DNI</mat-label>
-                <input matInput id="dni" type="text" formControlName="dni" [errorStateMatcher]="matcher"/>
-              
-                @if ("form.get('dni')?.hasError('required') && (form.get('dni')?.touched") {
-                  <mat-error>
-                     DNI is required
-                  </mat-error>
-                }
-
-              </mat-form-field>
-
-              
-              <mat-form-field appearance="outline" class="email">
-                
-                <mat-label>Email</mat-label>
-                <input matInput id="email" type="text" [value]="user.email" disabled/>
-
-              </mat-form-field>
-
-            </div>
+                <div class="input-combo">
+                  <mat-label>Email</mat-label>
+                <mat-form-field appearance="outline" class="email">
+                  <input [value]="user.email" disabled id="email" matInput type="text"/>
+                </mat-form-field>
+                </div>
+              </div>
 
 
-            <div class="fila common-rows" id="fila3">
+              <div class="row">
+                <div class="input-combo">
+                  <mat-label>Mobile</mat-label>
+                <mat-form-field appearance="outline">
+                  <input [errorStateMatcher]="matcher" formControlName="phone" id="phone" matInput type="text"/>
 
+                  @if ("form.get('phone')?.hasError('required') && (form.get('phone')?.touched || form.get('phone')?.dirty") {
+                    <mat-error>
+                       Mobile is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+                </div>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Mobile</mat-label>
-                <input matInput id="phone" type="text" formControlName="phone" [errorStateMatcher]="matcher"/>
-              
-                @if ("form.get('phone')?.hasError('required') && (form.get('phone')?.touched || form.get('phone')?.dirty") {
-                  <mat-error>
-                     Mobile is required
-                  </mat-error>
-                }
-              </mat-form-field>
+              <div class="row">
+                <div class="change-password-container">
+                  <button (click)="changePassword()" color="primary" mat-raised-button>
+                    Change password
+                    <mat-icon class="icon-right">chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+              </div>
 
-
-              <div id="special-column">
-                <button mat-raised-button color="primary" (click)="PasswordChange()">
-                  Change password
-                  <mat-icon class="icon-right">chevron_right</mat-icon>
+              <div class="save-container">
+                <button class="custom-button" mat-button type="submit">
+                  Save
                 </button>
-            </div>
-
-
-            </div>
-
-            <div class="fila common-rows" id="fila4">
-
-              <button mat-button class="custom-button" type="submit">
-                Save
-              </button>
-              
-            </div>
-
+              </div>
            </div>
           </form>
         </mat-card-content>

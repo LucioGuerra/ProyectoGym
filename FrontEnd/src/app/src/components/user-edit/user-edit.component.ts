@@ -1,65 +1,56 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
-import { Role, User } from '../models/user.models';
-import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
-import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { DrawerComponent } from '../drawer/drawer.component';
-import { FormGroup } from '@angular/forms';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatInput } from '@angular/material/input';
-
-
-
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {AuthService} from '@auth0/auth0-angular';
+import {Role, User} from '../models';
+import {MatIconModule} from '@angular/material/icon';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {Router} from '@angular/router';
+import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {DrawerComponent} from '../drawer/drawer.component';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {MatInput} from '@angular/material/input';
+import {TitleCasePipe} from "@angular/common";
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
 
-  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader,MatCardContent, MatButtonToggleModule, MatError, MatInput, MatFormField, MatLabel],
-  
+  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader, MatCardContent, MatButtonToggleModule, MatError, MatInput, MatFormField, MatLabel, TitleCasePipe],
+
   templateUrl: './user-edit.component.html',
-  styleUrl: './user-edit.component.scss', 
+  styleUrl: './user-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class UserEditComponent implements OnInit {
-  user: User;  
+  user: User;
   roles = Object.values(Role);
-  userImage: string | undefined;  
+  userImage: string | undefined;
   form: FormGroup;
   matcher = new ErrorStateMatcher();
 
-
- 
-
   constructor(public auth: AuthService, private router: Router, private fb: FormBuilder) {
-    
     this.user = {
-      id: 123,
-      firstName: 'Martin',
-      lastName: 'Eliseche',
-      email: 'tinchoeliseche@gmail.com',
+      id: 0,
+      firstName: '',
+      lastName: '',
+      email: '',
       role: Role.ADMIN,
-      phone: 2262369000,
-      password: '1234',
-      dni: 12093847,
+      phone: 0,
+      password: '',
+      dni: 0,
     };
 
     this.form = this.fb.group({
       firstName: [this.user.firstName, Validators.required],
       lastName: [this.user.lastName, Validators.required],
-
-      dni: [this.user.dni, [Validators.required, 
-                            Validators.minLength(8), 
-                            Validators.maxLength(8)],
-                          ],
-
+      dni: [this.user.dni, [Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(8)],
+      ],
       phone: [this.user.phone, Validators.required]
     });
   }
@@ -70,24 +61,20 @@ export class UserEditComponent implements OnInit {
     });
   }
 
-  
   homePage() {
     this.router.navigate(['/home']);
   }
 
- 
-  PasswordChange(): void {
+  changePassword(): void {
     alert('Changing password!');
     this.router.navigate(['/change-password']);
   }
-
 
   changeRole(selectedRole: Role) {
     if (this.user.role !== selectedRole) {
       this.user.role = selectedRole;
     }
   }
-  
 
   saveChanges() {
 
@@ -96,17 +83,15 @@ export class UserEditComponent implements OnInit {
       return;
     }
 
-
     if (this.form.valid) {
       this.user = {
         ...this.user,
         ...this.form.value
       };
 
-      
-    alert("changes were successfully saved.")
-    console.log("diccionario del usuario: ");
-    console.dir(this.user);
+      alert("changes were successfully saved.")
+      console.log("diccionario del usuario: ");
+      console.dir(this.user);
     }
 
   }
