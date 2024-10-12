@@ -40,12 +40,19 @@ public class ModelMapperConfig {
          typeMap03.addMappings(mapper -> {
             mapper.map(src -> src.getRoutine().getId() != null ? src.getRoutine().getId(): null, UserResponseDTO::setRoutineId);
             //mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
-             mapper.map(src -> src.getPicture(), UserResponseDTO::setPicture);
+             mapper.map(User::getPicture, UserResponseDTO::setPicture);
          });
 
          TypeMap<UserRequestDTO, User> typeMap04 = modelMapper.createTypeMap(UserRequestDTO.class, User.class);
             typeMap04.addMappings(mapper -> {
                 mapper.map(src -> src.getPicture() != null? src.getPicture(): "", User::setPicture);
+            });
+         TypeMap<Package, GetRandomPackageDTO> typeMap05 = modelMapper.createTypeMap(Package.class, GetRandomPackageDTO.class);
+            typeMap05.addMappings(mapper -> {
+                mapper.map(Package::getName, GetRandomPackageDTO::setName);
+                mapper.map(Package::getDescription, GetRandomPackageDTO::setDescription);
+                mapper.map(Package::getPrice, GetRandomPackageDTO::setPrice);
+                mapper.map(src -> src.getPackageActivities() != null? src.getPackageActivities().stream().map(packageActivity -> packageActivity.getActivity().getName()).toList(): new ArrayList<>(), GetRandomPackageDTO::setActivities);
             });
 
          //TODO Arreglar el mapeo

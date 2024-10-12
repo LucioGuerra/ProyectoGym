@@ -26,12 +26,13 @@ public class Activity {
     private Float price;
 
     @Column(nullable = false)
-    private Boolean softDelete = false;
+    private Boolean softDelete;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     public Activity() {
+        this.softDelete = false;
     }
 
     @PrePersist

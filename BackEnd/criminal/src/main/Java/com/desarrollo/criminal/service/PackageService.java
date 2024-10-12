@@ -1,14 +1,12 @@
 package com.desarrollo.criminal.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import com.desarrollo.criminal.dto.request.ActivitiesPackageDTO;
 import com.desarrollo.criminal.dto.request.PackageDTO;
 import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetRandomPackageDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.user.User;
@@ -59,7 +57,6 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
     public ResponseEntity<List<GetPackageDTO>> getAllPackages(){
         List<Package> packages = packageRepository.findAll();
 
@@ -79,6 +76,15 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.OK).body(packageDTO);
     }
 
+    public ResponseEntity<List<GetRandomPackageDTO>> getRandomPackage(){
+        List<Package> packages = packageRepository.findAll();
+        int numberOfPackages = Math.min(9, packages.size());
+
+        Collections.shuffle(packages);
+        List<Package> randomPackages = packages.subList(0, numberOfPackages);
+
+        return ResponseEntity.status(HttpStatus.OK).body(randomPackages.stream().map(aPackage -> modelMapper.map(aPackage, GetRandomPackageDTO.class)).toList());
+    }
 
     public ResponseEntity<Package> updatePackage(Long id, UpdatePackageDTO aPackage){
         Package packageToUpdate = packageRepository.findById(id).orElseThrow(() -> new CriminalCrossException("PACKAGE_NOT_FOUND","Package not found"));
@@ -138,6 +144,15 @@ public class PackageService {
             Integer quantity = packageDTO.getQuantity();
 
             price += (activity.getPrice() * quantity * 4);
+            if(quantity == 3){
+                price *= 0.9F;
+            }
+            if (quantity == 4){
+                price *= 0.85F;
+            }
+            if (quantity == 5){
+                price *= 0.8F;
+            }
         }
         return price;
     }

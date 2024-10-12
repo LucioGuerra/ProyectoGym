@@ -5,6 +5,7 @@ import java.util.List;
 import com.desarrollo.criminal.dto.request.PackageDTO;
 import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetRandomPackageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,11 @@ public class PackageController {
     @GetMapping("/{id}")
     public ResponseEntity<GetPackageDTO> getPackageById(@PathVariable Long id){
         return packageService.getPackageById(id);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<List<GetRandomPackageDTO>> getRandomPackage(){
+        return packageService.getRandomPackage();
     }
 
     @PatchMapping("/{id}")
