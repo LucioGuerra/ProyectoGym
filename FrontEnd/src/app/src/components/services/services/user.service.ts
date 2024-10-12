@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../models';
-import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import { UserModel } from '../../models';
+import { Observable } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -9,19 +9,23 @@ import {HttpClient} from "@angular/common/http";
 export class UserService {
   constructor(private http: HttpClient) { }
     private apiUrl = 'http://localhost:8080/api/public/users';
-      getUserById(id: number): Observable<User> {
-        return this.http.get<User>(`${this.apiUrl}/${id}`);
+      getUserById(id: number): Observable<UserModel> {
+        return this.http.get<UserModel>(`${this.apiUrl}/${id}`);
       }
 
-      getAllUsers(): Observable<User[]> {
-        return this.http.get<User[]>(this.apiUrl);
+      getUserByEmail(email: string): Observable<UserModel> {
+        return this.http.get<UserModel>(`${this.apiUrl}/${email}`);
       }
 
-      createUser(user: User): Observable<User> {
-        return this.http.post<User>(this.apiUrl, user);
+      getAllUsers(): Observable<UserModel[]> {
+        return this.http.get<UserModel[]>(this.apiUrl);
       }
 
-      updateUser(user: User): Observable<any> {
-        return this.http.put<User>(`${this.apiUrl}/${user.id}`, user);
+      createUser(user: UserModel): Observable<UserModel> {
+        return this.http.post<UserModel>(this.apiUrl, user);
+      }
+
+      updateUser(user: UserModel): Observable<any> {
+        return this.http.put<UserModel>(`${this.apiUrl}/${user.id}`, user);
       }
 }

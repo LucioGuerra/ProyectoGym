@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { Role, User } from '../models/user.models';
+import { Role, UserModel } from '../models';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,41 +22,40 @@ import { MatInput } from '@angular/material/input';
   standalone: true,
 
   imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader,MatCardContent, MatButtonToggleModule, MatError, MatInput, MatFormField, MatLabel],
-  
+
   templateUrl: './user-edit.component.html',
-  styleUrl: './user-edit.component.scss', 
+  styleUrl: './user-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class UserEditComponent implements OnInit {
-  user: User;  
+  user: UserModel;
   roles = Object.values(Role);
-  userImage: string | undefined;  
+  userImage: string | undefined;
   form: FormGroup;
   matcher = new ErrorStateMatcher();
 
 
- 
+
 
   constructor(public auth: AuthService, private router: Router, private fb: FormBuilder) {
-    
     this.user = {
       id: 123,
       firstName: 'Martin',
       lastName: 'Eliseche',
       email: 'tinchoeliseche@gmail.com',
       role: Role.ADMIN,
-      phone: 2262369000,
-      password: '1234',
-      dni: 12093847,
+      phone: '2262369000',
+      dni: '12093847',
+      picture: new URL('https://cdn.pixabay.com/photo')
     };
 
     this.form = this.fb.group({
       firstName: [this.user.firstName, Validators.required],
       lastName: [this.user.lastName, Validators.required],
 
-      dni: [this.user.dni, [Validators.required, 
-                            Validators.minLength(8), 
+      dni: [this.user.dni, [Validators.required,
+                            Validators.minLength(8),
                             Validators.maxLength(8)],
                           ],
 
@@ -70,12 +69,12 @@ export class UserEditComponent implements OnInit {
     });
   }
 
-  
+
   homePage() {
     this.router.navigate(['/home']);
   }
 
- 
+
   PasswordChange(): void {
     alert('Changing password!');
     this.router.navigate(['/change-password']);
@@ -87,7 +86,7 @@ export class UserEditComponent implements OnInit {
       this.user.role = selectedRole;
     }
   }
-  
+
 
   saveChanges() {
 
@@ -103,7 +102,7 @@ export class UserEditComponent implements OnInit {
         ...this.form.value
       };
 
-      
+
     alert("changes were successfully saved.")
     console.log("diccionario del usuario: ");
     console.dir(this.user);

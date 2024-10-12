@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { ToolbarComponent } from "../toolbar/toolbar.component";
+import { ToolbarComponent } from "../toolbar";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DrawerListComponent } from "./drawer-list/drawer-list.component";
 import { MatIconModule } from '@angular/material/icon';
@@ -21,18 +21,6 @@ export class DrawerComponent {
   opened: boolean = true;
 
   constructor(@Inject(DOCUMENT) public document: Document, private auth0: AuthService) {
-
-  constructor(@Inject(DOCUMENT) public document: Document, private auth: AuthService) {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      console.log('isAuthenticated:', isAuthenticated);
-      if(!isAuthenticated) {
-        this.auth.loginWithRedirect();
-      }else{
-        this.auth.user$.subscribe(user => {
-          console.log('User:', user);
-        });
-      }
-    });
   }
 
   menu() {
