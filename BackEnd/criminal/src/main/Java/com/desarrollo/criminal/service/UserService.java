@@ -3,6 +3,7 @@ package com.desarrollo.criminal.service;
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
@@ -123,18 +124,22 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
-    public ResponseEntity<List<AppointmentListResponseDTO>> getUserAppointments(Long id) {
+    public ResponseEntity<List<GetUserAppointmentDTO>> getUserAppointments(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
         List<Appointment> appointments = user.getUserXAppointments().stream()
                 .map(UserXAppointment::getAppointment).toList();
 
-        List<AppointmentListResponseDTO> appointmentsDTO = appointments.stream()
+        List<GetUserAppointmentDTO> appointmentsDTO = appointments.stream()
                 .map(appointment -> {
-                    AppointmentListResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentListResponseDTO.class);
+                    GetUserAppointmentDTO responseAppointmentDTO = modelMapper.map(appointment, GetUserAppointmentDTO.class);
                     responseAppointmentDTO.setActivity(appointment.getActivity().getName());
                     responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
+                    responseAppointmentDTO.setAttendance(user.getUserXAppointments().stream()
+                            .filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment))
+                            .findFirst().orElseThrow(() -> new CriminalCrossException("USER_NOT_IN_APPOINTMENT", "User not in appointment"))
+                            .getAttendance());
                     return responseAppointmentDTO;
                 })
                 .toList();

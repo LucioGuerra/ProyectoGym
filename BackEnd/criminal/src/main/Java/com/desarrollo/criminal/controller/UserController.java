@@ -3,6 +3,7 @@ package com.desarrollo.criminal.controller;
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/appointments/{id}")
-    public ResponseEntity<List<AppointmentListResponseDTO>> getUserAppointments(@PathVariable Long id){
+    public ResponseEntity<List<GetUserAppointmentDTO>> getUserAppointments(@PathVariable Long id){
         return userService.getUserAppointments(id);
     }
 
