@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 
+import java.net.URL;
 
 
 @Setter
@@ -26,6 +27,8 @@ public class UserResponseDTO {
     private Role role;
 
     private String phone;
+
+    private URL picture;
     
     private Long routineId;
 
