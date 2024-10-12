@@ -1,0 +1,123 @@
+<app-drawer>
+  <ng-container main-content>
+    <div class="main-div">
+      <section class="main-section">
+        <section class="top-section">
+          <div class="calendar">
+            <div class="title-section">
+              <mat-icon style="padding: 0 10px 0 10px; color: #f6c90e"
+              >calendar_month
+              </mat-icon
+              >
+              <h1 class="datepicker-title">Select date</h1>
+              <button mat-icon-button (click)="goBackDate($event)">
+                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_left</mat-icon>
+              </button>
+              <button mat-icon-button (click)="gofurtherDate($event)">
+                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_right</mat-icon>
+              </button>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-form-field>
+              <mat-label>DD/MM/YYYY</mat-label>
+              <input
+                [value]="selectedDate()"
+                matInput
+                [matDatepicker]="picker"
+                (dateChange)="datePickerChangeEvent('change', $event)"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="quick-actions">
+            <div class="title-section">
+              <mat-icon style="padding: 0 0 0 10px; color: #f6c90e"
+              >auto_awesome
+              </mat-icon
+              >
+              <h1 class="quickactions-title">Quick actions</h1>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="quickstart-buttons">
+              <button mat-flat-button class="button-class" (click)="newShift($event)">
+                <mat-icon>add</mat-icon>
+                Add new shift
+              </button>
+              <button mat-flat-button class="button-class" (click)="newActivity($event)">
+                <mat-icon>add_task</mat-icon>
+                Add new activity
+              </button>
+              <button mat-flat-button class="button-class" (click)="newUser($event)">
+                <mat-icon>person_add</mat-icon>
+                Add new client
+              </button>
+              <button mat-flat-button class="button-class" (click)="newSale($event)">
+                <mat-icon>attach_money</mat-icon>
+                Enter sale
+              </button>
+              <button mat-flat-button class="button-class" (click)="shop($event)">
+                <mat-icon>shopping_cart</mat-icon>
+                Purchase gym elements
+              </button>
+            </div>
+          </div>
+        </section>
+        <section class="botom-section">
+          <div class="agenda">
+            <mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="onTabChange($event)">
+              <mat-tab>
+                <ng-template mat-tab-label
+                             style="display: flex; flex-direction: row; align-content: center; justify-content: center; ">
+
+                  <div
+                    style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
+                    <mat-icon class="example-tab-icon" style="margin-right: 10px">fitness_center</mat-icon>
+                    <p style="margin: 0; align-content: center; justify-content: center">Gym agenda</p>
+                  </div>
+                </ng-template>
+                <div class="title-section">
+                  <mat-icon style="padding: 0 0 0 10px; color: #f6c90e"
+                  >calendar_view_day
+                  </mat-icon
+                  >
+                  <h1 class="agenda-title">Activity List</h1>
+                  <mat-chip-listbox
+                    class="activities-cards"
+                    multiple="true"
+                    aria-label="select activities"
+                    (change)="chipsChangeEvent('change', $event)"
+                  >
+                    @for (activity of activities; track activity) {
+                      <mat-chip-option [value]="activity.name" selected>
+                        {{ activity.name }}
+                      </mat-chip-option>
+                    }
+                  </mat-chip-listbox>
+                </div>
+
+                <mat-divider></mat-divider>
+                <app-agenda-list [appointmentList]="appointmentList" [selectedActivities]="selectedActivities"/>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label
+                             style="display: flex; flex-direction: row; align-content: center; justify-content: center">
+                  <div
+                    style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
+                    <span class="material-symbols-outlined" style="margin-right: 10px">rheumatology</span>
+                    <p style="margin: 0; align-content: center; justify-content: center">Kinesiology agenda</p>
+                  </div>
+                </ng-template>
+                <mat-divider></mat-divider>
+                <app-agenda-list [appointmentList]="appointmentList" [selectedActivities]="kinesiology"/>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </section>
+      </section>
+    </div>
+  </ng-container>
+</app-drawer>
