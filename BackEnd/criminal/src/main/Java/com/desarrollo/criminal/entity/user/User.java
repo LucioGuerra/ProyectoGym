@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,6 +40,9 @@ public class User {
 
     @Column(length = 15)
     private String phone;
+
+    @Column(nullable = false)
+    private URL picture;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

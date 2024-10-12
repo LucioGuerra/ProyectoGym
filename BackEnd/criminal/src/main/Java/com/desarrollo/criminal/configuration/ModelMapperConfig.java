@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.configuration;
 
+import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.*;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
@@ -11,6 +12,7 @@ import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -38,7 +40,13 @@ public class ModelMapperConfig {
          typeMap03.addMappings(mapper -> {
             mapper.map(src -> src.getRoutine().getId() != null ? src.getRoutine().getId(): null, UserResponseDTO::setRoutineId);
             //mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
+             mapper.map(src -> src.getPicture(), UserResponseDTO::setPicture);
          });
+
+         TypeMap<UserRequestDTO, User> typeMap04 = modelMapper.createTypeMap(UserRequestDTO.class, User.class);
+            typeMap04.addMappings(mapper -> {
+                mapper.map(src -> src.getPicture() != null? src.getPicture(): "", User::setPicture);
+            });
 
          //TODO Arreglar el mapeo
        /*TypeMap<Appointment, AppointmentResponseDTO> typeMap04 = modelMapper.createTypeMap(Appointment.class,

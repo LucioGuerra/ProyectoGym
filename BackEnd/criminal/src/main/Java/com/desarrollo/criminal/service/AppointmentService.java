@@ -250,6 +250,10 @@ public class AppointmentService {
 
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
         Appointment appointment = this.getAppointmentById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(convertAppointmentToDTO(appointment));
+    }
+
+    private AppointmentResponseDTO convertAppointmentToDTO(Appointment appointment) {
         AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
         responseAppointmentDTO.setActivity(appointment.getActivity().getName());
 
@@ -267,13 +271,13 @@ public class AppointmentService {
                             .findFirst()
                             .map(UserXAppointment::getAttendance)
                             .orElse(false));
+                    appointmentUserDTO.setPicture(user.getPicture());
                     return appointmentUserDTO;
                 })
                 .toList();
 
         responseAppointmentDTO.setParticipants(participants);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseAppointmentDTO);
+        return responseAppointmentDTO;
     }
 
     @Transactional
@@ -306,7 +310,8 @@ public class AppointmentService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    public ResponseEntity<?> addParticipantAttendance(Long appointmentId, Long userId) {
+    @Transactional
+    public ResponseEntity<?> switchParticipantAttendance(Long appointmentId, Long userId) {
         Appointment appointment = this.getAppointmentById(appointmentId);
         User user = userService.getUserById(userId);
 
@@ -317,7 +322,7 @@ public class AppointmentService {
         user.getUserXAppointments().stream()
                 .filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment))
                 .findFirst()
-                .ifPresent(userXAppointment -> userXAppointment.setAttendance(true));
+                .ifPresent(userXAppointment -> userXAppointment.setAttendance(!userXAppointment.getAttendance()));
 
         userService.save(user);
 

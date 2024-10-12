@@ -1,10 +1,11 @@
 package com.desarrollo.criminal.dto.request;
 
-import com.desarrollo.criminal.entity.user.Role;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
+
+import java.net.URL;
 
 
 @Setter
@@ -31,6 +32,7 @@ public class UserRequestDTO {
     @NotBlank(message = "Phone cannot be empty.")
     private String phone;
 
+    private URL picture;
 
     private UserRequestDTO(){}
 
