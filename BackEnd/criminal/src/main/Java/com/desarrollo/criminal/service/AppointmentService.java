@@ -4,11 +4,14 @@ import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
+import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.entity.user.UserXAppointment;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.AppointmentRepository;
+import com.desarrollo.criminal.repository.UserXAppointmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -29,6 +32,7 @@ public class AppointmentService {
     private final ActivityService activityService;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final UserXAppointmentRepository userXAppointmentRepository;
 
 
     public Appointment getAppointmentById(Long appointmentId) {
@@ -187,6 +191,7 @@ public class AppointmentService {
                 appointment.setActivity(activity);
             }
 
+
             if (updateAppointmentDTO.getMax_capacity() != null) {
                 appointment.setMax_capacity(updateAppointmentDTO.getMax_capacity());
             }
@@ -244,48 +249,79 @@ public class AppointmentService {
 
 
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
-        try {
-            Appointment appointment = this.getAppointmentById(id);
-            AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
-            responseAppointmentDTO.setActivity(appointment.getActivity().getName());
-            if(appointment.getInstructor() != null) {
-                responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
-            }
-            responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
-            return ResponseEntity.status(HttpStatus.OK).body(responseAppointmentDTO);
-        }catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Appointment appointment = this.getAppointmentById(id);
+        AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
+        responseAppointmentDTO.setActivity(appointment.getActivity().getName());
+
+        if(Optional.ofNullable(appointment.getInstructor()).isPresent()) {
+            responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
         }
+
+        responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
+
+        List<AppointmentUserDTO> participants = appointment.getParticipants().stream()
+                .map(user -> {
+                    AppointmentUserDTO appointmentUserDTO = modelMapper.map(user, AppointmentUserDTO.class);
+                    appointmentUserDTO.setAttendance(user.getUserXAppointments().stream()
+                            .filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment))
+                            .findFirst()
+                            .map(UserXAppointment::getAttendance)
+                            .orElse(false));
+                    return appointmentUserDTO;
+                })
+                .toList();
+
+        responseAppointmentDTO.setParticipants(participants);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseAppointmentDTO);
     }
 
+    @Transactional
     public ResponseEntity<?> addParticipant(Long appointmentId, Long userId) {
-        try {
-            Appointment appointment = this.getAppointmentById(appointmentId);
-            User user = userService.getUserById(userId);
-            if (appointment.getParticipants().contains(user)) {
-                throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
-            }
-            appointment.getParticipants().add(user);
-            appointmentRepository.save(appointment);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserById(userId);
+        if (appointment.getParticipants().contains(user)) {
+            throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
         }
+        appointment.getParticipants().add(user);
+        user.getUserXAppointments().add(new UserXAppointment(appointment, user));
+        appointmentRepository.save(appointment);
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 
+    @Transactional
     public ResponseEntity<?> removeParticipant(Long appointmentId, Long userId) {
-        try{
-            Appointment appointment = this.getAppointmentById(appointmentId);
-            User user = userService.getUserById(userId);
-            if (!appointment.getParticipants().contains(user)) {
-                throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
-            }
-            appointment.getParticipants().remove(user);
-            appointmentRepository.save(appointment);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserById(userId);
+
+        if (!appointment.getParticipants().contains(user)) {
+            throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
         }
+        userXAppointmentRepository.deleteByAppointmentAndUser(appointment, user);
+        appointment.getParticipants().remove(user);
+        appointmentRepository.save(appointment);
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    public ResponseEntity<?> addParticipantAttendance(Long appointmentId, Long userId) {
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserById(userId);
+
+        if (!appointment.getParticipants().contains(user)) {
+            throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
+        }
+
+        user.getUserXAppointments().stream()
+                .filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment))
+                .findFirst()
+                .ifPresent(userXAppointment -> userXAppointment.setAttendance(true));
+
+        userService.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

@@ -7,16 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AppointmentUserDTO {
+public class GetActivityDTO {
 
     private Long id;
+    private String name;
+    private String description;
+    private float price;
 
-    private String firstName;
-
-    private String lastName;
-
-    private Boolean attendance;
-
-    public AppointmentUserDTO() {}
-
+    private GetActivityDTO() {
+    }
 }

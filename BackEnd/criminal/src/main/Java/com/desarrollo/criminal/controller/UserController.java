@@ -1,58 +1,64 @@
 package com.desarrollo.criminal.controller;
 
+import com.desarrollo.criminal.dto.request.UserUpdateDTO;
+import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
+import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
-import com.desarrollo.criminal.dto.reponse.UserResponseDTO;
+import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.service.UserService;
 
 import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/public/users")
-
 public class UserController {
+
     private final UserService userService;
 
-
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return userService.getAllUsers();
     }
-    
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
-        try {
-            User user = userService.getUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
+        return userService.getUserDTOById(id);
     }
 
+    @GetMapping("/email")
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestBody String email){
+        return userService.getUserByEmail(email);
+    }
 
+    @GetMapping("/history/{id}")
+    public ResponseEntity<List<GetPackageDTO>> getUserHistory(@PathVariable Long id){
+        return userService.getUserHistory(id);
+    }
+
+    @GetMapping("/appointments/{id}")
+    public ResponseEntity<List<GetUserAppointmentDTO>> getUserAppointments(@PathVariable Long id){
+        return userService.getUserAppointments(id);
+    }
+
+    @GetMapping("/package/{id}")
+    public ResponseEntity<GetPackageDTO> getUserPackages(@PathVariable Long id){
+        return userService.getActivePackage(id);
+    }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO
-    userRequestDTO) {
-
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);
     }
-    
 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetail) {
-        return userService.updateUser(id, userDetail);
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
+        return userService.updateUser(id, userUpdateDTO);
     }
-
-
 }
