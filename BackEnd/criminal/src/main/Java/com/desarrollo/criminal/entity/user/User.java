@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.entity.user;
 
+import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.routine.Routine;
 import com.desarrollo.criminal.entity.tracking.Tracking;
@@ -11,7 +12,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -54,8 +57,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tracking> trackings;
 
+    @ManyToMany
+    private Set<Appointment> appointments;
+
     private User(){
         aPackage = new ArrayList<>();
+        appointments = new HashSet<>();
+
     }
 
     public void deletePackage(){

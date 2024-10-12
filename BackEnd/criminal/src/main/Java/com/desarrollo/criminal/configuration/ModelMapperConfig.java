@@ -1,9 +1,8 @@
 package com.desarrollo.criminal.configuration;
 
-import com.desarrollo.criminal.dto.response.UserResponseDTO;
+import com.desarrollo.criminal.dto.response.*;
+import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
-import com.desarrollo.criminal.dto.response.GetPackageActivityDTO;
-import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.PackageActivity;
 import org.modelmapper.Conditions;
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -40,6 +40,22 @@ public class ModelMapperConfig {
             //mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
          });
 
+         //TODO Arreglar el mapeo
+       /*TypeMap<Appointment, AppointmentResponseDTO> typeMap04 = modelMapper.createTypeMap(Appointment.class,
+               AppointmentResponseDTO.class);
+         typeMap04.addMappings(mapper -> {
+             mapper.map(src -> src.getActivity() != null? src.getActivity().getName(): null,
+                     AppointmentResponseDTO::setActivity);
+             mapper.map(src -> src.getInstructor() != null?
+                             src.getInstructor().getFirstName() + " " + src.getInstructor().getLastName(): null,
+                     AppointmentResponseDTO::setInstructor);
+             mapper.map(src -> src.getParticipants() != null? (long) src.getParticipants().size() : 0L,
+                     AppointmentResponseDTO::setParticipantsCount);
+             mapper.map(src -> src.getParticipants() != null ?
+                     src.getParticipants().stream().map(user -> modelMapper.map(user,
+                     AppointmentUserDTO.class)).toList(): new ArrayList<>(), AppointmentResponseDTO::setParticipants);
+
+         });*/
        return modelMapper;
    }
 }

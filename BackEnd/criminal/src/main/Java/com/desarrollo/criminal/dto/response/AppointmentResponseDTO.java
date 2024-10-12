@@ -29,4 +29,5 @@ public class AppointmentResponseDTO {
     private List<AppointmentUserDTO> participants;
 
     private AppointmentResponseDTO() {}
+
 }

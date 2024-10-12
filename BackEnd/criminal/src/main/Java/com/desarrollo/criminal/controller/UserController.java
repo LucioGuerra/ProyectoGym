@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
+import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,11 @@ public class UserController {
     @GetMapping("/history/{id}")
     public ResponseEntity<List<GetPackageDTO>> getUserHistory(@PathVariable Long id){
         return userService.getUserHistory(id);
+    }
+
+    @GetMapping("/appointments/{id}")
+    public ResponseEntity<List<AppointmentListResponseDTO>> getUserAppointments(@PathVariable Long id){
+        return userService.getUserAppointments(id);
     }
 
     @PostMapping

@@ -259,33 +259,30 @@ public class AppointmentService {
     }
 
     public ResponseEntity<?> addParticipant(Long appointmentId, Long userId) {
-        try {
-            Appointment appointment = this.getAppointmentById(appointmentId);
-            User user = userService.getUserById(userId);
-            if (appointment.getParticipants().contains(user)) {
-                throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
-            }
-            appointment.getParticipants().add(user);
-            appointmentRepository.save(appointment);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserById(userId);
+        if (appointment.getParticipants().contains(user)) {
+            throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
         }
+        appointment.getParticipants().add(user);
+        user.getAppointments().add(appointment);
+        appointmentRepository.save(appointment);
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 
+    //TODO adaptar a la nueva estructura de la base de datos
     public ResponseEntity<?> removeParticipant(Long appointmentId, Long userId) {
-        try{
-            Appointment appointment = this.getAppointmentById(appointmentId);
-            User user = userService.getUserById(userId);
-            if (!appointment.getParticipants().contains(user)) {
-                throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
-            }
-            appointment.getParticipants().remove(user);
-            appointmentRepository.save(appointment);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserById(userId);
+        if (!appointment.getParticipants().contains(user)) {
+            throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
         }
+        appointment.getParticipants().remove(user);
+        user.getAppointments().remove(appointment);
+        appointmentRepository.save(appointment);
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

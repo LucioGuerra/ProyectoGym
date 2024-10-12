@@ -48,7 +48,7 @@ public class Appointment {
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> participants = new ArrayList<>();
+    private List<User> participants;
 
     private Integer max_capacity;
 
@@ -58,6 +58,7 @@ public class Appointment {
     private boolean deleted = false;
 
     public Appointment(){
+        this.participants = new ArrayList<>();
     }
 
     public int getParticipantsCount() {

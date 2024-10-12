@@ -1,6 +1,8 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
+import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
+import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
@@ -99,6 +101,22 @@ public class UserService {
 
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
+
+    public ResponseEntity<List<AppointmentListResponseDTO>> getUserAppointments(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
+
+        List<AppointmentListResponseDTO> appointmentsDTO = user.getAppointments().stream()
+                .map(appointment -> {
+                    AppointmentListResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentListResponseDTO.class);
+                    responseAppointmentDTO.setActivity(appointment.getActivity().getName());
+                    responseAppointmentDTO.setParticipantsCount(appointment.getParticipants().size());
+                    return responseAppointmentDTO;
+                })
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentsDTO);
     }
     
     public User save(User user) {
