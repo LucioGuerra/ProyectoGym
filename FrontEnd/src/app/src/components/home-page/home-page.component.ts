@@ -45,9 +45,12 @@ export class HomePageComponent implements AfterViewInit {
         if(this.auth0.isAdmin()){
           console.log("Me redirige a admin/agenda")
           this.router.navigate(['admin/agenda']);
+        }else if(this.auth0.isClient()){
+          console.log("Me redirige a client/agenda")
+          this.router.navigate(['/agenda']);
         }
         else {
-          //todo redirect to client page
+          console.log("No es admin ni cliente")
         }
       }
       else{

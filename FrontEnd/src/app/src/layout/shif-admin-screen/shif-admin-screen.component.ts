@@ -46,15 +46,20 @@ export class ShifAdminScreenComponent implements OnInit {
   public tabIndex = signal<number>(0);
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
         }
       } else {
         this.router.navigate(['/login']);
       }
     });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit(): void {

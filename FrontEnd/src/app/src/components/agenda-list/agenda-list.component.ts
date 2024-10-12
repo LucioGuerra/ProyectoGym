@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, signal, OnInit} from '@angular/core';
 import {MatActionList, MatListItem} from "@angular/material/list";
 import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatRow, MatRowDef, MatTable} from "@angular/material/table";
 import {MatChip} from "@angular/material/chips";
@@ -11,76 +11,88 @@ import {Router} from "@angular/router";
 import {ErrorDialogComponent} from "../dialog/error-dialog/error-dialog.component";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {AppointmentInfoDialogComponent} from "../appointment-info-dialog/appointment-info-dialog.component";
+import {AppointmentService} from "../services/services";
 
 @Component({
-  selector: 'app-agenda-list',
-  standalone: true,
-  imports: [
-    MatActionList,
-    MatCell,
-    MatCellDef,
-    MatChip,
-    MatColumnDef,
-    MatHeaderCell,
-    MatIcon,
-    MatIconButton,
-    MatListItem,
-    MatMenu,
-    MatMenuItem,
-    MatProgressBar,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    MatMenuTrigger
-  ],
-  templateUrl: './agenda-list.component.html',
-  styleUrl: './agenda-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-agenda-list',
+    standalone: true,
+    imports: [
+        MatActionList,
+        MatCell,
+        MatCellDef,
+        MatChip,
+        MatColumnDef,
+        MatHeaderCell,
+        MatIcon,
+        MatIconButton,
+        MatListItem,
+        MatMenu,
+        MatMenuItem,
+        MatProgressBar,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        MatMenuTrigger
+    ],
+    templateUrl: './agenda-list.component.html',
+    styleUrl: './agenda-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AgendaListComponent {
-  displayedColumns: string[] = ['date', 'activity', 'capacity', 'actions'];
+export class AgendaListComponent implements OnInit {
+    displayedColumns: string[] = ['date', 'activity', 'capacity', 'actions'];
 
-  public appointments: Appointment[] = [];
+    public appointments: Appointment[] = [];
 
-  @Input() selectedActivities = signal<string[]>([]);
-  @Input() appointmentList = signal<Appointment[]>([]);
+    @Input() selectedActivities = signal<string[]>([]);
+    @Input() appointmentList = signal<Appointment[]>([]);
+    @Input() isAdmin: boolean = false;
 
-  constructor(private router: Router, private dialog: MatDialog) {
-
-  }
-
-  noActivities(): boolean {
-    if (this.appointmentList().length === 0) {
-      return true;
+    constructor(private router: Router, private dialog: MatDialog, private appointmentService: AppointmentService) {
     }
 
-    return this.appointmentList().filter(appointment =>
-      this.selectedActivities().includes(appointment.activity)
-    ).length === 0;
-  }
+    ngOnInit() {
+        if (!this.isAdmin) {
+            this.displayedColumns = ['date', 'activity', 'capacity'];
+        }
+    }
 
-  open_appointment($event: Event, appointment: Appointment) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '90%';
-    dialogConfig.maxWidth = '1400px';
-    dialogConfig.height = '80%';
-    dialogConfig.data = { id: appointment.id };
-    dialogConfig.panelClass = 'custom-dialog';
-    this.dialog.open(AppointmentInfoDialogComponent, dialogConfig);
-  }
+    noActivities(): boolean {
+        if (this.appointmentList().length === 0) {
+            return true;
+        }
 
-  edit_appointment($event: Event, appointmentID: number) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    this.router.navigate([`/admin/appointment/edit/${appointmentID}`]);
-  }
+        return this.appointmentList().filter(appointment =>
+            this.selectedActivities().includes(appointment.activity)
+        ).length === 0;
+    }
 
-  cancel_appointment($event: MouseEvent, appointment: Appointment) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    alert(`canceling appointment id: ${appointment.id}`);
-  }
+    open_appointment($event: Event, appointment: Appointment) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.maxWidth = '1400px';
+        if (this.isAdmin) {
+            dialogConfig.width = '90%';
+            dialogConfig.height = '80%';
+        } else {
+            dialogConfig.width = '30%';
+        }
+        dialogConfig.data = {id: appointment.id, isAdmin: this.isAdmin};
+        dialogConfig.panelClass = 'custom-dialog';
+        this.dialog.open(AppointmentInfoDialogComponent, dialogConfig);
+    }
+
+    edit_appointment($event: Event, appointmentID: number) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        this.router.navigate([`/admin/appointment/edit/${appointmentID}`]);
+    }
+
+    cancel_appointment($event: MouseEvent, appointment: Appointment) {
+        $event.stopPropagation();
+        $event.preventDefault();
+        this.appointmentService.cancelAppointment(appointment.id.toString());
+        alert(`canceling appointment id: ${appointment.id}`);
+    }
 }

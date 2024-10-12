@@ -70,4 +70,12 @@ export class AppointmentService {
       })))
     );
   }
+
+  switchUserAttendance(appointmentId: string, userId: number, attendance: boolean) {
+    return this.http.post<any>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {} );
+  }
+
+  cancelAppointment(id: string) {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

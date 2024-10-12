@@ -1,3 +1,4 @@
+@use "../../../../variables.scss";
 :host {
   display: block;
   width: 100%;
@@ -7,6 +8,7 @@
 
 mat-dialog-content {
   padding: 0 20px;
+  margin-bottom: 50px;
 }
 
 ::ng-deep mat-dialog-content, ::ng-deep mat-dialog-container {
@@ -15,8 +17,33 @@ mat-dialog-content {
   scrollbar-width: none;
 }
 
-::ng-deep mat-dialog-content::-webkit-scrollbar, , ::ng-deep mat-dialog-container::-webkit-scrollbar {
+::ng-deep mat-dialog-content::-webkit-scrollbar,
+
+,
+::ng-deep mat-dialog-container::-webkit-scrollbar {
   display: none;
+}
+
+.buttons-set-appointment {
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  button {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .agendar-turno{
+    background-color: variables.$light-gold-color;
+    color: #222222;
+    margin-right: 10px;
+  }
+  .cancelar-turno{
+    background-color: rgba(244, 67, 54, 0.80);
+    color: white;
+    margin-right: 10px;
+  }
 }
 
 ::ng-deep mat-dialog-content {
@@ -29,7 +56,7 @@ mat-dialog-content {
   }
 
   /* Microsoft Edge (si WebKit no funciona en tu caso específico) */
-  -ms-overflow-style: none;  /* IE and Edge */
+  -ms-overflow-style: none; /* IE and Edge */
 
   /* Para asegurarse de que en Edge clásico también se oculte */
   &::-webkit-scrollbar-track-piece {
@@ -43,6 +70,7 @@ mat-dialog-content {
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 0;
+
   p {
     font-size: 1.2rem;
     margin: 10px 0 0 0;
@@ -57,7 +85,7 @@ mat-dialog-content {
 
 .participants-section {
   margin-top: 1.2rem;
-  margin-bottom: 2rem;
+  /*margin-bottom: 2rem;*/
 }
 
 .participants-title {

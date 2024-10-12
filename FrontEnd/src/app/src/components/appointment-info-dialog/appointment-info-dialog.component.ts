@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, signal} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -7,14 +7,14 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatButtonModule } from "@angular/material/button";
+import {MatButtonModule} from "@angular/material/button";
 import {Appointment, AppointmentUser} from "../models";
-import {AppointmentService} from "../services/services";
+import {AppointmentService, AuthService} from "../services/services";
 import {AsyncPipe, DatePipe, NgOptimizedImage} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-appointment-info-dialog',
@@ -40,28 +40,32 @@ import { MatIconModule } from '@angular/material/icon';
 export class AppointmentInfoDialogComponent {
   loading = true;
   appointmentData: Appointment | undefined;
+  isReserved = signal<boolean>(false);
 
   constructor(
     public dialogRef: MatDialogRef<AppointmentInfoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { id: string },
+    @Inject(MAT_DIALOG_DATA) public data: { id: string, isAdmin: boolean },
     private appointmentService: AppointmentService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private auth: AuthService,
   ) {
     this.loadAppointment();
   }
 
   loadAppointment(): void {
-    this.appointmentService.getAppointmentById(this.data.id).subscribe(
-      (appointment: Appointment) => {
+    this.appointmentService.getAppointmentById(this.data.id).subscribe({
+      next: (appointment: Appointment) => {
         this.loading = false;
         this.appointmentData = appointment;
         this.changeDetectorRef.markForCheck();
+        console.log('users: ', this.appointmentData.participants);
+        console.log('isAdmin? ', this.data.isAdmin);
       },
-      (error: any)  => {
+      error: (error: any) => {
         this.loading = false;
         this.onClose();
       }
-    );
+    });
   }
 
   onClose(): void {
@@ -79,6 +83,20 @@ export class AppointmentInfoDialogComponent {
   }
 
   toggleAttendance(participant: AppointmentUser): void {
-    participant.attended = !participant.attended;
+    this.appointmentService.switchUserAttendance(this.data.id, participant.id, !participant.attendance).subscribe(
+      () => {
+        this.changeDetectorRef.markForCheck();
+        participant.attendance = !participant.attendance;
+      },
+      (error: any) => {
+        console.error('Error al cambiar la asistencia del usuario', error);
+      }
+    );
+  }
+
+  isUserInAppointment() {
+    console.log('userInfo: ', this.auth.userInfo());
+    this.isReserved.set(!this.isReserved());
+    /*return this.appointmentData!.participants!.some(user => user.id === this.auth.userInfo.);*/
   }
 }

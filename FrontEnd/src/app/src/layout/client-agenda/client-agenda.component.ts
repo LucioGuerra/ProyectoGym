@@ -56,20 +56,26 @@ export class ClientAgendaComponent implements OnInit {
 
   public appointments: Appointment[] = [];
 
-  public selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
+  public selectedDate = signal<Date>(new Date());
   public selectedActivities = signal<string[]>([]);
   public appointmentList = signal<Appointment[]>([]);
   kinesiology = signal<string[]>(['Kinesiology', 'Kinesiologia']);
   public tabIndex = signal<number>(0);
+  readonly today: Date = new Date();
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
-        if (this.auth0.isAdmin()) {
+        if (this.auth0.isClient()) {
+          console.log('Usuario autenticado, es admin? ', this.auth0.isAdmin(), 'es cliente? ', this.auth0.isClient());
+        } else if (this.auth0.isAdmin()) {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/home']);
         }
       } else {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       }
     });
   }
@@ -77,6 +83,8 @@ export class ClientAgendaComponent implements OnInit {
   ngOnInit(): void {
     this.loadAppointment(this.tabIndex());
     this.loadActivities();
+    console.log('Fecha seleccionada:', this.selectedDate());
+    console.log('today: ', this.today);
   }
 
   loadAppointment(tabIndex: number) {
