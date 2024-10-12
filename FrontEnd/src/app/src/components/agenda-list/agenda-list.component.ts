@@ -8,6 +8,8 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {Appointment} from "../models";
 import {Router} from "@angular/router";
+import {ErrorDialogComponent} from "../dialog/error-dialog/error-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-agenda-list',
@@ -42,7 +44,7 @@ export class AgendaListComponent {
   @Input() selectedActivities = signal<string[]>([]);
   @Input() appointmentList = signal<Appointment[]>([]);
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private dialog: MatDialog) {
 
   }
 
@@ -59,6 +61,12 @@ export class AgendaListComponent {
   open_appointment($event: Event, appointment: Appointment) {
     $event.stopPropagation();
     $event.preventDefault();
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        message: 'No se encontró la cita. Es posible que haya sido eliminada.',
+      },
+      disableClose: true
+    })
     alert(`opening appointment id: ${appointment.id}`);
   }
 
