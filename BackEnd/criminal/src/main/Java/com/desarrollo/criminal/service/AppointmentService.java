@@ -7,6 +7,7 @@ import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
+import com.desarrollo.criminal.entity.user.UserXAnnouncement;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.AppointmentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -265,14 +266,15 @@ public class AppointmentService {
             throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
         }
         appointment.getParticipants().add(user);
-        user.getAppointments().add(appointment);
+        user.getUserXAnnouncements().add(new UserXAnnouncement(appointment, user));
         appointmentRepository.save(appointment);
         userService.save(user);
         return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 
-    //TODO adaptar a la nueva estructura de la base de datos
+
+
     public ResponseEntity<?> removeParticipant(Long appointmentId, Long userId) {
         Appointment appointment = this.getAppointmentById(appointmentId);
         User user = userService.getUserById(userId);
@@ -280,9 +282,33 @@ public class AppointmentService {
             throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
         }
         appointment.getParticipants().remove(user);
-        user.getAppointments().remove(appointment);
+        this.deleteUserXAnnouncement(appointment, user);
         appointmentRepository.save(appointment);
         userService.save(user);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<?> addParticipantAttendance(Long appointmentId, Long userId) {
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserById(userId);
+
+        if (!appointment.getParticipants().contains(user)) {
+            throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
+        }
+
+        user.getUserXAnnouncements().stream()
+                .filter(userXAnnouncement -> userXAnnouncement.getAppointment().equals(appointment))
+                .findFirst()
+                .ifPresent(userXAnnouncement -> userXAnnouncement.setPresent(true));
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    private void deleteUserXAnnouncement(Appointment appointment, User user) {
+        UserXAnnouncement userXAnnouncement = user.getUserXAnnouncements().stream()
+                .filter(userXAnnouncement1 -> userXAnnouncement1.getAppointment().equals(appointment))
+                .findFirst()
+                .orElseThrow(() -> new CriminalCrossException("USER_X_ANNOUNCEMENT_NOT_FOUND", "UserXAnnouncement not found"));
+        user.getUserXAnnouncements().remove(userXAnnouncement);
     }
 }

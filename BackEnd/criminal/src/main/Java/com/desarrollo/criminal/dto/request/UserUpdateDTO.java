@@ -19,5 +19,5 @@ public record UserUpdateDTO(
 
         String phone,
 
-        Role role) {
+        String role) {
 }

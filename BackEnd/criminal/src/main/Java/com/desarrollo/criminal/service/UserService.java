@@ -113,7 +113,12 @@ public class UserService {
             user.setPhone(userUpdateDTO.phone());
         }
         if(Optional.ofNullable(userUpdateDTO.role()).isPresent()) {
-            user.setRole(userUpdateDTO.role());
+            if (userUpdateDTO.role() == "ADMIN") {
+                user.setRole(Role.ADMIN);
+            }
+            if (userUpdateDTO.role() == "CLIENT") {
+                user.setRole(Role.CLIENT);
+            }
         }
 
         userRepository.save(user);
