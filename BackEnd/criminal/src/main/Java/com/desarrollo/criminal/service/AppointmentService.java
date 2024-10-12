@@ -326,7 +326,7 @@ public class AppointmentService {
 
         userService.save(user);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(user.getUserXAppointments().stream().filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment)).findFirst().get().getAttendance());
     }
 
 }
