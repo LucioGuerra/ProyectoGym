@@ -10,6 +10,7 @@ export class AuthService {
   private auth0Client: auth0.WebAuth;
   isAuthenticated = signal<boolean>(false);
   isAdmin = signal<boolean>(false);
+  userInfo = signal<any>(null);
 
   constructor() {
     this.auth0Client = new auth0.WebAuth({
@@ -19,7 +20,7 @@ export class AuthService {
       responseType: 'token id_token',
       cookieDomain: "."
     })
-    //this.loadSession();
+    this.loadSession();
   }
 
   public login(email: string | undefined, password: string | undefined): void {
@@ -60,7 +61,7 @@ export class AuthService {
         const accessToken = urlParams.get("access_token");
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
-
+        console.log("accessToken: ", accessToken, "expiresIn: ", expiresIn, "idToken: ", idToken);
         this.setSession(accessToken, expiresIn, idToken);
       } catch (error) {
         console.error(error);
@@ -69,12 +70,14 @@ export class AuthService {
   }
 
   private setSession(accessToken: any, expiresIn: any, idToken: any): void {
+    const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
     localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('expires_at', expiresIn);
+    localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('idToken', idToken);
 
     this.isAuthenticated.set(true);
     this.setRole(idToken);
+    this.setUserInfo(idToken);
   }
 
   public logout(): void {
@@ -109,21 +112,32 @@ export class AuthService {
     }
   }
 
-  /*private loadSession() {
+  public setUserInfo(idToken: any) {
+    console.log("Entra a setUserInfo: ", jwtDecode(idToken));
+    this.userInfo.set(jwtDecode(idToken));
+  }
+
+  private loadSession() {
     const accessToken = localStorage.getItem('access_token');
     const expiresAt = localStorage.getItem('expires_at');
     const idToken = localStorage.getItem('idToken');
 
     if (accessToken && expiresAt && idToken) {
-      //const expiresAtDate = new Date(parseInt(expiresAt));
-      //const currentDate = new Date();
+      const expiresAtDate = new Date(parseInt(expiresAt!));
+      const currentDate = new Date();
 
-      //if (currentDate < expiresAtDate) {
+      if (currentDate < expiresAtDate) {
         this.isAuthenticated.set(true);
         this.setRole(idToken);
-      //} else {
-        //this.logout();
-      //}
+        this.setUserInfo(idToken);
+        console.log('Sesión restaurada con éxito.');
+      } else {
+        console.log('La sesión ha expirado, deslogueando...');
+        this.logout();
+      }
+    } else {
+      console.log('No hay sesión activa almacenada.');
+      console.log('Deslogueando...');
     }
-  }*/
+  }
 }
