@@ -9,7 +9,8 @@ import {MatProgressBar} from "@angular/material/progress-bar";
 import {Appointment} from "../models";
 import {Router} from "@angular/router";
 import {ErrorDialogComponent} from "../dialog/error-dialog/error-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {AppointmentInfoDialogComponent} from "../appointment-info-dialog/appointment-info-dialog.component";
 
 @Component({
   selector: 'app-agenda-list',
@@ -61,13 +62,14 @@ export class AgendaListComponent {
   open_appointment($event: Event, appointment: Appointment) {
     $event.stopPropagation();
     $event.preventDefault();
-    this.dialog.open(ErrorDialogComponent, {
-      data: {
-        message: 'No se encontró la cita. Es posible que haya sido eliminada.',
-      },
-      disableClose: true
-    })
-    alert(`opening appointment id: ${appointment.id}`);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '90%';
+    dialogConfig.maxWidth = '1400px';
+    dialogConfig.height = '80%';
+    dialogConfig.data = { id: appointment.id };
+    dialogConfig.panelClass = 'custom-dialog';
+    this.dialog.open(AppointmentInfoDialogComponent, dialogConfig);
   }
 
   edit_appointment($event: Event, appointmentID: number) {

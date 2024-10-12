@@ -14,6 +14,8 @@ export interface AppointmentUser {
   id: number,
   firstName: string,
   lastName: string,
+  attended: boolean,
+  picture: string,
 }
 
 export interface AppointmentList {

@@ -11,9 +11,11 @@
               >
               <h1 class="datepicker-title">Select date</h1>
               <button mat-icon-button (click)="goBackDate($event)">
-                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_left</mat-icon></button>
+                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_left</mat-icon>
+              </button>
               <button mat-icon-button (click)="gofurtherDate($event)">
-                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_right</mat-icon></button>
+                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_right</mat-icon>
+              </button>
             </div>
             <mat-divider></mat-divider>
             <mat-form-field>
@@ -68,10 +70,12 @@
           <div class="agenda">
             <mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="onTabChange($event)">
               <mat-tab>
-                <ng-template mat-tab-label style="display: flex; flex-direction: row; align-content: center; justify-content: center; ">
+                <ng-template mat-tab-label
+                             style="display: flex; flex-direction: row; align-content: center; justify-content: center; ">
 
-                  <div style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
-                  <mat-icon class="example-tab-icon" style="margin-right: 10px">fitness_center</mat-icon>
+                  <div
+                    style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
+                    <mat-icon class="example-tab-icon" style="margin-right: 10px">fitness_center</mat-icon>
                     <p style="margin: 0; align-content: center; justify-content: center">Gym agenda</p>
                   </div>
                 </ng-template>
@@ -99,11 +103,10 @@
                 <app-agenda-list [appointmentList]="appointmentList" [selectedActivities]="selectedActivities"/>
               </mat-tab>
               <mat-tab>
-                <ng-template mat-tab-label style="display: flex; flex-direction: row; align-content: center; justify-content: center">
+                <ng-template mat-tab-label
+                             style="display: flex; flex-direction: row; align-content: center; justify-content: center">
                   <div style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
-                  <span class="material-symbols-outlined" style="margin-right: 10px">
-rheumatology
-</span>
+                    <span class="material-symbols-outlined" style="margin-right: 10px">rheumatology</span>
                     <p style="margin: 0; align-content: center; justify-content: center">Kinesiology agenda</p>
                   </div>
                 </ng-template>

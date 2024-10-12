@@ -1,0 +1,157 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 1400px;
+  --mat-dialog-with-actions-content-padding: 0 50px;
+}
+
+mat-dialog-content {
+  padding: 0 20px;
+}
+
+::ng-deep mat-dialog-content, ::ng-deep mat-dialog-container {
+  padding: 0;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+::ng-deep mat-dialog-content::-webkit-scrollbar, , ::ng-deep mat-dialog-container::-webkit-scrollbar {
+  display: none;
+}
+
+::ng-deep mat-dialog-content {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+
+  /* Ocultar barra de desplazamiento para navegadores basados en WebKit (Chrome, Safari, Opera, Edge basado en Chromium) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Microsoft Edge (si WebKit no funciona en tu caso específico) */
+  -ms-overflow-style: none;  /* IE and Edge */
+
+  /* Para asegurarse de que en Edge clásico también se oculte */
+  &::-webkit-scrollbar-track-piece {
+    width: 0;
+    display: none;
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 0;
+  p {
+    font-size: 1.2rem;
+    margin: 10px 0 0 0;
+  }
+}
+
+.info-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0 0;
+}
+
+.participants-section {
+  margin-top: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.participants-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.participants-grid {
+  margin-top: 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.2rem;
+}
+
+.participant-card {
+  cursor: pointer;
+}
+
+::ng-deep mat-card {
+  transition: all 0.3s ease; /* Suaviza las transiciones */
+  cursor: pointer; /* El cursor será el de un botón */
+
+}
+
+::ng-deep .mat-mdc-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra en hover */
+  transform: translateY(-2px); /* Eleva la tarjeta ligeramente */
+  --mdc-outlined-card-container-color: rgba(102, 100, 94, 0.5) /* Cambia ligeramente el color de fondo */
+}
+
+.participant-content {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.img {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.participant-photo {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  /*margin-bottom: 0.5rem;*/
+  /*margin-right: 1.2rem;*/
+}
+
+.participant-info {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.participant-name {
+  font-weight: 500;
+  margin: 0 0 0.2rem 0;
+}
+
+.attendance-icon-container {
+  height: 100%;
+  /*margin-left: 1.2rem;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendance-icon.attended {
+  color: #4caf50;
+}
+
+.attendance-icon.not-attended {
+  color: #f44336;
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
