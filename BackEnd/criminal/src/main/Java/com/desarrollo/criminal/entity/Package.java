@@ -1,15 +1,18 @@
 package com.desarrollo.criminal.entity;
 
 import com.desarrollo.criminal.entity.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+@Setter
 @Getter
 @Entity
 public class Package {
@@ -27,7 +30,10 @@ public class Package {
     private LocalDate expirationDate;
 
     @Column(nullable = false)
-    private Integer credits;
+    private Boolean active;
+
+    @Column(nullable = false)
+    private Float price;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -35,15 +41,12 @@ public class Package {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "package_activity",
-            joinColumns = @JoinColumn(name = "package_id"),
-            inverseJoinColumns = @JoinColumn(name = "activity_id")
-    )
-    private Set<Activity> activities;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "package_id")
+    @JsonBackReference
+    private Set<PackageActivity> packageActivities;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -51,10 +54,11 @@ public class Package {
 
     }
 
-    public Package(String name, String description){
+    public Package(String name, String description) {
         this.name = name;
         this.description = description;
-        this.activities = new HashSet<>();
+        this.expirationDate = LocalDate.now().plusDays(31);
+        this.active = true;
     }
 
     @PrePersist

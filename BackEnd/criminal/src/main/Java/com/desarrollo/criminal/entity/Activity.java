@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,9 @@ public class Activity {
 
     @Column(nullable = false)
     private Float price;
+
+    @Column(nullable = false)
+    private Boolean softDelete = false;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

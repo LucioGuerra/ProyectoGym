@@ -1,10 +1,9 @@
 package com.desarrollo.criminal.repository;
 
+import com.desarrollo.criminal.entity.PackageActivity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.desarrollo.criminal.entity.Announcement;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AnnouncementRepository extends JpaRepository<Announcement, Long>{
-
+public interface PackageActivityRepository extends JpaRepository<PackageActivity, Long> {
 }
