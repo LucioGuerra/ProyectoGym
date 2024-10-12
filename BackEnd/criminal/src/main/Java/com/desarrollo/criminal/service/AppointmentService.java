@@ -70,8 +70,8 @@ public class AppointmentService {
 
     @Transactional
     public ResponseEntity<?> createAppointment(AppointmentDTO appointmentDTO) {
-
-        Integer appointmentsCreated = 0;
+        long recurrenceId = 0;
+        int appointmentsCreated = 0;
 
         if (appointmentDTO.getStartTime().isAfter(appointmentDTO.getEndTime())) {
             throw new CriminalCrossException("INVALID_TIME_RANGE", "The start time must be before the end time");
@@ -86,20 +86,38 @@ public class AppointmentService {
         Optional<User> instructorOptional = Optional.ofNullable(appointmentDTO.getInstructorID())
                 .map(userService::getUserById);
 
-        Appointment appointment = new Appointment();
-        appointment.setDate(appointmentDTO.getDate());
-        appointment.setStartTime(appointmentDTO.getStartTime());
-        appointment.setEndTime(appointmentDTO.getEndTime());
-        appointment.setActivity(activity);
-        appointment.setMax_capacity(appointmentDTO.getMax_capacity());
-        if (instructorOptional.isPresent()) {
-            appointment.setInstructor(instructorOptional.get());
+
+        if (!appointmentDTO.getAppointmentWeekDays().isEmpty() && appointmentDTO.getAppointmentWeekDays().contains(appointmentDTO.getDate().getDayOfWeek())) {
+            Appointment appointment = new Appointment();
+            appointment.setDate(appointmentDTO.getDate());
+            appointment.setStartTime(appointmentDTO.getStartTime());
+            appointment.setEndTime(appointmentDTO.getEndTime());
+            appointment.setActivity(activity);
+            appointment.setMax_capacity(appointmentDTO.getMax_capacity());
+            if (instructorOptional.isPresent()) {
+                appointment.setInstructor(instructorOptional.get());
+            }
+            appointment = appointmentRepository.save(appointment);
+            recurrenceId = appointment.getId();
+            appointment.setRecurrenceId(recurrenceId);
+            appointmentRepository.save(appointment);
+            appointmentsCreated++;
+        } else if(appointmentDTO.getAppointmentWeekDays().isEmpty()){
+            Appointment appointment = new Appointment();
+            appointment.setDate(appointmentDTO.getDate());
+            appointment.setStartTime(appointmentDTO.getStartTime());
+            appointment.setEndTime(appointmentDTO.getEndTime());
+            appointment.setActivity(activity);
+            appointment.setMax_capacity(appointmentDTO.getMax_capacity());
+            if (instructorOptional.isPresent()) {
+                appointment.setInstructor(instructorOptional.get());
+            }
+            appointment = appointmentRepository.save(appointment);
+            recurrenceId = appointment.getId();
+            appointment.setRecurrenceId(recurrenceId);
+            appointmentRepository.save(appointment);
+            appointmentsCreated++;
         }
-        appointment = appointmentRepository.save(appointment);
-        Long recurrenceId = appointment.getId();
-        appointment.setRecurrenceId(recurrenceId);
-        appointmentRepository.save(appointment);
-        appointmentsCreated++;
 
         if (!appointmentDTO.getAppointmentWeekDays().isEmpty() && appointmentDTO.getEndDate().isAfter(appointmentDTO.getDate())) {
 
@@ -108,7 +126,7 @@ public class AppointmentService {
             while (appointmentDate.isBefore(appointmentDTO.getEndDate().plusDays(1))) {
                 if (appointmentDTO.getAppointmentWeekDays().contains(appointmentDate.getDayOfWeek())) {
 
-                    appointment = new Appointment();
+                    Appointment appointment = new Appointment();
                     appointment.setDate(appointmentDate);
                     appointment.setStartTime(appointmentDTO.getStartTime());
                     appointment.setEndTime(appointmentDTO.getEndTime());
@@ -117,8 +135,15 @@ public class AppointmentService {
                         appointment.setInstructor(instructorOptional.get());
                     }
                     appointment.setMax_capacity(appointmentDTO.getMax_capacity());
-                    appointment.setRecurrenceId(recurrenceId);
-                    appointmentRepository.save(appointment);
+                    if(recurrenceId == 0){
+                        Appointment firstAppointment = appointmentRepository.save(appointment);
+                        recurrenceId = firstAppointment.getId();
+                        firstAppointment.setRecurrenceId(recurrenceId);
+                        appointmentRepository.save(firstAppointment);
+                    }else {
+                        appointment.setRecurrenceId(recurrenceId);
+                        appointmentRepository.save(appointment);
+                    }
                     appointmentsCreated++;
 
                 }
@@ -266,7 +291,6 @@ public class AppointmentService {
     }
 
 
-
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
         Appointment appointment = this.getAppointmentById(id);
         return ResponseEntity.status(HttpStatus.OK).body(convertAppointmentToDTO(appointment));
@@ -276,7 +300,7 @@ public class AppointmentService {
         AppointmentResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentResponseDTO.class);
         responseAppointmentDTO.setActivity(appointment.getActivity().getName());
         responseAppointmentDTO.setDate(appointment.getDate().atTime(appointment.getStartTime()));
-        if(Optional.ofNullable(appointment.getInstructor()).isPresent()) {
+        if (Optional.ofNullable(appointment.getInstructor()).isPresent()) {
             responseAppointmentDTO.setInstructor(appointment.getInstructor().getFirstName() + " " + appointment.getInstructor().getLastName());
         }
 
@@ -363,6 +387,29 @@ public class AppointmentService {
         Activity activity = activityService.getKinesiologyActivity();
 
         if (!kinesiologyAppointmentDTO.getAppointmentWeekDays().isEmpty() && kinesiologyAppointmentDTO.getAppointmentWeekDays().contains(kinesiologyAppointmentDTO.getDate().getDayOfWeek())) {
+            Appointment appointment = new Appointment();
+            appointment.setDate(kinesiologyAppointmentDTO.getDate());
+            appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
+            appointment.setEndTime(kinesiologyAppointmentDTO.getEndTime());
+            appointment.setActivity(activity);
+            appointment.setMax_capacity(1);
+            Appointment firstAppointment = appointmentRepository.save(appointment);
+            firstAppointmentId = firstAppointment.getId();
+            firstAppointment.setRecurrenceId(firstAppointmentId);
+            appointmentRepository.save(firstAppointment);
+            appointmentsCreated++;
+            for (int i = 1; i < kinesiologyAppointmentDTO.getAppointmentQuantity(); i++) {
+                appointment = new Appointment();
+                appointment.setDate(kinesiologyAppointmentDTO.getDate());
+                appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
+                appointment.setEndTime(kinesiologyAppointmentDTO.getEndTime());
+                appointment.setActivity(activity);
+                appointment.setMax_capacity(1);
+                appointment.setRecurrenceId(firstAppointmentId);
+                appointmentRepository.save(appointment);
+                appointmentsCreated++;
+            }
+        } else if (kinesiologyAppointmentDTO.getAppointmentWeekDays().isEmpty()) {
             Appointment appointment = new Appointment();
             appointment.setDate(kinesiologyAppointmentDTO.getDate());
             appointment.setStartTime(kinesiologyAppointmentDTO.getStartTime());
