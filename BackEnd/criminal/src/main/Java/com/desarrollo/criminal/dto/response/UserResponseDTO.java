@@ -1,15 +1,12 @@
-package com.desarrollo.criminal.dto.reponse;
+package com.desarrollo.criminal.dto.response;
 
 
 import com.desarrollo.criminal.entity.user.Role;
-import com.desarrollo.criminal.entity.Package;
-import com.desarrollo.criminal.entity.routine.Routine;
-import com.desarrollo.criminal.entity.tracking.Tracking;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 
+import java.net.URL;
 
 
 @Setter
@@ -30,12 +27,12 @@ public class UserResponseDTO {
     private Role role;
 
     private String phone;
+
+    private URL picture;
     
-    private Routine routine;
+    private Long routineId;
 
-    private Package aPackage;
-
-    private List<Tracking> trackings;
+    private Long aPackageId;
 
 
     private UserResponseDTO(){}

@@ -1,15 +1,16 @@
 package com.desarrollo.criminal.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Getter
 @Setter
-public class AppointmentResponseDTO {
+@AllArgsConstructor
+public class GetUserAppointmentDTO {
     private Long id;
 
     private LocalDate date;
@@ -20,14 +21,12 @@ public class AppointmentResponseDTO {
 
     private String activity;
 
-    private String instructor;
-
-    private Long max_capacity;
+    private Integer max_capacity;
 
     private Integer participantsCount;
 
-    private List<AppointmentUserDTO> participants;
+    private Boolean attendance;
 
-    private AppointmentResponseDTO() {}
-
+    private GetUserAppointmentDTO() {
+    }
 }

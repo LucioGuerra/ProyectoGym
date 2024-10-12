@@ -1,13 +1,12 @@
 export interface UserModel {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: Role;
-  phone: number;
-  password: string;
-  dni: number;
-  //photo: blob;
+    id: number;
+    firstName: String;
+    lastName: String;
+    email: String;
+    role: Role;
+    phone: String;
+    dni: String;
+    picture: URL;
 }
 
 export enum Role {

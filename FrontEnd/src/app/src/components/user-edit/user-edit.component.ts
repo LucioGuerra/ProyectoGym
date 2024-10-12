@@ -45,9 +45,9 @@ export class UserEditComponent {
       lastName: 'Apellido',
       email: 'nombreapellido@gmail.com',
       role: Role.ADMIN,
-      phone: 2211234567,
-      password: '',
-      dni: 1234567,
+      phone: '2262369000',
+      dni: '12093847',
+      picture: new URL('https://cdn.pixabay.com/photo')
     };
 
     this.form = this.fb.group({
@@ -60,6 +60,7 @@ export class UserEditComponent {
       phone: [this.userModel.phone, Validators.required]
     });
   }
+
 
   homePage() {
     this.router.navigate(['/home']);

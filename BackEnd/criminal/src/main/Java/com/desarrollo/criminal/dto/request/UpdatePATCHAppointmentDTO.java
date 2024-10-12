@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Setter
 public class UpdatePATCHAppointmentDTO {
 
-    @FutureOrPresent(message = "The date must be in the present or future")
+    @FutureOrPresent(message = "The date must be in the attendance or future")
     private LocalDate date;
 
     private LocalTime startTime;
