@@ -14,12 +14,12 @@ import {AuthService} from "../services/services/auth.service";
 import {User} from "@auth0/auth0-angular";
 import { signal } from "@angular/core";
 import { UserModel } from "../models";
-import {TitleCasePipe} from "@angular/common";
+import {NgIf, TitleCasePipe} from "@angular/common";
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader, MatCardContent, MatError, MatInput, MatFormField, MatLabel, TitleCasePipe],
+  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader, MatCardContent, MatError, MatInput, MatFormField, MatLabel, TitleCasePipe, NgIf],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,11 +27,12 @@ import {TitleCasePipe} from "@angular/common";
 
 export class UserEditComponent {
   roles = Object.values(Role);
-  userImage: string | undefined;
   form: FormGroup;
+  authenticated = false;
   matcher = new ErrorStateMatcher();
   user = signal<User>({});
   userModel: UserModel;
+  isHovering = false;
 
   constructor(public auth: AuthService, private router: Router, private fb: FormBuilder) {
     console.log("user info: ", this.auth.userInfo());
@@ -94,4 +95,14 @@ export class UserEditComponent {
     }
 
   }
+
+  changePicture(){
+    alert("Insert the new picture");
+  }
+
+  showText(isHovering: boolean) {
+    this.isHovering = isHovering;
+  }
+
+  protected readonly Role = Role;
 }

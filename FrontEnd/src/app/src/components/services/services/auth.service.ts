@@ -40,6 +40,7 @@ export class AuthService {
       email: email,
       password: password,
       connection: environment.auth0.database,
+      audience: environment.auth0.audience
     }, (err: any, result: any) => {
       if (err) {
         console.error('Error al registrar:', err);
