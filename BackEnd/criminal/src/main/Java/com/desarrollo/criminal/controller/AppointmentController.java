@@ -74,6 +74,11 @@ public class AppointmentController {
         return appointmentService.addParticipant(appointmentId, userId);
     }
 
+    @PostMapping("/{appointmentId}/user/{userId}/attendance")
+    public ResponseEntity<?> switchParticipantAttendance(@PathVariable Long appointmentId, @PathVariable Long userId) {
+        return appointmentService.switchParticipantAttendance(appointmentId, userId);
+    }
+
     @DeleteMapping("/{appointmentId}/user/{userId}")
     public ResponseEntity<?> removeParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
         return appointmentService.removeParticipant(appointmentId, userId);

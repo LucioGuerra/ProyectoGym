@@ -2,14 +2,12 @@ package com.desarrollo.criminal.controller;
 
 import java.util.List;
 
+import com.desarrollo.criminal.dto.request.PackageDTO;
+import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
+import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.service.PackageService;
@@ -18,27 +16,33 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/packages")
+@RequestMapping("/api/public/packages")
 public class PackageController {
     private final PackageService packageService;
 
     @PostMapping
-    public ResponseEntity<Package> createPackage(@RequestBody Package aPackage){
+    public ResponseEntity<Package> createPackage(@RequestBody PackageDTO aPackage){
         return packageService.createPackage(aPackage);
     }
 
     @GetMapping
-    public ResponseEntity<List<Package>> getAllPackage(){
-        return packageService.getAllPackage();
+    public ResponseEntity<List<GetPackageDTO>> getAllPackage(){
+        return packageService.getAllPackages();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Package> getPackageById(@RequestParam Long id){
+    public ResponseEntity<GetPackageDTO> getPackageById(@PathVariable Long id){
         return packageService.getPackageById(id);
     }
 
-    @PutMapping
-    public ResponseEntity<Package> updatePackage(@RequestParam Long id, @RequestBody Package aPackage){
+    @PatchMapping("/{id}")
+    public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody UpdatePackageDTO aPackage){
         return packageService.updatePackage(id, aPackage);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Package> deletePackage(){
+        packageService.deleteExpiredPackages();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

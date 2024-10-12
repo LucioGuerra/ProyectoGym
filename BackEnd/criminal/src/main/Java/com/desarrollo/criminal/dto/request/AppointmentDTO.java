@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class AppointmentDTO {
     @NotNull(message = "The date is required")
-    @FutureOrPresent(message = "The date must be in the present or future")
+    @FutureOrPresent(message = "The date must be in the attendance or future")
     private LocalDate date;
 
     @NotNull(message = "The start time is required")
@@ -38,7 +38,7 @@ public class AppointmentDTO {
     private List<DayOfWeek> appointmentWeekDays;
 
     @NotNull(message = "The start date is required")
-    @FutureOrPresent(message = "The date must be in the present or future")
+    @FutureOrPresent(message = "The date must be in the attendance or future")
     private LocalDate endDate;
 
     private AppointmentDTO() {}
