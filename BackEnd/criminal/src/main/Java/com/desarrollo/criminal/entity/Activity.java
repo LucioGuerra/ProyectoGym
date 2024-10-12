@@ -25,6 +25,9 @@ public class Activity {
     @Column(nullable = false)
     private Float price;
 
+    @Column(nullable = false)
+    private Boolean softDelete = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

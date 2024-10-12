@@ -1,6 +1,8 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.ActivityDTO;
+import com.desarrollo.criminal.dto.request.ActivityUpdateDTO;
+import com.desarrollo.criminal.dto.response.GetActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.repository.ActivityRepository;
 
@@ -23,13 +25,23 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ModelMapper modelMapper;
 
-    public ResponseEntity<List<Activity>> getAllActivities() {
-        List<Activity> activities = activityRepository.findAll();
-        return ResponseEntity.ok(activities);
+    public ResponseEntity<List<GetActivityDTO>> getAllActivities() {
+        List<Activity> activities = activityRepository.findAllNotDeleted();
+        return ResponseEntity.status(HttpStatus.OK).body(activities.stream().map(activity -> modelMapper.map(activity,
+                GetActivityDTO.class)).toList());
     }
 
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity not found"));
+        return activityRepository.findByIdAndNotDeleted(id).orElseThrow(() -> new EntityNotFoundException("activity " +
+                "not found " +
+                "with: " + id));
+    }
+
+    public ResponseEntity<GetActivityDTO> getAcitivityDTOById(Long id) {
+        Activity activity = activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity " +
+                "not found with: " + id));
+
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(activity, GetActivityDTO.class));
     }
 
     public ResponseEntity<Activity> createActivity(ActivityDTO activityDTO) {
@@ -37,7 +49,31 @@ public class ActivityService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public Set<Activity> getActivitiesByIds(List<Long> ids) {
-        return activityRepository.findAllById(ids);
+    public ResponseEntity<Activity> updateActivity(ActivityUpdateDTO activityDTO, Long id) {
+        Activity activity =
+                activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity" +
+                        " " +
+                "not found with: " + id));
+
+        if (Optional.ofNullable(activityDTO.getName()).isPresent()) {
+            activity.setName(activityDTO.getName());
+        }
+        if (Optional.ofNullable(activityDTO.getDescription()).isPresent()) {
+            activity.setDescription(activityDTO.getDescription());
+        }
+        if (activityDTO.getPrice() != 0) {
+            activity.setPrice(activityDTO.getPrice());
+        }
+        activityRepository.save(activity);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<?> deleteActivity(Long id) {
+        Activity activity = activityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("activity " +
+                "not found with: " + id));
+        activity.setSoftDelete(true);
+        activityRepository.save(activity);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

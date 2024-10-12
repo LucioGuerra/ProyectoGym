@@ -1,6 +1,8 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.ActivityDTO;
+import com.desarrollo.criminal.dto.request.ActivityUpdateDTO;
+import com.desarrollo.criminal.dto.response.GetActivityDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.ActivityService;
@@ -22,28 +24,27 @@ public class ActivityController {
     private final ActivityService activityService;
 
     @GetMapping
-    public  ResponseEntity<List<Activity>> getAllActivities(){
+    public  ResponseEntity<List<GetActivityDTO>> getAllActivities(){
         return activityService.getAllActivities();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
-            Activity activity = activityService.getActivityById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(activity);
+    public ResponseEntity<GetActivityDTO> getActivityById(@PathVariable Long id) {
+        return activityService.getAcitivityDTOById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Activity> createActivity(@RequestBody ActivityDTO activityDTO) {
+    public ResponseEntity<?> createActivity(@RequestBody ActivityDTO activityDTO) {
         return activityService.createActivity(activityDTO);
     }
-/*
-    @PatchMapping
-    public ResponseEntity<Activity> updateActivity(@RequestBody ActivityDTO activityDTO) {
-        return activityService.updateActivity(activityDTO);
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateActivity(@RequestBody ActivityUpdateDTO activityDTO, @PathVariable Long id) {
+        return activityService.updateActivity(activityDTO, id);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Activity> deleteActivity(@RequestBody ActivityDTO activityDTO) {
-        return activityService.deleteActivity(activityDTO);
-    }*/
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteActivity (@PathVariable Long id) {
+        return activityService.deleteActivity(id);
+    }
 }
