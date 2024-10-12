@@ -2,20 +2,18 @@ package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
-import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.UserResponseDTO;
+import com.desarrollo.criminal.entity.user.UserXAppointment;
 import com.desarrollo.criminal.exception.CriminalCrossException;
-import com.desarrollo.criminal.repository.PackageRepository;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,7 +127,10 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
-        List<AppointmentListResponseDTO> appointmentsDTO = user.getAppointments().stream()
+        List<Appointment> appointments = user.getUserXAppointments().stream()
+                .map(UserXAppointment::getAppointment).toList();
+
+        List<AppointmentListResponseDTO> appointmentsDTO = appointments.stream()
                 .map(appointment -> {
                     AppointmentListResponseDTO responseAppointmentDTO = modelMapper.map(appointment, AppointmentListResponseDTO.class);
                     responseAppointmentDTO.setActivity(appointment.getActivity().getName());

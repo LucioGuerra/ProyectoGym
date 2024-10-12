@@ -1,8 +1,6 @@
 package com.desarrollo.criminal.entity.user;
 
-import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
-import com.desarrollo.criminal.entity.Package;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class UserXAnnouncement {
+public class UserXAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,11 +21,14 @@ public class UserXAnnouncement {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Boolean present;
+    private Boolean attendance;
 
-    public UserXAnnouncement(Appointment appointment, User user) {
+    private UserXAppointment() {
+    }
+
+    public UserXAppointment(Appointment appointment, User user) {
         this.appointment = appointment;
         this.user = user;
-        this.present = false;
+        this.attendance = false;
     }
 }

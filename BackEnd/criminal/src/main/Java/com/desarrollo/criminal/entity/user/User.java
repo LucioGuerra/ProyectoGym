@@ -1,8 +1,6 @@
 package com.desarrollo.criminal.entity.user;
 
-import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.Package;
-import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.routine.Routine;
 import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -11,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,11 +59,11 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonBackReference
-    private Set<UserXAnnouncement> userXAnnouncements;
+    private Set<UserXAppointment> userXAppointments;
 
     private User(){
         aPackage = new ArrayList<>();
-        userXAnnouncements = new HashSet<>();
+        userXAppointments = new HashSet<>();
     }
 
     public void deletePackage(){

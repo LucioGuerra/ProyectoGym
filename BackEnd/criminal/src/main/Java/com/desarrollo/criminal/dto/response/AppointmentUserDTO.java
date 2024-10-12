@@ -15,6 +15,8 @@ public class AppointmentUserDTO {
 
     private String lastName;
 
+    private Boolean attendance;
+
     public AppointmentUserDTO() {}
 
 }
