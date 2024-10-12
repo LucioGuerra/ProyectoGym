@@ -42,7 +42,7 @@ public class PackageController {
 
     @DeleteMapping
     public ResponseEntity<Package> deletePackage(){
-        //packageService.deleteExpiredPackages();
+        packageService.deleteExpiredPackages();
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

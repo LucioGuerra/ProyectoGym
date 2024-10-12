@@ -9,6 +9,7 @@ import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.UserResponseDTO;
+import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.PackageRepository;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -62,9 +63,25 @@ public class UserService {
                 new EntityNotFoundException("User not found with id: " + id));
 
         List<GetPackageDTO> packagesDTO = user.getAPackage().stream()
-                .map(aPackage -> modelMapper.map(aPackage, GetPackageDTO.class)).toList();
+                .map(aPackage -> {
+                    GetPackageDTO dto = modelMapper.map(aPackage, GetPackageDTO.class);
+                    dto.setCreatedAt(aPackage.getCreatedAt().toLocalDate());
+                    return dto;
+                }).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(packagesDTO);
+    }
+
+    public ResponseEntity<GetPackageDTO> getActivePackage(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
+
+        Package activePackage = user.getAPackage().stream().filter(Package::getActive).findFirst().orElseThrow(() ->
+                new CriminalCrossException("NO_ACTIVE_PACKAGE", "User has no active package"));
+
+        GetPackageDTO packageDTO = modelMapper.map(activePackage, GetPackageDTO.class);
+        packageDTO.setCreatedAt(activePackage.getCreatedAt().toLocalDate());
+        return ResponseEntity.status(HttpStatus.OK).body(packageDTO);
     }
 
     public ResponseEntity<UserResponseDTO> createUser(UserRequestDTO userRequestDTO) {

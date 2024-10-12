@@ -46,6 +46,11 @@ public class UserController {
         return userService.getUserAppointments(id);
     }
 
+    @GetMapping("/package/{id}")
+    public ResponseEntity<GetPackageDTO> getUserPackages(@PathVariable Long id){
+        return userService.getActivePackage(id);
+    }
+
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);

@@ -79,18 +79,6 @@ public class PackageService {
         return ResponseEntity.status(HttpStatus.OK).body(packageDTO);
     }
 
-    public ResponseEntity<List<GetPackageDTO>> getPackageHistoryByUserId(Long id){
-        User user = userService.getUserById(id);
-        List<Package> packages = packageRepository.findByUser(user);
-
-        List<GetPackageDTO> packagesDTO = packages.stream().map(aPackage -> {
-            GetPackageDTO dto = modelMapper.map(aPackage, GetPackageDTO.class);
-            dto.setCreatedAt(aPackage.getCreatedAt().toLocalDate());
-            return dto;
-        }).toList();
-
-        return ResponseEntity.status(HttpStatus.OK).body(packagesDTO);
-    }
 
     public ResponseEntity<Package> updatePackage(Long id, UpdatePackageDTO aPackage){
         Package packageToUpdate = packageRepository.findById(id).orElseThrow(() -> new CriminalCrossException("PACKAGE_NOT_FOUND","Package not found"));
