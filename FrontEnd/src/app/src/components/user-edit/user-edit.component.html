@@ -1,141 +1,130 @@
 <app-drawer>
   <ng-container main-content>
     <span class="mainPage">
+      @if (this.found){
       <mat-card>
+        <form (ngSubmit)="saveChanges()" [formGroup]="form">
         <div class="header">
-        <mat-card-header>
-          <div class="back">
-            <button (click)="homePage()" aria-label="Go back" class="back-btn" mat-icon-button>
-              <mat-icon>chevron_left</mat-icon>
-            </button>
-          </div>
+          <mat-card-header>
+            <div class="back">
+              <button (click)="homePage()" aria-label="Go back" class="back-btn" mat-icon-button>
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+            </div>
 
-          <div class="avatar-container">
-            <div class="user-avatar" (mouseover)="showText(true)" (mouseout)="showText(false)">
-              <img [src]="user().picture!" alt="User Image" class="user-avatar-img" (click)="changePicture()">
+            <div class="avatar-container">
+              <div class="user-avatar" (mouseover)="showText(true)" (mouseout)="showText(false)">
+                <img [src]="this.picture" alt="User Image" class="user-avatar-img" (click)="changePicture()">
 
-              <div class="hover-text" (click)="changePicture()" *ngIf="isHovering">
-                Change Picture
+                <div class="hover-text" (click)="changePicture()" *ngIf="isHovering">
+                  Change Picture
+                </div>
               </div>
             </div>
-          </div>
 
-
-          <div class="role-container">
-            <select [(ngModel)]="userModel.role" class="role-select">
-                @if (user().name) {
-                <option class="option" [value]="Role.ADMIN" (click)="changeRole(Role.ADMIN)">
-                  {{ Role.ADMIN.toString() | titlecase }}
-                </option>
-                <option class="option" [value]="Role.CLIENT" (click)="changeRole(Role.CLIENT)">
-                  {{ Role.CLIENT.toString() | titlecase }}
-                </option>
-                }
-
-            </select>
-          </div>
-        </mat-card-header>
+            <div class="role-container">
+              <select formControlName="role" class="role-select" [value]="userModel.role">
+                  <option class="option" [value]="Role.ADMIN" (click)="changeRole(Role.ADMIN)">
+                    ADMIN
+                  </option>
+                  <option class="option" [value]="Role.CLIENT" (click)="changeRole(Role.CLIENT)">
+                    CLIENT
+                  </option>
+              </select>
+            </div>
+          </mat-card-header>
         </div>
         <mat-divider></mat-divider>
 
         <mat-card-content>
-          <form (ngSubmit)="saveChanges()" [formGroup]="form">
             <div class="userModel-content">
               <div class="row">
                 <div class="input-combo">
-                <mat-form-field appearance="outline" class="custom-text-color">
-                  <mat-label>First Name</mat-label>
-                  <input formControlName="firstName" id="firstName" matInput>
-                </mat-form-field>
+                  <mat-form-field appearance="outline" class="custom-text-color">
+                    <mat-label>First Name</mat-label>
+                    <input formControlName="firstName" id="firstName" matInput>
+                  </mat-form-field>
                 </div>
 
                 <div class="input-combo">
-                <mat-form-field appearance="outline">
-                  <mat-label>Last Name</mat-label>
-                  <input [errorStateMatcher]="matcher" formControlName="lastName" id="lastName"
-                         matInput placeholder="Enter your last name" type="text"/>
-                </mat-form-field>
-                  </div>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Last Name</mat-label>
+                    <input [errorStateMatcher]="matcher" formControlName="lastName" id="lastName"
+                           matInput placeholder="Enter your last name" type="text"/>
+                  </mat-form-field>
+                </div>
               </div>
 
               <div class="row">
                 <div class="input-combo">
                   <mat-form-field appearance="outline">
-                  <mat-label>DNI</mat-label>
-                  <input [errorStateMatcher]="matcher" formControlName="dni" id="dni" matInput
-                         placeholder="Enter your DNI" type="text"/>
-                    @if ("form.get('dni')?.hasError('required') && (form.get('dni')?.touched") {
-                      <mat-error>
-                       DNI is required
-                    </mat-error>
-                    }
-                </mat-form-field>
+                    <mat-label>DNI</mat-label>
+                    <input [errorStateMatcher]="matcher" formControlName="dni" id="dni" matInput
+                           placeholder="Enter your DNI" type="text"/>
+                  </mat-form-field>
                 </div>
 
                 <div class="input-combo" id="email">
-                  @if (user().name) {
                     <mat-form-field appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input [value]="userModel.email" class="email" matInput disabled >
+                      <input value="{{this.email}}" class="email" matInput disabled>
                     </mat-form-field>
-                      }
                 </div>
               </div>
 
-
-              @if (user()?.sub && !user()?.sub?.includes("windows live") &&
-              !user()?.sub?.includes("google") &&
-              !user()?.sub?.includes("facebook")) {
-              <div class="row">
-                <div class="input-combo">
-                <mat-form-field appearance="outline">
-                  <mat-label>Mobile</mat-label>
-                  <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
-
-                  @if ("form.get('phone')?.hasError('required') && (form.get('phone')?.touched || form.get('phone')?.dirty") {
-                    <mat-error>
-                       Mobile is required
-                    </mat-error>
-                  }
-                </mat-form-field>
-                </div>
-
-              <div class="row">
-                <div class="change-password-container">
-                  <button (click)="changePassword()" class="changepassword" color="primary" mat-raised-button>
-                    Change password
-                    <mat-icon class="icon-right">chevron_right</mat-icon>
-                  </button>
-                </div>
-              </div>
-              </div>
-              } @else {
+              <ng-container *ngIf="user()?.sub && !user()?.sub?.includes('windows live') && !user()?.sub?.includes('google') && !user()?.sub?.includes('facebook'); else elseBlock">
                 <div class="row">
-                <div class="input-combo">
-                <mat-form-field appearance="outline">
-                  <mat-label>Mobile</mat-label>
-                  <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
-
-                  @if ("form.get('phone')?.hasError('required') && (form.get('phone')?.touched || form.get('phone')?.dirty") {
-                    <mat-error>
-                       Mobile is required
-                    </mat-error>
-                  }
-                </mat-form-field>
+                  <div class="input-combo">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Phone</mat-label>
+                      <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
+                    </mat-form-field>
+                  </div>
                 </div>
+
+                <div class="row">
+                  <div class="change-password-container">
+                    <button (click)="changePassword()" class="changepassword" color="primary" mat-raised-button>
+                      Change password
+                      <mat-icon class="icon-right">chevron_right</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-template #elseBlock>
+                <div class="row">
+                  <div class="input-combo">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Mobile</mat-label>
+                      <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
+                    </mat-form-field>
+                  </div>
                   <div class="paCompletar"></div>
-              </div>
-              }
+                </div>
+              </ng-template>
 
               <div class="save-container">
                 <button class="custom-button" mat-button type="submit">
                   Save changes
                 </button>
               </div>
-           </div>
-          </form>
+            </div>
         </mat-card-content>
+        </form>
       </mat-card>
+      } @else {
+      <mat-card class="not-found">
+        <button (click)="homePage()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <div>
+          <h4>
+            User not found
+          </h4>
+        </div>
+      </mat-card>
+        }
     </span>
   </ng-container>
 </app-drawer>

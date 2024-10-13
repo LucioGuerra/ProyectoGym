@@ -10,9 +10,8 @@ export const routes: Routes = [
     { path: 'home', component: HomePageComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
-    { path: 'singup', component: SingupComponent },
+    { path: 'signup', component: SingupComponent },
     { path: 'admin/agenda', component: ShifAdminScreenComponent },
-    { path: 'edit', component: UserEditComponent },
-    { path: 'update-announcement/:id', component: UserEditComponent },
+    { path: 'edit/:id', component: UserEditComponent },
     { path: 'admin/users', component: UsersListComponent },
 ];

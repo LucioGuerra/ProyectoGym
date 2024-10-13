@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Role} from '../models';
+import {Role, UserModel} from '../models';
 import {MatIconModule} from '@angular/material/icon';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
@@ -13,8 +13,8 @@ import {MatInput} from '@angular/material/input';
 import {AuthService} from "../services/services/auth.service";
 import {User} from "@auth0/auth0-angular";
 import { signal } from "@angular/core";
-import { UserModel } from "../models";
 import {NgIf, TitleCasePipe} from "@angular/common";
+import {UserService} from "../services/services/user.service";
 
 @Component({
   selector: 'app-user-edit',
@@ -26,75 +26,112 @@ import {NgIf, TitleCasePipe} from "@angular/common";
 })
 
 export class UserEditComponent {
-  roles = Object.values(Role);
-  form: FormGroup;
-  authenticated = false;
-  matcher = new ErrorStateMatcher();
   user = signal<User>({});
-  userModel: UserModel;
+  id: string = '';
+  found = false
+  email: String = '';
+  picture: URL | String = '';
   isHovering = false;
+  form: FormGroup;
+    matcher = new ErrorStateMatcher();
 
-  constructor(public auth: AuthService, private router: Router, private fb: FormBuilder) {
-    console.log("user info: ", this.auth.userInfo());
-    this.user.set(this.auth.userInfo());
+    userModel: UserModel = {
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: Role.CLIENT,
+    phone: '',
+    dni: '',
+    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+  };
+
+  constructor(public auth: AuthService,
+              private router: Router,
+              private userService: UserService ,
+              private route: ActivatedRoute,) {
     console.log(this.user().picture);
 
-    this.userModel = {
-      id: 12345678,
-      firstName: 'Nombre',
-      lastName: 'Apellido',
-      email: 'nombreapellido@gmail.com',
-      role: Role.ADMIN,
-      phone: '2262369000',
-      dni: '12093847',
-      picture: new URL('https://cdn.pixabay.com/photo')
-    };
-
-    this.form = this.fb.group({
-      firstName: [this.userModel.firstName, Validators.required],
-      lastName: [this.userModel.lastName, Validators.required],
-      dni: [this.userModel.dni, [Validators.required,
-        Validators.minLength(7),
-        Validators.maxLength(8)],
-      ],
-      phone: [this.userModel.phone, Validators.required]
+    this.form = new FormGroup({
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      role: new FormControl('', [Validators.required]),
+      picture: new FormControl('', [Validators.required]),
+      dni: new FormControl('', [Validators.required]),
+      phone: new FormControl(''),
     });
   }
 
+  ngOnInit(): void {
+    if (this.auth.isAdmin()) {
+      this.id = this.route.snapshot.paramMap.get('id') || '';
+
+      if (this.id) {
+        this.userService.getUserById(this.id).subscribe({
+          next: (userModel) => {
+            this.form.patchValue(userModel);
+            this.email = userModel.email;
+            this.picture = userModel.picture;
+            this.show();
+            console.log('User found:', this.form.value);
+          }, error: (error) => {
+            console.error('User not found');
+          }
+        });
+      }
+    } else {
+      this.found = true;
+      // Necesito el id del usuario para poder buscarlo en la base de datos.
+      // No lo tengo, asi que esto queda para
+      // cuando se sincronicen los id de los usuarios de Auth0 con los de la base de datos.
+
+      // Lucio tiene que conectar la base de datos con auth0
+      // ademas de asignar el rol default a los usuarios. Asi
+      // comparten id y cuando quiera hacer el update, puedo buscar el usuario por id.
+       }
+  }
 
   homePage() {
     this.router.navigate(['/home']);
   }
 
   changePassword(): void {
-    alert('Changing password!');
+    alert('Changing password');
     this.router.navigate(['/change-password']);
   }
 
   changeRole(selectedRole: Role) {
-    if (this.userModel.role !== selectedRole) {
-      this.userModel.role = selectedRole;
-    }
+      this.form.patchValue({ role: selectedRole });
   }
 
   saveChanges() {
-
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
+      this.form.markAsTouched();
       return;
-    }
-
-    if (this.form.valid) {
-      this.user = {
-        ...this.user,
+    } else if (this.form.valid) {
+      this.userModel = {
+        ...this.userModel,
         ...this.form.value
       };
 
-      alert("changes were successfully saved.")
-      console.log("diccionario del usuario: ");
-      console.dir(this.user);
     }
 
+    this.userService.updateUser(this.userModel).subscribe({
+      next: (updatedUser: UserModel) => {
+        alert('User updated successfully');
+      },
+      error: (error: any) => {
+        console.error('Error updating user:', error);
+      },
+      complete: () => {
+        console.log('Update user completed');
+      }
+    });
+  }
+
+  show() {
+    this.found = true;
   }
 
   changePicture(){

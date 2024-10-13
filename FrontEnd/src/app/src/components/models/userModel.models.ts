@@ -6,7 +6,7 @@ export interface UserModel {
     role: Role;
     phone: String;
     dni: String;
-    picture: URL;
+    picture: URL | String;
 }
 
 export enum Role {
