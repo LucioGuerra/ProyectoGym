@@ -227,8 +227,8 @@ export class CreateAppointmentFormComponent implements OnInit {
     if (this.range.valid) {
       if (this.activities.find(activity => activity.id === this.range.value.activity)?.name === this.kinesiology) {
         const appointmentData: AppointmentRequest = {
-          date: formatDate(start.toISOString(), 'yyyy-MM-dd', 'en-US'),
-          endDate: formatDate(end.toISOString(), 'yyyy-MM-dd', 'en-US'),
+          date: this.appointmentService.dateAdapt(start),
+          endDate: this.appointmentService.dateAdapt(end),
           startTime: this.range.value.startTime,
           endTime: this.range.value.endTime,
           appointmentWeekDays: this.range.value.daysOfWeek,
@@ -248,8 +248,8 @@ export class CreateAppointmentFormComponent implements OnInit {
       } else {
         if (this.range.value.instructor === -1) {
           const appointmentData: AppointmentRequest = {
-            date: formatDate(start.toISOString(), 'yyyy-MM-dd', 'en-US'),
-            endDate: formatDate(end.toISOString(), 'yyyy-MM-dd', 'en-US'),
+            date: this.appointmentService.dateAdapt(start),
+            endDate: this.appointmentService.dateAdapt(end),
             startTime: this.range.value.startTime,
             endTime: this.range.value.endTime,
             activityID: this.range.value.activity,
@@ -268,8 +268,8 @@ export class CreateAppointmentFormComponent implements OnInit {
           );
         } else {
           const appointmentData: AppointmentRequest = {
-            date: formatDate(start.toISOString(), 'yyyy-MM-dd', 'en-US'),
-            endDate: formatDate(end.toISOString(), 'yyyy-MM-dd', 'en-US'),
+            date: this.appointmentService.dateAdapt(start),
+            endDate: this.appointmentService.dateAdapt(end),
             startTime: this.range.value.startTime,
             endTime: this.range.value.endTime,
             activityID: this.range.value.activity,

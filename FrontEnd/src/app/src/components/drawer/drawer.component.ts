@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject, signal} from '@angular/core';
 import { ToolbarComponent } from "../toolbar";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DrawerListComponent } from "./drawer-list/drawer-list.component";
@@ -17,10 +17,15 @@ import { UserProfileComponent } from "../user-profile/user-profile.component";
 })
 export class DrawerComponent {
 
+  anchoPantalla = signal<number>(window.innerWidth);
+  esMovil = signal<boolean>(window.innerWidth <= 768);
+
   events: string[] = [];
   opened: boolean = true;
 
-  constructor(@Inject(DOCUMENT) public document: Document, private auth0: AuthService) {}
+  constructor(@Inject(DOCUMENT) public document: Document, private auth0: AuthService) {
+    window.addEventListener('resize', this.actualizarAnchoPantalla.bind(this));
+  }
 
   menu() {
     alert('menu');
@@ -29,4 +34,13 @@ export class DrawerComponent {
   logout() {
     this.auth0.logout();
   }
+
+  actualizarAnchoPantalla(): void {
+    const nuevoAncho = window.innerWidth;
+    this.anchoPantalla.set(nuevoAncho);
+    this.esMovil.set(nuevoAncho <= 768); // Si el ancho es menor o igual a 768px, lo consideramos móvil
+  }
+
+
+  protected readonly resizeTo = resizeTo;
 }

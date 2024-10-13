@@ -89,7 +89,7 @@ export class ClientAgendaComponent implements OnInit {
 
   loadAppointment(tabIndex: number) {
     if (tabIndex == undefined || tabIndex == 0) {
-      console.log('Cargando citas de fisioterapia');
+      console.log('Cargando citas de todas las actividades');
       this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
         (data: Appointment[]) => {
           console.log('Datos en el componente:', data);

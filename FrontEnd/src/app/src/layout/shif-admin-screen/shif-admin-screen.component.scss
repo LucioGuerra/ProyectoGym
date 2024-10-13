@@ -194,15 +194,22 @@ mat-divider {
 
 @media (max-width: 750px) {
   .main-div {
+    margin: 0;
+    height: 100%;
+    padding-top: 56px;
+    .main-section{
+      height: 100%;
+    }
     .top-section{
       margin: 0;
-
+      height: auto;
+      border-radius: 0;
     }
     .calendar {
       width: 100%;
       flex: 1;
       margin: 0;
-      border-radius: 10px 10px 0 0;
+      border-radius: 0;
       mat-form-field {
         width: 90%;
       }
@@ -212,11 +219,16 @@ mat-divider {
     }
     .botom-section {
       margin: 0;
-
       .agenda {
         width: 100%;
+        flex: 1;
+        height: 100%;
         margin: 0;
-        border-radius: 0 0 10px 10px;
+        border-radius: 0;
+        .agenda-title,
+        .title-section mat-icon{
+          display:none;
+        }
       }
     }
   }

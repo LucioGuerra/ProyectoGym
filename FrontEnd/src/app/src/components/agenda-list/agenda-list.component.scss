@@ -252,8 +252,8 @@
   }
 
   ::ng-deep .mat-column-actions {
-    width: 2% !important;
-    padding-left: 0 !important;
+    width: 1%;
+    padding-left: 0;
   }
 }
 
@@ -268,8 +268,8 @@
   ::ng-deep .mat-column-activity {
     width: 10%;
   }
-  ::ng-deep .mat-column-capacity {
-    width: 100% !important;
+  ::ng-deep .progress-bar-container {
+    display: none !important;
   }
 }
 
@@ -323,6 +323,20 @@
     .user-quantity-text {
       width: auto !important;
     }
+  }
+}
+
+@media(max-width: 500px) {
+  .date{
+    font-size: 1rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;     /* Número máximo de líneas a mostrar */
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+
+  }
+  ::ng-deep .mat-column-actions {
+    padding-right: 0 !important;
   }
 }
 

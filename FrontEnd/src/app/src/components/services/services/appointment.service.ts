@@ -23,8 +23,8 @@ export class AppointmentService {
   }
 
   getAppointmentsByDate(date: Date): Observable<Appointment[]> {
-    console.log('Fecha en el servicio:', date.toISOString().split('T')[0]);
-    return this.http.get<Appointment[]>(`${this.apiUrl}/date/${date.toISOString().split('T')[0]}`).pipe(
+    console.log('Fecha en el servicio:', this.dateAdapt(date));
+    return this.http.get<Appointment[]>(`${this.apiUrl}/date/${this.dateAdapt(date)}`).pipe(
       map((appointments: any[]) => appointments.map(appointment => ({
         ...appointment,
         date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
@@ -60,7 +60,7 @@ export class AppointmentService {
   }
 
   getKinesiologyAppointmentsByDate(date: Date) {
-    return this.http.get<Appointment[]>(`${this.apiUrl}/kine/date/${date.toISOString().split('T')[0]}`).pipe(
+    return this.http.get<Appointment[]>(`${this.apiUrl}/kine/date/${this.dateAdapt(date)}`).pipe(
       map((appointments: any[]) => appointments.map(appointment => ({
         ...appointment,
         date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
@@ -77,5 +77,9 @@ export class AppointmentService {
 
   cancelAppointment(id: string) {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+  dateAdapt(date: Date): string {
+    return date.toLocaleString().split(",")[0].split('/').reverse().join('-');
   }
 }
