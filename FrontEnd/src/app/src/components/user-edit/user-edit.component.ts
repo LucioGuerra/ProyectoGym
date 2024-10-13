@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {Role, UserModel} from '../models';
 import {MatIconModule} from '@angular/material/icon';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -12,7 +12,6 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {MatInput} from '@angular/material/input';
 import {AuthService} from "../services/services/auth.service";
 import {User} from "@auth0/auth0-angular";
-import { signal } from "@angular/core";
 import {NgIf, TitleCasePipe} from "@angular/common";
 import {UserService} from "../services/services/user.service";
 
@@ -28,14 +27,16 @@ import {UserService} from "../services/services/user.service";
 export class UserEditComponent {
   user = signal<User>({});
   id: string = '';
-  found = false
+
+  found = signal<boolean>(false);
   email: String = '';
   picture: URL | String = '';
+
   isHovering = false;
   form: FormGroup;
-    matcher = new ErrorStateMatcher();
+  matcher = new ErrorStateMatcher();
 
-    userModel: UserModel = {
+  userModel: UserModel = {
     id: 0,
     firstName: '',
     lastName: '',
@@ -45,10 +46,11 @@ export class UserEditComponent {
     dni: '',
     picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
   };
+  protected readonly Role = Role;
 
   constructor(public auth: AuthService,
               private router: Router,
-              private userService: UserService ,
+              private userService: UserService,
               private route: ActivatedRoute,) {
     console.log(this.user().picture);
 
@@ -71,9 +73,13 @@ export class UserEditComponent {
         this.userService.getUserById(this.id).subscribe({
           next: (userModel) => {
             this.form.patchValue(userModel);
+
             this.email = userModel.email;
             this.picture = userModel.picture;
-            this.show();
+
+            this.found.set(true);
+            console.log(this.found());
+
             console.log('User found:', this.form.value);
           }, error: (error) => {
             console.error('User not found');
@@ -81,19 +87,18 @@ export class UserEditComponent {
         });
       }
     } else {
-      this.found = true;
       // Necesito el id del usuario para poder buscarlo en la base de datos.
       // No lo tengo, asi que esto queda para
       // cuando se sincronicen los id de los usuarios de Auth0 con los de la base de datos.
 
-      // Lucio tiene que conectar la base de datos con auth0
+      // Lu tiene que conectar la base de datos con auth0
       // ademas de asignar el rol default a los usuarios. Asi
       // comparten id y cuando quiera hacer el update, puedo buscar el usuario por id.
-       }
+    }
   }
 
-  homePage() {
-    this.router.navigate(['/home']);
+  usersList() {
+    this.router.navigate(['/admin/users']);
   }
 
   changePassword(): void {
@@ -102,7 +107,7 @@ export class UserEditComponent {
   }
 
   changeRole(selectedRole: Role) {
-      this.form.patchValue({ role: selectedRole });
+    this.form.patchValue({role: selectedRole});
   }
 
   saveChanges() {
@@ -130,17 +135,11 @@ export class UserEditComponent {
     });
   }
 
-  show() {
-    this.found = true;
-  }
-
-  changePicture(){
+  changePicture() {
     alert("Insert the new picture");
   }
 
   showText(isHovering: boolean) {
     this.isHovering = isHovering;
   }
-
-  protected readonly Role = Role;
 }

@@ -1,13 +1,13 @@
 <app-drawer>
   <ng-container main-content>
     <span class="mainPage">
-      @if (this.found){
-      <mat-card>
+      @if (found()) {
+        <mat-card>
         <form (ngSubmit)="saveChanges()" [formGroup]="form">
         <div class="header">
           <mat-card-header>
             <div class="back">
-              <button (click)="homePage()" aria-label="Go back" class="back-btn" mat-icon-button>
+              <button (click)="usersList()" aria-label="Go back" class="back-btn" mat-icon-button>
                 <mat-icon>chevron_left</mat-icon>
               </button>
             </div>
@@ -72,7 +72,7 @@
                 </div>
               </div>
 
-              <ng-container *ngIf="user()?.sub && !user()?.sub?.includes('windows live') && !user()?.sub?.includes('google') && !user()?.sub?.includes('facebook'); else elseBlock">
+              <!--              <ng-container *ngIf="user()?.sub && !user()?.sub?.includes('windows live') && !user()?.sub?.includes('google') && !user()?.sub?.includes('facebook'); else elseBlock">-->
                 <div class="row">
                   <div class="input-combo">
                     <mat-form-field appearance="outline">
@@ -80,9 +80,7 @@
                       <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
                     </mat-form-field>
                   </div>
-                </div>
 
-                <div class="row">
                   <div class="change-password-container">
                     <button (click)="changePassword()" class="changepassword" color="primary" mat-raised-button>
                       Change password
@@ -90,19 +88,19 @@
                     </button>
                   </div>
                 </div>
-              </ng-container>
+              <!--              </ng-container>-->
 
-              <ng-template #elseBlock>
-                <div class="row">
-                  <div class="input-combo">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Mobile</mat-label>
-                      <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
-                    </mat-form-field>
-                  </div>
-                  <div class="paCompletar"></div>
-                </div>
-              </ng-template>
+              <!--              <ng-template #elseBlock>-->
+              <!--                <div class="row">-->
+              <!--                  <div class="input-combo">-->
+              <!--                    <mat-form-field appearance="outline">-->
+              <!--                      <mat-label>Mobile</mat-label>-->
+              <!--                      <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>-->
+              <!--                    </mat-form-field>-->
+              <!--                  </div>-->
+              <!--                  <div class="paCompletar"></div>-->
+              <!--                </div>-->
+              <!--              </ng-template>-->
 
               <div class="save-container">
                 <button class="custom-button" mat-button type="submit">
@@ -114,17 +112,15 @@
         </form>
       </mat-card>
       } @else {
-      <mat-card class="not-found">
-        <button (click)="homePage()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
+        <mat-card class="not-found">
+        <button (click)="usersList()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
           <mat-icon>chevron_left</mat-icon>
         </button>
         <div>
-          <h4>
-            User not found
-          </h4>
+          <h4>User not found</h4>
         </div>
       </mat-card>
-        }
+      }
     </span>
   </ng-container>
 </app-drawer>
