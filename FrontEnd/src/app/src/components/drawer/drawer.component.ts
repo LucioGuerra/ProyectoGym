@@ -3,7 +3,7 @@ import { ToolbarComponent } from "../toolbar";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DrawerListComponent } from "./drawer-list/drawer-list.component";
 import { MatIconModule } from '@angular/material/icon';
-import { DOCUMENT } from '@angular/common';
+import {DOCUMENT, NgIf} from '@angular/common';
 import { AuthService } from '../services/services';
 import { MatButtonModule } from '@angular/material/button';
 import { UserProfileComponent } from "../user-profile/user-profile.component";
@@ -11,36 +11,42 @@ import { UserProfileComponent } from "../user-profile/user-profile.component";
 @Component({
   selector: 'app-drawer',
   standalone: true,
-  imports: [MatButtonModule, ToolbarComponent, MatSidenavModule, DrawerListComponent, MatIconModule, UserProfileComponent],
+  imports: [MatButtonModule, ToolbarComponent, MatSidenavModule, DrawerListComponent, MatIconModule, UserProfileComponent, NgIf],
   templateUrl: './drawer.component.html',
   styleUrl: './drawer.component.scss'
 })
 export class DrawerComponent {
 
-  anchoPantalla = signal<number>(window.innerWidth);
-  esMovil = signal<boolean>(window.innerWidth <= 768);
+  windowWidth = signal<number>(window.innerWidth);
+  isMobileScreen = signal(window.innerWidth <= 768);
 
   events: string[] = [];
-  opened: boolean = true;
+  opened: boolean = false;
 
   constructor(@Inject(DOCUMENT) public document: Document, private auth0: AuthService) {
-    window.addEventListener('resize', this.actualizarAnchoPantalla.bind(this));
-  }
-
-  menu() {
-    alert('menu');
+    window.addEventListener('resize', this.checkScreenSize.bind(this));
   }
 
   logout() {
     this.auth0.logout();
   }
 
-  actualizarAnchoPantalla(): void {
-    const nuevoAncho = window.innerWidth;
-    this.anchoPantalla.set(nuevoAncho);
-    this.esMovil.set(nuevoAncho <= 768); // Si el ancho es menor o igual a 768px, lo consideramos móvil
+  checkScreenSize(): void {
+    this.isMobileScreen.set(window.innerWidth <= 768);
+  }
+
+  toggleSidenav(): void {
+    console.log('toggleSidenav');
+    if (this.isMobileScreen()) {
+      console.log('mobile');
+      this.opened = !this.opened;
+
+    } else {
+      console.log('desktop');
+      this.opened = !this.opened;
+    }
   }
 
 
-  protected readonly resizeTo = resizeTo;
+
 }
