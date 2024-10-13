@@ -1,259 +1,166 @@
 import {
-  ChangeDetectionStrategy,
-  Component, effect,
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, effect, OnInit,
   signal
 } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../../components/services/services/auth.service';
-import { MatCardModule } from '@angular/material/card';
-import { ToolbarComponent } from '../../components/index';
-import { DrawerComponent } from "../../components/drawer/drawer.component";
-
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
-import { MatListModule } from '@angular/material/list';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatMenuModule } from '@angular/material/menu';
-import { Activity } from '../../components/index';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {AuthService} from '../../components';
+import {MatCardModule} from '@angular/material/card';
+import {ActivityService, Appointment, AppointmentService, ToolbarComponent} from '../../components';
+import {DrawerComponent} from "../../components/drawer/drawer.component";
+import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatChipListboxChange, MatChipsModule} from '@angular/material/chips';
+import {MatListModule} from '@angular/material/list';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {provideNativeDateAdapter, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatMenuModule} from '@angular/material/menu';
+import {Activity} from '../../components';
 import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {MatTableModule} from '@angular/material/table';
+import {AgendaListComponent} from "../../components/agenda-list/agenda-list.component";
+
 @Component({
   selector: 'app-shif-admin-screen',
   standalone: true,
-  imports: [MatMenuModule, MatProgressBarModule, MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent],
+  imports: [MatTabsModule, MatTableModule, MatMenuModule, MatProgressBarModule, MatChipsModule, MatListModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, DrawerComponent, AgendaListComponent],
   templateUrl: './shif-admin-screen.component.html',
-  providers: [provideNativeDateAdapter()],
+  providers: [provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},],
   styleUrl: './shif-admin-screen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShifAdminScreenComponent{
+export class ShifAdminScreenComponent implements OnInit {
 
-  private subscription = new Subscription();
+  public activities: Activity[] = [];
 
-  public activities = [{
-    name: 'Crossfit',
-  },
-  {
-    name: 'Yoga',
-  },
-  {
-    name: 'Pilates',
-  },
-  {
-    name: 'Spinning',
-  },
-  {
-    name: 'Zumba',
-  },
-  {
-    name: 'Boxing',
-  },
-  {
-    name: 'MMA',
-  },
-  {
-    name: 'Kickboxing',
-  },
-  {
-    name: 'Judo',
-  },
-  {
-    name: 'Karate',
-  },
-  ];
+  public appointments: Appointment[] = [];
 
-  public apointments: Activity[] = [{
-    id: 1,
-    date: new Date(Date.now()),
-    startTime: '10:00',
-    endTime: '11:00',
-    activity: 'Crossfit',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-  },
-  {
-    id: 2,
-    date: new Date(2023, 2, 10),
-    startTime: '11:00',
-    endTime: '12:00',
-    activity: 'Yoga',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '12:00',
-    endTime: '13:00',
-    activity: 'Pilates',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Smith', 'Jane Smith', 'John Doe'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 0
-  },
-  {
-    id: 3,
-    date: new Date(Date.now()),
-    startTime: '13:00',
-    endTime: '14:00',
-    activity: 'Spinning',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '14:00',
-    endTime: '15:00',
-    activity: 'Zumba',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 4,
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '15:00',
-    endTime: '16:00',
-    activity: 'Boxing',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 5,
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '16:00',
-    endTime: '17:00',
-    activity: 'MMA',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 6,
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '17:00',
-    endTime: '18:00',
-    activity: 'Kickboxing',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 7,
-  },
-  {
-    date: new Date(2023, 2, 10),
-    startTime: '18:00',
-    endTime: '19:00',
-    activity: 'Judo',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 8,
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '19:00',
-    endTime: '20:00',
-    activity: 'Karate',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 9,
-  },
-  {
-    date: new Date(Date.now()),
-    startTime: '20:00',
-    endTime: '21:00',
-    activity: 'Crossfit',
-    max_capacity: 20,
-    users: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Doe', 'Jane Doe', 'John Smith', 'Jane Smith'],
-    professional: 'John Doe',
-    weekDay: 'Friday',
-    id: 10,
-  },
-  ];
-
-  selectedDate = signal<Date>(new Date(Date.now()));
-  selectedActivities = signal<string[]>(["Crossfit", "Yoga", "Pilates", "Spinning", "Zumba", "Boxing", "MMA", "Kickboxing", "Judo", "Karate"]);
+  public selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
+  public selectedActivities = signal<string[]>([]);
+  public appointmentList = signal<Appointment[]>([]);
+  kinesiology= signal<string[]>(['Kinesiology', 'Kinesiologia']);
+  public tabIndex = signal<number>(0);
 
 
-
-  constructor(private auth0: AuthService, private router: Router) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
     effect(() => {
-      if(this.auth0.isAuthenticated()){
-        if(this.auth0.isAdmin()){
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
         }
-        //todo redirect to client page
-      }
-      else{
+      } else {
         this.router.navigate(['/login']);
       }
     });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
+  }
+
+  ngOnInit(): void {
+    this.loadAppointment(this.tabIndex());
+    this.loadActivities();
+  }
+
+  loadAppointment(tabIndex: number) {
+    if (tabIndex == undefined || tabIndex == 0) {
+      console.log('Cargando citas de fisioterapia');
+      this.appointmentService.getAppointmentsByDate(this.selectedDate()).subscribe(
+        (data: Appointment[]) => {
+          console.log('Datos en el componente:', data);
+          this.appointments = data;
+          this.appointmentList.set(data);
+          this.changeDetectorRef.markForCheck();
+        },
+        (error) => {
+          console.error('Error al obtener las citas', error);
+        }
+      );
+    } else {
+      console.log('Cargando citas de kinesiología');
+      this.appointmentService.getKinesiologyAppointmentsByDate(this.selectedDate()).subscribe(
+        (data: Appointment[]) => {
+          console.log('Datos en el componente:', data);
+          this.appointments = data;
+          this.appointmentList.set(data);
+          this.changeDetectorRef.markForCheck();
+        },
+        (error) => {
+          console.error('Error al obtener las citas', error);
+        }
+      );
+    }
+    return;
+  }
+
+  loadActivities() {
+    this.activityService.getActivities().subscribe(
+      (data: Activity[]) => {
+        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
+        this.activities = data.filter(activity => activity.name !== 'Kinesiology' && activity.name !== 'Kinesiologia');
+        this.selectedActivities.set(this.activities.map(activity => activity.name));
+        this.changeDetectorRef.markForCheck();
+        console.log('Datos en el componente después de la asignación:', this.activities);
+      },
+      (error) => {
+        console.error('Error al obtener las actividades', error);
+      }
+    );
   }
 
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
+    console.log('index:', this.tabIndex());
+    this.loadAppointment(this.tabIndex());
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
   }
+
   chipsChangeEvent(arg0: string, $event: MatChipListboxChange) {
     // this.selectedActivities.update(selectedActivities => [...selectedActivities, $event.value]);
     this.selectedActivities.set($event.value);
+    this.appointmentList.set(this.appointments.filter(appointment => this.selectedActivities().includes(appointment.activity)));
     // alert(`quantity selectioned: ${this.selectedActivities().length}, activities: ${this.selectedActivities()}`);
   }
-  noActivities(): Boolean {
-    if (this.apointments.filter(apointment =>
-      this.selectedActivities().includes(apointment.activity) && apointment.date.toDateString() == this.selectedDate().toDateString()
-    ).length == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  open_apointment($event: Event, apointment: Activity) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    alert(`opening apointment id: ${apointment.id}`);
-  }
-  edit_apointment($event: Event, apointment: Activity) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    alert(`editing apointment id: ${apointment.id}`);
-  }
-  cancel_apointment($event: MouseEvent, apointment: Activity) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    alert(`canceling apointment id: ${apointment.id}`);
-  }
+
+
   newShift($event: MouseEvent) {
-    alert('new shift');
+    this.router.navigate(['/admin/appointment/create']);
   }
+
   newActivity($event: MouseEvent) {
     alert('new activity');
   }
+
   newUser($event: MouseEvent) {
     alert('new user');
   }
+
   newSale($event: MouseEvent) {
     alert('new sale');
   }
+
   shop($event: MouseEvent) {
     alert('shop');
+  }
+
+  onTabChange($event: MatTabChangeEvent) {
+    /*this.tabIndex = $event.index;*/
+    console.log('Tab changed:', $event.index);
+    this.loadAppointment($event.index);
+  }
+
+  goBackDate($event: MouseEvent) {
+    this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() - 1)));
+    this.loadAppointment(this.tabIndex());
+  }
+
+  gofurtherDate($event: MouseEvent) {
+    this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() + 1)));
+    this.loadAppointment(this.tabIndex());
   }
 }

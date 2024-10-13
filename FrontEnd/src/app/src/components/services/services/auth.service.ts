@@ -9,6 +9,7 @@ export class AuthService {
   private auth0Client: auth0.WebAuth;
   isAuthenticated = signal<boolean>(false);
   isAdmin = signal<boolean>(false);
+  isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
 
   constructor() {
@@ -94,15 +95,18 @@ export class AuthService {
     if (role) {
       if (role == 'ADMIN') {
         this.isAdmin.set(true);
+        this.isClient.set(false);
         console.log("Es admin");
-      } else {
+      } else if (role == 'CLIENT') {
         this.isAdmin.set(false);
-        console.log("No es admin");
+        this.isClient.set(true);
+        console.log("No es admin, es cliente?", this.isClient());
       }
     } else {
       console.error("No hay ningun rol asignado")
     }
   }
+
 
   public setUserInfo(idToken: any) {
     console.log("Entra a setUserInfo: ", jwtDecode(idToken));

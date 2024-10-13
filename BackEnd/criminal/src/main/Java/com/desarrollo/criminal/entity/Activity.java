@@ -37,6 +37,7 @@ public class Activity {
     @PrePersist
     private void onCreate() {
         createdAt = LocalDateTime.now();
+        softDelete = false;
     }
 
 }

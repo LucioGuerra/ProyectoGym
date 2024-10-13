@@ -1,0 +1,12 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+@use 'm3-theme' as theme;
+
+:root {
+  --secondary: map.get(theme.$palettes, secondary);
+  --neutral: map.get(theme.$palettes, neutral);
+  --neutral-variant: map.get(theme.$palettes,  neutral-variant);
+  --error: map.get(theme.$palettes, error);
+  $_primary: map.merge(map.get(theme.$palettes, primary), theme.$rest);
+  $_tertiary: map.merge(map.get(theme.$palettes, tertiary), theme.$rest);
+}

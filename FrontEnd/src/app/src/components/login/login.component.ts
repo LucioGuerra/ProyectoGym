@@ -8,7 +8,7 @@ import { AuthService } from "../services/services/auth.service";
 
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -47,6 +47,7 @@ export class LoginComponent {
       const json = this.formGroup.value;
       console.log(json); //Esto se borra después, es para corroborar q se esta mandando to do ok
       this.auth0.login(json.email?.toString(), json.password?.toString());
+      this.router.navigate(['/agenda']);
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();
@@ -55,7 +56,7 @@ export class LoginComponent {
 
   constructor(private router: Router) {}
   singup(){
-    this.router.navigate(['/singup']);
+    this.router.navigate(['/signup']);
   }
   volver(){
     this.router.navigate(['/home']);
@@ -63,7 +64,6 @@ export class LoginComponent {
   forgot(){
     this.router.navigate(['/forgot']);
   }
-
 
   google(){
     this.auth0.loginWithThirdParty("google-oauth2")

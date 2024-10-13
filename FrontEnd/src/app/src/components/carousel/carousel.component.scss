@@ -1,0 +1,43 @@
+.carousel-container {
+  position: relative;
+  width: 100%; /* Asegúrate de ajustar el ancho según tu diseño */
+  height: 100%;
+  overflow: hidden; /* Este es el ajuste más importante para evitar overflow */
+}
+
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 100%;
+}
+
+.carousel-content {
+  transition: transform 500ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Esto asegura que los elementos fuera de la vista no sean visibles */
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  width: 100%; /* Asegura que cada item ocupe todo el ancho disponible */
+  opacity: 1; /* Empezamos con opacidad cero, controlada por la animación */
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1; /* Asegura que los botones estén encima del contenido */
+}
+
+.carousel-button.left {
+  left: 10px; /* Ajusta según tu diseño */
+}
+
+.carousel-button.right {
+  right: 10px; /* Ajusta según tu diseño */
+}

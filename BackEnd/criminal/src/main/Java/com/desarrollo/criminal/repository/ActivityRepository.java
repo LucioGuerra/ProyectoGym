@@ -15,4 +15,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Query("SELECT a FROM Activity a WHERE a.id = :id AND a.softDelete = false")
     Optional<Activity> findByIdAndNotDeleted(Long id);
+
+    Optional<Activity> findByName(String name);
 }

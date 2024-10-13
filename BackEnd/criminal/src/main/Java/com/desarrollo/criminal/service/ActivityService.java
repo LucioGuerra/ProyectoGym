@@ -76,4 +76,10 @@ public class ActivityService {
         activityRepository.save(activity);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    public Activity getKinesiologyActivity() {
+            return activityRepository.findByName("Kinesiology").orElse(activityRepository.findByName("Kinesiologia").orElseThrow(
+                    () -> new EntityNotFoundException("activity not found")));
+    }
+
 }
