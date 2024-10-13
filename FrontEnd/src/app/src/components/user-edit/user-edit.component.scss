@@ -12,7 +12,7 @@
   padding: 0;
   }
 
-h4{
+h4 {
   text-align: center;
   position: relative;
   margin-bottom: 50px;
@@ -34,7 +34,7 @@ mat-card {
   width: 60%;
   }
 
-form{
+form {
   width: 100%;
   align-self: center;
   justify-self: center;
@@ -63,7 +63,7 @@ mat-card-header {
   height: 100%;
   }
 
-.back-btn-not-found{
+.back-btn-not-found {
   border-radius: 50%;
   color: #D0D0D0;
   align-self: flex-start;
@@ -71,7 +71,7 @@ mat-card-header {
   display: flex;
   }
 
-.not-found{
+.not-found {
   display: flex;
   flex-direction: column;
   }
@@ -178,10 +178,11 @@ mat-card-header {
   }
 
 .role-select:hover {
-  color: #222222;
+  color: #222;
   background-color: #F6C90E;
-  mat-icon{
-    color: #222222;
+
+  mat-icon {
+    color: #222;
     }
   }
 
@@ -231,9 +232,10 @@ mat-card-content {
 .change-password-container {
   min-width: 210px;
   width: 100%;
+  height: auto;
   }
 
-.paCompletar{
+.paCompletar {
   width: 100%;
   }
 
@@ -245,7 +247,7 @@ button[mat-raised-button] {
   align-items: center;
   box-sizing: border-box;
 
-  padding: 5% 1%;
+  padding: 17.5px;
   width: 100%;
   height: auto;
 
@@ -451,7 +453,7 @@ button[mat-raised-button] {
     margin-top: 80px;
     }
 
-  .user-avatar{
+  .user-avatar {
     width: 100px;
     height: 100px;
     }
@@ -459,5 +461,24 @@ button[mat-raised-button] {
   mat-card {
     height: fit-content;
     margin-bottom: 0;
+    }
+  }
+
+
+@media (min-height: 860px) {
+  mat-card {
+    height: fit-content;
+    margin-top: 5vh;
+    }
+
+  .save-container {
+    padding-top: 20px;
+    margin-bottom: 20px;
+    }
+
+  .user-avatar {
+    width: 170px;
+    height: 170px;
+    margin-top: 20px;
     }
   }
