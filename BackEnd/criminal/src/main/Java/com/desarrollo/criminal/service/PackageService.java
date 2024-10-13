@@ -12,8 +12,6 @@ import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -164,6 +162,10 @@ public class PackageService {
             }
         }
         return false;
+    }
+
+    public Optional<Package> getPackageByUserIdAndActiveTrue(Long userId){
+        return packageRepository.findByUserIdAndActiveTrue(userId);
     }
 
 }

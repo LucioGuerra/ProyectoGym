@@ -34,6 +34,8 @@ public class AppointmentService {
     private final UserService userService;
     private final ModelMapper modelMapper;
     private final UserXAppointmentRepository userXAppointmentRepository;
+    private final PackageService packageService;
+
 
 
     public Appointment getAppointmentById(Long appointmentId) {
