@@ -40,7 +40,7 @@
             </mat-form-field>
           </div>
           <div class="quick-actions">
-
+            <app-announcement-carousel></app-announcement-carousel>
           </div>
         </section>
         <section class="botom-section">
@@ -75,7 +75,6 @@
                     }
                   </mat-chip-listbox>
                 </div>
-
                 <mat-divider></mat-divider>
                 <app-agenda-list [appointmentList]="appointmentList" [selectedActivities]="selectedActivities" [isAdmin]="auth0.isAdmin()"/>
               </mat-tab>

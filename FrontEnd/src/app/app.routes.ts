@@ -6,6 +6,8 @@ import {ShifAdminScreenComponent} from './src/layout/shif-admin-screen/shif-admi
 import {UserEditComponent} from './src/components/user-edit/user-edit.component';
 import {CreateAppointmentComponent} from "./src/layout/create-appointment/create-appointment.component";
 import {ClientAgendaComponent} from "./src/layout/client-agenda/client-agenda.component";
+import {CarouselComponent} from "./src/components/carousel/carousel.component";
+import {AnnouncementCarouselComponent} from "./src/components/announcement-carousel/announcement-carousel.component";
 
 export const routes: Routes = [
   {path: 'home', component: HomePageComponent},
@@ -17,4 +19,5 @@ export const routes: Routes = [
   {path: 'admin/appointment/create', component: CreateAppointmentComponent},
   {path: 'admin/appointment/edit/:id', component: CreateAppointmentComponent},
   {path: 'agenda', component: ClientAgendaComponent},
+  {path: 'carrusel', component: AnnouncementCarouselComponent},
 ];
