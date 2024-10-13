@@ -78,6 +78,7 @@ ng-container {
 
 .quick-actions {
   grid-area: quick-actions;
+  background-color: variables.$grey-color;
   height: auto;
   width: 100%;
   border-radius: 10px;

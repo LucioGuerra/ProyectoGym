@@ -32,7 +32,6 @@ export class ErrorDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ErrorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { message: string },
-    private router: Router,
   ) {}
 
   onClose(): void {
