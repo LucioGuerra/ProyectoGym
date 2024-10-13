@@ -1,0 +1,352 @@
+@use "../../../../variables.scss";
+
+.scrollable-section {
+  flex: 1;
+  height: auto;
+  width: 100%;
+  // border: 1px solid black;
+  border-radius: 0 0 10px 10px;
+
+  mat-action-list {
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+
+    /* Color del thumb y del track */
+    button {
+      height: auto;
+    }
+
+    .no-apointments {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      font-size: 1rem;
+      color: variables.$white-color;
+      font-weight: 500;
+    }
+  }
+
+  .apointments {
+    display: flex;
+    flex-direction: row;
+    // flex-wrap: wrap;
+    justify-content: start;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+
+    .apointment-title {
+      margin: 10px 0 0px 10px;
+      font-size: 1rem;
+      color: variables.$white-color;
+      width: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+      text-align: start;
+      font-weight: 500;
+
+      .date {
+        margin: 0;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .time {
+        margin: -5px 0 0 0;
+        font-size: 0.8rem;
+        color: variables.$white-color;
+        opacity: 0.6;
+      }
+    }
+
+    .card-container {
+      width: 175px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .apointment-activity-card {
+        padding: 0px 0px;
+        margin: 10px 0 10px 20px;
+        background-color: transparent;
+        border-color: variables.$white-color;
+        color: variables.$white-color;
+        border-radius: 10px;
+      }
+    }
+
+    .progress-bar-container {
+      margin: 0;
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .progress-bar {
+        height: 10px;
+        /* Ajustar la posición x deseada */
+        .progress-bar-inner {
+          height: 100%;
+          width: 50%;
+          background-color: variables.$light-gold-color;
+
+        }
+      }
+    }
+
+    .user-quantity {
+      // margin: 15px 0 15px 20px;
+      font-size: 1rem;
+      color: variables.$white-color;
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: end;
+      font-weight: 500;
+
+      .user-quantity-text {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+        margin: 0;
+
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+          margin: 0 0 0 5px;
+        }
+      }
+    }
+
+    .button-container {
+      margin: 0 0 0 10px;
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+
+      .edit {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+
+::ng-deep .appointment-table {
+  background-color: variables.$grey-color !important;
+  border-radius: 10px;
+  overflow: hidden;
+
+  ::ng-deep .mat-column-date {
+    width: 20%;
+    height: 80px;
+  }
+
+  ::ng-deep .mat-column-activity {
+    width: 7%;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .appointment-title {
+    margin: 10px 0 0px 10px;
+    font-size: 1rem;
+    color: variables.$white-color;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    text-align: start;
+    font-weight: 500;
+
+    .date {
+      width: fit-content;
+      margin: 0;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1.1rem;
+    }
+
+    .time {
+      width: fit-content;
+      margin: -5px 0 0 0;
+      font-size: 0.9rem;
+      color: variables.$white-color;
+      opacity: 0.6;
+    }
+  }
+
+  ::ng-deep .mat-column-capacity {
+    width: 60%;
+    padding-left: 0 !important;
+  }
+
+  .cantidad {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex: 1;
+
+    .progress-bar-container {
+      margin: 0;
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .progress-bar {
+        height: 10px;
+        /* Ajustar la posición x deseada */
+        .progress-bar-inner {
+          height: 100%;
+          width: 50%;
+          background-color: variables.$light-gold-color;
+
+        }
+      }
+    }
+
+    .user-quantity {
+      // margin: 15px 0 15px 20px;
+      font-size: 1rem;
+      color: variables.$white-color;
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: end;
+      font-weight: 500;
+
+      .user-quantity-text {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+        margin: 0;
+
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+          margin: 0 0 0 5px;
+        }
+      }
+    }
+  }
+
+  ::ng-deep .mat-column-actions {
+    width: 1%;
+    padding-left: 0;
+  }
+}
+
+
+@media (max-width: 1000px) {
+  .button-class:nth-child(n + 4) {
+    display: none;
+  }
+  ::ng-deep .mat-column-date {
+    width: 40% !important;
+  }
+  ::ng-deep .mat-column-activity {
+    width: 10%;
+  }
+  ::ng-deep .progress-bar-container {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .button-class:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+
+@media (max-width: 750px) {
+
+  .calendar {
+    width: 100%;
+    flex: 1;
+    margin: 0;
+    border-radius: 10px 10px 0 0;
+
+    mat-form-field {
+      width: 90%;
+    }
+  }
+
+  ::ng-deep .mat-column-date {
+    width: 20% !important;
+    height: 80px !important;
+  }
+
+  ::ng-deep .mat-column-activity {
+    width: 2% !important;
+  }
+
+  ::ng-deep .mat-column-capacity {
+    width: 10% !important;
+  }
+
+  .progress-bar-container {
+    display: none !important;
+    width: 0;
+
+    .progress-bar {
+      display: none;
+    }
+  }
+  .cantidad {
+    width: auto;
+  }
+  .user-quantity {
+    width: auto !important;
+
+    .user-quantity-text {
+      width: auto !important;
+    }
+  }
+}
+
+@media(max-width: 500px) {
+  .date{
+    font-size: 1rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;     /* Número máximo de líneas a mostrar */
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+
+  }
+  ::ng-deep .mat-column-actions {
+    padding-right: 0 !important;
+  }
+}
+
+::ng-deep mat-action-list {
+  padding: 0 !important;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: rgba(0, 0, 0, 0.04); /* Cambia este color al que prefieras */
+  cursor: pointer; /* Cambia el cursor a pointer para indicar que es clicable */
+  transition: background-color 0.3s ease; /* Suaviza la transición del fondo */
+}
+

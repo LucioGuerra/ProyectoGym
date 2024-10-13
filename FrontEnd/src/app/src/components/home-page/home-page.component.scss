@@ -41,15 +41,21 @@ mat-card-content {
   color: #b9a552;
 }
 
-.prices,
-.activities {
+
+
+.activities, .prices {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  width: 80%;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
   padding: 20px 0;
+  gap: 50px;
   color: white;
+}
+
+.prices {
+  gap: 10%;
 }
 
 .card-description {
@@ -90,19 +96,87 @@ mat-card-content {
   margin: 0;
   padding: 0;
 }
-
-.activity::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1;
+mat-card.activity {
+  width: 200px;
+  min-height: 130px ;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: 8px;
 }
 
-.activity .contenido {
-  position: relative;
-  z-index: 2;
+.card-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #b9a552;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: white;
+}
+
+.card-price {
+  margin-bottom: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .activities {
+    padding: 10px 0;
+    gap: 15px;
+  }
+
+  mat-card.activity {
+    width: 100px;
+    height: 130px;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-description {
+    font-size: 0.8rem;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .activities {
+    padding: 5px 0;
+    gap: 10px;
+  }
+  .prices {
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .card-prices {
+    margin-top: 65px;
+    padding: 0;
+  }
+
+  mat-card.activity {
+    width: 100px;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-description {
+    font-size: 0.7rem;
+  }
 }

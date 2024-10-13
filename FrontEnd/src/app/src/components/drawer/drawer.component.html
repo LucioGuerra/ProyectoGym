@@ -1,18 +1,36 @@
 <mat-sidenav-container class="example-container">
+  <!-- Sidenav para pantallas grandes (sale desde la izquierda) -->
   <mat-sidenav
-    #sidenav
-    mode="over"
-    (opened)="events.push()"
-    (closed)="events.push()"
+    #desktopSidenav
+    class="sidenav-left"
+    mode="side"
+    [opened]="opened"
+    *ngIf="!isMobileScreen()"
   >
-  <app-user-profile></app-user-profile>
+    <app-user-profile></app-user-profile>
+    <app-drawer-list></app-drawer-list>
+  </mat-sidenav>
+
+  <!-- Sidenav para pantallas móviles (sale desde arriba) -->
+  <mat-sidenav
+    #mobileSidenav
+    mode="over"
+    class="sidenav-top"
+    [opened]="opened"
+    *ngIf="isMobileScreen()"
+  >
     <app-drawer-list></app-drawer-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
     <app-toolbar>
       <ng-container toolbar-menu-button>
-        <button style="margin: 0 10px 0 0" mat-icon-button class="menu-button" aria-label="open drawer menu" (click)="sidenav.toggle()">
+        <button
+          mat-icon-button
+          class="menu-button"
+          aria-label="open drawer menu"
+          (click)="toggleSidenav()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
       </ng-container>

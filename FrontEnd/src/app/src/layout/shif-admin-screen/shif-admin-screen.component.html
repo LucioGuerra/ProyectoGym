@@ -5,14 +5,21 @@
         <section class="top-section">
           <div class="calendar">
             <div class="title-section">
-              <mat-icon style="padding: 0 5px 0 10px; color: #f6c90e"
-                >calendar_month</mat-icon
+              <mat-icon style="padding: 0 10px 0 10px; color: #f6c90e"
+              >calendar_month
+              </mat-icon
               >
               <h1 class="datepicker-title">Select date</h1>
+              <button mat-icon-button (click)="goBackDate($event)">
+                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_left</mat-icon>
+              </button>
+              <button mat-icon-button (click)="gofurtherDate($event)">
+                <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_right</mat-icon>
+              </button>
             </div>
             <mat-divider></mat-divider>
             <mat-form-field>
-              <mat-label>MM/DD/YYYY</mat-label>
+              <mat-label>DD/MM/YYYY</mat-label>
               <input
                 [value]="selectedDate()"
                 matInput
@@ -28,8 +35,9 @@
           </div>
           <div class="quick-actions">
             <div class="title-section">
-              <mat-icon style="padding: 0 0px 0 10px; color: #f6c90e"
-                >auto_awesome</mat-icon
+              <mat-icon style="padding: 0 0 0 10px; color: #f6c90e"
+              >auto_awesome
+              </mat-icon
               >
               <h1 class="quickactions-title">Quick actions</h1>
             </div>
@@ -45,7 +53,7 @@
               </button>
               <button mat-flat-button class="button-class" (click)="newUser($event)">
                 <mat-icon>person_add</mat-icon>
-                Add new client
+                Create new package
               </button>
               <button mat-flat-button class="button-class" (click)="newSale($event)">
                 <mat-icon>attach_money</mat-icon>
@@ -60,94 +68,52 @@
         </section>
         <section class="botom-section">
           <div class="agenda">
-            <div class="title-section">
-              <mat-icon style="padding: 0 0px 0 10px; color: #f6c90e"
-                >calendar_view_day</mat-icon
-              >
-              <h1 class="agenda-title">Agenda</h1>
-              <mat-chip-listbox
-                class="activities-cards"
-                multiple="true"
-                aria-label="select activities"
-                (change)="chipsChangeEvent('change', $event)"
-              >
-                @for (activity of activities; track activity) {
-                <mat-chip-option [value]="activity.name" selected>
-                  {{ activity.name }}
-                </mat-chip-option>
-                }
-              </mat-chip-listbox>
-            </div>
+            <mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="onTabChange($event)">
+              <mat-tab>
+                <ng-template mat-tab-label
+                             style="display: flex; flex-direction: row; align-content: center; justify-content: center; ">
 
-            <mat-divider></mat-divider>
-            <div class="scrollable-section">
-              <mat-action-list>
-                @for (apointment of apointments; track apointment) { @if
-                (selectedActivities().includes(apointment.activity) && apointment.date.toDateString() == selectedDate().toDateString()) {
-                <button [value]='apointment' mat-list-item (click)="open_apointment($event, apointment)">
-                  <div class="apointments">
-                    <div class="apointment-title">
-                      <p class="date">
-                        @switch(apointment.date.getDay()){ @case(1){ Lunes }
-                        @case(2){ Martes } @case(3){ Miercoles } @case(4){
-                        Jueves } @case(5){ Viernes } @case(6){ Sabado }
-                        @case(0){ Domingo } } {{ apointment.date.getDate() }} de
-                        @switch(apointment.date.getMonth()){ @case(0){ Enero }
-                        @case(1){ Febrero } @case(2){ Marzo } @case(3){ Abril }
-                        @case(4){ Mayo } @case(5){ Junio } @case(6){ Julio }
-                        @case(7){ Agosto } @case(8){ Septiembre } @case(9){
-                        Octubre } @case(10){ Noviembre } @case(11){ Diciembre }
-                        } de
-                        {{ apointment.date.getFullYear() }}
-                      </p>
-                      <p class="time">
-                        {{ apointment.startTime }} - {{ apointment.endTime }}
-                      </p>
-                    </div>
-                    <div class="card-container">
-                      <mat-chip class="apointment-activity-card">{{
-                        apointment.activity
-                      }}</mat-chip>
-                    </div>
-                    <div class="progress-bar-container">
-                      <mat-progress-bar
-                        class="progress-bar"
-                        mode="determinate"
-                        value="{{
-                          (apointment.users.length * 100) /
-                            apointment.max_capacity
-                        }}"
-                      ></mat-progress-bar>
-                    </div>
-                    <div class="user-quantity">
-                      <p class="user-quantity-text">
-                        {{ apointment.users.length }} /
-                        {{ apointment.max_capacity }}
-                        <mat-icon>person</mat-icon>
-                      </p>
-                    </div>
-                    <div class="button-container">
-                      <button (click)="$event.stopPropagation()" mat-icon-button class="edit" [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="edit_apointment($event, apointment)">Edit</button>
-                        <button mat-menu-item (click)="open_apointment($event, apointment)">Open</button>
-                        <button mat-menu-item (click)="cancel_apointment($event, apointment)">Cancel</button>
-                      </mat-menu>
-                    </div>
+                  <div
+                    style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
+                    <mat-icon class="example-tab-icon" style="margin-right: 10px">fitness_center</mat-icon>
+                    <p style="margin: 0; align-content: center; justify-content: center">Gym agenda</p>
                   </div>
-                </button>
-                }}
-                @if(apointments.length == 0 || noActivities()) {
-                  <button mat-list-item>
-                    <div class="no-apointments">
-                      <p>No hay citas para este día</p>
-                    </div>
-                  </button>
-                }
-              </mat-action-list>
-            </div>
+                </ng-template>
+                <div class="title-section">
+                  <mat-icon style="padding: 0 0 0 10px; color: #f6c90e"
+                  >calendar_view_day
+                  </mat-icon
+                  >
+                  <h1 class="agenda-title">Activity List</h1>
+                  <mat-chip-listbox
+                    class="activities-cards"
+                    multiple="true"
+                    aria-label="select activities"
+                    (change)="chipsChangeEvent('change', $event)"
+                  >
+                    @for (activity of activities; track activity) {
+                      <mat-chip-option [value]="activity.name" selected>
+                        {{ activity.name }}
+                      </mat-chip-option>
+                    }
+                  </mat-chip-listbox>
+                </div>
+
+                <mat-divider></mat-divider>
+                <app-agenda-list [appointmentList]="appointmentList" [selectedActivities]="selectedActivities" [isAdmin]="auth0.isAdmin()"/>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label
+                             style="display: flex; flex-direction: row; align-content: center; justify-content: center">
+                  <div style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
+                    <span class="material-symbols-outlined" style="margin-right: 10px">rheumatology</span>
+                    <p style="margin: 0; align-content: center; justify-content: center">Kinesiology agenda</p>
+                  </div>
+                </ng-template>
+                <mat-divider></mat-divider>
+                <app-agenda-list [appointmentList]="appointmentList" [selectedActivities]="kinesiology" [isAdmin]="auth0.isAdmin()"/>
+              </mat-tab>
+            </mat-tab-group>
           </div>
         </section>
       </section>

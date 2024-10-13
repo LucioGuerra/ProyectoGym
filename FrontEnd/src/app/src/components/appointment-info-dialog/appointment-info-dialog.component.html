@@ -1,0 +1,72 @@
+<mat-dialog-actions>
+  <h2 mat-dialog-title>Turno</h2>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-dialog-actions>
+<mat-dialog-content>
+  @if (appointmentData) {
+    <div class="info-grid">
+      <div class="container">
+        <h3 class="info-label">Fecha:</h3>
+        <p>{{ getFormattedDate(appointmentData.date) }}</p>
+      </div>
+      <div class="container">
+        <h3 class="info-label">Horario:</h3>
+        <p>{{ appointmentData.startTime }} - {{ appointmentData.endTime }}</p>
+      </div>
+      <div class="container">
+        <h3 class="info-label">Actividad:</h3>
+        <p>{{ appointmentData.activity }}</p>
+      </div>
+      <div class="container">
+        <h3 class="info-label">Instructor:</h3>
+        <p>{{ appointmentData.instructor }}</p>
+      </div>
+    </div>
+    <div class="buttons-set-appointment">
+      @if (this.isReserved()) {
+        <button mat-flat-button class="cancelar-turno" (click)="isUserInAppointment()">Cancelar reserva</button>
+      } @else {
+        <button mat-flat-button class="agendar-turno" (click)="isUserInAppointment()">Reservar turno</button>
+      }
+    </div>
+    @if (this.data.isAdmin) {
+      <div class="participants-section">
+        <h3 class="participants-title">Participantes ({{ appointmentData.participantsCount }}
+          /{{ appointmentData.max_capacity }}):</h3>
+        <div class="participants-grid">
+          @for (participant of appointmentData.participants; track participant.id) {
+            <mat-card (click)="toggleAttendance(participant)" class="participant-card"
+                      appearance="outlined">
+              <mat-card-content class="participant-content">
+                <div class="img"><img Src="https://cdn.auth0.com/avatars/ig.png"
+                                      [alt]="participant.firstName"
+                                      class="participant-photo"></div>
+                <div class="participant-info">
+                  <p class="participant-name">{{ participant.firstName }} {{ participant.lastName }}</p>
+                  <mat-chip-listbox
+                    aria-label="select activities"
+                  >
+                    <mat-chip [color]="participant.attendance ? 'accent' : 'primary'"
+                              [value]="participant.attendance">
+                      {{ participant.attendance ? 'Presente' : 'Ausente' }}
+                    </mat-chip>
+                  </mat-chip-listbox>
+                </div>
+                <div class="attendance-icon-container">
+                  @if (participant.attendance) {
+                    <mat-icon class="attendance-icon attended">check</mat-icon>
+                  } @else {
+                    <mat-icon class="attendance-icon not-attended">close</mat-icon>
+                  }
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      </div>
+    }
+  }
+</mat-dialog-content>
+
