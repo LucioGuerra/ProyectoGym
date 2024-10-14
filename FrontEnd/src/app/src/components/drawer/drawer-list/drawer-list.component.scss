@@ -10,7 +10,7 @@ a {
   display: flex;
   justify-content: center;
   align-content: center;
-}
+  }
 
 .items {
   width: auto;
@@ -20,19 +20,25 @@ a {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
   .icon {
     font-size: 20px;
     height: 20px;
     width: 20px;
     margin: 0 10px 0 0;
+    }
   }
-}
 
 a:hover {
-  color: #222222;
-  background-color: #d0d0d0;
+  color: #222;
+  background-color: #D0D0D0;
+  cursor: default;
 
   mat-list-item p {
-    color: #222222; // Cambia este color al que desees
+    color: #222;
+    }
   }
-}
+
+.mdc-list {
+  padding: 0 !important;
+  }

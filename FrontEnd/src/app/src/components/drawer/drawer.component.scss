@@ -1,36 +1,34 @@
 .example-container {
   width: 100%;
   height: 100%;
-}
+  }
 
 mat-drawer-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
+  }
 
-mat-sidenav{
+mat-sidenav {
   width: 22%;
-  background-color: #222222f1;
-}
-
-
+  background-color: #222222F1;
+  }
 
 mat-sidenav-container {
   background-color: transparent;
-}
+  }
 
 .sidenav-top {
   top: 0;
   left: 0;
   width: 100%;
   height: auto;
-  max-height: 300px; /* Ajusta según tus necesidades */
+  max-height: 300px;
   transform: translateY(-100%);
   transition: transform 0.3s ease-in-out;
-  position: fixed; /* Fijarlo en la parte superior */
-}
+  position: fixed;
+  }
 
 .mat-drawer-opened.sidenav-top {
   transform: translateY(0); /* Cuando está abierto, aparece desde arriba */
-}
+  }

@@ -1,37 +1,57 @@
 .main-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  }
 
 img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border-style: solid;
-    border-color: #d0d0d0d0;
-}
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: #D0D0D0D0;
+  }
 
 .name {
-    font-size: 1rem;
-    margin: 10px 0 0 0;
-    max-width: 80%;
-    text-align: center;
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+  font-size: 1rem;
+  margin: 10px 0 0 0;
+  max-width: 80%;
+  text-align: center;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  }
+
+mat-divider {
+  width: 100%;
+  }
 
 .email {
-    font-size: 0.6rem;
-    margin: 2px 0 10px 0;
-    max-width: 80%;
-    text-align: center;
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #d0d0d0f0;
-}
+  font-size: 0.6rem;
+  margin: 2px 0 0 0;
+  padding-bottom: 20px;
+  max-width: 80%;
+  text-align: center;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #D0D0D0F0;
+  }
+
+.main-container:hover {
+  background-color: #D0D0D0D0;
+  color: #222 !important;
+
+  .email {
+    background-color: transparent;
+    color: #222 !important;
+    }
+  }
+
+p:hover {
+  background-color: transparent;
+  color: #222 !important;
+  }
