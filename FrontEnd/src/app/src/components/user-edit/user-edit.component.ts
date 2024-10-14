@@ -18,7 +18,21 @@ import {UserService} from "../services/services/user.service";
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [MatIconModule, FormsModule, MatButtonModule, MatCard, DrawerComponent, ReactiveFormsModule, MatDividerModule, MatCardHeader, MatCardContent, MatError, MatInput, MatFormField, MatLabel, TitleCasePipe, NgIf],
+  imports: [MatIconModule,
+    FormsModule,
+    MatButtonModule,
+    MatCard,
+    DrawerComponent,
+    ReactiveFormsModule,
+    MatDividerModule,
+    MatCardHeader,
+    MatCardContent,
+    MatError,
+    MatInput,
+    MatFormField,
+    MatLabel,
+    TitleCasePipe,
+    NgIf],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -79,8 +93,6 @@ export class UserEditComponent {
 
             this.found.set(true);
             console.log(this.found());
-
-            console.log('User found:', this.form.value);
           }, error: (error) => {
             console.error('User not found');
           }
@@ -119,20 +131,20 @@ export class UserEditComponent {
         ...this.userModel,
         ...this.form.value
       };
-
+      console.log('User model:', this.userModel);
+      this.userService.updateUser(this.id, this.userModel).subscribe({
+        next: (updatedUser: UserModel) => {
+          alert('User updated successfully');
+        },
+        error: (error: any) => {
+          console.error('Error updating user:', error);
+        },
+        complete: () => {
+          console.log('Update user completed');
+        }
+      });
+      alert('User updated successfully');
     }
-
-    this.userService.updateUser(this.userModel).subscribe({
-      next: (updatedUser: UserModel) => {
-        alert('User updated successfully');
-      },
-      error: (error: any) => {
-        console.error('Error updating user:', error);
-      },
-      complete: () => {
-        console.log('Update user completed');
-      }
-    });
   }
 
   changePicture() {
