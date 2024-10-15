@@ -40,17 +40,15 @@ import {UserService} from "../services/services/user.service";
 
 export class UserEditComponent {
   user = signal<User>({});
-  id: string = '';
-
   found = signal<boolean>(false);
-  email: String = '';
-  picture: URL | String = '';
+
+  id: string = '';
 
   isHovering = false;
   form: FormGroup;
   matcher = new ErrorStateMatcher();
 
-  userModel: UserModel = {
+  userModel = signal<UserModel>({
     id: 0,
     firstName: '',
     lastName: '',
@@ -59,7 +57,7 @@ export class UserEditComponent {
     phone: '',
     dni: '',
     picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
-  };
+  });
   protected readonly Role = Role;
 
   constructor(public auth: AuthService,
@@ -87,9 +85,7 @@ export class UserEditComponent {
         this.userService.getUserById(this.id).subscribe({
           next: (userModel) => {
             this.form.patchValue(userModel);
-
-            this.email = userModel.email;
-            this.picture = userModel.picture;
+            this.userModel.set(userModel);
 
             this.found.set(true);
             console.log(this.found());
@@ -132,9 +128,10 @@ export class UserEditComponent {
         ...this.form.value
       };
       console.log('User model:', this.userModel);
-      this.userService.updateUser(this.id, this.userModel).subscribe({
+      this.userService.updateUser(this.id, this.userModel()).subscribe({
         next: (updatedUser: UserModel) => {
           alert('User updated successfully');
+          console.log(updatedUser)
         },
         error: (error: any) => {
           console.error('Error updating user:', error);

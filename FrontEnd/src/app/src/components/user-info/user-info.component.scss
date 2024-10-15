@@ -8,11 +8,14 @@
   }
 
 mat-card {
+  background-color: #66645E;
   display: flex;
   width: 65%;
+  padding: 25px;
   }
 
 .header {
+  color: #D0D0D0;
   display: flex;
   flex-direction: row;
   }
@@ -38,15 +41,15 @@ img {
   }
 
 button {
-  background-color: transparent;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  color: #F6C90E;
   border: 1px solid rgba(246, 201, 14, 0.79);
+  background-color: transparent;
   border-radius: 5px;
   font-size: 100%;
+  color: #F6C90E;
   }
 
 button:hover {
   color: #222;
   background-color: #F6C90E;
+  cursor: pointer;
   }

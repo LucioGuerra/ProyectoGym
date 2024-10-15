@@ -5,12 +5,12 @@
         <mat-card-header>
           <div class="header">
             <div class="photo">
-              <img [src]="this.userModel.picture" alt="User Image" class="user-avatar-img">
+              <img [src]="this.userModel().picture" alt="User Image" class="user-avatar-img">
             </div>
             <div class="info">
-              <div class="name">{{ userModel.firstName }} {{ userModel.lastName }}</div>
-              <div class="email"> {{ userModel.email }}</div>
-              <div class="dni">DNI: {{ userModel.dni }}</div>
+              <div class="name">{{ userModel().firstName }} {{ userModel().lastName }}</div>
+              <div class="email"> {{ userModel().email }}</div>
+              <div class="dni">DNI: {{ userModel().dni }}</div>
               <div class="edit">
                 <button class="button">Edit</button>
               </div>
