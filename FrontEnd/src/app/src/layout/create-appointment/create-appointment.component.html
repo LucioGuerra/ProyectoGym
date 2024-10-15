@@ -4,7 +4,11 @@
             <div class="main-container">
                 <div class="main-content">
                     <div class="main-content__header">
+                      @if(appointmentID){
+                        <h1 class="main-content__title">Edit Appointment</h1>
+                      } @else {
                         <h1 class="main-content__title">Create Appointment</h1>
+                      }
                     </div>
                     <mat-divider></mat-divider>
                     <div class="main-content__body">
