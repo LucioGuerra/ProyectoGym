@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Appointment, AppointmentRequest } from '../../index'; // Ajusta según tus rutas
-import { Observable} from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { environment } from '../../../../../index';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Appointment, AppointmentRequest} from '../../index'; // Ajusta según tus rutas
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {environment} from '../../../../../index';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,8 @@ import { environment } from '../../../../../index';
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getAppointments(): Observable<Appointment[]> {
     return this.http.get<any[]>(this.apiUrl).pipe(
@@ -72,7 +73,7 @@ export class AppointmentService {
   }
 
   switchUserAttendance(appointmentId: string, userId: number, attendance: boolean) {
-    return this.http.post<any>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {} );
+    return this.http.post<any>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {});
   }
 
   cancelAppointment(id: string) {
@@ -80,6 +81,6 @@ export class AppointmentService {
   }
 
   dateAdapt(date: Date): string {
-    return date.toLocaleString().split(",")[0].split('/').reverse().join('-');
+    return date.toLocaleString("es-AR").split(",")[0].split('/').map(part => part.length === 1 ? '0' + part : part).reverse().join('-');
   }
 }
