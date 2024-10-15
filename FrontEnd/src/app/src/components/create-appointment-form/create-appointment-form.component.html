@@ -140,13 +140,13 @@
     }
     <div class="button-container">
       @if (appointmentId) {
-        <button mat-stroked-button [style.margin-right.px]="20" (click)="Cancel()">Cancel</button>
+        <button mat-stroked-button class="back-btn" (click)="Cancel()">Cancel</button>
         <button mat-flat-button (click)="updateAppointment()">
           <mat-icon>add</mat-icon>
           Update
         </button>
       } @else {
-        <button mat-stroked-button [style.margin-right.px]="20" (click)="Cancel()">Volver</button>
+        <button mat-stroked-button class="back-btn" (click)="Cancel()">Volver</button>
         <button mat-flat-button (click)="createAppointment()">
           <mat-icon>add</mat-icon>
           Create

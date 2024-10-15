@@ -1,9 +1,16 @@
 mat-toolbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 30px;
-    background: #000000cc;
-    position: fixed;
-    z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px;
+  background: #000000cc;
+  position: fixed;
+  z-index: 1000;
+}
+
+@media (max-width: 600px) {
+  mat-toolbar {
+    padding: 0 10px;
+    position: relative;
+  }
 }
