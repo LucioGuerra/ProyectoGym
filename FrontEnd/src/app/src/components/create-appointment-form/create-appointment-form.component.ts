@@ -148,7 +148,6 @@ export class CreateAppointmentFormComponent implements OnInit {
       });
 
     }
-    console.log(formatDate(new Date(Date.now()).toLocaleDateString(), 'yyyy-MM-dd', 'en-US'));
   }
 
   formatTime(date: Date): string {
