@@ -1,5 +1,25 @@
 <app-drawer>
   <ng-container main-content>
+    <div class="container">
+      <mat-card>
+        <mat-card-header>
+          <div class="header">
+            <div class="photo">
+              <img [src]="this.userModel.picture" alt="User Image" class="user-avatar-img">
+            </div>
+            <div class="info">
+              <div class="name">{{ userModel.firstName }} {{ userModel.lastName }}</div>
+              <div class="email"> {{ userModel.email }}</div>
+              <div class="dni">DNI: {{ userModel.dni }}</div>
+              <div class="edit">
+                <button class="button">Edit</button>
+              </div>
+            </div>
+            <div class="streak"></div>
+          </div>
 
+        </mat-card-header>
+      </mat-card>
+    </div>
   </ng-container>
 </app-drawer>
