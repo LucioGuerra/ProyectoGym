@@ -2,23 +2,82 @@
   <ng-container main-content>
     <div class="container">
       <mat-card>
+
         <mat-card-header>
-          <div class="header">
-            <div class="photo">
-              <img [src]="this.userModel().picture" alt="User Image" class="user-avatar-img">
-            </div>
-            <div class="info">
-              <div class="name">{{ userModel().firstName }} {{ userModel().lastName }}</div>
-              <div class="email"> {{ userModel().email }}</div>
-              <div class="dni">DNI: {{ userModel().dni }}</div>
-              <div class="edit">
-                <button class="button">Edit</button>
-              </div>
-            </div>
-            <div class="streak"></div>
+          <div class="photo">
+            <img [src]="this.userModel().picture" alt="User Image" class="user-avatar-img">
           </div>
 
+          <div class="info">
+            <div class="name">{{ userModel().firstName }} {{ userModel().lastName }}</div>
+            <div class="email"> {{ userModel().email }}</div>
+            <div class="dni">DNI: {{ userModel().dni }}</div>
+            <div class="edit">
+              <button (click)="editUser(userModel().id)" class="button">Edit</button>
+            </div>
+          </div>
+
+          <div class="streak">
+            <!--Acá después se agrega un if en base a las asistencias-->
+            <mat-card>
+              <div class="text">Meses activo: 22 🔥</div>
+            </mat-card>
+          </div>
         </mat-card-header>
+
+
+        <mat-card-content>
+          <div class="content">
+
+            <h1>Últimos turnos</h1>
+
+            <mat-divider></mat-divider>
+
+            <div class="iterables">
+              <div class="appointments">
+                <ng-container matColumnDef="activity">
+                  <th *matHeaderCellDef mat-header-cell> No.</th>
+                  <td *matCellDef="let appointment" mat-cell>
+                    <div class="card-container">
+                      <mat-chip class="appointment-activity-card">{{
+                          appointment.activity
+                        }}
+                      </mat-chip>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="capacity">
+                  <th *matHeaderCellDef mat-header-cell> No.</th>
+                  <td *matCellDef="let appointment" class="columnaCantidad" mat-cell>
+                    <div class="cantidad">
+                      <div class="progress-bar-container">
+                        <mat-progress-bar
+                          class="progress-bar"
+                          mode="determinate"
+                          value="{{
+                          (appointment.participantsCount * 100) /
+                            appointment.max_capacity
+                        }}"
+                        ></mat-progress-bar>
+                      </div>
+                      <div class="user-quantity">
+                        <p class="user-quantity-text">
+                          {{ appointment.participantsCount }} /
+                          {{ appointment.max_capacity }}
+                          <mat-icon>person</mat-icon>
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+              </div>
+              <div class="line"></div>
+              <div class="packages">
+
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
       </mat-card>
     </div>
   </ng-container>

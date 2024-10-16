@@ -34,4 +34,12 @@ export class UserService {
   updateUser(id: string, user: UserModel): Observable<any> {
     return this.http.patch<UserModel>(`${this.apiUrl}/${id}`, user);
   }
+
+  getUserAppointments(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/public/users/appointments/${id}`);
+  }
+
+  getUserPackages(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
+  }
 }
