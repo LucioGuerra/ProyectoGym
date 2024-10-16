@@ -1,0 +1,76 @@
+<app-create-package>
+  <ng-container header>
+    <h1 class="main-content__title">Create package</h1>
+  </ng-container>
+
+  <ng-container body>
+    <div class="main-content__body">
+      <mat-form-field appearance="outline" class="package_name">
+        <mat-label>Package name</mat-label>
+        <input matInput>
+        <mat-error>Package name can't be empty</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="package_description">
+        <mat-label>Package description</mat-label>
+        <textarea matInput></textarea>
+        <mat-error>Description can't be empty</mat-error>
+      </mat-form-field>
+
+      <form class="example-form">
+        <mat-form-field class="user_filter" appearance="outline">
+          <mat-label>Client DNI</mat-label>
+          <input type="text"
+                 placeholder="Pick one"
+                 aria-label="Client DNI"
+                 matInput
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+            @for (user of this.filteredOptions | async; track user.dni) {
+              <mat-option [value]="user.dni">
+                {{user.firstName}} {{user.lastName}}
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+
+      @for (activityQ of activityQuantity(); track activityQ) {
+        <div class="activity_rows">
+          <mat-form-field appearance="outline" class="activity">
+            <mat-label>Activity</mat-label>
+            <mat-select (selectionChange)="onSelectChange($event)">
+              <mat-option [value]="-1"></mat-option>
+              @for (activity of activities; track activity.id) {
+                <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
+              }
+            </mat-select>
+            <mat-error>Please select an activity</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="classes">
+            <input matInput type="number" placeholder="Weekly classes" min="1">
+            <mat-error>Weekly classes can't be empty</mat-error>
+          </mat-form-field>
+        </div>
+      }
+      <div class="button-container__activities">
+        <button mat-icon-button (click)="remove()" color="warn" class="remove_button">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button mat-icon-button (click)="add()" color="primary" class="add_button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="button-container__main">
+        <button mat-stroked-button (click)="return()" color="warn" class="return_button">
+          <!--<mat-icon>chevron_left</mat-icon>-->
+          Return
+        </button>
+        <button mat-flat-button (click)="create()" color="primary" class="create_button">
+          Create package
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</app-create-package>

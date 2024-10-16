@@ -7,6 +7,8 @@ import {UserEditComponent} from './src/components/user-edit/user-edit.component'
 import {UsersListComponent} from './src/components/users-list/users-list.component';
 import {CreateAppointmentComponent} from "./src/layout/create-appointment/create-appointment.component";
 import {ClientAgendaComponent} from "./src/layout/client-agenda/client-agenda.component";
+import {CreatePackage} from "./src/layout/create-package/create-package";
+import {CreatPackageFormComponent} from "./src/components/creat-package-form/creat-package-form.component";
 
 export const routes: Routes = [
   {path: 'home', component: HomePageComponent},
@@ -17,13 +19,8 @@ export const routes: Routes = [
   {path: 'edit', component: UserEditComponent},
   {path: 'update-announcement/:id', component: UserEditComponent},
   {path: 'admin/users', component: UsersListComponent},
-  {path: 'home', component: HomePageComponent},
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent},
-  {path: 'signup', component: SingupComponent},
-  {path: 'admin/agenda', component: ShifAdminScreenComponent},
-  {path: 'edit', component: UserEditComponent},
   {path: 'admin/appointment/create', component: CreateAppointmentComponent},
   {path: 'admin/appointment/edit/:id', component: CreateAppointmentComponent},
   {path: 'agenda', component: ClientAgendaComponent},
+  {path: 'package/create', component: CreatPackageFormComponent},
 ];

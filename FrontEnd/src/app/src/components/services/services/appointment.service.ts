@@ -80,6 +80,6 @@ export class AppointmentService {
   }
 
   dateAdapt(date: Date): string {
-    return date.toLocaleString().split(",")[0].split('/').reverse().join('-');
+    return date.toLocaleString("es-AR").split(",")[0].split('/').map(part => part.length === 1 ? '0' + part : part).reverse().join('-');
   }
 }

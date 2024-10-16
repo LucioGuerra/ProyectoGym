@@ -1,0 +1,15 @@
+@use "../../../../variables.scss";
+.main-content__title {
+  margin: 0;
+  color: variables.$white-color;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: start;
+}
+.main-content__body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}

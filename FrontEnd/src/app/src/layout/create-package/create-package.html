@@ -1,0 +1,17 @@
+<app-drawer>
+    <ng-container main-content>
+        <div class="centered-card">
+            <div class="main-container">
+                <div class="main-content">
+                    <div class="main-content__header">
+                      <ng-content select="[header]"></ng-content>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="main-content__body">
+                      <ng-content select="[body]"></ng-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</app-drawer>
