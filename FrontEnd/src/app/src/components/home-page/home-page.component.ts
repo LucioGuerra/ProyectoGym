@@ -46,6 +46,7 @@ export class HomePageComponent implements AfterViewInit {private sections: HTMLE
           this.router.navigate(['/agenda']);
         } else {
           console.log("No es admin ni cliente");
+          this.auth0.handleAuthentication();
         }
       } else {
         this.auth0.handleAuthentication();

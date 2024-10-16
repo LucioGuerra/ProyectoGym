@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { Router } from '@angular/router';
 import { AuthService } from "../services/services/auth.service";
+import {UserModel} from "../models";
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -53,8 +54,9 @@ export class SingupComponent {
       if (this.validacionPassword()) {
         this.error = false
         const json = this.formGroup.value;
-        console.log(json); //Esto se borra después, es para corroborar q se esta mandando todo ok
-        this.auth0.signup(json.email?.toString(), json.password?.toString());
+        var user: UserModel = {dni: json.dni!, firstName: json.firstName!, lastName: json.lastName!, email: json.email!};
+        console.log(json);
+        this.auth0.signup(json.email?.toString(), json.password?.toString(), user);
       } else {
         this.error = true;
         this.formGroup.markAsTouched();
