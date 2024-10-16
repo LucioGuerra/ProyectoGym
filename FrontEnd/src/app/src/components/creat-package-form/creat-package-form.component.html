@@ -17,8 +17,7 @@
         <mat-error>Description can't be empty</mat-error>
       </mat-form-field>
 
-      <form class="example-form">
-        <mat-form-field class="user_filter" appearance="outline">
+        <mat-form-field appearance="outline" class="user_filter">
           <mat-label>Client DNI</mat-label>
           <input type="text"
                  placeholder="Pick one"
@@ -34,7 +33,6 @@
             }
           </mat-autocomplete>
         </mat-form-field>
-      </form>
 
       @for (activityQ of activityQuantity(); track activityQ) {
         <div class="activity_rows">
