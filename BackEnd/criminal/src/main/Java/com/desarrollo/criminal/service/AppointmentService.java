@@ -8,10 +8,12 @@ import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.Package;
+import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.user.UserXAppointment;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.AppointmentRepository;
+import com.desarrollo.criminal.repository.PackageActivityRepository;
 import com.desarrollo.criminal.repository.UserXAppointmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -34,8 +36,7 @@ public class AppointmentService {
     private final UserService userService;
     private final ModelMapper modelMapper;
     private final UserXAppointmentRepository userXAppointmentRepository;
-    private final PackageService packageService;
-
+    private final PackageActivityService packageActivityService;
 
 
     public Appointment getAppointmentById(Long appointmentId) {
@@ -285,29 +286,36 @@ public class AppointmentService {
     public ResponseEntity<?> addParticipant(Long appointmentId, Long userId) {
         Appointment appointment = this.getAppointmentById(appointmentId);
         User user = userService.getUserById(userId);
+
         Package userPackage = user.getAPackage().stream().filter(Package::getActive).findFirst().orElseThrow(() -> new CriminalCrossException("USER_HAS_NO_ACTIVE_PACKAGE", "The user has no active package"));
-        if(userPackage.getPackageActivities().stream().noneMatch(packageActivity -> packageActivity.getActivity().equals(appointment.getActivity()))){
-            throw new CriminalCrossException("USER_HAS_NO_ACTIVITY", "The user has no activity in his package");
-        }
-        if(appointment.getParticipants().size() >= appointment.getMax_capacity()){
-            throw new CriminalCrossException("APPOINTMENT_FULL", "The appointment is full");
-        }
-        if(user.getAPackage().stream().filter(Package::getActive).findFirst().get().getPackageActivities().stream().filter(packageActivity -> packageActivity.getActivity().equals(appointment.getActivity())).findFirst().get().getQuantity() > 0){
-            throw new CriminalCrossException("USER_NO_CREDITS", "The user doesn't have enough credits for this activity");
-        }
-        if (user.getUserXAppointments().stream().filter(userXAppointment -> userXAppointment.getAppointment().getDate().equals(appointment.getDate())).count() >= 3){
-            throw new CriminalCrossException("USER_TOO_MANY_APPOINTMENTS", "The user has too many appointments in the same day");
-        }
-        //TODO: Validar que el usuario no tenga una cita en el mismo horario
-        if (appointment.getParticipants().contains(user)) {
-            throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
-        }
+
+        PackageActivity packageActivity = packageActivityService.findPackageActivityByActivityIdAndPackageId(appointment.getActivity().getId(),
+                userPackage.getId()).orElseThrow(() -> new CriminalCrossException("USER_HAS_NO_ACTIVITY", "The user has no activity in his package"));
+
+        this.validateAddParticipant(appointment, user, packageActivity);
+
         appointment.getParticipants().add(user);
         user.getUserXAppointments().add(new UserXAppointment(appointment, user));
+        packageActivity.setQuantity(packageActivity.getQuantity() - 1);
+
+        packageActivityService.save(packageActivity);
         appointmentRepository.save(appointment);
         userService.save(user);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
+    private void validateAddParticipant(Appointment appointment, User user, PackageActivity packageActivity) {
+        if (appointment.getMax_capacity() == appointment.getParticipants().size()){
+            throw new CriminalCrossException("APPOINTMENTS_IS_FULL", "The appointment is full");
+        }
+
+        if (packageActivity.getQuantity() == 0){
+            throw new CriminalCrossException("USER_NO_CREDITS", "The user doesn't have enough credits for this activity");
+        }
+
+        appointmentRepository.findAppointmentByDateAndStartTimeAndParticipantsContains(appointment.getDate(),
+                appointment.getStartTime(), user).orElseThrow(() -> new CriminalCrossException("USER_ALREADY_HAS_APPOINTMENT",
+                "The user already has an appointment at this time"));
     }
 
     @Transactional
@@ -317,7 +325,7 @@ public class AppointmentService {
 
         if (!appointment.getParticipants().contains(user)) {
             throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
-        }
+        } 
         userXAppointmentRepository.deleteByAppointmentAndUser(appointment, user);
         appointment.getParticipants().remove(user);
         appointmentRepository.save(appointment);

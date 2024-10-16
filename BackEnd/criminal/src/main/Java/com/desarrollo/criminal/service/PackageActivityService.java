@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -20,5 +21,9 @@ public class PackageActivityService {
         for (PackageActivity packageActivity : packageActivities) {
             packageActivityRepository.save(packageActivity);
         }
+    }
+
+    public Optional<PackageActivity> findPackageActivityByActivityIdAndPackageId(Long activityId, Long packageId) {
+        return packageActivityRepository.findPackageActivityByActivity_IdAndAPackage_Id(activityId, packageId);
     }
 }
