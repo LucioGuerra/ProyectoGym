@@ -15,7 +15,8 @@ import {AsyncPipe, NgForOf} from "@angular/common";
 import {Observable, startWith} from "rxjs";
 import {User} from "@auth0/auth0-angular";
 import {map} from "rxjs/operators";
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
+import {ActivityPackage, Package} from "../models/package.models";
 
 @Component({
   selector: 'app-creat-package-form',
@@ -48,8 +49,10 @@ export class CreatPackageFormComponent implements OnInit {
   activities: Activity[] = [];
   users: UserModel[] = [];
   activityQuantity = signal<number[]>([1]);
-  selectedValues = signal<string[]>(["-1"]);
+  selectedValues = signal<ActivityPackage[]>([{activityId: -1, quantity: 1}]);
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
+  packageName = new FormControl<string>('');
+  packageDescription = new FormControl<string>('');
 
   constructor(private activityService: ActivityService, private userService: UserService, private router: Router) {
     this.activityService.getActivities().subscribe(activities => this.activities = activities);
@@ -74,7 +77,7 @@ export class CreatPackageFormComponent implements OnInit {
 
   add() {
     this.activityQuantity.set([...this.activityQuantity(), this.activityQuantity().length + 1]);
-    this.selectedValues.set([...this.selectedValues(), "-1"]);
+    this.selectedValues.set([...this.selectedValues(), {activityId: -1, quantity: 1}]);
   }
 
   remove() {
@@ -86,7 +89,7 @@ export class CreatPackageFormComponent implements OnInit {
 
   onSelectChange(event: MatSelectChange) {
     const value = (event as unknown as HTMLSelectElement).value;
-    this.selectedValues.set([...this.selectedValues(), value]);
+    this.selectedValues.set([...this.selectedValues(), {activityId: parseInt(value), quantity: 1}]);
   }
 
   displayUser(user: UserModel): string {
@@ -99,10 +102,20 @@ export class CreatPackageFormComponent implements OnInit {
   }
 
   create() {
-    alert("creado");
+    if (this.packageName.value && this.packageDescription.value && this.myControl.value && this.myControl.value !== '' && this.selectedValues().length > 0 && this.selectedValues().every(value => value.activityId !== -1)) {
+      let createdPackage: Package = {
+        name: this.packageName.value,
+        description: this.packageDescription.value!,
+        userId: this.users.find(user => user.dni === this.myControl.value)?.id!,
+        activities: this.selectedValues().map(value => value),
+      }
+      alert(`creado ${createdPackage}`);
+    } else {
+      alert('Faltan campos por completar');
+    }
   }
 
-  return(){
+  return() {
     this.router.navigate(['/admin/agenda']);
   }
 }
