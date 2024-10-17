@@ -8,7 +8,8 @@ export interface UserModel {
     dni: String;
     picture?: URL;
 }
+
 export enum Role {
-     ADMIN = 'ADMIN',
-     CLIENT = 'CLIENT'
+  ADMIN = 'ADMIN',
+  CLIENT = 'CLIENT'
 }

@@ -14,13 +14,6 @@ export class AuthService {
   isAdmin = signal<boolean>(false);
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
-  /*public userRegistration: UserModel = {
-    dni: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    picture: new URL('https://cdn.pixabay.com/photo'),
-  };*/
 
   constructor(private userService: UserService) {
     this.auth0Client = new auth0.WebAuth({
@@ -53,6 +46,7 @@ export class AuthService {
       email: email,
       password: password,
       connection: environment.auth0.database,
+      audience: environment.auth0.audience
     }, (err: any, result: any) => {
       if (err) {
         console.error('Error al registrar:', err);
@@ -66,7 +60,7 @@ export class AuthService {
   public handleAuthentication(): void {
     const queryParams = new URLSearchParams(window.location.hash.substring(1));
     const urlParams = new URLSearchParams(queryParams);
-    console.log("entrando a handleAuthentication");
+
     if (urlParams.get("access_token")) {
       try {
         const accessToken = urlParams.get("access_token");

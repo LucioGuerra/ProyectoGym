@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, effect, signal} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, signal} from '@angular/core';
 
 import {DrawerComponent} from "../drawer/drawer.component";
-import {Role, UserModel } from '../models';
+import {Role, UserModel} from '../models';
 import {UserService} from "../services/services/user.service";
 import {Router} from "@angular/router";
 
@@ -12,7 +12,7 @@ import {MatActionList} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {AuthService} from "../services/services/auth.service";
-import { User } from "@auth0/auth0-angular";
+import {User} from "@auth0/auth0-angular";
 
 @Component({
   selector: 'app-users-list',
@@ -39,16 +39,16 @@ export class UsersListComponent {
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'buttons'];
 
   constructor(
-      private userService: UserService,
-      private auth0: AuthService,
-      private router: Router,) {
+    private userService: UserService,
+    private auth0: AuthService,
+    private router: Router,
+    private changes: ChangeDetectorRef) {
     effect(() => {
-      if(this.auth0.isAuthenticated()){
-        if(this.auth0.isAdmin()){
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
         }
         //todo redirect to client page
-      }
-      else{
+      } else {
         this.router.navigate(['/login']);
       }
     });
@@ -58,11 +58,12 @@ export class UsersListComponent {
     this.userService.getAllUsers().subscribe({
       next: (users: any) => {
         this.users = users.map((users: any) => ({
-            id: users.id,
-            firstName: users.firstName,
-            lastName: users.lastName,
-            email: users.email
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          email: users.email
         }));
+        this.changes.detectChanges();
       },
       error: (error: any) => {
         console.error(error);

@@ -1,0 +1,114 @@
+.container {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+  }
+
+mat-card {
+  background-color: #66645E;
+  display: flex;
+  width: 65%;
+  padding: 25px;
+  }
+
+
+mat-card-header {
+  color: #D0D0D0;
+  display: flex;
+  flex-direction: row;
+
+  img {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    padding-top: 60px;
+    gap: 0.25em;
+    font-size: large;
+
+    .name {
+      font-size: 300%;
+      margin-bottom: -7.5px;
+      width: max-content;
+      }
+
+    button {
+      border: 1px solid rgba(246, 201, 14, 0.79);
+      background-color: transparent;
+      border-radius: 5px;
+      font-size: 100%;
+      color: #F6C90E;
+      }
+
+    button:hover {
+      color: #F6C90E;
+      background-color: rgba(208, 208, 208, 0.1);
+      cursor: pointer;
+      }
+    }
+
+  .streak {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: end;
+
+    width: 100%;
+    margin-right: 30px;
+    }
+
+  mat-card {
+    background-color: rgba(208, 208, 208, 0.75);
+    padding: 10px;
+
+    height: auto;
+    width: max-content;
+    font-weight: bold;
+    color: #222;
+
+    .text {
+      width: 100%;
+      padding-left: 5px;
+      font-size: 130%;
+      }
+    }
+  }
+
+.content {
+  padding: 10px;
+
+  h1 {
+    font-weight: normal;
+    margin: 30px auto 5px 20px;
+    }
+
+  .iterables {
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+
+    .line {
+      width: 1px;
+      height: 10px;
+      }
+
+    .appointments {
+      width: 50%;
+      height: 10px;
+      }
+
+    .packages {
+      width: 30%;
+      height: 10px;
+      }
+    }
+  }
