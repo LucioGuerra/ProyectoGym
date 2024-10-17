@@ -97,7 +97,6 @@ mat-card-header {
     gap: 1em;
 
     .line {
-      background-color: #D0D0D0;
       width: 1px;
       height: 10px;
       }
@@ -105,15 +104,11 @@ mat-card-header {
     .appointments {
       width: 50%;
       height: 10px;
-      background-color: #0A0B0B;
-
-      
       }
 
     .packages {
       width: 30%;
       height: 10px;
-      background-color: #B9A552;
       }
     }
   }

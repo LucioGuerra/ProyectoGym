@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../../../index';
 
-import {UserModel} from '../../models';
+import {Appointment, UserModel} from '../../models';
 
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,16 @@ export class UserService {
     return this.http.patch<UserModel>(`${this.apiUrl}/${id}`, user);
   }
 
-  getUserAppointments(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/public/users/appointments/${id}`);
+  getUserAppointments(id: string): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.apiUrl}/api/public/users/appointments/${id}`).pipe(
+      map((appointments: Appointment[]) => appointments.map(appointment => ({
+        ...appointment,
+        date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+        max_capacity: appointment.max_capacity || 0,
+        startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
+        endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
+      }))
+      )    );
   }
 
   getUserPackages(id: string): Observable<any> {

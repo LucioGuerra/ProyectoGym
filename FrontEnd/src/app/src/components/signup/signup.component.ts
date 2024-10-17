@@ -21,11 +21,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, ToolbarComponent, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule],
-  templateUrl: './singup.component.html',
-  styleUrl: './singup.component.scss',
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SingupComponent {
+export class SignupComponent {
   error = false;//El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide = true;
 
@@ -48,7 +48,7 @@ export class SingupComponent {
     return this.formGroup.get(['password'])?.value === this.formGroup.get(['repassword'])?.value;
   }
 
-  singup(): void {
+  signup(): void {
     if (this.formGroup.valid) {
       if (this.validacionPassword()) {
         this.error = false

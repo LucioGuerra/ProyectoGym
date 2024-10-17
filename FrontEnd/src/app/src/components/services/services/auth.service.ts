@@ -47,6 +47,7 @@ export class AuthService {
         console.error('Error al registrar:', err);
       } else {
         console.log('Usuario registrado exitosamente:', result);
+        this.login(email, password);
       }
     });
   }

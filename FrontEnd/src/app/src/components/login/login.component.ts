@@ -55,7 +55,7 @@ export class LoginComponent {
   }
 
   constructor(private router: Router) {}
-  singup(){
+  signup(){
     this.router.navigate(['/signup']);
   }
   volver(){

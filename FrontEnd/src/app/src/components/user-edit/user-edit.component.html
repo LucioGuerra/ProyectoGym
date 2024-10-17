@@ -7,7 +7,7 @@
         <div class="header">
           <mat-card-header>
             <div class="back">
-              <button (click)="usersList()" aria-label="Go back" class="back-btn" mat-icon-button>
+              <button (click)="back()" aria-label="Go back" class="back-btn" mat-icon-button>
                 <mat-icon>chevron_left</mat-icon>
               </button>
             </div>
@@ -113,7 +113,7 @@
       </mat-card>
       } @else {
         <mat-card class="not-found">
-        <button (click)="usersList()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
+        <button (click)="back()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
           <mat-icon>chevron_left</mat-icon>
         </button>
         <div>

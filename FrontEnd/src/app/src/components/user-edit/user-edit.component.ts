@@ -105,8 +105,8 @@ export class UserEditComponent {
     }
   }
 
-  usersList() {
-    this.router.navigate(['/admin/users']);
+  back() {
+    window.history.back();
   }
 
   changePassword(): void {

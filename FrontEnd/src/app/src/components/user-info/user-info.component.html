@@ -29,48 +29,11 @@
         <mat-card-content>
           <div class="content">
 
-            <h1>Últimos turnos</h1>
-
+            <h1>Last appointments</h1>
             <mat-divider></mat-divider>
 
             <div class="iterables">
-              <div class="appointments">
-                <ng-container matColumnDef="activity">
-                  <th *matHeaderCellDef mat-header-cell> No.</th>
-                  <td *matCellDef="let appointment" mat-cell>
-                    <div class="card-container">
-                      <mat-chip class="appointment-activity-card">{{
-                          appointment.activity
-                        }}
-                      </mat-chip>
-                    </div>
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="capacity">
-                  <th *matHeaderCellDef mat-header-cell> No.</th>
-                  <td *matCellDef="let appointment" class="columnaCantidad" mat-cell>
-                    <div class="cantidad">
-                      <div class="progress-bar-container">
-                        <mat-progress-bar
-                          class="progress-bar"
-                          mode="determinate"
-                          value="{{
-                          (appointment.participantsCount * 100) /
-                            appointment.max_capacity
-                        }}"
-                        ></mat-progress-bar>
-                      </div>
-                      <div class="user-quantity">
-                        <p class="user-quantity-text">
-                          {{ appointment.participantsCount }} /
-                          {{ appointment.max_capacity }}
-                          <mat-icon>person</mat-icon>
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                </ng-container>
-              </div>
+              <div class="appointments"></div>
               <div class="line"></div>
               <div class="packages">
 
