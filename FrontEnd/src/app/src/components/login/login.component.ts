@@ -47,7 +47,7 @@ export class LoginComponent {
       const json = this.formGroup.value;
       console.log(json); //Esto se borra después, es para corroborar q se esta mandando to do ok
       this.auth0.login(json.email?.toString(), json.password?.toString());
-      this.router.navigate(['/agenda']);
+      /*this.router.navigate(['/agenda']);*/
     } else {
       this.error = true;
       this.formGroup.markAllAsTouched();
