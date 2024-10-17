@@ -29,7 +29,6 @@ public class UserRequestDTO {
     @Size(min = 8, max = 8, message = "DNI must be composed of 8 characters.")
     private String dni;
 
-    @NotBlank(message = "Phone cannot be empty.")
     private String phone;
 
     private URL picture;

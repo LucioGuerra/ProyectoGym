@@ -4,6 +4,8 @@ import com.desarrollo.criminal.entity.user.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
+import java.net.URL;
+
 public record UserUpdateDTO(
         @Size(min = 1, max = 25, message = "First name must be between 1 and 25 characters.")
         String firstName,
@@ -19,5 +21,8 @@ public record UserUpdateDTO(
 
         String phone,
 
-        String role) {
+        String role,
+
+        URL picture
+) {
 }

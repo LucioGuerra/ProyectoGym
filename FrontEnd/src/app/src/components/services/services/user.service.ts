@@ -15,7 +15,7 @@ export class UserService {
       }
 
       getUserByEmail(email: string): Observable<UserModel> {
-        return this.http.get<UserModel>(`${this.apiUrl}/${email}`);
+        return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
       }
 
       getAllUsers(): Observable<UserModel[]> {
@@ -28,10 +28,10 @@ export class UserService {
       }
 
       updateUser(user: UserModel): Observable<any> {
-        return this.http.put<UserModel>(`${this.apiUrl}/${user.id}`, user);
+        return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
       }
 
-  editUser(picture: any, email: string) {
+  setPictureToUser(picture: any, email: string) {
     let user = this.getUserByEmail(email);
     user.subscribe((user) => {
       user.picture = picture;

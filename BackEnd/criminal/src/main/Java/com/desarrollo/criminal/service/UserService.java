@@ -111,6 +111,9 @@ public class UserService {
         if(Optional.ofNullable(userUpdateDTO.phone()).isPresent()) {
             user.setPhone(userUpdateDTO.phone());
         }
+        if(Optional.ofNullable(userUpdateDTO.picture()).isPresent()) {
+            user.setPicture(userUpdateDTO.picture());
+        }
         if(Optional.ofNullable(userUpdateDTO.role()).isPresent()) {
             if (userUpdateDTO.role() == "ADMIN") {
                 user.setRole(Role.ADMIN);

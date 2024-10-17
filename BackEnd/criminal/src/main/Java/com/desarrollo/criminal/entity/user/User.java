@@ -41,7 +41,7 @@ public class User {
     @Column(length = 15)
     private String phone;
 
-    @Column(nullable = false)
+    @Column
     private URL picture;
 
     @Column(name = "created_at", updatable = false)

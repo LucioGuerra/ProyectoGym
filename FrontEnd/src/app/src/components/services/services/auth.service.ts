@@ -14,13 +14,13 @@ export class AuthService {
   isAdmin = signal<boolean>(false);
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
-  userRegistration: UserModel = {
+  /*public userRegistration: UserModel = {
     dni: "",
     email: "",
     firstName: "",
     lastName: "",
     picture: new URL('https://cdn.pixabay.com/photo'),
-  };
+  };*/
 
   constructor(private userService: UserService) {
     this.auth0Client = new auth0.WebAuth({
@@ -49,7 +49,6 @@ export class AuthService {
   }
 
   public signup(email: string | undefined, password: string | undefined, user: UserModel): void {
-    console.log("Entra a signup, ", user);
     this.auth0Client.signup({
       email: email,
       password: password,
@@ -58,22 +57,8 @@ export class AuthService {
       if (err) {
         console.error('Error al registrar:', err);
       } else {
-        console.log('Usuario registrado exitosamente:', result);
-        this.userRegistration.email = email!;
-        this.userRegistration.firstName = user.firstName;
-        this.userRegistration.lastName = user.lastName!;
-        this.userRegistration.dni = user.dni;
-        console.log("userRegistration: ", this.userRegistration);
-        this.createUser(email);
-        //this.userService.createUser(user).subscribe(
-        // (saveUser: UserModel) => {
-        // console.log("Usuario guardado: ", saveUser);
+        this.createUser(user);
         this.login(email, password);
-        //},
-        //(error) => {
-        //console.error("Error al guardar el usuario: ", error);
-        //}
-        //);
       }
     });
   }
@@ -87,9 +72,32 @@ export class AuthService {
         const accessToken = urlParams.get("access_token");
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
-        console.log("accessToken: ", accessToken, "expiresIn: ", expiresIn, "idToken: ", idToken);
+
         // @ts-ignore
-        this.userService.editUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+        var user: UserModel = this.userService.getUserByEmail(jwtDecode(idToken)['email']);
+        if(user){
+          if (user.picture == null) {
+            // @ts-ignore
+            this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+          }
+        }else {
+          // @ts-ignore
+          var email:String = jwtDecode(idToken)['email'];
+          // @ts-ignore
+          var firstName:String = jwtDecode(idToken)['given_name'];
+          // @ts-ignore
+          var lastName:String = jwtDecode(idToken)['family_name'];
+          // @ts-ignore
+          var picture:URL = jwtDecode(idToken)['picture'];
+          // @ts-ignore
+          user = {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            picture: picture,
+          }
+          this.createUser(user);
+        }
         this.setSession(accessToken, expiresIn, idToken);
       } catch (error) {
         console.error(error);
@@ -172,28 +180,19 @@ export class AuthService {
     }
   }
 
-  private createUser(email: any) {
-    let usermodel: UserModel = {
-      dni: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      picture: new URL("http://localhost:4200"),
-    };
-    console.log("userRegistration: ", this.userRegistration);
+  private createUser(user: UserModel) {
+    console.log("Entra a createUser");
 
     // @ts-ignore
-    this.userService.getUserByEmail(email).subscribe(
-      (user: UserModel) => {usermodel = user},
-      (error) => { console.error("Error al obtener el usuario por email: ", error); }
-    );
-    console.log("usermodel: ", usermodel);
-    if (usermodel.dni != "") {
-      console.log("El usuario ya existe");
-      return;
-    }
-    console.log("Entra a createUser");
-    this.userService.createUser(this.userRegistration).subscribe(
+    this.userService.getUserByEmail(user.email).subscribe(
+      (user: UserModel) => {
+        console.log("Usuario encontrado: ", user);
+      },
+      (error) => {
+        console.error("Error al buscar el usuario: ", error);
+      });
+
+    this.userService.createUser(user).subscribe(
       (saveUser: UserModel) => {
         console.log("Usuario guardado: ", saveUser);
       },
