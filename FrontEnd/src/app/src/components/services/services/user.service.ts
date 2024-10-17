@@ -6,11 +6,6 @@ import {Appointment, UserModel} from '../../models';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs/operators";
-import { Injectable } from '@angular/core';
-import { UserModel } from '../../models';
-import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import {User} from "@auth0/auth0-angular";
 
 @Injectable({
   providedIn: 'root'

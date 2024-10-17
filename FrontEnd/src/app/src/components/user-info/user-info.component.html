@@ -13,7 +13,7 @@
             <div class="email"> {{ userModel().email }}</div>
             <div class="dni">DNI: {{ userModel().dni }}</div>
             <div class="edit">
-              <button (click)="editUser(userModel().id)" class="button">Edit</button>
+              <button (click)="editUser(userModel().id ?? 0)" class="button">Edit</button>
             </div>
           </div>
 
