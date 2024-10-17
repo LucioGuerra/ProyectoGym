@@ -18,7 +18,7 @@ ng-container {
 
 .main-section {
   display: grid;
-  grid-template-columns: 1fr 2fr; // Ajusta las proporciones según necesites
+  grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr 4fr;
   grid-template-areas:
     "calendar agenda"
