@@ -17,6 +17,7 @@ import {User} from "@auth0/auth0-angular";
 import {map} from "rxjs/operators";
 import {Router} from '@angular/router';
 import {ActivityPackage, Package} from "../models/package.models";
+import {PackageService} from "../services/services/package.service";
 
 @Component({
   selector: 'app-creat-package-form',
@@ -55,7 +56,7 @@ export class CreatPackageFormComponent implements OnInit {
   packageName = new FormControl('');
   packageDescription = new FormControl('');
 
-  constructor(private activityService: ActivityService, private userService: UserService, private router: Router) {
+  constructor(private packageService: PackageService, private activityService: ActivityService, private userService: UserService, private router: Router) {
     this.activityService.getActivities().subscribe(activities => this.activities = activities);
   }
 
@@ -124,9 +125,19 @@ export class CreatPackageFormComponent implements OnInit {
       let createdPackage: Package = {
         name: this.packageName.value,
         description: this.packageDescription.value,
-        userId: this.users.find(user => user.dni === this.myControl.value)?.id!,
+        userId: this.selectedUser()!.id!,
         activities: this.selectedValues().map(value => value),
       }
+      this.packageService.createPackage(createdPackage).subscribe(
+        (response) => {
+          console.log(response);
+          alert(`creado ${response}`);
+        },
+        (error) => {
+          console.error(error);
+          alert(`error ${error}`);
+        }
+      );
       alert(`creado ${createdPackage}`);
     } else {
       alert('Faltan campos por completar');
@@ -135,6 +146,19 @@ export class CreatPackageFormComponent implements OnInit {
 
   return() {
     this.router.navigate(['/admin/agenda']);
+  }
+
+  onQuantityChange(event: Event, index: number) {
+    const inputElement = event.target as HTMLInputElement;
+    const value = parseInt(inputElement.value, 10);
+
+    const updatedValues = [...this.selectedValues()];
+
+    updatedValues[index - 1] = { ...updatedValues[index-1], quantity: value };
+
+    this.selectedValues.set(updatedValues);
+
+    console.log(updatedValues);
   }
 }
 
