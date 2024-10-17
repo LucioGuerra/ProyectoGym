@@ -128,7 +128,7 @@ export class UserEditComponent {
         ...this.form.value
       };
       console.log('User model:', this.userModel);
-      this.userService.updateUser(this.id, this.userModel()).subscribe({
+      this.userService.updateUser(this.userModel()).subscribe({
         next: (updatedUser: UserModel) => {
           alert('User updated successfully');
           console.log(updatedUser)
