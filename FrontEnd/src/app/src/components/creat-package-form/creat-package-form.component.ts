@@ -48,11 +48,12 @@ export class CreatPackageFormComponent implements OnInit {
   myControl = new FormControl<string>('');
   activities: Activity[] = [];
   users: UserModel[] = [];
+  selectedUser = signal<UserModel | null>(null);
   activityQuantity = signal<number[]>([1]);
   selectedValues = signal<ActivityPackage[]>([{activityId: -1, quantity: 1}]);
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
-  packageName = new FormControl<string>('');
-  packageDescription = new FormControl<string>('');
+  packageName = new FormControl('');
+  packageDescription = new FormControl('');
 
   constructor(private activityService: ActivityService, private userService: UserService, private router: Router) {
     this.activityService.getActivities().subscribe(activities => this.activities = activities);
@@ -87,9 +88,18 @@ export class CreatPackageFormComponent implements OnInit {
     }
   }
 
-  onSelectChange(event: MatSelectChange) {
+  onSelectChange(event: MatSelectChange, index: number) {
     const value = (event as unknown as HTMLSelectElement).value;
-    this.selectedValues.set([...this.selectedValues(), {activityId: parseInt(value), quantity: 1}]);
+    const updatedValues = [...this.selectedValues()];
+    console.log(value);
+    console.log(index);
+    console.log(updatedValues);
+    // Actualizamos el valor en el índice correspondiente
+    updatedValues[index - 1] = { ...updatedValues[index - 1], activityId: parseInt(value, 10) };
+    console.log(updatedValues)
+    // Establecemos la nueva lista actualizada en la señal
+    this.selectedValues.set(updatedValues);
+    console.log(updatedValues);
   }
 
   displayUser(user: UserModel): string {
@@ -97,15 +107,23 @@ export class CreatPackageFormComponent implements OnInit {
   }
 
   private _filter(dni: string): UserModel[] {
-    const filterValue = dni.toLowerCase();
-    return this.users.filter(user => user.dni.toLowerCase().includes(filterValue));
+    const filterValue = dni;
+    return this.users.filter(user => user.dni.includes(filterValue));
+  }
+
+  onUserSelected(user: UserModel) {
+    this.selectedUser.set(user);
   }
 
   create() {
-    if (this.packageName.value && this.packageDescription.value && this.myControl.value && this.myControl.value !== '' && this.selectedValues().length > 0 && this.selectedValues().every(value => value.activityId !== -1)) {
+    console.log(this.packageName.value);
+    console.log(this.packageDescription.value);
+    console.log(this.selectedUser());
+    console.log(this.selectedValues());
+    if (this.packageName.value && this.packageDescription.value && this.selectedUser() != null && this.selectedValues().length > 0 && this.selectedValues().every(value => value.activityId !== -1)) {
       let createdPackage: Package = {
         name: this.packageName.value,
-        description: this.packageDescription.value!,
+        description: this.packageDescription.value,
         userId: this.users.find(user => user.dni === this.myControl.value)?.id!,
         activities: this.selectedValues().map(value => value),
       }

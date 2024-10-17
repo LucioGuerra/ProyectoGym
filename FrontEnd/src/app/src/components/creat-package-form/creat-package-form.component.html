@@ -7,38 +7,38 @@
     <div class="main-content__body">
       <mat-form-field appearance="outline" class="package_name">
         <mat-label>Package name</mat-label>
-        <input matInput>
+        <input matInput [formControl]="packageName">
         <mat-error>Package name can't be empty</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="package_description">
         <mat-label>Package description</mat-label>
-        <textarea matInput></textarea>
+        <textarea matInput [formControl]="packageDescription" ></textarea>
         <mat-error>Description can't be empty</mat-error>
       </mat-form-field>
 
-        <mat-form-field appearance="outline" class="user_filter">
-          <mat-label>Client DNI</mat-label>
-          <input type="text"
-                 placeholder="Pick one"
-                 aria-label="Client DNI"
-                 matInput
-                 [formControl]="myControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
-            @for (user of this.filteredOptions | async; track user.dni) {
-              <mat-option [value]="user.dni">
-                {{user.firstName}} {{user.lastName}}
-              </mat-option>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="user_filter">
+        <mat-label>Client DNI</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Client DNI"
+               matInput
+               [formControl]="myControl"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete"
+                          [displayWith]="displayUser"
+                          (optionSelected)="onUserSelected($event.option.value)">
+          <mat-option *ngFor="let user of filteredOptions | async" [value]="user">
+            {{user.firstName}} {{user.lastName}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
       @for (activityQ of activityQuantity(); track activityQ) {
         <div class="activity_rows">
           <mat-form-field appearance="outline" class="activity">
             <mat-label>Activity</mat-label>
-            <mat-select (selectionChange)="onSelectChange($event)">
+            <mat-select (selectionChange)="onSelectChange($event, activityQ)">
               <mat-option [value]="-1"></mat-option>
               @for (activity of activities; track activity.id) {
                 <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
