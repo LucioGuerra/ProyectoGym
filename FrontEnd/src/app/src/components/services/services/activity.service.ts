@@ -18,5 +18,10 @@ export class ActivityService {
     return this.http.get<Activity[]>(this.apiUrl);
   }
 
+  updateActivity(id: bigint, updatedActivity: Activity): Observable<Activity> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.put<Activity>(url, updatedActivity);
+  }
+  
 
 }

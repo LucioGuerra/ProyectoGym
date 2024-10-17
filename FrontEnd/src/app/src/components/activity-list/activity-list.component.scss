@@ -7,8 +7,7 @@
     width: 100%;
     padding: 0;
 }
- 
-//color del contenedor interno de la card es #66645E
+
 
 .card {
     display: flex;
@@ -16,14 +15,14 @@
     background-color: #222222;
     color: #d0d0d0;
     font-weight: bold;
-    height: 25vh;
-    width: 80%;
+    height: 28vh;
+    width: 72%;
     max-height: auto;
     padding: 1rem;
     box-sizing: border-box;
     max-width: 100%;
     overflow: visible;
-    transform: translateY(-100%);
+    transform: translateY(-80%);
 }
 
 .card-header {
@@ -34,15 +33,79 @@
     width: 100%;
     height: 50px;
     margin-bottom: 10px;
-  }
+}
   
-  h1{
+h1 {
     font-size: 200%;
-  }
+}
   
-  .icon {
+.icon {
     font-size: 230%;
-    color: white;
+    color: #d0d0d0;
     width: fit-content;
     height: fit-content;
-  }
+}
+
+
+.table-container {
+    border-radius: 10px;
+    overflow: hidden;
+}
+  
+mat-table {
+    width: 100%;
+    table-layout: fixed;
+    background-color: rgb(102, 100, 94);
+}
+
+.table {
+  width: 100%;
+}
+
+.contenido {
+  width: 97%;
+}
+
+.column {
+  background-color: transparent !important;
+  text-underline-offset: 0;
+}
+
+.test {
+  background-color: red !important;
+}
+
+tr {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 120%;
+  gap: 18%;
+  margin-left: 2%;
+  color: #d0d0d0;
+}
+
+
+
+
+
+
+
+
+///////////////////////////////////////
+  
+.derecha {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    max-width: 70px;
+}
+
+
+
+
+
+
+
+
+
