@@ -78,7 +78,6 @@ export class UserEditComponent {
   }
 
   ngOnInit(): void {
-    if (this.auth.isAdmin()) {
       this.id = this.route.snapshot.paramMap.get('id') || '';
 
       if (this.id) {
@@ -94,15 +93,6 @@ export class UserEditComponent {
           }
         });
       }
-    } else {
-      // Necesito el id del usuario para poder buscarlo en la base de datos.
-      // No lo tengo, asi que esto queda para
-      // cuando se sincronicen los id de los usuarios de Auth0 con los de la base de datos.
-
-      // Lu tiene que conectar la base de datos con auth0
-      // ademas de asignar el rol default a los usuarios. Asi
-      // comparten id y cuando quiera hacer el update, puedo buscar el usuario por id.
-    }
   }
 
   back() {
@@ -123,15 +113,15 @@ export class UserEditComponent {
       this.form.markAsTouched();
       return;
     } else if (this.form.valid) {
-      this.userModel = {
-        ...this.userModel,
+      this.userModel.set({
+        ...this.userModel(),
         ...this.form.value
-      };
-      console.log('User model:', this.userModel);
+      });
+      console.log('User model:', this.userModel());
       this.userService.updateUser(this.userModel()).subscribe({
         next: (updatedUser: UserModel) => {
-          alert('User updated successfully');
           console.log(updatedUser)
+          alert('User updated successfully');
         },
         error: (error: any) => {
           console.error('Error updating user:', error);
@@ -140,7 +130,6 @@ export class UserEditComponent {
           console.log('Update user completed');
         }
       });
-      alert('User updated successfully');
     }
   }
 
