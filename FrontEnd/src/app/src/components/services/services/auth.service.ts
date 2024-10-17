@@ -30,7 +30,7 @@ export class AuthService {
       responseType: 'token id_token',
       cookieDomain: "."
     })
-    /*this.loadSession();*/
+    this.loadSession();
   }
 
   public login(email: string | undefined, password: string | undefined): void {
@@ -81,21 +81,7 @@ export class AuthService {
             this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
           }
         }else {
-          // @ts-ignore
-          var email:String = jwtDecode(idToken)['email'];
-          // @ts-ignore
-          var firstName:String = jwtDecode(idToken)['given_name'];
-          // @ts-ignore
-          var lastName:String = jwtDecode(idToken)['family_name'];
-          // @ts-ignore
-          var picture:URL = jwtDecode(idToken)['picture'];
-          // @ts-ignore
-          user = {
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
-            picture: picture,
-          }
+          //todo: crear usuario si se autentico por 3ro por primera vez
           this.createUser(user);
         }
         this.setSession(accessToken, expiresIn, idToken);
