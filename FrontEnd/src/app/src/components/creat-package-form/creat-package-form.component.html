@@ -47,7 +47,8 @@
             <mat-error>Please select an activity</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="classes">
-            <input matInput type="number" placeholder="Weekly classes" min="1">
+            <mat-label>Weekly classes</mat-label>
+            <input matInput type="number" min="1" (input)="onQuantityChange($event, activityQ)">
             <mat-error>Weekly classes can't be empty</mat-error>
           </mat-form-field>
         </div>

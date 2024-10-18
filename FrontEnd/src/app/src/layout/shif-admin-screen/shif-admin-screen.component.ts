@@ -65,6 +65,11 @@ export class ShifAdminScreenComponent implements OnInit {
   ngOnInit(): void {
     this.loadAppointment(this.tabIndex());
     this.loadActivities();
+    this.appointmentService.appointmentChanged$.subscribe(() => {
+      console.log('Cambios en los appointments detectados. Recargando...');
+      this.loadAppointment(this.tabIndex());  // Recargamos los appointments
+      this.changeDetectorRef.markForCheck();  // Forzar la detección de cambios
+    });
   }
 
   loadAppointment(tabIndex: number) {
@@ -162,5 +167,11 @@ export class ShifAdminScreenComponent implements OnInit {
   gofurtherDate($event: MouseEvent) {
     this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() + 1)));
     this.loadAppointment(this.tabIndex());
+  }
+
+  onAppointmentsUpdated() {
+    console.log('entra a onAppointmentsUpdated, index:', this.tabIndex());
+    this.loadAppointment(this.tabIndex());
+    this.changeDetectorRef.markForCheck()// Recargar appointments cuando sea necesario
   }
 }

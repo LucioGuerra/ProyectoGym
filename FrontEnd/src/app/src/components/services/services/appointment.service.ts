@@ -1,17 +1,42 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Appointment, AppointmentRequest} from '../../index'; // Ajusta según tus rutas
-import {Observable} from 'rxjs';
+import {interval, Observable, Subject, switchMap} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '../../../../../index';
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
+  private appointmentChangedSource = new Subject<void>();
+  appointmentChanged$ = this.appointmentChangedSource.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+  ) {
+    this.startPolling();
+  }
+
+  // Iniciar polling para obtener citas cada cierto tiempo
+  startPolling() {
+    // Emitir actualizaciones cada 1 segundos
+    interval(1000)
+      .pipe(// Llamar al servidor para obtener citas
+      )
+      .subscribe(() => {
+          this.appointmentChangedSource.next(); // Emitir las citas actualizadas
+        },
+      );
+  }
+
+
+  notifyAppointmentChanged() {+
+    console.log('Notificando cambio en las citas');
+    this.appointmentChangedSource.next();
   }
 
   getAppointments(): Observable<Appointment[]> {
@@ -72,8 +97,8 @@ export class AppointmentService {
     );
   }
 
-  switchUserAttendance(appointmentId: string, userId: number, attendance: boolean) {
-    return this.http.post<any>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {});
+  switchUserAttendance(appointmentId: string, userId: number, attendance: boolean): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {});
   }
 
   cancelAppointment(id: string) {
@@ -83,4 +108,18 @@ export class AppointmentService {
   dateAdapt(date: Date): string {
     return date.toLocaleString("es-AR").split(",")[0].split('/').map(part => part.length === 1 ? '0' + part : part).reverse().join('-');
   }
+
+  reserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
+    return this.userService.getUserByEmail(userEmail).pipe(
+      switchMap(user => this.http.post<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`, {}))
+    );
+  }
+
+
+  unreserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
+    return this.userService.getUserByEmail(userEmail).pipe(
+      switchMap(user => this.http.delete<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`))
+    );
+  }
+
 }
