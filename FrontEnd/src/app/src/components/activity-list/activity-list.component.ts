@@ -13,7 +13,7 @@ import { User } from "@auth0/auth0-angular";
 
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatActionList} from "@angular/material/list";
-
+import { MatButton } from '@angular/material/button';
 
 
 
@@ -32,6 +32,7 @@ import {MatActionList} from "@angular/material/list";
     MatMenuItem,
     MatMenuTrigger,
     MatActionList, 
+    MatButton,
   ],
   templateUrl: './activity-list.component.html',
   styleUrls: ['./activity-list.component.scss'],
@@ -79,6 +80,11 @@ export class ActivityListComponent {
       error: (error: any) => console.error(error),
       complete: () => console.log('Request completed')
     });
+  }
+
+
+  addItem(){
+    alert("adding activity")
   }
 
 
