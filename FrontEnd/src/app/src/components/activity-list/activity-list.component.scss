@@ -1,119 +1,121 @@
 .contenedor {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: transparent;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   padding: 0;
+  position: relative; 
 }
 
 .card {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   background-color: #222222;
   color: #d0d0d0;
   font-weight: bold;
-  height: 28vh;
-  width: 72%;
-  max-height: auto;
+  width: 63%;
   padding: 1rem;
   box-sizing: border-box;
   max-width: 100%;
-  overflow: visible;
-  transform: translateY(-80%);
+  overflow: hidden;
+  position: absolute; 
+  top: 10%; 
+  left: 50%;
+  transform: translate(-50%, 0); 
 }
 
 .card-header {
-display: flex;
-align-items: center;
-justify-content: space-between; 
-width: 100%;
-height: 50px;
-margin-bottom: 10px;
-gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  gap: 10px;
 }
 
 .left-header {
-display: flex;
-align-items: center;
-gap: 10px;
-flex-grow: 1; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
 }
 
 h1 {
-font-size: 200%;
+  font-size: 200%;
 }
 
 .icon {
-font-size: 230%;
-color: #d0d0d0;
-width: fit-content;
-height: fit-content;
+  font-size: 230%;
+  color: #d0d0d0;
+  width: fit-content;
+  height: fit-content;
 }
 
 .add-button {
-font-size: 24px;
-transition: transform 0.3s ease-in-out;
-flex-shrink: 0; 
-transform: translateX(-15%);
+  font-size: 24px;
+  transition: transform 0.3s ease-in-out;
+  flex-shrink: 0;
+  transform: translateX(-65%);
 }
 
-///////////---------------------------------------------
-
-
 .table-container {
+  flex: 1;
+  max-height: auto; 
   border-radius: 10px;
   overflow: hidden;
 }
 
 mat-table {
   width: 100%;
-  table-layout: fixed;
+  table-layout: fixed; 
   background-color: rgb(102, 100, 94);
-}
-
-.table {
-  width: 100%;
-  text-decoration: none; 
-}
-
-.contenido {
-  width: 97%;
+  border-collapse: collapse; 
 }
 
 .column {
   background-color: transparent !important;
-  text-underline-offset: 0;
 }
 
 th, td {
-  font-size: 95%;  
-  word-wrap: break-word;
+  padding: 6px 40px;
+}
+
+th {
+  font-size: 92%;
+  transform: translateY(18%);
+  padding: 2% !important;
+  text-align: center;
+}
+
+td {
+  font-size: 85%;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
   text-align: left;
-  padding: 8px 10px;
 }
 
 tr {
-  display: flex;
-  align-items: center;
+  display: table-row; 
   font-weight: bold;
   font-size: 120%;
-  gap: 18%;
-  margin-left: 2%;
   color: #d0d0d0;
 }
+
 
 
 ///////////////////////////////////////////////////////////////
 
 
 
-@media (min-width: 950px) and (max-width: 1250px) {
+@media (min-width: 999px) and (max-width: 1250px) {
   .card {
-    width: 85%;  
+    width: 75%;  
     height: auto;
-    transform: translateY(-95%);
     padding: 0.75rem;
   }
 
@@ -150,188 +152,367 @@ tr {
     margin: 0;
     padding: 8px;
     align-self: center;
-    transform: none;  
+    transform: none;
+    transform: translateX(-60%);  
   }
 
   .table-container {
-    width: 100%;
-    overflow-x: auto;  
+    width: 100%;  
   }
 
   mat-table {
     width: 100%;
-    table-layout: auto; 
+    table-layout: fixed;
+    border-collapse: collapse; 
   }
 
   th, td {
-    font-size: 95%;  
-    word-wrap: break-word;
+    padding: 6px 33.5px;
+  }
+  
+  th {
+    font-size: 92%;
+    transform: translateY(18%);
+    padding: 2% !important;
+    text-align: center;
+  }
+  
+  td {
+    font-size: 80%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
     text-align: left;
-    padding: 8px 10px;
   }
+  
 
-  tr {
-    display: flex;
-    gap: 15%;
-  }
 }
 
 //////////////////////////////////////////
 
-@media (min-width: 756px) and (max-width: 950px) {
+
+@media (min-width: 880px) and (max-width: 999px) {
   
-  th, td {
-    font-size: 95%;  
-    word-wrap: break-word;
+  th {
+    font-size: 80%;
+    transform: translateY(30%);
+    padding: 2% !important;
     text-align: left;
-    padding: 8px 10px;
+    padding: 3px !important;
   }
-
-  tr {
-    display: flex;
-    gap: 9%;
-  }
-
-}
-
-/////////////////////////////////////////////
-
-@media (min-width: 623px) and (max-width: 756px) {
   
-  th, td {
-    font-size: 82%;  
-    word-wrap: break-word;
-    text-align: left;
-    padding: 8px 10px;
-  }
-
-  tr {
-    display: flex;
-    gap: 6.8%;
-  }
-
-}
-
-////////////////////////////////////////////
-
-@media (min-width: 525px) and (max-width: 623px) {
-  
-  th, td {
-    font-size: 79%;  
-    word-wrap: break-word;
-    text-align: left;
-    padding: 8px 10px;
-  }
-
-  tr {
-    display: flex;
-    gap: 4%;
-  }
-
-}
-
-/////////////////////////////////////////////
-
-
-@media (min-width: 506px) and (max-width: 525px) {
-  
-  th, td {
-    font-size: 75%;  
-    word-wrap: break-word;
-    text-align: left;
-    padding: 8px 10px;
-  }
-
-  tr {
-    display: flex;
-    gap: 2%;
-  }
-
-}
-
-////////////////////////////////////////////
-
-
-@media (min-width: 450px) and (max-width: 506px) {
-  
-  th, td {
-    font-size: 70%;  
-    word-wrap: break-word;
-    text-align: left;
-    padding: 8px 10px;
-  }
-
-  tr {
-    display: flex;
-    gap: 0.25%;
-  }
-
-}
-
-////////////////////////////////////////////
-
-
-@media (max-width: 450px) {
-  .card {
-    width: 95%;
-    height: auto;
-    transform: translateY(-50%);
-    padding: 0.5rem;
-  }
-
-  .card-header {
-    display: flex;
-    flex-direction: row; 
-    align-items: center; 
-    justify-content: space-between; 
-    height: 40px; 
-    gap: 10px;
-    padding: 0 8px;
-  }
-
-  .left-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 70%;
-  }
-
-  h1 {
-    font-size: 120%; 
+  td {
+    font-size: 70%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
     white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: left;
+    padding: 6px 10px;
   }
 
-  .icon {
-    font-size: 140%; 
+}
+
+
+
+
+
+/////////////////////////////////////////////
+@media (min-width: 756px) and (max-width: 880px) {
+  
+  th {
+    font-size: 70%;
+    transform: translateY(28%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 3px !important;
+  }
+  
+  td {
+    font-size: 60%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 10px;
   }
 
-  .add-button {
-    font-size: 20px;
-    margin: 0; 
-    padding: 6px; 
+}
+
+
+
+/////////////////////////////////////////////
+
+@media (min-width: 710px) and (max-width: 756px) {
+  
+  th {
+    font-size: 65%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 3px !important;
+  }
+  
+  td {
+    font-size: 58%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 6px;
   }
 
+}
+
+/////////////////////////////////////////////
+
+@media (min-width: 670px) and (max-width: 710px) {
+  
+  th {
+    font-size: 65%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 3px !important;
+  }
+  
+  td {
+    font-size: 55%;
+    overflow: auto; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 4px;
+  }
+
+}
+
+///////////////////////////////////////////
+
+@media (min-width: 623px) and (max-width: 670px) {
+  
+  th {
+    font-size: 62%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 2px !important;
+  }
+  
+  td {
+    font-size: 52%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 3px;
+  }
+
+}
+
+////////////////////////////////////////////
+
+@media (min-width: 565px) and (max-width: 623px) {
+  
+  .card {
+    width: 80%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 75%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 55%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 10px;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+
+@media (min-width: 506px) and (max-width: 565px) {
+  
+  .card {
+    width: 90%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 75%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 57%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 10px;
+  }
+
+}
+
+////////////////////////////////////////////
+
+
+@media (min-width: 470px) and (max-width: 506px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 75%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 57%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 10px;
+  }
+
+}
+
+//////////////////////////////////////////////
+
+@media (min-width: 433px) and (max-width: 470px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 75%;
+    transform: translateY(38%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 53%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 10px;
+  }
+
+}
+
+////////////////////////////////////////////
+
+
+@media (min-width: 411px) and (max-width: 433px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 65%;
+    transform: translateY(48%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 55%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 5px;
+  }
+
+}
+
+//////////////////////////////////////////////
+
+@media (min-width: 393px) and (max-width: 411px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 65%;
+    transform: translateY(48%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 53%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 3px;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+@media (max-width: 393px) {
+  
   .table-container {
-    width: 100%;
     overflow-x: auto; 
+    width: 100%; 
   }
 
-  mat-table {
+  .card {
     width: 100%;
-    table-layout: auto; 
   }
 
-  th, td {
-    font-size: 90%; 
-    word-wrap: break-word; 
-    text-align: left; 
-    padding: 6px 8px;
+  th {
+    font-size: 80%;
+    transform: translateY(50%);
+    padding: 2% !important;
+    text-align: left;
+    padding: 1px !important;
+  }
+  
+  td {
+    font-size: 70%;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    text-align: left;
+    padding: 6px 3px;
   }
 
-  tr {
-    display: table-row; 
-    gap: 0; 
-  }
 }

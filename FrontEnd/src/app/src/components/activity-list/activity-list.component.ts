@@ -59,11 +59,10 @@ export class ActivityListComponent {
         this.router.navigate(['/login']);
       }
 
-
     });
   }
 
-
+  
   ngOnInit() {
     this.activityService.getActivities().subscribe({
       next: (activities: any) => {
@@ -81,15 +80,15 @@ export class ActivityListComponent {
       complete: () => console.log('Request completed')
     });
   }
+    
 
 
-  addItem(){
+  addActivity(){
     alert("adding activity")
   }
 
 
   updateActivity(id: bigint) {
-    this.router.navigate(['/update-activity', id]); 
+    alert("upadating activity with id:" + id);
   }
-
 }
