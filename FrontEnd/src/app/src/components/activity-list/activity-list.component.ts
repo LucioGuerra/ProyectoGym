@@ -11,9 +11,10 @@ import { Role } from '../models';
 import { Activity } from '../models';
 import { User } from "@auth0/auth0-angular";
 
-import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {MatActionList} from "@angular/material/list";
+import { MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import { MatActionList} from "@angular/material/list";
 import { MatButton } from '@angular/material/button';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 
@@ -44,7 +45,8 @@ export class ActivityListComponent {
   roles = Object.values(Role);
   user = signal<User>({}); 
   activities = signal<Activity[]>([]); 
-  dataSource = signal<Activity[]>([]);
+  dataSource = new MatTableDataSource<Activity>();
+
   displayedColumns: string[] = ['name', 'description', 'price', 'buttons'];
 
 
@@ -73,7 +75,7 @@ export class ActivityListComponent {
           price: activity.price
         }));
         this.activities.set(formattedActivities);
-        this.dataSource.set(formattedActivities);  
+        this.dataSource.data = formattedActivities;   
         this.changes.detectChanges();
       },
       error: (error: any) => console.error(error),

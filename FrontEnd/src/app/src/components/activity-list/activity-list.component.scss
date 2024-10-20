@@ -6,7 +6,7 @@
   height: 100vh;
   width: 100%;
   padding: 0;
-  position: relative; 
+  position: relative;
 }
 
 .card {
@@ -21,10 +21,10 @@
   box-sizing: border-box;
   max-width: 100%;
   overflow: hidden;
-  position: absolute; 
-  top: 10%; 
+  position: absolute;
+  top: 10%;
   left: 50%;
-  transform: translate(-50%, 0); 
+  transform: translate(-50%, 0);
 }
 
 .card-header {
@@ -64,16 +64,17 @@ h1 {
 
 .table-container {
   flex: 1;
-  max-height: auto; 
+  max-height: auto;
   border-radius: 10px;
-  overflow: hidden;
+  overflow: hidden
 }
 
 mat-table {
   width: 100%;
-  table-layout: fixed; 
+  table-layout: auto;
   background-color: rgb(102, 100, 94);
-  border-collapse: collapse; 
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .column {
@@ -81,29 +82,36 @@ mat-table {
 }
 
 th, td {
-  padding: 6px 40px;
-}
-
-th {
-  font-size: 92%;
-  transform: translateY(18%);
-  padding: 2% !important;
+  padding: 12px 70px; 
   text-align: center;
 }
 
-td {
-  font-size: 85%;
-  overflow: hidden; 
-  text-overflow: ellipsis; 
+th {
+  font-size: 1rem;
+  font-weight: bold;
+  border-bottom: 2px solid #d0d0d0;
   white-space: nowrap; 
-  text-align: left;
+}
+
+td {
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 tr {
-  display: table-row; 
-  font-weight: bold;
-  font-size: 120%;
+  display: table-row;
   color: #d0d0d0;
+}
+
+mat-header-row, mat-row {
+  display: table-row;
+}
+
+mat-cell, mat-header-cell {
+  flex: 1; 
+  width: 25%; 
 }
 
 
@@ -167,22 +175,36 @@ tr {
   }
 
   th, td {
-    padding: 6px 33.5px;
-  }
-  
-  th {
-    font-size: 92%;
-    transform: translateY(18%);
-    padding: 2% !important;
+    padding: 12px 75px; 
     text-align: center;
   }
   
-  td {
-    font-size: 80%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
+  th {
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
-    text-align: left;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
+  }
+  
+  mat-cell, mat-header-cell {
+    flex: 1; 
+    width: 25%; 
   }
   
 
@@ -193,22 +215,34 @@ tr {
 
 @media (min-width: 880px) and (max-width: 999px) {
   
+  th, td {
+    padding: 12px 50px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 80%;
-    transform: translateY(30%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 3px !important;
+    font-size: 0.99rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 70%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 10px;
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
+  }
+  
 
 }
 
@@ -219,21 +253,32 @@ tr {
 /////////////////////////////////////////////
 @media (min-width: 756px) and (max-width: 880px) {
   
+  th, td {
+    padding: 12px 35px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 70%;
-    transform: translateY(28%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 3px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 60%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 10px;
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
   }
 
 }
@@ -244,21 +289,28 @@ tr {
 
 @media (min-width: 710px) and (max-width: 756px) {
   
+  th, td {
+    padding: 12px 27px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 65%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 3px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 58%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 6px;
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
   }
 
 }
@@ -267,21 +319,25 @@ tr {
 
 @media (min-width: 670px) and (max-width: 710px) {
   
+  th, td {
+    padding: 12px 22px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 65%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 3px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 55%;
-    overflow: auto; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 4px;
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
+  
 
 }
 
@@ -289,21 +345,23 @@ tr {
 
 @media (min-width: 623px) and (max-width: 670px) {
   
+  th, td {
+    padding: 12px 18px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 62%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 2px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 52%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 3px;
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -318,21 +376,23 @@ tr {
     padding: 0.75rem;
   }
 
+  th, td {
+    padding: 12px 28px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 75%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 55%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 10px;
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -348,21 +408,23 @@ tr {
     padding: 0.75rem;
   }
 
+  th, td {
+    padding: 12px 28px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 75%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 57%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 10px;
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -378,21 +440,23 @@ tr {
     padding: 0.75rem;
   }
 
+  th, td {
+    padding: 12px 30px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 75%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 57%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 10px;
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -407,21 +471,23 @@ tr {
     padding: 0.75rem;
   }
 
+  th, td {
+    padding: 12px 26px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 75%;
-    transform: translateY(38%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 53%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 10px;
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -437,21 +503,23 @@ tr {
     padding: 0.75rem;
   }
 
+  th, td {
+    padding: 12px 25px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 65%;
-    transform: translateY(48%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 55%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 5px;
+    font-size: 0.60rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -466,21 +534,23 @@ tr {
     padding: 0.75rem;
   }
 
+  th, td {
+    padding: 12px 25px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 65%;
-    transform: translateY(48%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 53%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 3px;
+    font-size: 0.60rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
@@ -498,21 +568,23 @@ tr {
     width: 100%;
   }
 
+  th, td {
+    padding: 12px 28px; 
+    text-align: center;
+  }
+  
   th {
-    font-size: 80%;
-    transform: translateY(50%);
-    padding: 2% !important;
-    text-align: left;
-    padding: 1px !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
   }
   
   td {
-    font-size: 70%;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    text-align: left;
-    padding: 6px 3px;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
 }
