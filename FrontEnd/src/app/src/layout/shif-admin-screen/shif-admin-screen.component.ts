@@ -39,7 +39,7 @@ export class ShifAdminScreenComponent implements OnInit {
 
   public appointments: Appointment[] = [];
 
-  public selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
+  public selectedDate = signal<Date>(this.getStoredDate());
   public selectedActivities = signal<string[]>([]);
   public appointmentList = signal<Appointment[]>([]);
   kinesiology= signal<string[]>(['Kinesiology', 'Kinesiologia']);
@@ -58,6 +58,7 @@ export class ShifAdminScreenComponent implements OnInit {
       } else {
         this.router.navigate(['/login']);
       }
+      this.saveStoredDate(this.selectedDate());
     });
     console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
@@ -116,6 +117,15 @@ export class ShifAdminScreenComponent implements OnInit {
         console.error('Error al obtener las actividades', error);
       }
     );
+  }
+
+  saveStoredDate(date: Date) {
+    localStorage.setItem('selectedDate', date.toISOString());
+  }
+
+  getStoredDate(): Date {
+    const date = localStorage.getItem('selectedDate');
+    return date ? new Date(date) : new Date();
   }
 
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
