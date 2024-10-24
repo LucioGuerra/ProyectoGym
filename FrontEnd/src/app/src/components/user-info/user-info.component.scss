@@ -92,23 +92,31 @@ mat-card-header {
     margin: 30px auto 5px 20px;
     }
 
+  mat-divider{
+    margin-bottom: 10px;
+    }
+
   .iterables {
     display: grid;
+    justify-self: center;
     grid-template-areas:
     'appointments divider packages';
-    gap: 1em;
+    gap: 2em;
+    width: 95%;
 
     .appointments {
       grid-area: appointments;
-      align-self: start;
       height: auto;
+      #activity{
+        justify-items: right;
+        }
       }
 
     .divider{
       grid-area: divider;
       width: 0.25px;
       height: 90%;
-      background-color: rgba(209, 209, 209, 0.44);
+      background-color: rgba(208, 208, 208, 0.19); //Ver si puedo implementar un degradado
       align-self: center;
       }
 

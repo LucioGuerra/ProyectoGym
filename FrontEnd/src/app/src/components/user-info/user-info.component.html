@@ -116,7 +116,7 @@
                         </ng-container>
                         <ng-container matColumnDef="activity">
                           <th mat-header-cell *matHeaderCellDef> No.</th>
-                          <td mat-cell *matCellDef="let appointment">
+                          <td id="activity" mat-cell *matCellDef="let appointment">
                             <div class="card-container">
                               <mat-chip class="appointment-activity-card">{{
                                   appointment.activity
