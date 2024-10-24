@@ -6,22 +6,36 @@
   <ng-container body>
     <div class="main-content__body">
       <mat-form-field appearance="outline" class="package_name">
-        <mat-label>Package name</mat-label>
+        <mat-label>Nombre del paquete</mat-label>
         <input matInput [formControl]="packageName">
-        <mat-error>Package name can't be empty</mat-error>
+        @if (packageName.invalid && packageName.dirty) {
+          @if (packageName.errors?.['required']) {
+            <mat-error>El nombre del paquete es obligatorio.</mat-error>
+          }
+          @if (packageName.errors?.['minlength']) {
+            <mat-error>El nombre del paquete debe tener al menos 3 caracteres.</mat-error>
+          }
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="package_description">
-        <mat-label>Package description</mat-label>
-        <textarea matInput [formControl]="packageDescription" ></textarea>
-        <mat-error>Description can't be empty</mat-error>
+        <mat-label>Descripción del paquete</mat-label>
+        <textarea matInput [formControl]="packageDescription"></textarea>
+        @if (packageDescription.invalid && packageDescription.dirty) {
+          @if (packageDescription.errors?.['required']) {
+            <mat-error>La descripción es obligatoria.</mat-error>
+          }
+          @if (packageDescription.errors?.['maxlength']) {
+            <mat-error>La descripción debe tener menos de 500 caracteres.</mat-error>
+          }
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="user_filter">
-        <mat-label>Client DNI</mat-label>
+        <mat-label>DNI del cliente</mat-label>
         <input type="text"
-               placeholder="Pick one"
-               aria-label="Client DNI"
+               placeholder="Selecciona uno"
+               aria-label="DNI del cliente"
                matInput
                [formControl]="myControl"
                [matAutocomplete]="auto">
@@ -32,27 +46,36 @@
             {{user.firstName}} {{user.lastName}}
           </mat-option>
         </mat-autocomplete>
+        @if (myControl.invalid && myControl.dirty) {
+          <mat-error>La selección del cliente es obligatoria.</mat-error>
+        }
       </mat-form-field>
 
       @for (activityQ of activityQuantity(); track activityQ) {
         <div class="activity_rows">
           <mat-form-field appearance="outline" class="activity">
-            <mat-label>Activity</mat-label>
+            <mat-label>Actividad</mat-label>
             <mat-select (selectionChange)="onSelectChange($event, activityQ)">
-              <mat-option [value]="-1"></mat-option>
+              <mat-option [value]="-1">Selecciona una actividad</mat-option>
               @for (activity of activities; track activity.id) {
                 <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
               }
             </mat-select>
-            <mat-error>Please select an activity</mat-error>
+            @if (selectedValues()[activityQ - 1].activityId === -1) {
+              <mat-error>Por favor selecciona una actividad.</mat-error>
+            }
           </mat-form-field>
+
           <mat-form-field appearance="outline" class="classes">
-            <mat-label>Weekly classes</mat-label>
+            <mat-label>Clases semanales</mat-label>
             <input matInput type="number" min="1" (input)="onQuantityChange($event, activityQ)">
-            <mat-error>Weekly classes can't be empty</mat-error>
+            @if (selectedValues()[activityQ - 1].quantity < 1) {
+              <mat-error>Las clases semanales deben ser mayores a 0.</mat-error>
+            }
           </mat-form-field>
         </div>
       }
+
       <div class="button-container__activities">
         <button mat-icon-button (click)="remove()" color="warn" class="remove_button">
           <mat-icon>remove</mat-icon>
@@ -61,15 +84,16 @@
           <mat-icon>add</mat-icon>
         </button>
       </div>
+
       <div class="button-container__main">
         <button mat-stroked-button (click)="return()" color="warn" class="return_button">
-          <!--<mat-icon>chevron_left</mat-icon>-->
-          Return
+          Volver
         </button>
         <button mat-flat-button (click)="create()" color="primary" class="create_button">
-          Create package
+          Crear paquete
         </button>
       </div>
+
     </div>
   </ng-container>
 </app-create-package>

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {CreateAppointmentFormComponent} from "../create-appointment-form/create-appointment-form.component";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
@@ -46,15 +46,15 @@ import {PackageService} from "../services/services/package.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreatPackageFormComponent implements OnInit {
-  myControl = new FormControl<string>('');
+  myControl = new FormControl<string>('', [Validators.required]);
   activities: Activity[] = [];
   users: UserModel[] = [];
   selectedUser = signal<UserModel | null>(null);
   activityQuantity = signal<number[]>([1]);
   selectedValues = signal<ActivityPackage[]>([{activityId: -1, quantity: 1}]);
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
-  packageName = new FormControl('');
-  packageDescription = new FormControl('');
+  packageName = new FormControl('', [Validators.required]);
+  packageDescription = new FormControl('', [Validators.required, Validators.maxLength(500)]);
 
   constructor(private packageService: PackageService, private activityService: ActivityService, private userService: UserService, private router: Router) {
     this.activityService.getActivities().subscribe(activities => this.activities = activities);
