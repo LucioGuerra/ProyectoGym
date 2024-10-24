@@ -176,7 +176,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 75px; 
-    text-align: center;
   }
   
   th {
@@ -184,6 +183,7 @@ mat-cell, mat-header-cell {
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
+    text-align: center;
   }
   
   td {
@@ -191,6 +191,7 @@ mat-cell, mat-header-cell {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    text-align: left
   }
   
   tr {
@@ -217,7 +218,6 @@ mat-cell, mat-header-cell {
   
   th, td {
     padding: 12px 40px; 
-    text-align: center;
   }
   
   th {
@@ -255,7 +255,6 @@ mat-cell, mat-header-cell {
   
   th, td {
     padding: 12px 35px; 
-    text-align: center;
   }
   
   th {
@@ -291,7 +290,6 @@ mat-cell, mat-header-cell {
   
   th, td {
     padding: 12px 27px; 
-    text-align: center;
   }
   
   th {
@@ -321,7 +319,6 @@ mat-cell, mat-header-cell {
   
   th, td {
     padding: 12px 22px; 
-    text-align: center;
   }
   
   th {
@@ -347,7 +344,6 @@ mat-cell, mat-header-cell {
   
   th, td {
     padding: 12px 18px; 
-    text-align: center;
   }
   
   th {
@@ -378,7 +374,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 28px; 
-    text-align: center;
   }
   
   th {
@@ -410,7 +405,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 28px; 
-    text-align: center;
   }
   
   th {
@@ -442,7 +436,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 30px; 
-    text-align: center;
   }
   
   th {
@@ -473,7 +466,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 26px; 
-    text-align: center;
   }
   
   th {
@@ -505,7 +497,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 25px; 
-    text-align: center;
   }
   
   th {
@@ -536,7 +527,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 25px; 
-    text-align: center;
   }
   
   th {
@@ -570,7 +560,6 @@ mat-cell, mat-header-cell {
 
   th, td {
     padding: 12px 28px; 
-    text-align: center;
   }
   
   th {
