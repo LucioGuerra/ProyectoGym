@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {CreateAppointmentFormComponent} from "../create-appointment-form/create-appointment-form.component";
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
@@ -11,7 +11,7 @@ import {Activity, UserModel} from "../models";
 import {ActivityService} from "../services/services";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {UserService} from "../services/services/user.service";
-import {AsyncPipe, NgForOf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {Observable, startWith} from "rxjs";
 import {User} from "@auth0/auth0-angular";
 import {map} from "rxjs/operators";
@@ -39,126 +39,120 @@ import {PackageService} from "../services/services/package.service";
     MatAutocomplete,
     MatAutocompleteTrigger,
     AsyncPipe,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './creat-package-form.component.html',
   styleUrl: './creat-package-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreatPackageFormComponent implements OnInit {
-  myControl = new FormControl<string>('', [Validators.required]);
   activities: Activity[] = [];
   users: UserModel[] = [];
-  selectedUser = signal<UserModel | null>(null);
-  activityQuantity = signal<number[]>([1]);
-  selectedValues = signal<ActivityPackage[]>([{activityId: -1, quantity: 1}]);
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
-  packageName = new FormControl('', [Validators.required]);
-  packageDescription = new FormControl('', [Validators.required, Validators.maxLength(500)]);
 
-  constructor(private packageService: PackageService, private activityService: ActivityService, private userService: UserService, private router: Router) {
-    this.activityService.getActivities().subscribe(activities => this.activities = activities);
-  }
+  // Definimos un FormGroup que contiene el FormArray de actividades
+  packageForm: FormGroup = new FormGroup({
+    packageName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    packageDescription: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    myControl: new FormControl('', [Validators.required]), // Autocomplete para el usuario
+    activitiesArray: new FormArray([]) // FormArray para las actividades
+  });
+
+  constructor(
+    private packageService: PackageService,
+    private activityService: ActivityService,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
     this.loadActivities();
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.packageForm.controls['myControl'].valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || ''))
     );
+
+    // Inicializar el primer conjunto de actividad y cantidad
+    this.addActivity();
   }
 
+  // Cargar lista de usuarios
   private loadUsers() {
-    this.userService.getAllUsers().subscribe(users => this.users = users);
+    this.userService.getAllUsers().subscribe(users => (this.users = users));
   }
 
+  // Cargar lista de actividades
   private loadActivities() {
-    this.activityService.getActivities().subscribe(activities => this.activities = activities);
+    this.activityService.getActivities().subscribe(activities => (this.activities = activities));
   }
 
-  add() {
-    this.activityQuantity.set([...this.activityQuantity(), this.activityQuantity().length + 1]);
-    this.selectedValues.set([...this.selectedValues(), {activityId: -1, quantity: 1}]);
+  // Getter para facilitar el acceso al FormArray
+  get activitiesArray(): FormArray {
+    return this.packageForm.get('activitiesArray') as FormArray;
   }
 
-  remove() {
-    if (this.activityQuantity().length > 1) {
-      this.activityQuantity.set([...this.activityQuantity().slice(0, -1)]);
-      this.selectedValues.set([...this.selectedValues().slice(0, -1)]);
+  // Agregar una nueva actividad y cantidad como FormGroup
+  addActivity() {
+    const activityControl = new FormControl(-1, [Validators.required, Validators.min(1)]); // Control para la actividad seleccionada
+    const quantityControl = new FormControl(1, [Validators.required, Validators.min(1)]); // Control para la cantidad de clases semanales
+
+    const activityGroup = new FormGroup({
+      activityId: activityControl,
+      quantity: quantityControl
+    });
+
+    this.activitiesArray.push(activityGroup); // Añadir el FormGroup al FormArray
+  }
+
+  // Eliminar una actividad
+  removeActivity(index: number) {
+    if (this.activitiesArray.length > 1) {
+      this.activitiesArray.removeAt(index);
     }
   }
 
-  onSelectChange(event: MatSelectChange, index: number) {
-    const value = (event as unknown as HTMLSelectElement).value;
-    const updatedValues = [...this.selectedValues()];
-    console.log(value);
-    console.log(index);
-    console.log(updatedValues);
-    // Actualizamos el valor en el índice correspondiente
-    updatedValues[index - 1] = { ...updatedValues[index - 1], activityId: parseInt(value, 10) };
-    console.log(updatedValues)
-    // Establecemos la nueva lista actualizada en la señal
-    this.selectedValues.set(updatedValues);
-    console.log(updatedValues);
+  // Filtrar usuarios por DNI
+  private _filter(dni: string): UserModel[] {
+    const filterValue = dni.toLowerCase();
+    return this.users.filter(user => user.dni.toLowerCase().includes(filterValue));
   }
 
+  // Mostrar nombre completo en autocompletado
   displayUser(user: UserModel): string {
     return user && user.firstName ? `${user.firstName} ${user.lastName}` : '';
   }
 
-  private _filter(dni: string): UserModel[] {
-    const filterValue = dni;
-    return this.users.filter(user => user.dni.includes(filterValue));
-  }
+  // Crear el paquete
+  createPackage() {
+    const activities = this.activitiesArray.controls.map(control => {
+      const group = control as FormGroup;
+      return {
+        activityId: group.get('activityId')?.value,
+        quantity: group.get('quantity')?.value
+      };
+    });
 
-  onUserSelected(user: UserModel) {
-    this.selectedUser.set(user);
-  }
+      const packageData = {
+        name: this.packageForm.get('packageName')?.value,
+        description: this.packageForm.get('packageDescription')?.value,
+        userId: this.packageForm.get('myControl')?.value.id, // Obtener el ID del usuario seleccionado
+        activities
+      };
 
-  create() {
-    console.log(this.packageName.value);
-    console.log(this.packageDescription.value);
-    console.log(this.selectedUser());
-    console.log(this.selectedValues());
-    if (this.packageName.value && this.packageDescription.value && this.selectedUser() != null && this.selectedValues().length > 0 && this.selectedValues().every(value => value.activityId !== -1)) {
-      let createdPackage: Package = {
-        name: this.packageName.value,
-        description: this.packageDescription.value,
-        userId: this.selectedUser()!.id!,
-        activities: this.selectedValues().map(value => value),
-      }
-      this.packageService.createPackage(createdPackage).subscribe(
-        (response) => {
-          console.log(response);
-          alert(`creado ${response}`);
+      this.packageService.createPackage(packageData).subscribe(
+        response => {
+          alert(`Paquete creado: ${response}`);
         },
-        (error) => {
-          console.error(error);
-          alert(`error ${error}`);
+        error => {
+          alert(`Error al crear paquete: ${error}`);
         }
       );
-      alert(`creado ${createdPackage}`);
-    } else {
-      alert('Faltan campos por completar');
     }
-  }
 
+  // Navegar de vuelta a la agenda
   return() {
     this.router.navigate(['/admin/agenda']);
   }
-
-  onQuantityChange(event: Event, index: number) {
-    const inputElement = event.target as HTMLInputElement;
-    const value = parseInt(inputElement.value, 10);
-
-    const updatedValues = [...this.selectedValues()];
-
-    updatedValues[index - 1] = { ...updatedValues[index-1], quantity: value };
-
-    this.selectedValues.set(updatedValues);
-
-    console.log(updatedValues);
-  }
 }
-
