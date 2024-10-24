@@ -26,4 +26,8 @@ export class ActivityService {
   getActivitybyId(activityId: string) {
     return this.http.get<Activity>(`${this.apiUrl}/${activityId}`);
   }
+
+  editActivity(activityId: string, activity: Activity) {
+    return this.http.patch(`${this.apiUrl}/${activityId}`, activity);
+  }
 }
