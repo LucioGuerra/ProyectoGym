@@ -12,8 +12,9 @@
 mat-card {
   background-color: #66645E;
   display: flex;
-  width: 65%;
   padding: 25px;
+  width: 65%;
+  height: auto;
   }
 
 mat-card-header {
@@ -92,23 +93,27 @@ mat-card-header {
     }
 
   .iterables {
-    flex-direction: row;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-areas:
+    'appointments divider packages';
     gap: 1em;
 
-    .line {
-      width: 1px;
-      height: 10px;
+    .appointments {
+      grid-area: appointments;
+      align-self: start;
+      height: auto;
       }
 
-    .appointments {
-      width: 50%;
-      height: 10px;
+    .divider{
+      grid-area: divider;
+      width: 0.25px;
+      height: 90%;
+      background-color: rgba(209, 209, 209, 0.44);
+      align-self: center;
       }
 
     .packages {
-      width: 30%;
+      grid-area: packages;
       height: 10px;
       }
     }
