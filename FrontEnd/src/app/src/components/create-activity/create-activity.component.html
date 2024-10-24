@@ -8,29 +8,54 @@
       <mat-form-field appearance="outline" class="package_name">
         <mat-label>Nombre de la actividad</mat-label>
         <input matInput [formControl]="activityName">
-        <mat-error>La actividad debe tener un nombre</mat-error>
+        @if (activityName.invalid && activityName.dirty) {
+          @if (activityName.errors?.['required']) {
+            <mat-error>La actividad debe tener un nombre</mat-error>
+          }
+        }
+        <mat-error></mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="package_description">
         <mat-label>Descripcion de la actividad</mat-label>
-        <textarea matInput [formControl]="activityDescription" ></textarea>
-        <mat-error>La actividad debe tener una descripcion</mat-error>
+        <textarea matInput [formControl]="activityDescription"></textarea>
+        @if (activityDescription.invalid && activityDescription.dirty) {
+          @if (activityDescription.errors?.['maxlength']) {
+            <mat-error>Esta descripcion es demasiado larga</mat-error>
+          }
+          @if (activityDescription.errors?.['required']) {
+            <mat-error>La actividad debe tener una descripcion</mat-error>
+          }
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="package_description">
         <mat-label>Precio por clase</mat-label>
-        <input matInput [formControl]="activityPrice">
-        <mat-error>La actividad debe tener un precio</mat-error>
+        <input matInput [formControl]="activityPrice" [min]="0">
+        @if (activityPrice.invalid && activityPrice.dirty) {
+          @if (activityPrice.errors?.['required']) {
+            <mat-error>La actividad debe tener un precio</mat-error>
+          }
+          @if (activityPrice.errors?.['min']) {
+            <mat-error>El precio debe ser mayor a 0</mat-error>
+          }
+        }
       </mat-form-field>
 
       <div class="button-container__main">
         <button mat-stroked-button (click)="return()" color="warn" class="return_button">
           <!--<mat-icon>chevron_left</mat-icon>-->
-          Return
+          Volver
         </button>
-        <button mat-flat-button (click)="create()" color="primary" class="create_button">
-          Create package
-        </button>
+        @if (activityId) {
+          <button mat-flat-button (click)="edit()" color="primary" class="create_button">
+            Editar actividad
+          </button>
+        } @else {
+          <button mat-flat-button (click)="create()" color="primary" class="create_button">
+            Crear actividad
+          </button>
+        }
       </div>
     </div>
   </ng-container>

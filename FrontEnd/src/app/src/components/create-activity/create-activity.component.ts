@@ -7,7 +7,7 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatSelect} from "@angular/material/select";
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, Validators, ReactiveFormsModule} from "@angular/forms";
 import {Activity} from "../models";
 import {ActivityService} from "../services/services";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -38,9 +38,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class CreateActivityComponent implements OnInit {
   activityId: string | null = null;
-  activityName = new FormControl('');
-  activityDescription = new FormControl('');
-  activityPrice = new FormControl<number>(1000.0);
+  activityName = new FormControl('', Validators.required);
+  activityDescription = new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]);
+  activityPrice = new FormControl<number>(1000.0, [Validators.required, Validators.min(1)]);
 
   constructor(private activityService: ActivityService, private router: Router, private route: ActivatedRoute) {
 
@@ -65,11 +65,11 @@ export class CreateActivityComponent implements OnInit {
     console.log(this.activityName.value);
     console.log(this.activityDescription.value);
     console.log(this.activityPrice.value);
-    if (this.activityName.value && this.activityDescription.value && this.activityPrice.value && this.activityPrice.value > 0) {
+    if (this.activityName.valid && this.activityDescription.valid && this.activityPrice.valid) {
       let createdActivity: Activity = {
-        name: this.activityName.value,
-        description: this.activityDescription.value,
-        price: this.activityPrice.value
+        name: this.activityName.value!,
+        description: this.activityDescription.value!,
+        price: this.activityPrice.value!
       }
       this.activityService.createActivity(createdActivity).subscribe(
         (response) => {
@@ -83,11 +83,41 @@ export class CreateActivityComponent implements OnInit {
       );
       alert(`creado ${createdActivity}`);
     } else {
-      alert('Faltan campos por completar');
+      this.activityName.markAsDirty();
+      this.activityDescription.markAsDirty();
+      this.activityPrice.markAsDirty();
     }
   }
 
   return() {
     this.router.navigate(['/admin/agenda']);
+  }
+
+  edit() {
+    console.log(this.activityName.value);
+    console.log(this.activityDescription.value);
+    console.log(this.activityPrice.value);
+    if (this.activityId && this.activityName.valid && this.activityDescription.valid && this.activityPrice.valid) {
+      let createdActivity: Activity = {
+        name: this.activityName.value!,
+        description: this.activityDescription.value!,
+        price: this.activityPrice.value!
+      }
+      this.activityService.editActivity(this.activityId, createdActivity).subscribe(
+        (response) => {
+          console.log(response);
+          alert("se creo correctamente");
+        },
+        (error) => {
+          console.error(error);
+          alert(`error ${error}`);
+        }
+      );
+      alert(`creado ${createdActivity}`);
+    } else {
+      this.activityName.markAsDirty();
+      this.activityDescription.markAsDirty();
+      this.activityPrice.markAsDirty();
+    }
   }
 }
