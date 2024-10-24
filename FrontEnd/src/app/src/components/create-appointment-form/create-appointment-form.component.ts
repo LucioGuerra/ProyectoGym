@@ -99,11 +99,13 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   private loadAppointmentData(id?: string): void {
+    this.range.disable();
     if (id) {
       this.appointmentService.getAppointmentById(id).subscribe(
         (data: Appointment) => {
           console.log('Datos en el componente:', data);
           console.log('max_capacity:', data.max_capacity);
+          this.range.enable();
           this.range.patchValue({
             start: new Date(data.date),
             end: new Date(data.date),
@@ -121,22 +123,20 @@ export class CreateAppointmentFormComponent implements OnInit {
           }
         },
         (error) => {
-          if (error.status === 404) {
             this.dialog.open(ErrorDialogComponent, {
               data: {
-                message: 'No se encontró la cita. Es posible que haya sido eliminada.',
+                message: error.status === 404
+                  ? 'No se encontró la cita. Es posible que haya sido eliminada.'
+                  : 'Ups. Hubo un error inesperado, intentelo mas tarde.',
               },
               disableClose: true
             }).afterClosed().subscribe(() => {
               this.router.navigate(['/admin/agenda']);
             });
-            this.range.disable();
-          } else {
-            console.error('Error inesperado:', error);
-          }
         }
       );
     } else {
+      this.range.enable();
       this.range.patchValue({
         start: new Date(Date.now()),
         end: new Date(Date.now()),
@@ -148,7 +148,6 @@ export class CreateAppointmentFormComponent implements OnInit {
       });
 
     }
-    console.log(formatDate(new Date(Date.now()).toLocaleDateString(), 'yyyy-MM-dd', 'en-US'));
   }
 
   formatTime(date: Date): string {

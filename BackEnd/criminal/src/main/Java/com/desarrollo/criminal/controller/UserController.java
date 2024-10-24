@@ -4,6 +4,7 @@ import com.desarrollo.criminal.dto.request.UserUpdateDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestBody String email){
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam("email") @Email String email){
         return userService.getUserByEmail(email);
     }
 

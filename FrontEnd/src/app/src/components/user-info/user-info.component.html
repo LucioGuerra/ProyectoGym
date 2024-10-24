@@ -1,0 +1,47 @@
+<app-drawer>
+  <ng-container main-content>
+    <div class="container">
+      <mat-card>
+
+        <mat-card-header>
+          <div class="photo">
+            <img [src]="this.userModel().picture" alt="User Image" class="user-avatar-img">
+          </div>
+
+          <div class="info">
+            <div class="name">{{ userModel().firstName }} {{ userModel().lastName }}</div>
+            <div class="email"> {{ userModel().email }}</div>
+            <div class="dni">DNI: {{ userModel().dni }}</div>
+            <div class="edit">
+              <button (click)="editUser(userModel().id ?? 0)" class="button">Edit</button>
+            </div>
+          </div>
+
+          <div class="streak">
+            <!--Acá después se agrega un if en base a las asistencias-->
+            <mat-card>
+              <div class="text">Meses activo: 22 🔥</div>
+            </mat-card>
+          </div>
+        </mat-card-header>
+
+
+        <mat-card-content>
+          <div class="content">
+
+            <h1>Last appointments</h1>
+            <mat-divider></mat-divider>
+
+            <div class="iterables">
+              <div class="appointments"></div>
+              <div class="line"></div>
+              <div class="packages">
+
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</app-drawer>

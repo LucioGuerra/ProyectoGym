@@ -1,9 +1,11 @@
 import {Injectable, signal} from "@angular/core";
-import { environment } from "../../../../../environments/environment";
+import {environment} from "../../../../../environments/environment";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
-import { jwtDecode } from "jwt-decode";
-import {BehaviorSubject} from "rxjs";
+import {jwtDecode} from "jwt-decode";
+import {UserService} from "./user.service";
+import {User} from "@auth0/auth0-angular";
+import {Role, UserModel} from "../../models";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -13,7 +15,7 @@ export class AuthService {
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
 
-  constructor() {
+  constructor(private userService: UserService) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
@@ -39,16 +41,18 @@ export class AuthService {
     })
   }
 
-  public signup(email: string | undefined, password: string | undefined): void {
+  public signup(email: string | undefined, password: string | undefined, user: UserModel): void {
     this.auth0Client.signup({
       email: email,
       password: password,
       connection: environment.auth0.database,
+      audience: environment.auth0.audience
     }, (err: any, result: any) => {
       if (err) {
         console.error('Error al registrar:', err);
       } else {
-        console.log('Usuario registrado exitosamente:', result);
+        this.createUser(user);
+        this.login(email, password);
       }
     });
   }
@@ -62,7 +66,18 @@ export class AuthService {
         const accessToken = urlParams.get("access_token");
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
-        console.log("accessToken: ", accessToken, "expiresIn: ", expiresIn, "idToken: ", idToken);
+
+        // @ts-ignore
+        var user: UserModel = this.userService.getUserByEmail(jwtDecode(idToken)['email']);
+        if(user){
+          if (user.picture == null) {
+            // @ts-ignore
+            this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+          }
+        }else {
+          //todo: crear usuario si se autentico por 3ro por primera vez
+          this.createUser(user);
+        }
         this.setSession(accessToken, expiresIn, idToken);
       } catch (error) {
         console.error(error);
@@ -143,5 +158,26 @@ export class AuthService {
       console.log('No hay sesión activa almacenada.');
       console.log('Deslogueando...');
     }
+  }
+
+  private createUser(user: UserModel) {
+    console.log("Entra a createUser");
+
+    // @ts-ignore
+    this.userService.getUserByEmail(user.email).subscribe(
+      (user: UserModel) => {
+        console.log("Usuario encontrado: ", user);
+      },
+      (error) => {
+        console.error("Error al buscar el usuario: ", error);
+      });
+
+    this.userService.createUser(user).subscribe(
+      (saveUser: UserModel) => {
+        console.log("Usuario guardado: ", saveUser);
+      },
+      (error) => {
+        console.error("Error al guardar el usuario: ", error);
+      });
   }
 }

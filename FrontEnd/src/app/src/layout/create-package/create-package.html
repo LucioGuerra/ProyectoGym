@@ -4,15 +4,11 @@
             <div class="main-container">
                 <div class="main-content">
                     <div class="main-content__header">
-                      @if(appointmentID){
-                        <h1 class="main-content__title">Edit Appointment</h1>
-                      } @else {
-                        <h1 class="main-content__title">Create Appointment</h1>
-                      }
+                      <ng-content select="[header]"></ng-content>
                     </div>
                     <mat-divider></mat-divider>
                     <div class="main-content__body">
-                        <app-create-appointment-form [appointmentId]="appointmentID"></app-create-appointment-form>
+                      <ng-content select="[body]"></ng-content>
                     </div>
                 </div>
             </div>

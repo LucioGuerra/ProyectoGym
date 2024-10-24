@@ -2,10 +2,10 @@
   <!-- Sidenav para pantallas grandes (sale desde la izquierda) -->
   <mat-sidenav
     #desktopSidenav
+    *ngIf="!isMobileScreen()"
+    [opened]="opened"
     class="sidenav-left"
     mode="side"
-    [opened]="opened"
-    *ngIf="!isMobileScreen()"
   >
     <app-user-profile></app-user-profile>
     <app-drawer-list></app-drawer-list>
@@ -14,10 +14,10 @@
   <!-- Sidenav para pantallas móviles (sale desde arriba) -->
   <mat-sidenav
     #mobileSidenav
-    mode="over"
-    class="sidenav-top"
-    [opened]="opened"
     *ngIf="isMobileScreen()"
+    [opened]="opened"
+    class="sidenav-top"
+    mode="over"
   >
     <app-drawer-list></app-drawer-list>
   </mat-sidenav>
@@ -26,16 +26,16 @@
     <app-toolbar>
       <ng-container toolbar-menu-button>
         <button
-          mat-icon-button
-          class="menu-button"
-          aria-label="open drawer menu"
           (click)="toggleSidenav()"
+          aria-label="open drawer menu"
+          class="menu-button"
+          mat-icon-button
         >
           <mat-icon>menu</mat-icon>
         </button>
       </ng-container>
       <ng-container toolbar-action-button>
-        <button mat-stroked-button class="logout-button" (click)="logout()">
+        <button (click)="logout()" class="logout-button" mat-stroked-button>
           <mat-icon>logout</mat-icon>
           Log out
         </button>

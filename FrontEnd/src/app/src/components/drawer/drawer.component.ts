@@ -1,17 +1,18 @@
 import {Component, Inject, signal} from '@angular/core';
-import { ToolbarComponent } from "../toolbar";
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { DrawerListComponent } from "./drawer-list/drawer-list.component";
-import { MatIconModule } from '@angular/material/icon';
+import {ToolbarComponent} from "../toolbar";
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {DrawerListComponent} from "./drawer-list/drawer-list.component";
+import {MatIconModule} from '@angular/material/icon';
 import {DOCUMENT, NgIf} from '@angular/common';
-import { AuthService } from '../services/services';
-import { MatButtonModule } from '@angular/material/button';
-import { UserProfileComponent } from "../user-profile/user-profile.component";
+import {AuthService} from '../services/services';
+import {MatButtonModule} from '@angular/material/button';
+import {UserProfileComponent} from "../user-profile/user-profile.component";
+import {MatListItem} from "@angular/material/list";
 
 @Component({
   selector: 'app-drawer',
   standalone: true,
-  imports: [MatButtonModule, ToolbarComponent, MatSidenavModule, DrawerListComponent, MatIconModule, UserProfileComponent, NgIf],
+  imports: [MatButtonModule, ToolbarComponent, MatSidenavModule, DrawerListComponent, MatIconModule, UserProfileComponent, NgIf, MatListItem],
   templateUrl: './drawer.component.html',
   styleUrl: './drawer.component.scss'
 })
@@ -46,7 +47,5 @@ export class DrawerComponent {
       this.opened = !this.opened;
     }
   }
-
-
 
 }

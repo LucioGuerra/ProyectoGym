@@ -1,14 +1,15 @@
 export interface UserModel {
-    id: number;
+    id?: number;
     firstName: String;
     lastName: String;
     email: String;
-    role: Role;
-    phone: String;
+    role?: Role;
+    phone?: String;
     dni: String;
-    picture: URL;
+    picture?: URL;
 }
+
 export enum Role {
-     ADMIN = 'ADMIN',
-     CLIENT = 'CLIENT'
+  ADMIN = 'ADMIN',
+  CLIENT = 'CLIENT'
 }
