@@ -1,0 +1,590 @@
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: transparent;
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  position: relative;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: #222222;
+  color: #d0d0d0;
+  font-weight: bold;
+  width: 60%;
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+h1 {
+  font-size: 200%;
+}
+
+.icon {
+  font-size: 230%;
+  color: #d0d0d0;
+  width: fit-content;
+  height: fit-content;
+}
+
+.add-button {
+  font-size: 24px;
+  transition: transform 0.3s ease-in-out;
+  flex-shrink: 0;
+  transform: translateX(-65%);
+}
+
+.table-container {
+  flex: 1;
+  max-height: auto;
+  border-radius: 10px;
+  overflow: hidden
+}
+
+mat-table {
+  width: 100%;
+  table-layout: auto;
+  background-color: rgb(102, 100, 94);
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.column {
+  background-color: transparent !important;
+}
+
+th, td {
+  padding: 12px 70px; 
+  text-align: center;
+}
+
+th {
+  font-size: 1rem;
+  font-weight: bold;
+  border-bottom: 2px solid #d0d0d0;
+  white-space: nowrap; 
+}
+
+td {
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+tr {
+  display: table-row;
+  color: #d0d0d0;
+}
+
+mat-header-row, mat-row {
+  display: table-row;
+}
+
+mat-cell, mat-header-cell {
+  flex: 1; 
+  width: 25%; 
+}
+
+
+
+///////////////////////////////////////////////////////////////
+
+
+
+@media (min-width: 980px) and (max-width: 1250px) {
+  .card {
+    width: 75%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;  
+    gap: 12px;
+    padding: 0 10px;
+  }
+
+  .left-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 60%; 
+  }
+
+  h1 {
+    font-size: 140%; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .icon {
+    font-size: 180%;  
+  }
+
+  .add-button {
+    font-size: 22px;
+    margin: 0;
+    padding: 8px;
+    align-self: center;
+    transform: none;
+    transform: translateX(-60%);  
+  }
+
+  .table-container {
+    width: 100%;  
+  }
+
+  mat-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse; 
+  }
+
+  th, td {
+    padding: 12px 75px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
+  }
+  
+  mat-cell, mat-header-cell {
+    flex: 1; 
+    width: 25%; 
+  }
+  
+
+}
+
+//////////////////////////////////////////
+
+
+@media (min-width: 880px) and (max-width: 980px) {
+  
+  th, td {
+    padding: 12px 40px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.99rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
+  }
+  
+
+}
+
+
+
+
+
+/////////////////////////////////////////////
+@media (min-width: 756px) and (max-width: 880px) {
+  
+  th, td {
+    padding: 12px 35px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
+  }
+
+}
+
+
+
+/////////////////////////////////////////////
+
+@media (min-width: 710px) and (max-width: 756px) {
+  
+  th, td {
+    padding: 12px 27px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  tr {
+    display: table-row;
+    color: #d0d0d0;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+@media (min-width: 670px) and (max-width: 710px) {
+  
+  th, td {
+    padding: 12px 22px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+
+}
+
+///////////////////////////////////////////
+
+@media (min-width: 623px) and (max-width: 670px) {
+  
+  th, td {
+    padding: 12px 18px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+////////////////////////////////////////////
+
+@media (min-width: 565px) and (max-width: 623px) {
+  
+  .card {
+    width: 80%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th, td {
+    padding: 12px 28px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+
+@media (min-width: 506px) and (max-width: 565px) {
+  
+  .card {
+    width: 90%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th, td {
+    padding: 12px 28px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+////////////////////////////////////////////
+
+
+@media (min-width: 470px) and (max-width: 506px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th, td {
+    padding: 12px 30px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+//////////////////////////////////////////////
+
+@media (min-width: 433px) and (max-width: 470px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th, td {
+    padding: 12px 26px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+////////////////////////////////////////////
+
+
+@media (min-width: 411px) and (max-width: 433px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th, td {
+    padding: 12px 25px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.60rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+//////////////////////////////////////////////
+
+@media (min-width: 393px) and (max-width: 411px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th, td {
+    padding: 12px 25px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.60rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+@media (max-width: 393px) {
+  
+  .table-container {
+    overflow-x: auto; 
+    width: 100%; 
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 12px 28px; 
+    text-align: center;
+  }
+  
+  th {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+  }
+  
+  td {
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
