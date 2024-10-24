@@ -16,7 +16,7 @@
   background-color: #222222;
   color: #d0d0d0;
   font-weight: bold;
-  width: 63%;
+  width: 60%;
   padding: 1rem;
   box-sizing: border-box;
   max-width: 100%;
@@ -120,7 +120,7 @@ mat-cell, mat-header-cell {
 
 
 
-@media (min-width: 999px) and (max-width: 1250px) {
+@media (min-width: 980px) and (max-width: 1250px) {
   .card {
     width: 75%;  
     height: auto;
@@ -213,10 +213,10 @@ mat-cell, mat-header-cell {
 //////////////////////////////////////////
 
 
-@media (min-width: 880px) and (max-width: 999px) {
+@media (min-width: 880px) and (max-width: 980px) {
   
   th, td {
-    padding: 12px 50px; 
+    padding: 12px 40px; 
     text-align: center;
   }
   
