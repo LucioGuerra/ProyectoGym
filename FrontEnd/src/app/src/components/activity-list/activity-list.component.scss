@@ -16,7 +16,7 @@
   background-color: #222222;
   color: #d0d0d0;
   font-weight: bold;
-  width: 60%;
+  width: 48%;
   padding: 1rem;
   box-sizing: border-box;
   max-width: 100%;
@@ -83,14 +83,14 @@ mat-table {
 
 th, td {
   padding: 12px 70px; 
-  text-align: center;
 }
 
 th {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   border-bottom: 2px solid #d0d0d0;
   white-space: nowrap; 
+  text-align: center;
 }
 
 td {
@@ -98,6 +98,7 @@ td {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  text-align: left;
 }
 
 tr {
@@ -118,9 +119,73 @@ mat-cell, mat-header-cell {
 
 ///////////////////////////////////////////////////////////////
 
+@media (min-width: 1235px) and (max-width: 1356px) {
+
+.card {
+    width: 71%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+ th, td {
+    padding: 12px 83px; 
+  }
+  
+  th {
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+    text-align: center;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left
+  }
+
+}
+
+//////////////////////////////////////////////////////////////////
+
+@media (min-width: 1140px) and (max-width: 1235px) {
+
+.card {
+    width: 71%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+ th, td {
+    padding: 12px 75px; 
+  }
+  
+  th {
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap; 
+    text-align: center;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left
+  }
+
+}
 
 
-@media (min-width: 980px) and (max-width: 1250px) {
+//////////////////////////////////////////////////////////////////
+
+
+@media (min-width: 980px) and (max-width: 1140px) {
   .card {
     width: 75%;  
     height: auto;
@@ -377,14 +442,14 @@ mat-cell, mat-header-cell {
   }
   
   th {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -404,18 +469,18 @@ mat-cell, mat-header-cell {
   }
 
   th, td {
-    padding: 12px 28px; 
+    padding: 12px 26px; 
   }
   
   th {
-    font-size: 0.85rem;
+    font-size: 1rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -435,18 +500,18 @@ mat-cell, mat-header-cell {
   }
 
   th, td {
-    padding: 12px 30px; 
+    padding: 12px 27px; 
   }
   
   th {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -465,18 +530,18 @@ mat-cell, mat-header-cell {
   }
 
   th, td {
-    padding: 12px 26px; 
+    padding: 12px 24px; 
   }
   
   th {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.65rem;
+    font-size: 0.77rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -496,18 +561,18 @@ mat-cell, mat-header-cell {
   }
 
   th, td {
-    padding: 12px 25px; 
+    padding: 12px 21px; 
   }
   
   th {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.60rem;
+    font-size: 0.77rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -526,18 +591,18 @@ mat-cell, mat-header-cell {
   }
 
   th, td {
-    padding: 12px 25px; 
+    padding: 12px 20px; 
   }
   
   th {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.60rem;
+    font-size: 0.78rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -563,14 +628,14 @@ mat-cell, mat-header-cell {
   }
   
   th {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: bold;
     border-bottom: 2px solid #d0d0d0;
     white-space: nowrap; 
   }
   
   td {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
