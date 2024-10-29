@@ -43,6 +43,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   appointmentData: Appointment | undefined;
   isReserved = signal<boolean>(false);
   isFull = signal<boolean>(false);
+  prueba=null;
 
   constructor(
     public dialogRef: MatDialogRef<AppointmentInfoDialogComponent>,
