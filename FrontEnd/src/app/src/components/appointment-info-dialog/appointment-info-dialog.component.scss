@@ -187,12 +187,17 @@ mat-dialog-actions {
   grid-template-columns: 1fr 1fr;
   column-gap: 50px;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 15px;
   width: 100%;
   margin-bottom: -20px;
 }
 
 @media (max-width: 600px) {
+  .kinesiology-professional {
+    display: grid;
+    grid-template-columns: 1fr;
+
+  }
   .info-grid {
     grid-template-columns: 1fr;
   }

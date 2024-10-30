@@ -87,8 +87,16 @@ export class AppointmentService {
 
 
   async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologoId: number): Promise<Observable<any>> {
-    await this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {instructorID: kinesiologoId});
-    return await this.reserveAppointment(appointmentId, userEmail);
+    console.log('Agregando usuario a la cita de kinesiología, id:', appointmentId, 'email:', userEmail, 'kinesiologoId:', kinesiologoId);
+    this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {instructorID: kinesiologoId, updateAllFutureAppointments: false}).subscribe(
+      () => {
+        console.log('Instructor asignado a la cita de kinesiología');
+      },
+      error => {
+        console.error('Error al asignar el instructor a la cita de kinesiología:', error);
+      }
+    );
+    return this.reserveAppointment(appointmentId, userEmail);
   }
 
   getKinesiologyAppointmentsByDate(date: Date) {
@@ -128,4 +136,17 @@ export class AppointmentService {
     );
   }
 
+  removeInstructorFromKinesiologyAppointment(appointmentId: string) {
+    return this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {
+      "instructorID": "-1",
+      "updateAllFutureAppointments": false
+    }).subscribe(
+      () => {
+        console.log('Instructor eliminado de la cita de kinesiología');
+      },
+      error => {
+        console.error('Error al eliminar el instructor de la cita de kinesiología:', error);
+      }
+    );
+  }
 }

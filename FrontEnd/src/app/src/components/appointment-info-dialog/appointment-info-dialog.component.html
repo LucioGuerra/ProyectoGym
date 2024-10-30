@@ -24,7 +24,7 @@
         <p>{{ appointmentData.instructor }}</p>
       </div>
     </div>
-    @if (isKinesiology()) {
+    @if (isKinesiology() && !this.isReserved()) {
       <h3 class="kine-label">Elige a tu instructor: </h3>
       <div class="kinesiology-professional">
         <mat-form-field class="kinesio-form" appearance="outline">
@@ -39,6 +39,9 @@
               <mat-option [value]="option">{{ option }}</mat-option>
             }
           </mat-autocomplete>
+          @if (kinesiologoControl.invalid && kinesiologoControl.dirty) {
+            <mat-error>Debe elegir un kinesiologo</mat-error>
+          }
         </mat-form-field>
         <mat-form-field class="kinesio-form" appearance="outline">
           <mat-label>Parte del cuerpo a tratar</mat-label>
@@ -56,7 +59,11 @@
     }
     <div class="buttons-set-appointment">
       @if (this.isReserved()) {
-        <button mat-flat-button class="cancelar-turno" (click)="isUserInAppointment()">Cancelar reserva</button>
+        @if (isKinesiology()){
+          <button mat-flat-button class="cancelar-turno" (click)="removeUserFromKineAppointment()">Cancelar reserva</button>
+        } @else {
+          <button mat-flat-button class="cancelar-turno" (click)="isUserInAppointment()">Cancelar reserva</button>
+        }
       } @else {
         @if (this.isFull()) {
           <button mat-flat-button class="agendar-turno" disabled>Turno completo</button>

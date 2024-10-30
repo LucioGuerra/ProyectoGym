@@ -18,16 +18,18 @@ import {MatIconModule} from '@angular/material/icon';
 import {UserService} from "../services/services/user.service";
 import {map} from "rxjs/operators";
 import {Observable, startWith} from "rxjs";
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormField} from "@angular/material/form-field";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatInput} from "@angular/material/input";
 import {MatLabel} from "@angular/material/form-field";
+import {MatError} from "@angular/material/form-field";
 
 @Component({
   selector: 'app-appointment-info-dialog',
   standalone: true,
   imports: [
+    MatError,
     MatLabel,
     MatDialogTitle,
     MatDialogContent,
@@ -61,7 +63,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   isKinesiology = signal<boolean>(false);
 
   //para la busqueda de kinesiologo
-  kinesiologoControl = new FormControl('');
+  kinesiologoControl = new FormControl('', Validators.required);
   kinesiologosOptions = [
     {
       "id": 1,
@@ -74,7 +76,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   //para la busqueda de partes del cuerpo
   bodyPartControl = new FormControl('');
   bodyPartOptions = [
-    { "id": 1, "name": "Cuello" },
+    {"id": 1, "name": "Cuello"},
   ];
   filteredBodyPartOptions: Observable<string[]> | undefined;
 
@@ -84,7 +86,6 @@ export class AppointmentInfoDialogComponent implements OnInit {
 
     return options.filter(option => option.toLowerCase().includes(filterValue));
   }
-
 
 
   constructor(
@@ -136,6 +137,11 @@ export class AppointmentInfoDialogComponent implements OnInit {
                 return this._filter(value || '', filteredKinesiologos.map(kinesiologo => kinesiologo.name));
               })
             );
+          } else {
+            this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
+              startWith(''),
+              map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.name))),
+            );
           }
         });
       }
@@ -160,9 +166,10 @@ export class AppointmentInfoDialogComponent implements OnInit {
           console.log('isAdmin? ', this.data.isAdmin);
           console.log("participants: ", this.appointmentData.participants);
           console.log("max_capacity: ", this.appointmentData.max_capacity);
-          if(this.appointmentData.participants!.length >= this.appointmentData.max_capacity) {
+          console.log("instructor", this.appointmentData.instructor);
+          if (this.appointmentData.participants!.length >= this.appointmentData.max_capacity) {
             this.isFull.set(true);
-          }else {
+          } else {
             this.isFull.set(false);
           }
           resolve();
@@ -265,14 +272,24 @@ export class AppointmentInfoDialogComponent implements OnInit {
   }
 
   addUserToKineAppointment() {
-    this.appointmentService.addUserToKinesiologyAppointment(
-      this.data.id,
-      this.auth.userInfo().email,
-      this.kinesiologosOptions.filter(kinesiologo => kinesiologo.name === this.kinesiologoControl.value)[0].id
-    ).then((observable) => {
-      observable.subscribe(() => {
-        this.loadAppointment();
+    if (this.kinesiologoControl.valid) {
+      this.appointmentService.addUserToKinesiologyAppointment(
+        this.data.id,
+        this.auth.userInfo().email,
+        this.kinesiologosOptions.filter(kinesiologo => kinesiologo.name === this.kinesiologoControl.value)[0].id
+      ).then((observable) => {
+        observable.subscribe(() => {
+          this.loadAppointment();
+        });
       });
-    });
+    } else {
+      this.kinesiologoControl.markAsDirty();
+      this.kinesiologoControl.markAsTouched();
+    }
+  }
+
+  removeUserFromKineAppointment() {
+    this.appointmentService.removeInstructorFromKinesiologyAppointment(this.data.id)
+    this.isUserInAppointment();
   }
 }
