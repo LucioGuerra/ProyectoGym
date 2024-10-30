@@ -85,6 +85,12 @@ export class AppointmentService {
     return this.http.post<any>(`${this.apiUrl}/kine`, appointmentData);
   }
 
+
+  async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologoId: number): Promise<Observable<any>> {
+    await this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {instructorID: kinesiologoId});
+    return await this.reserveAppointment(appointmentId, userEmail);
+  }
+
   getKinesiologyAppointmentsByDate(date: Date) {
     return this.http.get<Appointment[]>(`${this.apiUrl}/kine/date/${this.dateAdapt(date)}`).pipe(
       map((appointments: any[]) => appointments.map(appointment => ({
@@ -97,7 +103,7 @@ export class AppointmentService {
     );
   }
 
-  switchUserAttendance(appointmentId: string, userId: number, attendance: boolean): Observable<boolean> {
+  switchUserAttendance(appointmentId: string, userId: number): Observable<boolean> {
     return this.http.post<boolean>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {});
   }
 

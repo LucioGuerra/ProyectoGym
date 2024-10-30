@@ -60,4 +60,12 @@ export class UserService {
   getUserPackages(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
   }
+
+  getKinesioUsers() {
+    return this.http.get<UserModel[]>(`${this.apiUrl}/kine`);
+  }
+
+  getBodyParts() {
+    return this.http.get<any[]>(`${this.apiUrl}/kine/body-parts`);
+  }
 }

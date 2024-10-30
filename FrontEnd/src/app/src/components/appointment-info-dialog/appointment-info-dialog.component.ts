@@ -16,11 +16,19 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {UserService} from "../services/services/user.service";
+import {map} from "rxjs/operators";
+import {Observable, startWith} from "rxjs";
+import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {MatFormField} from "@angular/material/form-field";
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
+import {MatInput} from "@angular/material/input";
+import {MatLabel} from "@angular/material/form-field";
 
 @Component({
   selector: 'app-appointment-info-dialog',
   standalone: true,
   imports: [
+    MatLabel,
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
@@ -33,6 +41,12 @@ import {UserService} from "../services/services/user.service";
     MatIconModule,
     DatePipe,
     NgOptimizedImage,
+    MatFormField,
+    MatAutocomplete,
+    MatOption,
+    ReactiveFormsModule,
+    MatAutocompleteTrigger,
+    MatInput,
   ],
   templateUrl: './appointment-info-dialog.component.html',
   styleUrls: ['./appointment-info-dialog.component.scss'],
@@ -43,7 +57,35 @@ export class AppointmentInfoDialogComponent implements OnInit {
   appointmentData: Appointment | undefined;
   isReserved = signal<boolean>(false);
   isFull = signal<boolean>(false);
-  prueba=null;
+
+  isKinesiology = signal<boolean>(false);
+
+  //para la busqueda de kinesiologo
+  kinesiologoControl = new FormControl('');
+  kinesiologosOptions = [
+    {
+      "id": 1,
+      "name": "Kinesiologo 1",
+      "bodyParts": [1, 2, 3, 8], // IDs de "Cuello", "Hombros", "Espalda", "Manos"
+    }
+  ];
+  filteredKinesiologosOptions: Observable<string[]> | undefined;
+
+  //para la busqueda de partes del cuerpo
+  bodyPartControl = new FormControl('');
+  bodyPartOptions = [
+    { "id": 1, "name": "Cuello" },
+  ];
+  filteredBodyPartOptions: Observable<string[]> | undefined;
+
+
+  private _filter(value: string, options: string[]): string[] {
+    const filterValue = value.toLowerCase();
+
+    return options.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+
 
   constructor(
     public dialogRef: MatDialogRef<AppointmentInfoDialogComponent>,
@@ -55,37 +97,113 @@ export class AppointmentInfoDialogComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-    this.loadAppointment();
-    this.appointmentService.appointmentChanged$.subscribe(() => {
-      this.loadAppointment();
+  async ngOnInit() {
+    try {
+      await Promise.all([
+        this.loadAppointment(),
+        this.loadBodyParts(),
+        this.loadKinesiologyInstructors()
+      ]);
+
+      this.appointmentService.appointmentChanged$.subscribe(() => {
+        this.loadAppointment();
+      });
+
+      if (this.isKinesiology()) {
+        // Filtro de kinesiologo
+        this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.name))),
+        );
+
+        // Filtro de partes del cuerpo
+        this.filteredBodyPartOptions = this.bodyPartControl.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(value || '', this.bodyPartOptions.map(bodyPart => bodyPart.name))),
+        );
+
+        // Filtrar kinesiologo basado en partes del cuerpo
+        this.bodyPartControl.valueChanges.subscribe((bodyPart) => {
+          if (bodyPart) {
+            this.kinesiologoControl.setValue('');
+            this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
+              startWith(''),
+              map(value => {
+                const filteredKinesiologos = this.kinesiologosOptions.filter(kinesiologo =>
+                  kinesiologo.bodyParts.includes(this.bodyPartOptions.find(part => part.name === bodyPart)?.id || 0)
+                );
+                return this._filter(value || '', filteredKinesiologos.map(kinesiologo => kinesiologo.name));
+              })
+            );
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error during initialization', error);
+    }
+  }
+
+  loadAppointment(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.appointmentService.getAppointmentById(this.data.id).subscribe({
+        next: (appointment: Appointment) => {
+          this.loading = false;
+          this.appointmentData = appointment;
+          this.isKinesiology.set(this.appointmentData.activity === 'Kinesiology' || this.appointmentData.activity === 'Kinesiologia');
+          this.userService.getUserByEmail(this.auth.userInfo().email).subscribe(user => {
+            this.isReserved.set(appointment.participants!.some(participant => participant.id === user.id));
+            console.log('isReserved? ', this.isReserved());
+          });
+          this.changeDetectorRef.markForCheck();
+          console.log('users: ', this.appointmentData.participants);
+          console.log('isAdmin? ', this.data.isAdmin);
+          console.log("participants: ", this.appointmentData.participants);
+          console.log("max_capacity: ", this.appointmentData.max_capacity);
+          if(this.appointmentData.participants!.length >= this.appointmentData.max_capacity) {
+            this.isFull.set(true);
+          }else {
+            this.isFull.set(false);
+          }
+          resolve();
+        },
+        error: (error: any) => {
+          this.loading = false;
+          this.onClose();
+          reject(error);
+        }
+      });
     });
   }
 
-  loadAppointment(): void {
-    this.appointmentService.getAppointmentById(this.data.id).subscribe({
-      next: (appointment: Appointment) => {
-        this.loading = false;
-        this.appointmentData = appointment;
-        this.userService.getUserByEmail(this.auth.userInfo().email).subscribe(user => {
-          this.isReserved.set(appointment.participants!.some(participant => participant.id === user.id));
-          console.log('isReserved? ', this.isReserved());
-        });
-        this.changeDetectorRef.markForCheck();
-        console.log('users: ', this.appointmentData.participants);
-        console.log('isAdmin? ', this.data.isAdmin);
-        console.log("participants: ", this.appointmentData.participants);
-        console.log("max_capacity: ", this.appointmentData.max_capacity);
-        if(this.appointmentData.participants!.length >= this.appointmentData.max_capacity) {
-          this.isFull.set(true);
-        }else {
-          this.isFull.set(false);
+  loadKinesiologyInstructors(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.userService.getKinesioUsers().subscribe({
+        next: (kinesiologos: any[]) => {
+          this.kinesiologosOptions = kinesiologos;
+          this.changeDetectorRef.markForCheck();
+          resolve();
+        },
+        error: (error: any) => {
+          console.error('Error al cargar los kinesiologos', error);
+          reject(error);
         }
-      },
-      error: (error: any) => {
-        this.loading = false;
-        this.onClose();
-      }
+      });
+    });
+  }
+
+  loadBodyParts(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.userService.getBodyParts().subscribe({
+        next: (bodyParts: any[]) => {
+          this.bodyPartOptions = bodyParts;
+          this.changeDetectorRef.markForCheck();
+          resolve();
+        },
+        error: (error: any) => {
+          console.error('Error al cargar las partes del cuerpo', error);
+          reject(error);
+        }
+      });
     });
   }
 
@@ -104,7 +222,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   }
 
   toggleAttendance(participant: AppointmentUser): void {
-    this.appointmentService.switchUserAttendance(this.data.id, participant.id, !participant.attendance).subscribe(
+    this.appointmentService.switchUserAttendance(this.data.id, participant.id).subscribe(
       (response) => {
         console.log('Asistencia cambiada', response);
         this.changeDetectorRef.markForCheck();
@@ -143,5 +261,17 @@ export class AppointmentInfoDialogComponent implements OnInit {
         }
       });
     }
+  }
+
+  addUserToKineAppointment() {
+    this.appointmentService.addUserToKinesiologyAppointment(
+      this.data.id,
+      this.auth.userInfo().email,
+      this.kinesiologosOptions.filter(kinesiologo => kinesiologo.name === this.kinesiologoControl.value)[0].id
+    ).then((observable) => {
+      observable.subscribe(() => {
+        this.loadAppointment();
+      });
+    });
   }
 }

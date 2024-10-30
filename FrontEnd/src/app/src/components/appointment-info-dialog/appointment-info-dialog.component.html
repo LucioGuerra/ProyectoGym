@@ -24,14 +24,48 @@
         <p>{{ appointmentData.instructor }}</p>
       </div>
     </div>
+    @if (isKinesiology()) {
+      <h3 class="kine-label">Elige a tu instructor: </h3>
+      <div class="kinesiology-professional">
+        <mat-form-field class="kinesio-form" appearance="outline">
+          <mat-label>Kinesiologo</mat-label>
+          <input type="text"
+                 placeholder="Elige un kinesiologo"
+                 matInput
+                 [formControl]="kinesiologoControl"
+                 [matAutocomplete]="kinesiologoAuto">
+          <mat-autocomplete #kinesiologoAuto="matAutocomplete">
+            @for (option of filteredKinesiologosOptions | async; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="kinesio-form" appearance="outline">
+          <mat-label>Parte del cuerpo a tratar</mat-label>
+          <input type="text"
+                 matInput
+                 [formControl]="bodyPartControl"
+                 [matAutocomplete]="bodyPartAuto">
+          <mat-autocomplete #bodyPartAuto="matAutocomplete">
+            @for (option of filteredBodyPartOptions | async; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    }
     <div class="buttons-set-appointment">
       @if (this.isReserved()) {
         <button mat-flat-button class="cancelar-turno" (click)="isUserInAppointment()">Cancelar reserva</button>
       } @else {
-        @if(this.isFull()) {
+        @if (this.isFull()) {
           <button mat-flat-button class="agendar-turno" disabled>Turno completo</button>
         } @else {
-          <button mat-flat-button class="agendar-turno" (click)="isUserInAppointment()">Reservar turno</button>
+          @if (isKinesiology()) {
+            <button mat-flat-button class="agendar-turno" (click)="addUserToKineAppointment()">Reservar turno</button>
+          } @else {
+            <button mat-flat-button class="agendar-turno" (click)="isUserInAppointment()">Reservar turno</button>
+          }
         }
       }
     </div>
