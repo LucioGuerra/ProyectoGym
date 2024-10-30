@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.dto.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,7 @@ public class UpdatePATCHAppointmentDTO {
 
     private Long instructorID;
 
+    @NotNull(message = "The field updateAllFutureAppointments is required")
     private Boolean updateAllFutureAppointments;
 
     private UpdatePATCHAppointmentDTO() {}

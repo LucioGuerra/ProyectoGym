@@ -5,7 +5,7 @@
     *ngIf="!isMobileScreen()"
     [opened]="opened"
     class="sidenav-left"
-    mode="side"
+    mode="over"
   >
     <app-user-profile></app-user-profile>
     <app-drawer-list></app-drawer-list>
@@ -19,6 +19,7 @@
     class="sidenav-top"
     mode="over"
   >
+    <app-user-profile></app-user-profile>
     <app-drawer-list></app-drawer-list>
   </mat-sidenav>
 

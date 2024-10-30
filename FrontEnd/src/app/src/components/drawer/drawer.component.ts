@@ -38,14 +38,9 @@ export class DrawerComponent {
 
   toggleSidenav(): void {
     console.log('toggleSidenav');
-    if (this.isMobileScreen()) {
-      console.log('mobile');
+
       this.opened = !this.opened;
 
-    } else {
-      console.log('desktop');
-      this.opened = !this.opened;
-    }
   }
 
 }

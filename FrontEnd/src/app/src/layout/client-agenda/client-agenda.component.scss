@@ -12,18 +12,18 @@ ng-container {
   background-color: variables.$black-color;
   margin: 80px 20px 20px 30px;
   border-radius: 20px;
-  height: 75%;
   padding: 30px;
 }
 
 .main-section {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: 1fr 4fr;
+  grid-template-rows: 130px 200px;
   grid-template-areas:
     "calendar agenda"
-    "quick-actions agenda";
-  gap: 20px;
+    "quick-actions agenda"
+    "none agenda";
+  column-gap: 30px;
   background-color: transparent;
   height: 100%;
 }
@@ -86,7 +86,7 @@ ng-container {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  margin: 0;
+  margin-top: 30px;
 
   .title-section {
     display: flex;
@@ -186,8 +186,9 @@ mat-divider {
 
 @media (max-width: 750px) {
   .main-section {
+    margin-top: 50px;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 5fr;
+    grid-template-rows: 0.1fr 1fr;
     grid-template-areas:
       "calendar"
       "agenda";
@@ -219,7 +220,7 @@ mat-divider {
   .main-div {
     margin: 0;
     height: 100vh;
-    padding: 56px 0 0 0;
+    padding: 0 0 0 0;
   }
   .calendar{
     border-radius: 0;

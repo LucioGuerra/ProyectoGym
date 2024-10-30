@@ -77,7 +77,7 @@ export class AgendaListComponent implements OnInit {
             dialogConfig.width = '90%';
             dialogConfig.height = '80%';
         } else {
-            dialogConfig.width = '30%';
+            dialogConfig.width = '40%';
         }
         dialogConfig.data = {id: appointment.id, isAdmin: this.isAdmin};
         dialogConfig.panelClass = 'custom-dialog';
