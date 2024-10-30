@@ -99,17 +99,18 @@ export class AppointmentInfoDialogComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      await Promise.all([
-        this.loadAppointment(),
-        this.loadBodyParts(),
-        this.loadKinesiologyInstructors()
-      ]);
+      await this.loadAppointment();
 
       this.appointmentService.appointmentChanged$.subscribe(() => {
         this.loadAppointment();
       });
 
       if (this.isKinesiology()) {
+        await Promise.all([
+          await this.loadBodyParts(),
+          await this.loadKinesiologyInstructors()
+        ]);
+
         // Filtro de kinesiologo
         this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
           startWith(''),

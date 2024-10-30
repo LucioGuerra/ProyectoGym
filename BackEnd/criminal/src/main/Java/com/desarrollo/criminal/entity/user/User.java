@@ -65,7 +65,7 @@ public class User {
     @JsonBackReference
     private Set<UserXAppointment> userXAppointments;
 
-    private User(){
+    public User(){
         aPackage = new ArrayList<>();
         userXAppointments = new HashSet<>();
     }
