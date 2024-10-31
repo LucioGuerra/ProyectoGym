@@ -11,5 +11,6 @@ export interface UserModel {
 
 export enum Role {
   ADMIN = 'ADMIN',
-  CLIENT = 'CLIENT'
+  CLIENT = 'CLIENT',
+  KINE = 'KINE'
 }

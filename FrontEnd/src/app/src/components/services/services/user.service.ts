@@ -20,22 +20,22 @@ export class UserService {
     return this.http.get<UserModel>(`${this.apiUrl}/${id}`);
   }
 
-      getUserByEmail(email: string): Observable<UserModel> {
-        return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
-      }
+  getUserByEmail(email: string): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
+  }
 
   getAllUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(this.apiUrl);
   }
 
   createUser(user: UserModel): Observable<UserModel> {
-        console.log("Entra al create user")
-        return this.http.post<UserModel>(this.apiUrl, user);
-      }
+    console.log("Entra al create user")
+    return this.http.post<UserModel>(this.apiUrl, user);
+  }
 
-      updateUser(user: UserModel): Observable<any> {
-        return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
-      }
+  updateUser(user: UserModel): Observable<any> {
+    return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
+  }
 
   setPictureToUser(picture: any, email: string) {
     let user = this.getUserByEmail(email);
@@ -54,7 +54,7 @@ export class UserService {
           startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
           endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
         }))
-      )    );
+      ));
   }
 
   getUserPackages(id: string): Observable<any> {
