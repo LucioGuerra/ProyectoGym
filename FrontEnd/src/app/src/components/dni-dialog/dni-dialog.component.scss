@@ -1,0 +1,9 @@
+.dni-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  align-self: flex-start;
+}
