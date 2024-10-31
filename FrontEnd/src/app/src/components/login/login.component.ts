@@ -41,6 +41,8 @@ export class LoginComponent {
     password: new FormControl("",Validators.required),
   });
 
+
+
   onLogin(): void {
     if (this.formGroup.valid) {
       this.error = false
@@ -54,7 +56,11 @@ export class LoginComponent {
     }
   }
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    if (localStorage.getItem('selectedDate')) {
+      localStorage.removeItem('selectedDate');
+    }
+  }
   signup(){
     this.router.navigate(['/signup']);
   }

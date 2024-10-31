@@ -36,9 +36,6 @@ export class HomePageComponent implements AfterViewInit {private sections: HTMLE
   ];
 
   constructor(private el: ElementRef, private router: Router, private auth0: AuthService, private activityService: ActivityService) {
-    if (localStorage.getItem('selectedDate')) {
-      localStorage.removeItem('selectedDate');
-    }
     effect(async () => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
