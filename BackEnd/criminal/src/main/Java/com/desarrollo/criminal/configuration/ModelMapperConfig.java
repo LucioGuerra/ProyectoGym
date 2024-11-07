@@ -36,12 +36,14 @@ public class ModelMapperConfig {
                mapper.when(Conditions.isNotNull()).map(PackageActivity::getQuantity, GetPackageActivityDTO::setQuantity);
            });
 
-       TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
+       /*TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
          typeMap03.addMappings(mapper -> {
             mapper.map(src -> src.getRoutine().getId() != null ? src.getRoutine().getId(): null, UserResponseDTO::setRoutineId);
             //mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
              mapper.map(src -> src.getPicture(), UserResponseDTO::setPicture);
          });
+
+        */
 
          TypeMap<UserRequestDTO, User> typeMap04 = modelMapper.createTypeMap(UserRequestDTO.class, User.class);
             typeMap04.addMappings(mapper -> {

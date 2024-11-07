@@ -69,6 +69,11 @@ public class AppointmentController {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
+        return appointmentService.deleteAppointment(id);
+    }
+
     @PostMapping("/{appointmentId}/user/{userId}")
     public ResponseEntity<?> addParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
         return appointmentService.addParticipant(appointmentId, userId);
