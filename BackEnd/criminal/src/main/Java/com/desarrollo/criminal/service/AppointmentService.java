@@ -68,7 +68,7 @@ public class AppointmentService {
     }
 
     public ResponseEntity<List<AppointmentListResponseDTO>> getAllAppointments() {
-        List<Appointment> appointments = appointmentRepository.findAll();
+        List<Appointment> appointments = appointmentRepository.findAllAndDeletedFalse();
         return getListResponseEntity(appointments);
     }
 
@@ -310,7 +310,12 @@ public class AppointmentService {
 
 
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
-        Appointment appointment = this.getAppointmentById(id);
+        Appointment appointment =
+                appointmentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                        "Appointment not found with id: " + id));
+        if(appointment.isDeleted()){
+            throw new CriminalCrossException("APPOINTMENT_DELETED", "The appointment has been deleted");
+        }
         return ResponseEntity.status(HttpStatus.OK).body(convertAppointmentToDTO(appointment));
     }
 

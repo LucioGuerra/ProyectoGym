@@ -24,4 +24,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT a FROM Appointment a WHERE a.date = :date AND a.startTime = :startTime AND :user MEMBER OF a.participants")
     Optional<Appointment> findAppointmentByDateAndStartTimeAndParticipantsContains(LocalDate date, LocalTime startTime, User user);
+
+    @Query("SELECT a FROM Appointment a WHERE a.deleted = false")
+    List<Appointment> findAllAndDeletedFalse();
 }
