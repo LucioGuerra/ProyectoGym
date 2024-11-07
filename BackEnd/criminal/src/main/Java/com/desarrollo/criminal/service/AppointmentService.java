@@ -22,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -156,25 +157,35 @@ public class AppointmentService {
         return ResponseEntity.status(HttpStatus.CREATED).body(appointmentsCreated);
     }
 
+    @Transactional
     public ResponseEntity<?> deleteAppointment(Long id, boolean deleteAllFutureAppointments) {
         int appointmentsDeleted = 0;
-        try {
-            Appointment appointment = this.getAppointmentById(id);
-            appointment.setDeleted(true);
-            appointmentRepository.save(appointment);
-            appointmentsDeleted++;
-            if (deleteAllFutureAppointments) {
-                List<Appointment> futureAppointments = appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
-                futureAppointments.forEach(futureAppointment -> {
-                    futureAppointment.setDeleted(true);
-                    appointmentRepository.save(futureAppointment);
-                });
-                appointmentsDeleted += futureAppointments.size();
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(appointmentsDeleted);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Appointment appointment = this.getAppointmentById(id);
+
+        removeParticipants(appointment);
+        appointmentsDeleted++;
+
+        if (deleteAllFutureAppointments) {
+            List<Appointment> futureAppointments = appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
+
+            futureAppointments.forEach(this::removeParticipants);
+            appointmentsDeleted += futureAppointments.size();
         }
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentsDeleted);
+    }
+
+    @Transactional
+    protected void removeParticipants(Appointment appointment) {
+        if (!appointment.getParticipants().isEmpty()) {
+            int participants = appointment.getParticipants().size();
+            while(participants > 0){
+                this.removeParticipant(appointment.getId(), appointment.getParticipants().get(0).getId());
+                participants--;
+            }
+        }
+
+        appointment.setDeleted(true);
+        appointmentRepository.save(appointment);
     }
 
     public ResponseEntity<?> updateAllAppointment(Long id, AppointmentDTO appointmentDTO) {
