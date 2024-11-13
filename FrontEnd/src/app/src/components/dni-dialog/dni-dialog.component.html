@@ -1,5 +1,15 @@
 <div class="dni-dialog">
-  <label for="dni">Enter DNI:</label>
-  <input id="dni" [(ngModel)]="dni" type="text" />
-  <button (click)="submitDni()">Submit</button>
+  <h1 mat-dialog-title>Introduzca su DNI</h1>
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="dni-field">
+      <mat-label>DNI</mat-label>
+      <input matInput id="dni" [formControl]="dni" type="number">
+      <mat-error *ngIf="dni.invalid && dni.dirty">
+        Necesitamos su dni para validar su identidad.
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button (click)="submitDni()">Ingresar</button>
+  </mat-dialog-actions>
 </div>

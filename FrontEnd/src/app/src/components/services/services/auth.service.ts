@@ -5,7 +5,7 @@ import * as auth0 from 'auth0-js';
 import {jwtDecode} from "jwt-decode";
 import {UserService} from "./user.service";
 import {Role, UserModel} from "../../models";
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DniDialogComponent} from "../../dni-dialog/dni-dialog.component";
 import {HttpClient} from "@angular/common/http";
 
@@ -87,7 +87,12 @@ export class AuthService {
           async (error) => {
             console.log("El usuario no existe, se crea uno...");
 
-            const dialogRef = this.dialog.open(DniDialogComponent);
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.autoFocus = true;
+            dialogConfig.maxWidth = '1400px';
+            dialogConfig.width = '40%';
+            dialogConfig.panelClass = 'custom-dialog';
+            const dialogRef = this.dialog.open(DniDialogComponent, dialogConfig);
 
             const dni = await dialogRef.afterClosed().toPromise();
             if (dni) {
