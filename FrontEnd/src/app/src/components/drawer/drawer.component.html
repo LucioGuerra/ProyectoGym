@@ -8,7 +8,11 @@
     mode="over"
   >
     <app-user-profile></app-user-profile>
-    <app-drawer-list></app-drawer-list>
+    @if(isClient && !isAdmin){
+      <app-drawer-list-client></app-drawer-list-client>
+    } @else {
+      <app-drawer-list></app-drawer-list>
+    }
   </mat-sidenav>
 
   <!-- Sidenav para pantallas móviles (sale desde arriba) -->
@@ -20,7 +24,11 @@
     mode="over"
   >
     <app-user-profile></app-user-profile>
-    <app-drawer-list></app-drawer-list>
+    @if(isClient && !isAdmin){
+      <app-drawer-list-client></app-drawer-list-client>
+    } @else {
+      <app-drawer-list></app-drawer-list>
+    }
   </mat-sidenav>
 
   <mat-sidenav-content>

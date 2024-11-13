@@ -1,0 +1,44 @@
+a {
+  color: #000;
+  text-decoration: none;
+  display: block;
+  padding: 10px 0;
+  font-size: 1.2em;
+  font-weight: 500;
+  transition: all 0.3s;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.items {
+  width: auto;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    margin: 0 10px 0 0;
+  }
+}
+
+a:hover {
+  color: #222;
+  background-color: #D0D0D0;
+  cursor: default;
+
+  mat-list-item p {
+    color: #222;
+  }
+}
+
+.mdc-list {
+  padding: 0 !important;
+}
