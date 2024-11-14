@@ -30,12 +30,26 @@
   column-gap: 50px
 }
 
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .remove_button{
+    margin-bottom: 20px;
+    margin-left: 10px;
+  }
+}
+.add{
+  margin: 0 0 20px 0;
+}
+
 .button-container__activities{
   margin: 0 0 20px 0;
   justify-content: center;
 }
 
-.remove_button, .return_button{
+.return_button{
   margin-right: 20px;
 }
 

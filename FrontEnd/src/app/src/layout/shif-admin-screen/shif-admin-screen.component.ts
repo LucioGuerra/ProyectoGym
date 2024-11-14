@@ -39,7 +39,7 @@ export class ShifAdminScreenComponent implements OnInit {
 
   public appointments: Appointment[] = [];
 
-  public selectedDate = signal<Date>(new Date(new Date().setDate(new Date().getDate())));
+  public selectedDate = signal<Date>(this.getStoredDate());
   public selectedActivities = signal<string[]>([]);
   public appointmentList = signal<Appointment[]>([]);
   kinesiology= signal<string[]>(['Kinesiology', 'Kinesiologia']);
@@ -58,6 +58,7 @@ export class ShifAdminScreenComponent implements OnInit {
       } else {
         this.router.navigate(['/login']);
       }
+      this.saveStoredDate(this.selectedDate());
     });
     console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
@@ -65,6 +66,11 @@ export class ShifAdminScreenComponent implements OnInit {
   ngOnInit(): void {
     this.loadAppointment(this.tabIndex());
     this.loadActivities();
+    this.appointmentService.appointmentChanged$.subscribe(() => {
+      console.log('Cambios en los appointments detectados. Recargando...');
+      this.loadAppointment(this.tabIndex());  // Recargamos los appointments
+      this.changeDetectorRef.markForCheck();  // Forzar la detección de cambios
+    });
   }
 
   loadAppointment(tabIndex: number) {
@@ -113,6 +119,15 @@ export class ShifAdminScreenComponent implements OnInit {
     );
   }
 
+  saveStoredDate(date: Date) {
+    localStorage.setItem('selectedDate', date.toISOString());
+  }
+
+  getStoredDate(): Date {
+    const date = localStorage.getItem('selectedDate');
+    return date ? new Date(date) : new Date(new Date(Date.now()).setHours(0, 0, 0, 0));
+  }
+
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.selectedDate.set(event.value!);
     console.log('index:', this.tabIndex());
@@ -133,7 +148,7 @@ export class ShifAdminScreenComponent implements OnInit {
   }
 
   newActivity($event: MouseEvent) {
-    alert('new activity');
+    this.router.navigate(['/admin/activity/create'])
   }
 
   newPackage($event: MouseEvent) {
@@ -145,7 +160,7 @@ export class ShifAdminScreenComponent implements OnInit {
   }
 
   shop($event: MouseEvent) {
-    alert('shop');
+    this.router.navigate(['/admin/ecommerce']);
   }
 
   onTabChange($event: MatTabChangeEvent) {
@@ -162,5 +177,11 @@ export class ShifAdminScreenComponent implements OnInit {
   gofurtherDate($event: MouseEvent) {
     this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() + 1)));
     this.loadAppointment(this.tabIndex());
+  }
+
+  onAppointmentsUpdated() {
+    console.log('entra a onAppointmentsUpdated, index:', this.tabIndex());
+    this.loadAppointment(this.tabIndex());
+    this.changeDetectorRef.markForCheck()// Recargar appointments cuando sea necesario
   }
 }

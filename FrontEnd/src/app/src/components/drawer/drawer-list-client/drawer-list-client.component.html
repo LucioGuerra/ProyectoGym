@@ -1,0 +1,15 @@
+<mat-list>
+  @for (element of appLinks; track element.id) {
+    <a [href]="element.link">
+      <mat-list-item>
+        <div class="items">
+          <!-- <mat-icon class="icon">{{ element.icon }}</mat-icon> -->
+          <p class="title">{{ element.name }}</p>
+        </div>
+      </mat-list-item>
+    </a>
+    <mat-divider></mat-divider>
+  }
+  <mat-divider></mat-divider>
+  <!-- este se puede quitar, habra que ver como nos gusta mas-->
+</mat-list>

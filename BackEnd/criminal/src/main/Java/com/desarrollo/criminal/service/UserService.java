@@ -1,7 +1,6 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
@@ -20,8 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -152,5 +150,62 @@ public class UserService {
     
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    public ResponseEntity<?> getKines() {
+        List<Map<String, Object>> kinesiologosOptions = new ArrayList<>();
+        kinesiologosOptions.add(new HashMap<>(Map.of("id", 1, "name", "Manolo Hernandez", "Dni", "12312345", "email", "kine1@kine1.com", "bodyParts", List.of(1, 2, 3, 8))));
+        kinesiologosOptions.add(new HashMap<>(Map.of("id", 2, "name", "Marcos Ramirez", "Dni", "12312665", "email", "kine2@kine2.com", "bodyParts", List.of(3, 4, 8))));
+        kinesiologosOptions.add(new HashMap<>(Map.of("id", 3, "name", "Castro Sanchez", "Dni", "12992345", "email", "kine3@kine3.com", "bodyParts", List.of(5, 8, 6, 7))));
+
+        List<User> kines = userRepository.findByRole(Role.KINE);
+
+        if (kines.isEmpty()) {
+            kinesiologosOptions.forEach(kine -> {
+                User user = new User();
+                user.setRole(Role.KINE);
+                user.setFirstName(((String) kine.get("name")).split(" ")[0]);
+                user.setLastName(((String) kine.get("name")).split(" ")[1]);
+                user.setDni(kine.get("Dni").toString());
+                user.setEmail((String) kine.get("email"));
+                userRepository.save(user);
+            });
+        } else {
+            for (Map<String, Object> kine : kinesiologosOptions) {
+                String email = (String) kine.get("email");
+                if (userRepository.findByEmail(email).isEmpty()) {
+                    User user = new User();
+                    user.setRole(Role.KINE);
+                    user.setFirstName(((String) kine.get("name")).split(" ")[0]);
+                    user.setLastName(((String) kine.get("name")).split(" ")[1]);
+                    user.setDni(kine.get("Dni").toString());
+                    user.setEmail(email);
+                    userRepository.save(user);
+                }
+            }
+        }
+        kines = userRepository.findByRole(Role.KINE);
+        kines.forEach(kine -> {
+            kinesiologosOptions.forEach(kineMap -> {
+                if (kine.getEmail().equals(kineMap.get("email"))) {
+                    kineMap.put("id", kine.getId());
+                }
+            });
+        });
+
+        return ResponseEntity.status(HttpStatus.OK).body(kinesiologosOptions);
+    }
+
+    public ResponseEntity<?> getKineBodyParts() {
+        List<Map<String, Object>> bodyPartOptions = new ArrayList<>();
+        bodyPartOptions.add(Map.of("id", 1, "name", "Cuello"));
+        bodyPartOptions.add(Map.of("id", 2, "name", "Hombros"));
+        bodyPartOptions.add(Map.of("id", 3, "name", "Espalda"));
+        bodyPartOptions.add(Map.of("id", 4, "name", "Cadera"));
+        bodyPartOptions.add(Map.of("id", 5, "name", "Piernas"));
+        bodyPartOptions.add(Map.of("id", 6, "name", "Pies"));
+        bodyPartOptions.add(Map.of("id", 7, "name", "Brazos"));
+        bodyPartOptions.add(Map.of("id", 8, "name", "Manos"));
+        return ResponseEntity.status(HttpStatus.OK).body(bodyPartOptions);
     }
 }

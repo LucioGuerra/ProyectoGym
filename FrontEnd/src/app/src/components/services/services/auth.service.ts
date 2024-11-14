@@ -4,8 +4,13 @@ import {environment} from "../../../../../environments/environment";
 import * as auth0 from 'auth0-js';
 import {jwtDecode} from "jwt-decode";
 import {UserService} from "./user.service";
-import {User} from "@auth0/auth0-angular";
 import {Role, UserModel} from "../../models";
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {DniDialogComponent} from "../../dni-dialog/dni-dialog.component";
+import {HttpClient} from "@angular/common/http";
+import {lastValueFrom} from "rxjs";
+import {DniService} from "../dni/dni.service";
+
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -15,7 +20,7 @@ export class AuthService {
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private dialog: MatDialog, private http: HttpClient, private dniService: DniService) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
@@ -57,9 +62,12 @@ export class AuthService {
     });
   }
 
-  public handleAuthentication(): void {
+  public async handleAuthentication(): Promise<void> {
     const queryParams = new URLSearchParams(window.location.hash.substring(1));
     const urlParams = new URLSearchParams(queryParams);
+    var usuario: UserModel;
+
+    console.log("Entra a handleauth");
 
     if (urlParams.get("access_token")) {
       try {
@@ -67,33 +75,74 @@ export class AuthService {
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
 
+        console.log("entramos a handleauth ");
         // @ts-ignore
-        var user: UserModel = this.userService.getUserByEmail(jwtDecode(idToken)['email']);
-        if(user){
-          if (user.picture == null) {
+        this.userService.getUserByEmail(jwtDecode(idToken)['email']).subscribe(
+          async (user: UserModel) => {
+            console.log("Usuario encontrado: ", user);
+            if (user.picture == null) {
+              // @ts-ignore
+              this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+            }
+            await this.setSession(accessToken, expiresIn, idToken, user.role!);
+          },
+          async (error) => {
+            console.log("El usuario no existe, se crea uno...");
+
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.autoFocus = true;
+            dialogConfig.maxWidth = '1400px';
+            dialogConfig.width = '40%';
+            dialogConfig.panelClass = 'custom-dialog';
+            dialogConfig.hasBackdrop = false;
+            dialogConfig.data = {
             // @ts-ignore
-            this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+              apellido: jwtDecode(idToken)['family_name'],
+            // @ts-ignore
+              nombre: jwtDecode(idToken)['given_name'],
+            }
+            // @ts-ignore
+            console.log("apellido: ", jwtDecode(idToken)['family_name']);
+            const dialogRef = this.dialog.open(DniDialogComponent, dialogConfig);
+            await dialogRef.afterClosed().toPromise();
+            let dni =  this.dniService.getDni();
+            if (dni) {
+              console.log("DNI entered:", dni);
+              usuario = {
+                // @ts-ignore
+                email: jwtDecode(idToken)['email'],
+                // @ts-ignore
+                firstName: this.dniService.getNombre(),
+                // @ts-ignore
+                lastName: this.dniService.getApellido(),
+                dni: dni,
+                // @ts-ignore
+                picture: jwtDecode(idToken)['picture'],
+              };
+              await this.createUser(usuario);
+            }
+            await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
           }
-        }else {
-          //todo: crear usuario si se autentico por 3ro por primera vez
-          this.createUser(user);
-        }
-        this.setSession(accessToken, expiresIn, idToken);
+        );
       } catch (error) {
         console.error(error);
       }
     }
   }
 
-  private setSession(accessToken: any, expiresIn: any, idToken: any): void {
-    const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('expires_at', expiresAt);
-    localStorage.setItem('idToken', idToken);
+  private setSession(accessToken: any, expiresIn: any, idToken: any, userRole: Role): Promise<void> {
+    return new Promise(async (resolve) => {
+      const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('expires_at', expiresAt);
+      localStorage.setItem('idToken', idToken);
 
-    this.isAuthenticated.set(true);
-    this.setRole(idToken);
-    this.setUserInfo(idToken);
+      this.isAuthenticated.set(true);
+      this.setRole(userRole);
+      this.setUserInfo(idToken);
+
+      //this.isClient.set(true);
+    });
   }
 
   public logout(): void {
@@ -112,15 +161,14 @@ export class AuthService {
 
   }
 
-  private setRole(idToken: any) {
+  private setRole(userRole: Role) {
     // @ts-ignore
-    const role = jwtDecode(idToken)['https://criminal-cross.com/roles'];
-    if (role) {
-      if (role == 'ADMIN') {
+    if (userRole) {
+      if (userRole == Role.ADMIN) {
         this.isAdmin.set(true);
         this.isClient.set(false);
         console.log("Es admin");
-      } else if (role == 'CLIENT') {
+      } else if (userRole == Role.CLIENT) {
         this.isAdmin.set(false);
         this.isClient.set(true);
         console.log("No es admin, es cliente?", this.isClient());
@@ -129,7 +177,6 @@ export class AuthService {
       console.error("No hay ningun rol asignado")
     }
   }
-
 
   public setUserInfo(idToken: any) {
     console.log("Entra a setUserInfo: ", jwtDecode(idToken));
@@ -147,7 +194,15 @@ export class AuthService {
 
       if (currentDate < expiresAtDate) {
         this.isAuthenticated.set(true);
-        this.setRole(idToken);
+        // @ts-ignore
+        this.userService.getUserByEmail(jwtDecode(idToken)['email']).subscribe(
+          (user: UserModel) => {
+            console.log("Usuario encontrado: ", user);
+            this.setRole(user.role!);
+          },
+          (error) => {
+            console.error("Error al buscar el usuario: ", error);
+          });
         this.setUserInfo(idToken);
         console.log('Sesión restaurada con éxito.');
       } else {
@@ -160,7 +215,7 @@ export class AuthService {
     }
   }
 
-  private createUser(user: UserModel) {
+  private createUser(user: UserModel): void {
     console.log("Entra a createUser");
 
     // @ts-ignore

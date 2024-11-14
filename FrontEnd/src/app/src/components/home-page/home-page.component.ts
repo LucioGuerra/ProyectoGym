@@ -36,7 +36,7 @@ export class HomePageComponent implements AfterViewInit {private sections: HTMLE
   ];
 
   constructor(private el: ElementRef, private router: Router, private auth0: AuthService, private activityService: ActivityService) {
-    effect(() => {
+    effect(async () => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
           console.log("Me redirige a admin/agenda");
@@ -46,10 +46,10 @@ export class HomePageComponent implements AfterViewInit {private sections: HTMLE
           this.router.navigate(['/agenda']);
         } else {
           console.log("No es admin ni cliente");
-          this.auth0.handleAuthentication();
+          await this.auth0.handleAuthentication();
         }
       } else {
-        this.auth0.handleAuthentication();
+        await auth0.handleAuthentication();
       }
     }, { allowSignalWrites: true });
   }

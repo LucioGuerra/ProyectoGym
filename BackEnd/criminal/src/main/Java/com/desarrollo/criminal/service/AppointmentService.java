@@ -233,8 +233,12 @@ public class AppointmentService {
             }
 
             if (updateAppointmentDTO.getInstructorID() != null) {
-                User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
-                appointment.setInstructor(instructor);
+                if (updateAppointmentDTO.getInstructorID() == -1) {
+                    appointment.setInstructor(null);
+                } else {
+                    User instructor = userService.getUserById(updateAppointmentDTO.getInstructorID());
+                    appointment.setInstructor(instructor);
+                }
             }
 
             appointmentRepository.save(appointment);
