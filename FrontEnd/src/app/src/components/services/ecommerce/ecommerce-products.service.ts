@@ -93,7 +93,18 @@ export class EcommerceProductsService {
     return this.productos;
   }
 
-  comprarProducto(listaProductos: ProductQuantity[]) {
+  comprarProductos(listaProductos: ProductQuantity[]) {
+    const productInfo = listaProductos.map(product => {
+      const productDetails = this.productos.find(p => p.id === product.id);
+      return `Product: ${productDetails?.titulo}\nQuantity: ${product.unidades}\nPrice: ${productDetails?.precio}\n\n`;
+    }).join('');
 
+    const blob = new Blob([productInfo], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'product_info.txt';
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }
