@@ -107,6 +107,6 @@ export class UserInfoComponent {
   }
 
   editUser(id: number) {
-    this.router.navigate(['/edit/', id]);
+    this.router.navigate(['/edit']);
   }
 }

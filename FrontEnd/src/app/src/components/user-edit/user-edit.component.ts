@@ -34,7 +34,7 @@ import {UserService} from "../services/services/user.service";
     TitleCasePipe,
     NgIf],
   templateUrl: './user-edit.component.html',
-  styleUrl: './user-edit.component.scss',
+  styleUrls: ['./user-edit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -57,6 +57,7 @@ export class UserEditComponent {
     dni: '',
     picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
   });
+
   userVista = signal<UserModel>({
     id: 0,
     firstName: '',
@@ -72,7 +73,7 @@ export class UserEditComponent {
   constructor(public auth: AuthService,
               private router: Router,
               private userService: UserService,
-              private route: ActivatedRoute,) {
+              private route: ActivatedRoute) {
     console.log(this.user().picture);
 
     this.form = new FormGroup({
@@ -89,38 +90,47 @@ export class UserEditComponent {
   ngOnInit(): void {
     this.user.set(this.auth.userInfo());
     this.id = this.route.snapshot.paramMap.get('id');
+    this.userService.getUserByEmail(String(this.user().email)).subscribe({
+      next: (userModel) => {
+        this.userModel.set(userModel);
+        this.found.set(true);
 
-    if (this.id == null) {
-      this.userService.getUserByEmail(String(this.user().email)).subscribe({
-        next: (userModel) => {
-          this.userModel.set(userModel);
-          this.found.set(true);
-          this.form.patchValue(this.userModel());
-        },
-        error: (error) => {
-          console.error('User not found');
+        if (this.id && this.userModel().role === Role.CLIENT) {
+          this.router.navigate(['/edit']);
+          return;
         }
-      });
-    } else {
-      if (this.userModel().role === Role.ADMIN) {
-        this.userService.getUserById(this.id).subscribe({
-          next: (userVista) => {
-            this.form.patchValue(userVista);
-            this.userVista.set(userVista);
-            this.found.set(true);
-          }, error: (error) => {
-            console.error('User not found');
-          }
-        });
-      } else if (this.userModel().role === Role.CLIENT) {
-        this.router.navigate(['/edit']);
-      }
-    }
 
+        if (this.id && this.userModel().role === Role.ADMIN) {
+          this.userService.getUserById(this.id).subscribe({
+            next: (userVista: UserModel) => {
+              this.form.patchValue(userVista);
+              this.userVista.set(userVista);
+              this.found.set(true);
+            },
+            error: () => {
+              console.error('User not found');
+            }
+          });
+        } else {
+          this.userVista.set(userModel);
+          this.form.patchValue(this.userModel());
+        }
+      },
+      error: () => {
+        console.error('User not found');
+      }
+    });
   }
 
   back() {
-    window.history.back();
+    const previousUrl = document.referrer;
+    const isAdmin = this.userModel().role === Role.ADMIN;
+
+    if (previousUrl !== '/user-info' && !isAdmin) {
+      this.router.navigate(['/user-info']);
+    } else if (isAdmin) {
+      window.history.back();
+    }
   }
 
   changePassword(): void {
@@ -128,61 +138,49 @@ export class UserEditComponent {
     this.router.navigate(['/change-password']);
   }
 
-  changeRole(selectedRole: Role) {
-    this.form.patchValue({role: selectedRole});
+  async changeRole(event: Event) {
+    const selectedRole = (event.target as HTMLSelectElement).value;
+
+    // Actualiza solo el formulario para que saveChanges sincronice después con userVista
+    this.form.patchValue({ role: selectedRole === 'ADMIN' ? Role.ADMIN : Role.CLIENT });
   }
 
   saveChanges() {
-    this.user.set(this.auth.userInfo());
     this.id = this.route.snapshot.paramMap.get('id');
 
-    if (this.id == null) {
-      if (this.form.invalid) {
-        this.form.markAsTouched();
-        return;
-      } else if (this.form.valid) {
-        this.userModel.set({
-          ...this.userModel(),
-          ...this.form.value
-        });
-        console.log('User model:', this.userModel());
-        this.userService.updateUser(this.userModel()).subscribe({
-          next: (updatedUser: UserModel) => {
-            console.log(updatedUser)
-            alert('User updated successfully');
-          },
-          error: (error: any) => {
-            console.error('Error updating user:', error);
-          },
-          complete: () => {
-            console.log('Update user completed');
-          }
-        });
-      }
-    } else {
-      if (this.form.invalid){
-        this.form.markAsTouched();
-        return;
-      } else if (this.form.valid) {
-        this.userVista.set({
-          ...this.userVista(),
-          ...this.form.value
-        });
-        console.log('User vista:', this.userVista());
-        this.userService.updateUser(this.userVista()).subscribe({
-          next: (updatedUser: UserModel) => {
-            console.log(updatedUser)
-            alert('User updated successfully');
-          },
-          error: (error: any) => {
-            console.error('Error updating user:', error);
-          },
-          complete: () => {
-            console.log('Update user completed');
-          }
-        });
-      }
+    if (this.form.invalid) {
+      this.form.markAsTouched();
+      return;
     }
+
+    // Actualizar `userVista` con los valores del formulario
+    const formValues = this.form.getRawValue();
+    this.userVista.set({
+      ...this.userVista(),
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      dni: formValues.dni,
+      phone: formValues.phone,
+      role: formValues.role,  // Asegúrate de que `role` esté actualizado aquí
+      picture: this.userVista().picture,  // Mantener la imagen existente
+      email: this.userVista().email  // Mantener el email existente si es necesario
+    });
+
+    // Verificación en la consola para confirmar los datos que se enviarán
+    console.log('Datos a enviar (userVista):', this.userVista());
+
+    this.userService.updateUser(this.userVista()).subscribe({
+      next: (updatedUser: UserModel) => {
+        console.log('Usuario actualizado:', updatedUser);
+        alert('User updated successfully');
+      },
+      error: (error: any) => {
+        console.error('Error updating user:', error);
+      },
+      complete: () => {
+        console.log('Update user completed');
+      }
+    });
   }
 
   changePicture() {

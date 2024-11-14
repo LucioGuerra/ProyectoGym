@@ -113,10 +113,10 @@ public class UserService {
             user.setPicture(userUpdateDTO.picture());
         }
         if(Optional.ofNullable(userUpdateDTO.role()).isPresent()) {
-            if (userUpdateDTO.role() == "ADMIN") {
+            if (userUpdateDTO.role ( ).equals ( "ADMIN" )) {
                 user.setRole(Role.ADMIN);
             }
-            if (userUpdateDTO.role() == "CLIENT") {
+            if (userUpdateDTO.role ( ).equals ( "CLIENT" )) {
                 user.setRole(Role.CLIENT);
             }
         }

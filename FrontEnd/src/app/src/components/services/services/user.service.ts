@@ -34,6 +34,7 @@ export class UserService {
   }
 
   updateUser(user: UserModel): Observable<any> {
+    console.log('Entra al update user');
     return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
   }
 
