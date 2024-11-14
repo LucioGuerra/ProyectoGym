@@ -144,4 +144,8 @@ export class EcommerceComponent implements OnInit {
     const product = this.shopListService.getListaComprados()?.find(producto => producto.id === productId);
     return product ? product.unidades : 0;
   }
+
+  volver() {
+    this.router.navigate(['/admin/agenda'])
+  }
 }

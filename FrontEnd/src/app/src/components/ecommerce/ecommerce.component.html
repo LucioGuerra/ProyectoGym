@@ -1,7 +1,12 @@
 <app-main-screen>
   <ng-container header>
     <div class="header">
+      <div class="header-title" style="display: flex; flex-direction: row; align-items: center;  ">
+        <button mat-icon-button color="primary" style="margin-right: 10px" (click)="volver()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
       <h1 class="titulo">Comprar elementos</h1>
+      </div>
       <button mat-stroked-button color="primary" (click)="comprar()">
         <mat-icon>
           shopping_cart

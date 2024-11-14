@@ -160,7 +160,7 @@ export class ShifAdminScreenComponent implements OnInit {
   }
 
   shop($event: MouseEvent) {
-    alert('shop');
+    this.router.navigate(['/admin/ecommerce']);
   }
 
   onTabChange($event: MatTabChangeEvent) {

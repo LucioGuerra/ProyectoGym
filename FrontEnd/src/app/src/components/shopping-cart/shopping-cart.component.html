@@ -1,13 +1,13 @@
 <app-main-screen>
   <ng-container header>
     <div class="header">
-      <h1 class="titulo">Comprar elementos</h1>
-      <button mat-stroked-button color="primary" (click)="volver()">
-        <mat-icon>
-          chevron_left
-        </mat-icon>
-        Volver
-      </button>
+      <div class="header-title" style="display: flex; flex-direction: row; align-items: center;  ">
+        <button mat-icon-button color="primary" style="margin-right: 10px" (click)="volver()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <h1 class="titulo">Carrito de compras</h1>
+      </div>
+      <span></span>
     </div>
   </ng-container>
   <ng-container body>
@@ -68,8 +68,8 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
       <div class="button-section">
-        <h3>Precio final: {{ precioTotal() }}</h3>
-        <button mat-flat-button color="primary" (click)="volver()">
+        <h3>Precio final: {{ precioTotal() | currency }}</h3>
+        <button mat-flat-button color="primary" (click)="comprar()">
           <mat-icon>
             shopping_basket
           </mat-icon>

@@ -1,19 +1,14 @@
 import {Injectable, signal} from '@angular/core';
+import {ProductQuantity} from "../../models/ecommerceProducts.models";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopListService {
 
-  listaComprados = signal<{
-    id: number;
-    unidades: number;
-  }[] | null>(null);
+  listaComprados = signal<ProductQuantity[] | null>(null);
 
-  setListaComprados(data: {
-    id: number;
-    unidades: number;
-  }[]) {
+  setListaComprados(data: ProductQuantity[]) {
     this.listaComprados.set(data);
   }
 

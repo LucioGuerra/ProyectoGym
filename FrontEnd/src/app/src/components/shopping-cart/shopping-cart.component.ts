@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {Observable, startWith} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import {ShopListService} from "../services/shop-list/shop-list.service";
 import {EcommerceProducts} from "../models/ecommerceProducts.models";
 import {EcommerceProductsService} from "../services/ecommerce/ecommerce-products.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -41,10 +42,12 @@ import {EcommerceProductsService} from "../services/ecommerce/ecommerce-products
   ],
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CurrencyPipe]
 })
 export class ShoppingCartComponent implements OnInit {
-
+  private _snackBar = inject(MatSnackBar);
+  private currencyPipe = inject(CurrencyPipe);
   productsOptions: EcommerceProducts[] = [];
   filteredProducts= signal<{
     id: number;
@@ -57,7 +60,10 @@ export class ShoppingCartComponent implements OnInit {
 
   displayedColumns: string[] = ['imagen', 'titulo', 'descripcion', 'precio', 'unidades_disponibles', "acciones"];
 
-  constructor(private router: Router, private shopListService: ShopListService, private ecommerceProductsService: EcommerceProductsService) {
+  constructor(private router: Router,
+              private shopListService: ShopListService,
+              private ecommerceProductsService: EcommerceProductsService,
+  ) {
     this.productsOptions = this.ecommerceProductsService.getProducts();
   }
 
@@ -132,5 +138,15 @@ export class ShoppingCartComponent implements OnInit {
       total += this.productsOptions.find(product => product.id === producto.id)!.precio * producto.unidades;
     });
     return total;
+  }
+
+  comprar() {
+    if (this.shopListService.getListaComprados() !== null && this.shopListService.getListaComprados()!.length > 0) {
+      let cantidadProductosTotal = this.shopListService.getListaComprados()!.reduce((acc, producto) => acc + producto.unidades, 0);
+      this.ecommerceProductsService.comprarProductos(this.shopListService.getListaComprados()!);
+      this._snackBar.open(`se ha enviado un pedido de ${cantidadProductosTotal} productos por ${this.currencyPipe.transform(this.precioTotal(), 'USD')}`, "close", {"duration": 5000})
+    } else {
+      this._snackBar.open("No hay productos en el carrito", "close", {"duration": 3000})
+    }
   }
 }
