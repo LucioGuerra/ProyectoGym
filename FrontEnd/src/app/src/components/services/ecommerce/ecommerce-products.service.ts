@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {EcommerceProducts} from "../../models/ecommerceProducts.models";
+import {EcommerceProducts, ProductQuantity} from "../../models/ecommerceProducts.models";
 
 @Injectable({
   providedIn: 'root'
@@ -91,5 +91,9 @@ export class EcommerceProductsService {
 
   getProducts(){
     return this.productos;
+  }
+
+  comprarProducto(listaProductos: ProductQuantity[]) {
+
   }
 }
