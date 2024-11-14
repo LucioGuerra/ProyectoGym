@@ -6,6 +6,8 @@ import { Injectable } from '@angular/core';
 export class DniService {
 
   dni: string = '';
+  apellido: string = '';
+  nombre: string = '';
 
   constructor() { }
 
@@ -15,5 +17,21 @@ export class DniService {
 
   getDni() {
     return this.dni
+  }
+
+  setApellido(apellido: string) {
+    this.apellido = apellido;
+  }
+
+  getApellido() {
+    return this.apellido;
+  }
+
+  setNombre(nombre: string) {
+    this.nombre = nombre;
+  }
+
+  getNombre() {
+    return this.nombre;
   }
 }

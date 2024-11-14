@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Output} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -38,20 +39,40 @@ import {DniService} from "../services/dni/dni.service";
 })
 export class DniDialogComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<DniDialogComponent>,
-    private dniService: DniService){}
-
   dni = new FormControl('', [Validators.required, Validators.minLength(7), Validators.maxLength(9)]);
-
+  apellido = new FormControl('', [Validators.required, Validators.minLength(1)]);
+  nombre = new FormControl('', [Validators.required, Validators.minLength(1)]);
   @Output() dniSubmitted = new EventEmitter<string>();
 
+  constructor(
+    public dialogRef: MatDialogRef<DniDialogComponent>,
+    private dniService: DniService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    ){
+    if (data && data.apellido) {
+      this.apellido.setValue(data.apellido);
+      this.apellido.disable();
+    }
+    if (data && data.nombre) {
+      this.nombre.setValue(data.nombre);
+      this.nombre.disable();
+    }
+  }
+
+
   submitDni() {
-    if (this.dni.valid) {
+    if (this.dni.valid && this.apellido.valid && this.nombre.valid) {
       this.dniService.setDni(this.dni.value!);
+      this.dniService.setApellido(this.apellido.value!);
+      this.dniService.setNombre(this.nombre.value!);
       this.dialogRef.close();
     } else {
       this.dni.markAsDirty();
+      this.apellido.markAsDirty();
+      this.nombre.markAsDirty();
+      this.dni.markAsTouched();
+      this.apellido.markAsTouched();
+      this.nombre.markAsTouched();
     }
   }
 }

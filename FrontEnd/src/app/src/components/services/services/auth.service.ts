@@ -94,6 +94,15 @@ export class AuthService {
             dialogConfig.maxWidth = '1400px';
             dialogConfig.width = '40%';
             dialogConfig.panelClass = 'custom-dialog';
+            dialogConfig.hasBackdrop = false;
+            dialogConfig.data = {
+            // @ts-ignore
+              apellido: jwtDecode(idToken)['family_name'],
+            // @ts-ignore
+              nombre: jwtDecode(idToken)['given_name'],
+            }
+            // @ts-ignore
+            console.log("apellido: ", jwtDecode(idToken)['family_name']);
             const dialogRef = this.dialog.open(DniDialogComponent, dialogConfig);
             await dialogRef.afterClosed().toPromise();
             let dni =  this.dniService.getDni();
@@ -103,9 +112,9 @@ export class AuthService {
                 // @ts-ignore
                 email: jwtDecode(idToken)['email'],
                 // @ts-ignore
-                firstName: jwtDecode(idToken)['given_name'],
+                firstName: this.dniService.getNombre(),
                 // @ts-ignore
-                lastName: jwtDecode(idToken)['family_name'],
+                lastName: this.dniService.getApellido(),
                 dni: dni,
                 // @ts-ignore
                 picture: jwtDecode(idToken)['picture'],
