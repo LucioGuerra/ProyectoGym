@@ -42,10 +42,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   ],
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CurrencyPipe]
 })
 export class ShoppingCartComponent implements OnInit {
   private _snackBar = inject(MatSnackBar);
+  private currencyPipe = inject(CurrencyPipe);
   productsOptions: EcommerceProducts[] = [];
   filteredProducts= signal<{
     id: number;
@@ -58,7 +60,10 @@ export class ShoppingCartComponent implements OnInit {
 
   displayedColumns: string[] = ['imagen', 'titulo', 'descripcion', 'precio', 'unidades_disponibles', "acciones"];
 
-  constructor(private router: Router, private shopListService: ShopListService, private ecommerceProductsService: EcommerceProductsService) {
+  constructor(private router: Router,
+              private shopListService: ShopListService,
+              private ecommerceProductsService: EcommerceProductsService,
+  ) {
     this.productsOptions = this.ecommerceProductsService.getProducts();
   }
 
@@ -138,8 +143,8 @@ export class ShoppingCartComponent implements OnInit {
   comprar() {
     if (this.shopListService.getListaComprados() !== null && this.shopListService.getListaComprados()!.length > 0) {
       let cantidadProductosTotal = this.shopListService.getListaComprados()!.reduce((acc, producto) => acc + producto.unidades, 0);
-      this.ecommerceProductsService.comprarProducto(this.shopListService.getListaComprados()!);
-      this._snackBar.open(`se ha enviado un pedido de ${cantidadProductosTotal} productos por $${this.precioTotal()}`, "close", {"duration": 5000})
+      this.ecommerceProductsService.comprarProductos(this.shopListService.getListaComprados()!);
+      this._snackBar.open(`se ha enviado un pedido de ${cantidadProductosTotal} productos por ${this.currencyPipe.transform(this.precioTotal(), 'USD')}`, "close", {"duration": 5000})
     } else {
       this._snackBar.open("No hay productos en el carrito", "close", {"duration": 3000})
     }
