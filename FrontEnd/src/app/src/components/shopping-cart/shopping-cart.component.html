@@ -67,6 +67,15 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
+      <div class="button-section">
+        <h3>Precio final: {{ precioTotal() }}</h3>
+        <button mat-flat-button color="primary" (click)="volver()">
+          <mat-icon>
+            shopping_basket
+          </mat-icon>
+          Confirmar compra
+        </button>
+      </div>
     </div>
   </ng-container>
 </app-main-screen>

@@ -125,4 +125,12 @@ export class ShoppingCartComponent implements OnInit {
     this.router.navigate(['/admin/ecommerce']);
 
   }
+
+  precioTotal() {
+    let total = 0;
+    this.shopListService.getListaComprados()?.forEach(producto => {
+      total += this.productsOptions.find(product => product.id === producto.id)!.precio * producto.unidades;
+    });
+    return total;
+  }
 }
