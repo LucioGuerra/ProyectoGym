@@ -28,7 +28,7 @@ export class AppointmentService {
       .pipe(// Llamar al servidor para obtener citas
       )
       .subscribe(() => {
-          this.appointmentChangedSource.next(); // Emitir las citas actualizadas
+          //this.appointmentChangedSource.next(); // Emitir las citas actualizadas
         },
       );
   }
