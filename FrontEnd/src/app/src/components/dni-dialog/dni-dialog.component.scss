@@ -1,3 +1,5 @@
+@use "../../../../variables";
+
 .dni-dialog {
   display: flex;
   flex-direction: column;
@@ -15,6 +17,11 @@ h1{
   margin-bottom: 0;
 }
 
+.title {
+  color: variables.$light-gold-color;
+  width: 70%;
+}
+
 mat-dialog-content {
   display: flex;
   flex-direction: column;
@@ -24,6 +31,7 @@ mat-dialog-content {
 
 .dni-field {
   margin-top: 10px;
+  margin-bottom: 0;
 }
 
 ::ng-deep .dni-field{

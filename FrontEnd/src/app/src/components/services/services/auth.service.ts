@@ -8,6 +8,8 @@ import {Role, UserModel} from "../../models";
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DniDialogComponent} from "../../dni-dialog/dni-dialog.component";
 import {HttpClient} from "@angular/common/http";
+import {lastValueFrom} from "rxjs";
+import {DniService} from "../dni/dni.service";
 
 
 @Injectable({ providedIn: "root" })
@@ -18,7 +20,7 @@ export class AuthService {
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
 
-  constructor(private userService: UserService, private dialog: MatDialog, private http: HttpClient) {
+  constructor(private userService: UserService, private dialog: MatDialog, private http: HttpClient, private dniService: DniService) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
@@ -92,26 +94,32 @@ export class AuthService {
             dialogConfig.maxWidth = '1400px';
             dialogConfig.width = '40%';
             dialogConfig.panelClass = 'custom-dialog';
+            dialogConfig.hasBackdrop = false;
+            dialogConfig.data = {
+            // @ts-ignore
+              apellido: jwtDecode(idToken)['family_name'],
+            // @ts-ignore
+              nombre: jwtDecode(idToken)['given_name'],
+            }
+            // @ts-ignore
+            console.log("apellido: ", jwtDecode(idToken)['family_name']);
             const dialogRef = this.dialog.open(DniDialogComponent, dialogConfig);
-
-            const dni = await dialogRef.afterClosed().toPromise();
+            await dialogRef.afterClosed().toPromise();
+            let dni =  this.dniService.getDni();
             if (dni) {
               console.log("DNI entered:", dni);
               usuario = {
                 // @ts-ignore
                 email: jwtDecode(idToken)['email'],
                 // @ts-ignore
-                firstName: jwtDecode(idToken)['given_name'],
+                firstName: this.dniService.getNombre(),
                 // @ts-ignore
-                lastName: jwtDecode(idToken)['family_name'],
+                lastName: this.dniService.getApellido(),
                 dni: dni,
                 // @ts-ignore
                 picture: jwtDecode(idToken)['picture'],
-                // @ts-ignore
-                role: jwtDecode(idToken)['https://criminal-cross.com/roles'],
               };
-              this.createUser(usuario);
-              // Use the DNI as needed
+              await this.createUser(usuario);
             }
             await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
           }
@@ -207,7 +215,7 @@ export class AuthService {
     }
   }
 
-  private createUser(user: UserModel) {
+  private createUser(user: UserModel): void {
     console.log("Entra a createUser");
 
     // @ts-ignore
