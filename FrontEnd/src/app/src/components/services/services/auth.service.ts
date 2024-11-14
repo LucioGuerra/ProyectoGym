@@ -133,7 +133,7 @@ export class AuthService {
       this.setRole(userRole);
       this.setUserInfo(idToken);
 
-      this.isClient.set(true);
+      //this.isClient.set(true);
     });
   }
 
