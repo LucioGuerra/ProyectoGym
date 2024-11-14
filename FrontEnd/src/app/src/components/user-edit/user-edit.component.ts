@@ -57,6 +57,16 @@ export class UserEditComponent {
     dni: '',
     picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
   });
+  userVista = signal<UserModel>({
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: Role.CLIENT,
+    phone: '',
+    dni: '',
+    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+  });
   protected readonly Role = Role;
 
   constructor(public auth: AuthService,
@@ -96,6 +106,7 @@ export class UserEditComponent {
         this.userService.getUserById(this.id).subscribe({
           next: (userVista) => {
             this.form.patchValue(userVista);
+            this.userVista.set(userVista);
             this.found.set(true);
           }, error: (error) => {
             console.error('User not found');
@@ -122,27 +133,55 @@ export class UserEditComponent {
   }
 
   saveChanges() {
-    if (this.form.invalid) {
-      this.form.markAsTouched();
-      return;
-    } else if (this.form.valid) {
-      this.userModel.set({
-        ...this.userModel(),
-        ...this.form.value
-      });
-      console.log('User model:', this.userModel());
-      this.userService.updateUser(this.userModel()).subscribe({
-        next: (updatedUser: UserModel) => {
-          console.log(updatedUser)
-          alert('User updated successfully');
-        },
-        error: (error: any) => {
-          console.error('Error updating user:', error);
-        },
-        complete: () => {
-          console.log('Update user completed');
-        }
-      });
+    this.user.set(this.auth.userInfo());
+    this.id = this.route.snapshot.paramMap.get('id');
+
+    if (this.id == null) {
+      if (this.form.invalid) {
+        this.form.markAsTouched();
+        return;
+      } else if (this.form.valid) {
+        this.userModel.set({
+          ...this.userModel(),
+          ...this.form.value
+        });
+        console.log('User model:', this.userModel());
+        this.userService.updateUser(this.userModel()).subscribe({
+          next: (updatedUser: UserModel) => {
+            console.log(updatedUser)
+            alert('User updated successfully');
+          },
+          error: (error: any) => {
+            console.error('Error updating user:', error);
+          },
+          complete: () => {
+            console.log('Update user completed');
+          }
+        });
+      }
+    } else {
+      if (this.form.invalid){
+        this.form.markAsTouched();
+        return;
+      } else if (this.form.valid) {
+        this.userVista.set({
+          ...this.userVista(),
+          ...this.form.value
+        });
+        console.log('User vista:', this.userVista());
+        this.userService.updateUser(this.userVista()).subscribe({
+          next: (updatedUser: UserModel) => {
+            console.log(updatedUser)
+            alert('User updated successfully');
+          },
+          error: (error: any) => {
+            console.error('Error updating user:', error);
+          },
+          complete: () => {
+            console.log('Update user completed');
+          }
+        });
+      }
     }
   }
 
