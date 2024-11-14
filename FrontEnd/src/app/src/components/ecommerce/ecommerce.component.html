@@ -1,0 +1,87 @@
+<app-main-screen>
+  <ng-container header>
+    <div class="header">
+      <h1 class="titulo">Comprar elementos</h1>
+      <button mat-stroked-button color="primary" (click)="comprar()">
+        <mat-icon>
+          shopping_cart
+        </mat-icon>
+        Carrito
+      </button>
+    </div>
+  </ng-container>
+  <ng-container body>
+    <div class="productos-form">
+
+      <mat-form-field class="busqueda" appearance="outline">
+        <mat-label>Producto</mat-label>
+        <input type="text"
+               placeholder="Buscar productos"
+               matInput
+               [formControl]="productsControl"
+               [matAutocomplete]="productsAuto">
+        <mat-autocomplete #productsAuto="matAutocomplete">
+          @for (option of filteredProductsOptions | async; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+
+      <mat-table [dataSource]="filteredProducts()" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="imagen">
+          <mat-header-cell *matHeaderCellDef> Imagen</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <img class="imagen" [src]="element.imagen" alt="{{element.titulo}}" width="50" height="50">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="titulo">
+          <mat-header-cell *matHeaderCellDef> Título</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.titulo }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+          <mat-header-cell *matHeaderCellDef> Descripción</mat-header-cell>
+          <mat-cell *matCellDef="let element"><p>{{ element.descripcion.slice(0, 20) }} <a
+            matTooltip="{{ element.descripcion }}" matTooltipPosition="right"><u>ver mas</u></a></p></mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="precio">
+          <mat-header-cell *matHeaderCellDef> Precio</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.precio | currency }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="unidades_disponibles">
+          <mat-header-cell *matHeaderCellDef> Disponibles</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.unidades_disponibles }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef>Comprar</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div class="acciones">
+              @if ( getProductQuantity(element.id) == 0 ) {
+                <button mat-icon-button color="primary" disabled>
+                  <mat-icon>remove</mat-icon>
+                </button>
+              } @else {
+                <button mat-icon-button color="primary" (click)="restarUnidad(element.id)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              }
+              <span>{{ getProductQuantity(element.id) }}</span>
+              <button mat-icon-button color="primary" (click)="sumarUnidad(element.id)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </ng-container>
+</app-main-screen>

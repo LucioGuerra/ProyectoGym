@@ -77,6 +77,12 @@ mat-dialog-content {
   }
 }
 
+.kine-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 20px 0 0 0;
+}
+
 .info-label {
   font-size: 1.2rem;
   font-weight: 600;
@@ -176,7 +182,22 @@ mat-dialog-actions {
   justify-content: space-between;
 }
 
+.kinesiology-professional {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 50px;
+  align-items: center;
+  margin-top: 15px;
+  width: 100%;
+  margin-bottom: -20px;
+}
+
 @media (max-width: 600px) {
+  .kinesiology-professional {
+    display: grid;
+    grid-template-columns: 1fr;
+
+  }
   .info-grid {
     grid-template-columns: 1fr;
   }

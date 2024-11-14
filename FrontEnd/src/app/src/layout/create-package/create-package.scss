@@ -45,6 +45,9 @@
 
 
 @media(max-width: 600px){
+  .main-content__body {
+    width: 100%;
+  }
 .centered-card{
   padding-top: 20px;
 }

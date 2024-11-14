@@ -62,4 +62,15 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
         return userService.updateUser(id, userUpdateDTO);
     }
+
+    @GetMapping("/kine")
+    public ResponseEntity<?> getKines(){
+        return userService.getKines();
+    }
+
+    @GetMapping("/kine/body-parts")
+    public ResponseEntity<?> getKineBodyParts(){
+        return userService.getKineBodyParts();
+    }
+
 }

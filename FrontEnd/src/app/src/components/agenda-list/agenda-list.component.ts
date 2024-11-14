@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, signal, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, signal, OnInit, ChangeDetectorRef} from '@angular/core';
 import {MatActionList, MatListItem} from "@angular/material/list";
 import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatRow, MatRowDef, MatTable} from "@angular/material/table";
 import {MatChip} from "@angular/material/chips";
@@ -41,13 +41,14 @@ import {AppointmentService} from "../services/services";
 export class AgendaListComponent implements OnInit {
     displayedColumns: string[] = ['date', 'activity', 'capacity', 'actions'];
 
-    public appointments: Appointment[] = [];
+    /*public appointments: Appointment[] = [];*/
 
     @Input() selectedActivities = signal<string[]>([]);
     @Input() appointmentList = signal<Appointment[]>([]);
     @Input() isAdmin: boolean = false;
 
-    constructor(private router: Router, private dialog: MatDialog, private appointmentService: AppointmentService) {
+
+    constructor(private changeDetectorRef: ChangeDetectorRef,private router: Router, private dialog: MatDialog, private appointmentService: AppointmentService) {
     }
 
     ngOnInit() {
@@ -76,7 +77,7 @@ export class AgendaListComponent implements OnInit {
             dialogConfig.width = '90%';
             dialogConfig.height = '80%';
         } else {
-            dialogConfig.width = '30%';
+            dialogConfig.width = '40%';
         }
         dialogConfig.data = {id: appointment.id, isAdmin: this.isAdmin};
         dialogConfig.panelClass = 'custom-dialog';
