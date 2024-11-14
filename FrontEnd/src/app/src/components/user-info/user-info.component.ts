@@ -23,6 +23,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatActionList, MatListItem} from "@angular/material/list";
 import {MatMenu, MatMenuItem} from "@angular/material/menu";
+import {AuthService} from "../services/services";
 
 @Component({
   selector: 'app-user-info',
@@ -69,15 +70,17 @@ export class UserInfoComponent {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {
   }
 
   ngOnInit(): void {
+    this.user.set(this.auth.userInfo());
     console.log(this.user().picture);
     this.displayedColumns = ['date', 'activity'];
 
-    this.userService.getUserById('2').subscribe({
+    this.userService.getUserByEmail(String(this.user().email)).subscribe({
       next: (userModel) => {
         this.userModel.set(userModel);
       }, error: (error) => {

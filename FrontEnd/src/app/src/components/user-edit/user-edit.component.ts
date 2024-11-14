@@ -10,7 +10,7 @@ import {DrawerComponent} from '../drawer/drawer.component';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatInput} from '@angular/material/input';
-import {AuthService} from "../services/services/auth.service";
+import {AuthService} from "../services/services";
 import {User} from "@auth0/auth0-angular";
 import {NgIf, TitleCasePipe} from "@angular/common";
 import {UserService} from "../services/services/user.service";
@@ -42,12 +42,11 @@ export class UserEditComponent {
   user = signal<User>({});
   found = signal<boolean>(false);
 
-  id: string = '';
+  id: string | null = '';
 
   isHovering = false;
   form: FormGroup;
   matcher = new ErrorStateMatcher();
-
   userModel = signal<UserModel>({
     id: 0,
     firstName: '',
@@ -78,21 +77,35 @@ export class UserEditComponent {
   }
 
   ngOnInit(): void {
-      this.id = this.route.snapshot.paramMap.get('id') || '';
+    this.user.set(this.auth.userInfo());
+    this.id = this.route.snapshot.paramMap.get('id');
 
-      if (this.id) {
+    if (this.id == null) {
+      this.userService.getUserByEmail(String(this.user().email)).subscribe({
+        next: (userModel) => {
+          this.userModel.set(userModel);
+          this.found.set(true);
+          this.form.patchValue(this.userModel());
+        },
+        error: (error) => {
+          console.error('User not found');
+        }
+      });
+    } else {
+      if (this.userModel().role === Role.ADMIN) {
         this.userService.getUserById(this.id).subscribe({
-          next: (userModel) => {
-            this.form.patchValue(userModel);
-            this.userModel.set(userModel);
-
+          next: (userVista) => {
+            this.form.patchValue(userVista);
             this.found.set(true);
-            console.log(this.found());
           }, error: (error) => {
             console.error('User not found');
           }
         });
+      } else if (this.userModel().role === Role.CLIENT) {
+        this.router.navigate(['/edit']);
       }
+    }
+
   }
 
   back() {
