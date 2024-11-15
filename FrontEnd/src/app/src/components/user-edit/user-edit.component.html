@@ -77,6 +77,7 @@
                     </mat-form-field>
                   </div>
 
+                  @if (!this.id){
                   <div class="change-password-container">
                     <button type="button" (click)="changePassword()" class="changepassword" color="primary"
                             mat-raised-button>
@@ -84,6 +85,10 @@
                       <mat-icon class="icon-right">chevron_right</mat-icon>
                     </button>
                   </div>
+                  } @else {
+                    <div class="change-password-container">
+                  </div>
+                  }
                 </div>
 
                 <div class="save-container">
