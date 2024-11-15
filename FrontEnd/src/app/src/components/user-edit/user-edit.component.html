@@ -78,13 +78,18 @@
                   </div>
 
                   @if (!this.id){
-                  <div class="change-password-container">
-                    <button type="button" (click)="changePassword()" class="changepassword" color="primary"
-                            mat-raised-button>
-                      Change password
-                      <mat-icon class="icon-right">chevron_right</mat-icon>
-                    </button>
-                  </div>
+                    @if (this.user().sub?.startsWith('google') || this.user().sub?.startsWith('windowslive')
+                    || this.user().sub?.startsWith('facebook')){
+                      <div class="change-password-container"></div>
+                    } @else {
+                      <div class="change-password-container">
+                        <button type="button" (click)="changePassword()" class="changepassword" color="primary"
+                                mat-raised-button>
+                          Change password
+                          <mat-icon class="icon-right">chevron_right</mat-icon>
+                        </button>
+                      </div>
+                    }
                   } @else {
                     <div class="change-password-container">
                   </div>
