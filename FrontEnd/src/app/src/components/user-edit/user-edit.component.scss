@@ -47,7 +47,7 @@ mat-card-header {
   display: grid;
   grid-template-areas:
   "back photo role";
-  grid-template-columns: 3.5fr 4fr 3.5fr;
+  grid-template-columns: 3.5fr auto 3.5fr;
 
   align-items: end !important;
   position: relative;
@@ -96,7 +96,7 @@ mat-card-header {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #D0D0D0;
-  background-color: rgba(34, 34, 34, 0.77);
+  // background-color: rgba(34, 34, 34, 0.77);
   padding: 5px 10px;
   border-radius: 5px;
   width: max-content;
@@ -109,7 +109,7 @@ mat-card-header {
   }
 
 .user-avatar:hover .user-avatar-img {
-  filter: brightness(0.5);
+  filter: brightness(0.3);
   }
 
 .hover-text:hover {

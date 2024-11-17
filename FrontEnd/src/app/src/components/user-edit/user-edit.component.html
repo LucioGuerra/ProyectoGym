@@ -12,14 +12,28 @@
               </button>
             </div>
 
-            <div class="avatar-container">
-              <div class="user-avatar" (mouseover)="showText(true)" (mouseout)="showText(false)">
-                <img [src]="userModel().picture" alt="User Image" class="user-avatar-img" (click)="changePicture()">
-
-                <div class="hover-text" (click)="changePicture()" *ngIf="isHovering">
-                  Change Picture
-                </div>
+            <div class="user-avatar" (mouseover)="showText(true)" (mouseout)="showText(false)">
+              <!-- Imagen visible -->
+              <img
+                [src]="userModel().picture || defaultImage"
+                alt="User Image"
+                class="user-avatar-img"
+                (click)="triggerFileInput()"
+              />
+            
+              <!-- Texto visible al pasar el mouse -->
+              <div class="hover-text" *ngIf="isHovering" (click)="triggerFileInput()">
+                Change Picture
               </div>
+            
+              <!-- Input de tipo archivo (oculto) -->
+              <input
+                type="file"
+                accept="image/*"
+                #fileInput
+                (change)="onFileSelected($event)"
+                style="display: none;"
+              />
             </div>
 
             <div class="role-container">
