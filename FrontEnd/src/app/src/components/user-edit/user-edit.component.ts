@@ -170,6 +170,8 @@ export class UserEditComponent {
       return;
     }
 
+    await this.uploadImage();
+
     // Actualizar `userVista` con los valores del formulario
     const formValues = this.form.getRawValue();
     this.userVista.set({
@@ -239,7 +241,7 @@ export class UserEditComponent {
       }
       const reader = new FileReader();
       reader.onload = () => {
-        this.userModel.set({ ...this.userModel(), picture: new URL(reader.result as string) });
+        this.userVista.set({ ...this.userVista(), picture: new URL(reader.result as string) });
         console.log('Imagen:', reader.result);
         this.imageFile = reader.result as string;
       };
@@ -257,8 +259,8 @@ export class UserEditComponent {
       try {
         const response: any = await lastValueFrom(this.http.post(environment.cloudinary.api, formData));
         console.log('Imagen cargada con éxito:', response);
-        this.form.patchValue({ picture: new URL(response.secure_url) });
-        console.log('Imagen cargada:', this.userModel().picture);
+        this.userVista.set({ ...this.userVista(), picture: new URL(response.secure_url) });
+        console.log('Imagen cargada:', this.userVista().picture);
       } catch (error) {
         this.dialogConfig.autoFocus = true;
         this.dialogConfig.maxWidth = '1400px';
