@@ -68,6 +68,7 @@ export class UserEditComponent {
   protected readonly Role = Role;
 
   private dialogConfig = new MatDialogConfig();
+  
 
   constructor(public auth: AuthService,
     private router: Router,
@@ -171,18 +172,15 @@ export class UserEditComponent {
         this.dialogConfig.maxWidth = '1400px';
         this.dialogConfig.width = '40%';
         this.dialogConfig.panelClass = 'custom-dialog';
-        this.dialogConfig.data = { message: 'Please select a valid image file.' };
+        this.dialogConfig.data = { message: 'El archivo seleccionado no es una imagen.' };
         const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
         return;
       }
 
       const maxSizeInMB = 2;
       if (file.size / 1024 / 1024 > maxSizeInMB) {
-        this.dialogConfig.autoFocus = true;
-        this.dialogConfig.maxWidth = '1400px';
-        this.dialogConfig.width = '40%';
-        this.dialogConfig.panelClass = 'custom-dialog';
-        this.dialogConfig.data = { message:`La imagen excede el tamaño maximo de ${maxSizeInMB}MB` };
+        
+        this.dialogConfig.data = { message:`La imagen excede el tamaño maximo de ${maxSizeInMB}MB.` };
         const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
         return;
       }
@@ -209,6 +207,12 @@ export class UserEditComponent {
         this.form.patchValue({ picture: new URL(response.secure_url) });
         console.log('Imagen cargada:', this.userModel().picture);
       } catch (error) {
+        this.dialogConfig.autoFocus = true;
+        this.dialogConfig.maxWidth = '1400px';
+        this.dialogConfig.width = '40%';
+        this.dialogConfig.panelClass = 'custom-dialog';
+        this.dialogConfig.data = { message: 'Ha habido un error, por favor intentelo mas tarde.' };
+        const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
         console.error('Error al cargar la imagen:', error);
       }
     } else {
