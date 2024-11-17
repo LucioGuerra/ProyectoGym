@@ -20,6 +20,7 @@ export const routes: Routes = [
   {path: 'signup', component: SignupComponent},
   {path: 'admin/agenda', component: ShifAdminScreenComponent},
   {path: 'edit/:id', component: UserEditComponent},
+  {path: 'edit', component: UserEditComponent},
   {path: 'admin/users', component: UsersListComponent},
   {path: 'admin/appointment/create', component: CreateAppointmentComponent},
   {path: 'admin/appointment/edit/:id', component: CreateAppointmentComponent},

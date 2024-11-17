@@ -34,6 +34,7 @@ export class UserService {
   }
 
   updateUser(user: UserModel): Observable<any> {
+    console.log('Entra al update user');
     return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
   }
 
@@ -46,7 +47,7 @@ export class UserService {
   }
 
   getUserAppointments(id: string): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(`${this.apiUrl}/api/public/users/appointments/${id}`).pipe(
+    return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/${id}`).pipe(
       map((appointments: Appointment[]) => appointments.map(appointment => ({
           ...appointment,
           date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
