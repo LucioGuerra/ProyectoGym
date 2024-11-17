@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { Role, UserModel } from '../models';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,6 +19,7 @@ import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.compon
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments';
 import { lastValueFrom } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-edit',
@@ -44,6 +45,7 @@ import { lastValueFrom } from 'rxjs';
 })
 
 export class UserEditComponent {
+  private _snackBar = inject(MatSnackBar);
   user = signal<User>({});
   found = signal<boolean>(false);
   defaultImage = 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg';
@@ -138,13 +140,19 @@ export class UserEditComponent {
       console.log('User model:', this.userModel());
       this.userService.updateUser(this.userModel()).subscribe({
         next: (updatedUser: UserModel) => {
-          console.log(updatedUser)
-          alert('User updated successfully');
+          console.log(updatedUser);
         },
         error: (error: any) => {
+          this.dialogConfig.autoFocus = true;
+          this.dialogConfig.maxWidth = '1400px';
+          this.dialogConfig.width = '40%';
+          this.dialogConfig.panelClass = 'custom-dialog';
+          this.dialogConfig.data = { message: 'Ha habido un error, por favor intentelo mas tarde' };
+          const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
           console.error('Error updating user:', error);
         },
         complete: () => {
+          this._snackBar.open('Datos guardados', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"});
           console.log('Update user completed');
         }
       });
