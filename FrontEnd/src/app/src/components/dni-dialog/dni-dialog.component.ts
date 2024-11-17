@@ -61,7 +61,7 @@ export class DniDialogComponent {
 
 
   submitDni() {
-    if (this.dni.valid && this.apellido.valid && this.nombre.valid) {
+    if (this.dni.valid && (this.apellido.disabled || this.apellido.valid) && (this.nombre.disabled || this.nombre.valid)) {
       this.dniService.setDni(this.dni.value!);
       this.dniService.setApellido(this.apellido.value!);
       this.dniService.setNombre(this.nombre.value!);
