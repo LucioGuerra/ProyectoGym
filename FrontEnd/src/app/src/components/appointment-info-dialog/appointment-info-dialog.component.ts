@@ -1,8 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, signal} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogActions,
   MatDialogClose,
+  MatDialogConfig,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle,
@@ -24,6 +26,7 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {MatInput} from "@angular/material/input";
 import {MatLabel} from "@angular/material/form-field";
 import {MatError} from "@angular/material/form-field";
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-appointment-info-dialog',
@@ -55,6 +58,7 @@ import {MatError} from "@angular/material/form-field";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppointmentInfoDialogComponent implements OnInit {
+
   loading = true;
   appointmentData: Appointment | undefined;
   isReserved = signal<boolean>(false);
@@ -95,6 +99,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private auth: AuthService,
     private userService: UserService,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -147,6 +152,14 @@ export class AppointmentInfoDialogComponent implements OnInit {
       }
     } catch (error) {
       console.error('Error during initialization', error);
+      let dialogConf = new MatDialogConfig();
+      dialogConf.data = {
+        message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+      };
+      let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+      d.afterClosed().subscribe(() => {
+        this.onClose();
+      });
     }
   }
 
@@ -292,4 +305,23 @@ export class AppointmentInfoDialogComponent implements OnInit {
     this.appointmentService.removeInstructorFromKinesiologyAppointment(this.data.id)
     this.isUserInAppointment();
   }
+
+  isPast(): boolean {
+    if (new Date(this.appointmentData!.date) < new Date()){
+      console.log('isPast: ', true);
+      return true;
+    } else if (new Date(this.appointmentData!.date) > new Date()) {
+      return false;
+    } else {
+      if (this.appointmentData?.startTime && this.appointmentData?.endTime) {
+        const now = new Date();
+        const startTime = new Date(this.appointmentData.startTime);
+        const endTime = new Date(this.appointmentData.endTime);
+        return now < startTime;
+      } else {
+        return false;
+      }
+    }
+  }
+
 }
