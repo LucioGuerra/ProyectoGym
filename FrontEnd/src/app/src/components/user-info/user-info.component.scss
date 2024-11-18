@@ -7,6 +7,7 @@
   justify-content: center;
   flex-direction: column;
   display: flex;
+  margin-top: 70px;
   }
 
 mat-card {
@@ -15,12 +16,15 @@ mat-card {
   padding: 25px;
   width: 65%;
   height: auto;
+  flex-direction: column;
   }
 
 mat-card-header {
   color: #D0D0D0;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 20px;
 
   img {
     border-radius: 50%;
@@ -31,13 +35,15 @@ mat-card-header {
   .info {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     padding-left: 20px;
-    padding-top: 60px;
-    gap: 0.25em;
+    padding-top: 30px;
+    gap: 0.5em;
     font-size: large;
+    width: 100%;
 
     .name {
-      font-size: 300%;
+      font-size: 2.5rem;
       margin-bottom: -7.5px;
       width: max-content;
       }
@@ -46,7 +52,7 @@ mat-card-header {
       border: 1px solid rgba(246, 201, 14, 0.79);
       background-color: transparent;
       border-radius: 5px;
-      font-size: 100%;
+      font-size: 1rem;
       color: #F6C90E;
       }
 
@@ -59,322 +65,375 @@ mat-card-header {
 
   .streak {
     display: flex;
-    flex-direction: row;
-    align-items: end;
-    justify-content: end;
-
+    flex-direction: column;
+    align-items: flex-end;
+    height: 100%;
+    justify-content: flex-end;
     width: 100%;
-    margin-right: 30px;
-    }
 
-  mat-card {
-    background-color: rgba(208, 208, 208, 0.75);
-    padding: 10px;
+    mat-card {
+      background-color: rgba(208, 208, 208, 0.75);
+      padding: 10px;
+      height: auto;
+      width: max-content;
+      font-weight: bold;
+      color: #222;
 
-    height: auto;
-    width: max-content;
-    font-weight: bold;
-    color: #222;
-
-    .text {
-      width: 100%;
-      padding-left: 5px;
-      font-size: 130%;
+      .text {
+        width: 100%;
+        padding-left: 5px;
+        font-size: 1.5rem;
+        }
       }
     }
   }
 
 .content {
-  padding: 10px;
+  padding: 20px;
 
   h1 {
     font-weight: normal;
     margin: 30px auto 5px 20px;
     }
 
-  mat-divider{
+  mat-divider {
     margin-bottom: 10px;
     }
 
   .iterables {
     display: grid;
-    justify-self: center;
     grid-template-areas:
-    'appointments divider packages';
+      "appointments divider packages";
     gap: 2em;
-    width: 95%;
+    width: 100%;
 
     .appointments {
       grid-area: appointments;
-      height: auto;
-      #activity{
-        justify-items: right;
-        }
       }
 
-    .divider{
+    .divider {
       grid-area: divider;
       width: 0.25px;
       height: 90%;
-      background-color: rgba(208, 208, 208, 0.19); //Ver si puedo implementar un degradado
+      background-color: rgba(208, 208, 208, 0.19);
       align-self: center;
       }
 
     .packages {
       grid-area: packages;
-      height: 10px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      align-items: flex-start;
+
+      mat-card {
+        background-color: #444;
+        color: #F6C90E;
+        padding: 15px;
+        border-radius: 10px;
+        width: 100%;
+        }
       }
     }
   }
 
-@media (max-width: 1300px){
-  mat-card-header{
+@media (max-width: 1440px) {
+  .container {
+    margin-top: 100px;
+    }
+
+  mat-card-header {
     display: grid;
     grid-template-areas:
       "img info"
-      "streak streak";
+      "img streak";
+    gap: 15px;
     }
 
-  .photo{
-    grid-area: img;
-    display: flex;
-    justify-content: center;
-    }
-
-  .info{
-    grid-area: info;
-    margin: 0;
-    padding-top: 30px !important;
-    }
-
-  .streak{
-    grid-area: streak;
-    margin: 0;
-    }
-
-  .content{
-    padding: 0 !important;
-    }
-  }
-
-@media (max-width: 945px){
-  mat-card-header{
-    display: grid;
-    grid-template-areas:
-      "img"
-      "info"
-      "streak";
-    }
-
-  .photo{
+  .photo {
     grid-area: img;
     display: flex;
     justify-content: center;
 
-    img{
+    img {
       width: 250px;
       height: 250px;
       }
     }
 
-  .info{
+  .info {
     grid-area: info;
-    margin: 0;
-    padding-top: 30px !important;
+    padding-top: 20px !important;
+    align-items: center;
     }
 
-  .streak{
+  .streak {
     grid-area: streak;
-    margin: 0;
-    }
+    display: flex;
+    flex-direction: row;
 
-  .content{
-    padding: 0 !important;
+    mat-card {
+      display: flex;
+      }
+
+    align-items: flex-start;
+    justify-content: left;
+    margin-top: 0;
     }
   }
 
-.scrollable-section {
-  flex: 1;
-  height: auto;
-  width: 100%;
-  border-radius: 0 0 10px 10px;
-
-  mat-action-list {
-    padding: 0;
-    flex: 1;
-    overflow-y: auto;
-
-    button {
-      height: auto;
-      }
-
-    .no-apointments {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      width: 100%;
-      font-size: 1rem;
-      color: variables.$white-color;
-      font-weight: 500;
-      }
+@media (max-width: 1300px) {
+  mat-card {
+    width: 80%;
+    padding: 20px;
     }
 
-  .apointments {
+  mat-card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    }
+
+  img {
+    width: 150px;
+    height: 150px;
+    }
+
+  .info {
+    padding: 0 !important;
+    padding-top: 10px !important;
+    align-items: center;
+    }
+
+  .streak {
     display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-content: center;
-    width: 100%;
+    flex-direction: column;
+    align-items: flex-start !important;
     height: 100%;
+    justify-content: flex-start !important;
 
-    .apointment-title {
-      margin: 10px 0 0px 10px;
+    mat-card {
+      padding: 8px;
+      font-size: 1.2rem;
+      }
+    }
+
+  .content {
+    padding: 15px;
+    }
+  }
+
+@media (max-width: 945px) {
+  .container {
+    margin-top: 250px;
+    }
+
+  .name {
+    width: fit-content;
+    }
+
+  mat-card-header {
+    display: grid;
+    grid-template-areas:
+      "img img"
+      "info streak";
+    text-align: center;
+    gap: 0;
+    }
+
+  .photo {
+    grid-area: img;
+    display: flex;
+    justify-content: center;
+
+    img {
+      width: 350px;
+      height: 350px;
+      }
+    }
+
+  .info {
+    grid-area: info;
+    margin: 0;
+    padding-top: 10px;
+    align-items: center;
+    }
+
+  .streak {
+    grid-area: streak;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important;
+    height: 100%;
+    justify-content: flex-end !important;
+
+    mat-card {
+      align-self: flex-end;
+      }
+    }
+
+  .iterables {
+    grid-template-areas:
+      "appointments"
+      "divider"
+      "packages";
+    gap: 1em;
+    width: 100%;
+    }
+  }
+
+@media (max-width: 750px) {
+  .container {
+    width: 100%;
+    }
+
+  mat-card {
+    padding: 15px;
+    width: 95%;
+    }
+
+  .info {
+    font-size: 1rem;
+
+    .name {
+      font-size: 2rem;
+      }
+    }
+
+  .streak {
+    mat-card {
+      padding: 5px;
       font-size: 1rem;
-      color: variables.$white-color;
-      width: auto;
-      display: flex;
-      flex-direction: row;
-      justify-content: end;
-      text-align: start;
-      font-weight: 500;
-
-      .date {
-        margin: 0;
-        white-space: normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        }
-
-      .time {
-        margin: -5px 0 0 0;
-        font-size: 0.8rem;
-        color: variables.$white-color;
-        opacity: 0.6;
-        }
-      }
-
-    .card-container {
-      width: 175px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      .apointment-activity-card {
-        padding: 0px 0px;
-        margin: 10px 0 10px 20px;
-        background-color: transparent;
-        border-color: variables.$white-color;
-        color: variables.$white-color;
-        border-radius: 10px;
-        }
       }
     }
 
+  .content {
+    padding: 10px;
+    }
+  }
 
-  ::ng-deep .appointment-table {
-    background-color: variables.$grey-color !important;
-    border-radius: 10px;
-    overflow: hidden;
-
-    ::ng-deep .mat-column-date {
-      width: 20%;
-      height: 80px;
-      }
-
-    ::ng-deep .mat-column-activity {
-      width: 7%;
-      padding-right: 0 !important;
-      padding-left: 0 !important;
-      }
-
-    .appointment-title {
-      margin: 10px 0 0px 10px;
-      font-size: 1rem;
-      color: variables.$white-color;
-      width: fit-content;
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-      text-align: start;
-      font-weight: 500;
-
-      .date {
-        width: fit-content;
-        margin: 0;
-        white-space: normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 1.1rem;
-        }
-
-      .time {
-        width: fit-content;
-        margin: -5px 0 0 0;
-        font-size: 0.9rem;
-        color: variables.$white-color;
-        opacity: 0.6;
-        }
+@media (max-width: 500px) {
+  .info {
+    .name {
+      font-size: 1.5rem;
       }
     }
 
-
-  @media (max-width: 1000px) {
-    .button-class:nth-child(n + 4) {
-      display: none;
-      }
-    ::ng-deep .mat-column-date {
-      width: 40% !important;
-      }
-    ::ng-deep .mat-column-activity {
-      width: 10%;
-      }
-    }
-
-  @media (max-width: 900px) {
-    .button-class:nth-child(n + 3) {
-      display: none;
-      }
-    }
-
-
-  @media (max-width: 750px) {
-    .calendar {
+  .iterables {
+    .appointments,
+    .packages {
       width: 100%;
-      flex: 1;
+      }
+    }
+  }
+
+::ng-deep .appointment-table {
+  background-color: variables.$grey-color !important;
+  border-radius: 10px;
+  overflow: hidden;
+
+  ::ng-deep .mat-column-date {
+    width: 20%;
+    height: 80px;
+    }
+
+  ::ng-deep .mat-column-activity {
+    width: 7%;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    }
+
+  .appointment-title {
+    margin: 10px 0 0 10px;
+    color: variables.$white-color;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    text-align: start;
+    font-weight: 500;
+
+    .date {
+      width: fit-content;
       margin: 0;
-      border-radius: 10px 10px 0 0;
-
-      mat-form-field {
-        width: 90%;
-        }
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1.1rem;
       }
 
-    ::ng-deep .mat-column-date {
-      width: 20% !important;
-      height: 80px !important;
+    .time {
+      width: fit-content;
+      margin: -5px 0 0 0;
+      font-size: 0.9rem;
+      color: variables.$white-color;
+      opacity: 0.6;
       }
+    }
+  }
 
-    ::ng-deep .mat-column-activity {
-      width: 2% !important;
+@media (max-width: 1100px) {
+  .button-class:nth-child(n + 4) {
+    display: none;
+    }
+  ::ng-deep .mat-column-date {
+    width: 40% !important;
+    }
+  ::ng-deep .mat-column-activity {
+    width: 10%;
+    }
+  }
+
+@media (max-width: 900px) {
+  .button-class:nth-child(n + 3) {
+    display: none;
+    }
+  }
+
+@media (max-width: 750px) {
+  mat-card {
+    margin-top: 70px;
+    }
+
+  .calendar {
+    width: 100%;
+    flex: 1;
+    margin: 0;
+    border-radius: 10px 10px 0 0;
+
+    mat-form-field {
+      width: 90%;
       }
     }
 
-  @media(max-width: 500px) {
-    .date {
-      font-size: 1rem !important;
-      display: -webkit-box !important;
-      -webkit-line-clamp: 2 !important;
-      -webkit-box-orient: vertical !important;
-      overflow: hidden !important;
-      }
+  ::ng-deep .mat-column-date {
+    width: 20% !important;
+    height: 80px !important;
+    }
 
-    .mat-mdc-row:hover .mat-mdc-cell {
-      background-color: rgba(0, 0, 0, 0.04);
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      }
+  ::ng-deep .mat-column-activity {
+    width: 2% !important;
+    }
+  }
+
+@media (max-width: 500px) {
+  mat-card {
+    margin-top: 70px;
+    }
+
+  .date {
+    font-size: 1rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    }
+
+  .mat-mdc-row:hover .mat-mdc-cell {
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     }
   }

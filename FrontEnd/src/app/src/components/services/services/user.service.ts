@@ -16,6 +16,10 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
+  getStreak(id: string): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.apiUrl}/streak/${id}`);
+  }
+
   getUserById(id: string): Observable<UserModel> {
     return this.http.get<UserModel>(`${this.apiUrl}/${id}`);
   }

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {DrawerComponent} from "../drawer/drawer.component";
-import {Role, Appointment, UserModel} from "../models";
+import {Appointment, Role, UserModel} from "../models";
 import {User} from "@auth0/auth0-angular";
 
 import {UserService} from "../services/services/user.service";
@@ -16,7 +16,8 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatRow,
-  MatRowDef, MatTable
+  MatRowDef,
+  MatTable
 } from "@angular/material/table";
 import {MatChip} from "@angular/material/chips";
 import {MatIcon} from "@angular/material/icon";
@@ -88,7 +89,7 @@ export class UserInfoComponent {
       }
     });
 
-    this.userService.getUserAppointments('2').subscribe({
+    this.userService.getUserAppointments('1').subscribe({
       next: (appointments) => {
         this.userAppointments.set(appointments);
         console.log(appointments)
