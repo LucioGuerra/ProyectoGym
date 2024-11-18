@@ -118,7 +118,7 @@ export class CreatPackageFormComponent implements OnInit {
         d.afterClosed().subscribe(() => {
           this.router.navigate(['/admin/agenda']);
         });
-        alert(`Error al cargar actividades: ${error}`);
+        console.log(`Error al cargar actividades: ${error}`);
       }
     );
   }
@@ -179,11 +179,11 @@ export class CreatPackageFormComponent implements OnInit {
       this.packageService.createPackage(packageData).subscribe(
         response => {
           this._snackBar.open(`Se ha creado el paquete correctamente`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
-          alert(`Paquete creado: ${response}`);
+          console.log(`Paquete creado: ${response}`);
         },
         error => {
           this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"})
-          alert(`Error al crear paquete: ${error}`);
+          console.log(`Error al crear paquete: ${error}`);
         }
       );
     }
