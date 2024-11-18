@@ -80,8 +80,8 @@
     border-radius: 10px;
     margin: 0;
     padding: 0 60px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     color: variables.$white-color;
+    background-color: #111111;
     border-radius: 10px;
   }
 
@@ -95,5 +95,9 @@
   .card:hover {
     cursor: pointer;
     filter: brightness(1.1);
+  }
+
+  mat-card-content {
+    margin-bottom: 10px;
   }
 }
