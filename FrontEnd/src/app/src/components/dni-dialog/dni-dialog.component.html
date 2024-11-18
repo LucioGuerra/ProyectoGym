@@ -17,7 +17,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="dni-field">
       <mat-label>DNI</mat-label>
-      <input matInput id="dni" [formControl]="dni" type="number">
+      <input matInput id="dni" [formControl]="dni" type="number" (blur)="onDniBlur()">
       <mat-error *ngIf="dni.invalid && dni.dirty">
         Necesitamos su dni para validar su identidad.
       </mat-error>

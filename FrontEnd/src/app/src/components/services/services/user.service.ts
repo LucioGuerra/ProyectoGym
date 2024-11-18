@@ -11,6 +11,7 @@ import {map} from "rxjs/operators";
   providedIn: 'root'
 })
 export class UserService {
+  
   private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
@@ -22,6 +23,10 @@ export class UserService {
 
   getUserByEmail(email: string): Observable<UserModel> {
     return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
+  }
+
+  getUserByDNI(dni: string): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.apiUrl}/dni/${dni}`);
   }
 
   getAllUsers(): Observable<UserModel[]> {
