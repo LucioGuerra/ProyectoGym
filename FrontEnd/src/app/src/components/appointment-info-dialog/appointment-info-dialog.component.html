@@ -60,7 +60,7 @@
     <div class="buttons-set-appointment">
       @if (this.isReserved()) {
         @if ( this.isPast()) {
-          <button mat-flat-button class="cancelar-turno" disabled>Turno pasado</button>
+          <button mat-flat-button class="cancelar-turno" disabled style="filter: brightness(0.7);">El turno ya ha pasado</button>
         } @else {
           @if (isKinesiology()){
             <button mat-flat-button class="cancelar-turno" (click)="removeUserFromKineAppointment()">Cancelar reserva</button>
@@ -70,7 +70,7 @@
         }
       } @else {
         @if (this.isPast()) {
-          <button mat-flat-button class="agendar-turno" disabled>Turno pasado</button>
+          <button mat-flat-button class="agendar-turno" disabled style="filter: brightness(0.7);">El turno ya ha pasado</button>
         } @else {
           @if (this.isFull()) {
             <button mat-flat-button class="agendar-turno" disabled>Turno completo</button>
