@@ -38,6 +38,11 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<UserResponseDTO> getUserByDni(@PathVariable String dni){
+        return userService.getUserByDni(dni);
+    }
+
     @GetMapping("/history/{id}")
     public ResponseEntity<List<GetPackageDTO>> getUserHistory(@PathVariable Long id){
         return userService.getUserHistory(id);

@@ -208,4 +208,11 @@ public class UserService {
         bodyPartOptions.add(Map.of("id", 8, "name", "Manos"));
         return ResponseEntity.status(HttpStatus.OK).body(bodyPartOptions);
     }
+
+    public ResponseEntity<UserResponseDTO> getUserByDni(String dni) {
+        User user = userRepository.findByDni(dni).orElseThrow(() ->
+                new EntityNotFoundException("User not found with dni: " + dni));
+
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
 }
