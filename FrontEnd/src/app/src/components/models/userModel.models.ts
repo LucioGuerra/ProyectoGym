@@ -14,3 +14,12 @@ export enum Role {
   CLIENT = 'CLIENT',
   KINE = 'KINE'
 }
+
+export interface BodyPart {
+  id: number;
+  name: string;
+}
+
+export interface KineModel extends UserModel {
+  bodyParts: number[];
+}
