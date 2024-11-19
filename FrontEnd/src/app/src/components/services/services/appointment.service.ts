@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Appointment, AppointmentRequest} from '../../index'; // Ajusta según tus rutas
+import {Appointment, AppointmentRequest, KineModel, UserModel} from '../../index'; // Ajusta según tus rutas
 import {interval, Observable, Subject, switchMap} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '../../../../../index';
@@ -86,9 +86,9 @@ export class AppointmentService {
   }
 
 
-  async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologoId: number): Promise<Observable<any>> {
-    console.log('Agregando usuario a la cita de kinesiología, id:', appointmentId, 'email:', userEmail, 'kinesiologoId:', kinesiologoId);
-    this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {instructorID: kinesiologoId, updateAllFutureAppointments: false}).subscribe(
+  async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologo: UserModel): Promise<Observable<any>> {
+    console.log('Agregando usuario a la cita de kinesiología, id:', appointmentId, 'email:', userEmail, 'kinesiologo:', kinesiologo);
+    this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {kinesiologo: kinesiologo}).subscribe(
       () => {
         console.log('Instructor asignado a la cita de kinesiología');
       },

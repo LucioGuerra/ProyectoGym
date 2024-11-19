@@ -10,7 +10,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {MatButtonModule} from "@angular/material/button";
-import {Appointment, AppointmentUser} from "../models";
+import {Appointment, AppointmentUser, BodyPart, KineModel} from "../models";
 import {AppointmentService, AuthService} from "../services/services";
 import {AsyncPipe, DatePipe, NgOptimizedImage} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -68,13 +68,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
 
   //para la busqueda de kinesiologo
   kinesiologoControl = new FormControl('', Validators.required);
-  kinesiologosOptions = [
-    {
-      "id": 1,
-      "name": "Kinesiologo 1",
-      "bodyParts": [1, 2, 3, 8], // IDs de "Cuello", "Hombros", "Espalda", "Manos"
-    }
-  ];
+  kinesiologosOptions: KineModel[] = [];
   filteredKinesiologosOptions: Observable<string[]> | undefined;
 
   //para la busqueda de partes del cuerpo
@@ -120,7 +114,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
         // Filtro de kinesiologo
         this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.name))),
+          map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.firstName + ' ' + kinesiologo.lastName))),
         );
 
         // Filtro de partes del cuerpo
@@ -139,13 +133,13 @@ export class AppointmentInfoDialogComponent implements OnInit {
                 const filteredKinesiologos = this.kinesiologosOptions.filter(kinesiologo =>
                   kinesiologo.bodyParts.includes(this.bodyPartOptions.find(part => part.name === bodyPart)?.id || 0)
                 );
-                return this._filter(value || '', filteredKinesiologos.map(kinesiologo => kinesiologo.name));
+                return this._filter(value || '', filteredKinesiologos.map(kinesiologo => kinesiologo.firstName + ' ' + kinesiologo.lastName));
               })
             );
           } else {
             this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
               startWith(''),
-              map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.name))),
+              map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.firstName + ' ' + kinesiologo.lastName))),
             );
           }
         });
@@ -199,7 +193,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   loadKinesiologyInstructors(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.userService.getKinesioUsers().subscribe({
-        next: (kinesiologos: any[]) => {
+        next: (kinesiologos: KineModel[]) => {
           this.kinesiologosOptions = kinesiologos;
           this.changeDetectorRef.markForCheck();
           resolve();
@@ -215,7 +209,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   loadBodyParts(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.userService.getBodyParts().subscribe({
-        next: (bodyParts: any[]) => {
+        next: (bodyParts: BodyPart[]) => {
           this.bodyPartOptions = bodyParts;
           this.changeDetectorRef.markForCheck();
           resolve();
@@ -289,7 +283,9 @@ export class AppointmentInfoDialogComponent implements OnInit {
       this.appointmentService.addUserToKinesiologyAppointment(
         this.data.id,
         this.auth.userInfo().email,
-        this.kinesiologosOptions.filter(kinesiologo => kinesiologo.name === this.kinesiologoControl.value)[0].id
+        this.kinesiologosOptions.find(kinesiologo =>
+          kinesiologo.firstName + ' ' + kinesiologo.lastName === this.kinesiologoControl.value
+        )!
       ).then((observable) => {
         observable.subscribe(() => {
           this.loadAppointment();
