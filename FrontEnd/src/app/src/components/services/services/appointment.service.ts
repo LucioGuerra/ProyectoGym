@@ -88,7 +88,7 @@ export class AppointmentService {
 
   async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologo: UserModel): Promise<Observable<any>> {
     console.log('Agregando usuario a la cita de kinesiología, id:', appointmentId, 'email:', userEmail, 'kinesiologo:', kinesiologo);
-    this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {kinesiologo: kinesiologo}).subscribe(
+    this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {kinesiologo: kinesiologo, updateAllFutureAppointments:false}).subscribe(
       () => {
         console.log('Instructor asignado a la cita de kinesiología');
       },

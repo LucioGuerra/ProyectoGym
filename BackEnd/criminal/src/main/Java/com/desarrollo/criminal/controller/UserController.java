@@ -1,7 +1,6 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import jakarta.validation.constraints.Email;
@@ -40,7 +39,7 @@ public class UserController {
 
     @GetMapping("/dni/{dni}")
     public ResponseEntity<UserResponseDTO> getUserByDni(@PathVariable String dni){
-        return userService.getUserByDni(dni);
+        return userService.getUserEntityByDni(dni);
     }
 
     @GetMapping("/history/{id}")
@@ -66,16 +65,6 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
         return userService.updateUser(id, userUpdateDTO);
-    }
-
-    @GetMapping("/kine")
-    public ResponseEntity<?> getKines(){
-        return userService.getKines();
-    }
-
-    @GetMapping("/kine/body-parts")
-    public ResponseEntity<?> getKineBodyParts(){
-        return userService.getKineBodyParts();
     }
 
 }

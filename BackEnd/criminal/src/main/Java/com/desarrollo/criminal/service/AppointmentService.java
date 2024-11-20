@@ -6,6 +6,7 @@ import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
+import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
@@ -225,6 +226,20 @@ public class AppointmentService {
             if (updateAppointmentDTO.getActivityID() != null) {
                 Activity activity = activityService.getActivityById(updateAppointmentDTO.getActivityID());
                 appointment.setActivity(activity);
+            }
+
+            if (updateAppointmentDTO.getKinesiologo() != null) {
+                Optional<User> kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
+                if (kine.isPresent()) {
+                    appointment.setInstructor(kine.get());
+                } else {
+                    userService.createUser(updateAppointmentDTO.getKinesiologo());
+                    kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
+                    if (kine.isEmpty()) {
+                        throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
+                    }
+                    appointment.setInstructor(kine.get());
+                }
             }
 
 
