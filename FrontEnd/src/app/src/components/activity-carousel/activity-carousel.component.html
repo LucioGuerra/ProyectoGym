@@ -1,0 +1,39 @@
+<div class="carousel-container">
+    <mat-tab-group class="custom-tab-group" [(selectedIndex)]="selectedIndex">
+      @for(activity of activities ; track activity) {
+      <mat-tab>
+        <mat-card class="card">
+          <mat-card-title>{{ activity.name }}</mat-card-title>
+          <mat-card-content>{{
+            activity.description!.length > 100
+              ? activity.description!.slice(0, 100) + "..."
+              : activity.description!
+          }}</mat-card-content>
+        </mat-card>
+      </mat-tab>
+      }
+    </mat-tab-group>
+    @if (selectedIndex != 0){
+    <button mat-icon-button class="navigation-buttons-left" (click)="prevSlide()">
+      <mat-icon> navigate_before </mat-icon>
+    </button>
+    } @else {
+      <button mat-icon-button class="navigation-buttons-left" disabled>
+          <mat-icon> navigate_before </mat-icon>
+        </button>
+    }
+    @if (announcements.length > 1) { @if(selectedIndex === announcements.length - 1) {
+    <button mat-icon-button class="navigation-buttons-right" disabled>
+      <mat-icon> navigate_next </mat-icon>
+    </button>
+    } @else {
+    <button
+      mat-icon-button
+      class="navigation-buttons-right"
+      (click)="nextSlide()"
+    >
+      <mat-icon> navigate_next </mat-icon>
+    </button>
+    } }
+  </div>
+  

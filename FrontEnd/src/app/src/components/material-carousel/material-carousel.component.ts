@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-material-carousel',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatTabsModule, NgForOf],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatTabsModule],
   templateUrl: './material-carousel.component.html',
   styleUrl: './material-carousel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
