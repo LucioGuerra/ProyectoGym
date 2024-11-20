@@ -28,6 +28,8 @@ public class UpdatePATCHAppointmentDTO {
     @NotNull(message = "The field updateAllFutureAppointments is required")
     private Boolean updateAllFutureAppointments;
 
+    private UserRequestDTO kinesiologo;
+
     private UpdatePATCHAppointmentDTO() {}
 }
 

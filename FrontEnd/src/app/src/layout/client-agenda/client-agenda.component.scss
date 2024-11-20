@@ -18,7 +18,7 @@ ng-container {
 .main-section {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: 130px 200px;
+  grid-template-rows: 130px auto;
   grid-template-areas:
     "calendar agenda"
     "quick-actions agenda"
@@ -78,7 +78,6 @@ ng-container {
 
 .quick-actions {
   grid-area: quick-actions;
-  background-color: variables.$grey-color;
   height: auto;
   width: 100%;
   border-radius: 10px;

@@ -9,10 +9,21 @@ import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDivider} from "@angular/material/divider";
 import {Router} from "@angular/router";
-import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef} from "@angular/material/table";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatRow,
+  MatRowDef, MatTable
+} from "@angular/material/table";
 import {MatChip} from "@angular/material/chips";
 import {MatIcon} from "@angular/material/icon";
 import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatActionList, MatListItem} from "@angular/material/list";
+import {MatMenu, MatMenuItem} from "@angular/material/menu";
+import {AuthService} from "../services/services";
 
 @Component({
   selector: 'app-user-info',
@@ -29,13 +40,21 @@ import {MatProgressBar} from "@angular/material/progress-bar";
     MatHeaderCell,
     MatIcon,
     MatProgressBar,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatActionList,
+    MatListItem,
+    MatMenu,
+    MatMenuItem,
+    MatRow,
+    MatRowDef,
+    MatTable
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserInfoComponent {
+  displayedColumns: string[] = ['date', 'activity'];
   user = signal<User>({});
   userModel = signal<UserModel>({
     id: 2,
@@ -51,14 +70,17 @@ export class UserInfoComponent {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {
   }
 
   ngOnInit(): void {
+    this.user.set(this.auth.userInfo());
     console.log(this.user().picture);
+    this.displayedColumns = ['date', 'activity'];
 
-    this.userService.getUserById('2').subscribe({
+    this.userService.getUserByEmail(String(this.user().email)).subscribe({
       next: (userModel) => {
         this.userModel.set(userModel);
       }, error: (error) => {
@@ -69,6 +91,7 @@ export class UserInfoComponent {
     this.userService.getUserAppointments('2').subscribe({
       next: (appointments) => {
         this.userAppointments.set(appointments);
+        console.log(appointments)
       }, error: (error) => {
         console.error('User not found');
       }
@@ -84,6 +107,6 @@ export class UserInfoComponent {
   }
 
   editUser(id: number) {
-    this.router.navigate(['/edit/', id]);
+    this.router.navigate(['/edit']);
   }
 }

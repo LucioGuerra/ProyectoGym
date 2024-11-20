@@ -1,11 +1,11 @@
 export interface UserModel {
     id?: number;
-    firstName: String;
-    lastName: String;
-    email: String;
+    firstName: string;
+    lastName: string;
+    email: string;
     role?: Role;
-    phone?: String;
-    dni: String;
+    phone?: string;
+    dni: string;
     picture?: URL;
 }
 
@@ -13,4 +13,13 @@ export enum Role {
   ADMIN = 'ADMIN',
   CLIENT = 'CLIENT',
   KINE = 'KINE'
+}
+
+export interface BodyPart {
+  id: number;
+  name: string;
+}
+
+export interface KineModel extends UserModel {
+  bodyParts: number[];
 }

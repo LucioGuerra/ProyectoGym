@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from '@angular/core';
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {CreateAppointmentFormComponent} from "../create-appointment-form/create-appointment-form.component";
 import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -18,6 +18,9 @@ import {map} from "rxjs/operators";
 import {Router} from '@angular/router';
 import {ActivityPackage, Package} from "../models/package.models";
 import {PackageService} from "../services/services/package.service";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-creat-package-form',
@@ -47,6 +50,7 @@ import {PackageService} from "../services/services/package.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreatPackageFormComponent implements OnInit {
+  private _snackBar = inject(MatSnackBar);
   activities: Activity[] = [];
   users: UserModel[] = [];
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
@@ -63,7 +67,8 @@ export class CreatPackageFormComponent implements OnInit {
     private packageService: PackageService,
     private activityService: ActivityService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -80,12 +85,42 @@ export class CreatPackageFormComponent implements OnInit {
 
   // Cargar lista de usuarios
   private loadUsers() {
-    this.userService.getAllUsers().subscribe(users => (this.users = users));
+    this.userService.getAllUsers().subscribe(
+      users => {
+        this.users = users;
+      },
+      error => {
+        let dialogConf = new MatDialogConfig();
+        dialogConf.data = {
+          message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+        };
+        let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+        d.afterClosed().subscribe(() => {
+          this.router.navigate(['/admin/agenda']);
+        });
+        alert(`Error al cargar usuarios: ${error}`);
+      }
+    );
   }
 
   // Cargar lista de actividades
   private loadActivities() {
-    this.activityService.getActivities().subscribe(activities => (this.activities = activities));
+    this.activityService.getActivities().subscribe(
+      activities => {
+        this.activities = activities
+      },
+      error => {
+        let dialogConf = new MatDialogConfig();
+        dialogConf.data = {
+          message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+        };
+        let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+        d.afterClosed().subscribe(() => {
+          this.router.navigate(['/admin/agenda']);
+        });
+        console.log(`Error al cargar actividades: ${error}`);
+      }
+    );
   }
 
   // Getter para facilitar el acceso al FormArray
@@ -143,10 +178,12 @@ export class CreatPackageFormComponent implements OnInit {
 
       this.packageService.createPackage(packageData).subscribe(
         response => {
-          alert(`Paquete creado: ${response}`);
+          this._snackBar.open(`Se ha creado el paquete correctamente`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+          console.log(`Paquete creado: ${response}`);
         },
         error => {
-          alert(`Error al crear paquete: ${error}`);
+          this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"})
+          console.log(`Error al crear paquete: ${error}`);
         }
       );
     }

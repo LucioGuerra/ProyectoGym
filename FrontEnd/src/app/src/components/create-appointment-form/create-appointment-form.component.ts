@@ -237,11 +237,11 @@ export class CreateAppointmentFormComponent implements OnInit {
         this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
-            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           },
           (error: any) => {
             console.error('Error al crear la cita:', error);
-            this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000})
+            this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           }
         );
       } else {
@@ -259,9 +259,10 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
-              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al crear la cita:', error);
             }
           );
@@ -283,6 +284,7 @@ export class CreateAppointmentFormComponent implements OnInit {
               this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al crear la cita:', error);
             }
           );
@@ -308,9 +310,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           console.log('Datos del formulario:', JSON.stringify(appointmentData), 'ID del turno:', this.appointmentId);
           this.appointmentService.updateAppointment(this.appointmentId!, appointmentData).subscribe(
             (data: any) => {
+              this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al actualizar la cita:', error);
             }
           );
@@ -326,9 +330,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           console.log('Datos del formulario:', JSON.stringify(appointmentData), 'ID del turno:', this.appointmentId);
           this.appointmentService.updateAppointment(this.appointmentId!, appointmentData).subscribe(
             (data: any) => {
+              this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al actualizar la cita:', error);
             }
           );

@@ -13,19 +13,7 @@
       <mat-card-content>
         <h4 class="title">Activities</h4>
         <div class="activities">
-          @for (activity of activities; track activity.id) {
-          <mat-card
-            class="activity"
-            appearance="outlined"
-          >
-            <mat-card-content class="contenido">
-              <div class="card-text">
-                <p class="card-title">{{ activity.name }}</p>
-                <p class="card-description">{{ activity.description }}</p>
-              </div>
-            </mat-card-content>
-          </mat-card>
-          }
+          <app-activity-carousel></app-activity-carousel>
         </div>
       </mat-card-content>
     </mat-card>
