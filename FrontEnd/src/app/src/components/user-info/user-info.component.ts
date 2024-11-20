@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {DrawerComponent} from "../drawer/drawer.component";
 import {Appointment, Role, UserModel} from "../models";
 import {User} from "@auth0/auth0-angular";
+import {Package} from "../models/package.models";
 
 import {UserService} from "../services/services/user.service";
 
@@ -19,12 +20,15 @@ import {
   MatRowDef,
   MatTable
 } from "@angular/material/table";
-import {MatChip} from "@angular/material/chips";
+import {MatChip, MatChipListbox, MatChipOption} from "@angular/material/chips";
 import {MatIcon} from "@angular/material/icon";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatActionList, MatListItem} from "@angular/material/list";
 import {MatMenu, MatMenuItem} from "@angular/material/menu";
 import {AuthService} from "../services/services";
+import {AgendaListComponent} from "../agenda-list/agenda-list.component";
+import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-user-info',
@@ -48,7 +52,15 @@ import {AuthService} from "../services/services";
     MatMenuItem,
     MatRow,
     MatRowDef,
-    MatTable
+    MatTable,
+    AgendaListComponent,
+    MatChipListbox,
+    MatChipOption,
+    MatTab,
+    MatTabGroup,
+    MatTabLabel,
+    NgForOf,
+    NgIf
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -58,7 +70,7 @@ export class UserInfoComponent {
   displayedColumns: string[] = ['date', 'activity'];
   user = signal<User>({});
   userModel = signal<UserModel>({
-    id: 2,
+    id: 0,
     firstName: '',
     lastName: '',
     email: '',
@@ -68,6 +80,7 @@ export class UserInfoComponent {
     picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
   });
   userAppointments = signal<Appointment[]>([]);
+  userPackages = signal<Package[]>([]);
 
   constructor(
     private userService: UserService,
@@ -89,22 +102,22 @@ export class UserInfoComponent {
       }
     });
 
-    this.userService.getUserAppointments('1').subscribe({
+    this.userService.getUserAppointments(String(this.userModel().id)).subscribe({
       next: (appointments) => {
         this.userAppointments.set(appointments);
-        console.log(appointments)
+        console.log('Turnos del usuario: ',appointments)
       }, error: (error) => {
         console.error('User not found');
       }
     });
 
-    // this.userService.getUserPackages('2').subscribe({
-    //   next: (packages) => {
-    //     this.userPackages.set(packages);
-    //   }, error: (error) => {
-    //     console.error('User not found');
-    //   }
-    // });
+    this.userService.getUserPackages(String(this.userModel().id)).subscribe({
+      next: (packages) => {
+        this.userPackages.set(packages);
+      }, error: (error) => {
+        console.error('User not found');
+      }
+    });
   }
 
   editUser(id: number) {

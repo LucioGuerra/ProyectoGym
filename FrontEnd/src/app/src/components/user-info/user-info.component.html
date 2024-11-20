@@ -2,155 +2,155 @@
   <ng-container main-content>
     <div class="container">
       <mat-card id="contenedora">
-
         <mat-card-header>
           <div class="photo">
-            <img [src]="this.userModel().picture" alt="User Image" class="user-avatar-img">
+            <img [src]="this.userModel().picture" alt="Imagen del usuario" class="user-avatar-img">
           </div>
 
           <div class="info">
             <div class="name">{{ userModel().firstName }} {{ userModel().lastName }}</div>
-            <div class="email"> {{ userModel().email }}</div>
+            <div class="email">{{ userModel().email }}</div>
             <div class="dni">DNI: {{ userModel().dni }}</div>
             <div class="edit">
-              <button (click)="editUser(userModel().id ?? 0)" class="button">Edit</button>
+              <button (click)="editUser(userModel().id ?? 0)" class="button">Editar</button>
             </div>
           </div>
 
           <div class="streak">
-            <!--Acá después se agrega un if en base a las asistencias-->
+            <!-- Acá después se agrega un if en base a las asistencias -->
             <mat-card>
               <div class="text">Meses activo: 22 🔥</div>
             </mat-card>
           </div>
         </mat-card-header>
 
-
         <mat-card-content>
           <div class="content">
-            <div class="title">
-              <h1>Last appointments</h1>
-            </div>
-            <mat-divider></mat-divider>
-
-            <div class="iterables">
-              <div class="appointments">
-                <div class="scrollable-section">
-
-                  <mat-action-list>
-                    <div class="appointment-table">
-                      <table [dataSource]="userAppointments()" class="appointment-table" mat-table>
-                        <ng-container matColumnDef="date">
-                          <th *matHeaderCellDef mat-header-cell> Date</th>
-                          <td *matCellDef="let appointment" mat-cell>
-                            <div class="appointment-title">
-                              <p class="date">
-                                @switch (appointment.date.getDay()) {
-                                  @case (1) {
-                                    Lunes
-                                  }
-                                  @case (2) {
-                                    Martes
-                                  }
-                                  @case (3) {
-                                    Miercoles
-                                  }
-                                  @case (4) {
-                                    Jueves
-                                  }
-                                  @case (5) {
-                                    Viernes
-                                  }
-                                  @case (6) {
-                                    Sabado
-                                  }
-                                  @case (0) {
-                                    Domingo
-                                  }
-                                } {{ appointment.date.getDate() }} de
-                                @switch (appointment.date.getMonth()) {
-                                  @case (0) {
-                                    Enero
-                                  }
-                                  @case (1) {
-                                    Febrero
-                                  }
-                                  @case (2) {
-                                    Marzo
-                                  }
-                                  @case (3) {
-                                    Abril
-                                  }
-                                  @case (4) {
-                                    Mayo
-                                  }
-                                  @case (5) {
-                                    Junio
-                                  }
-                                  @case (6) {
-                                    Julio
-                                  }
-                                  @case (7) {
-                                    Agosto
-                                  }
-                                  @case (8) {
-                                    Septiembre
-                                  }
-                                  @case (9) {
-                                    Octubre
-                                  }
-                                  @case (10) {
-                                    Noviembre
-                                  }
-                                  @case (11) {
-                                    Diciembre
-                                  }
-                                } de
-                                {{ appointment.date.getFullYear() }}
-                              </p>
-                              <p class="time">
-                                {{ appointment.startTime }} - {{ appointment.endTime }}
-                              </p>
+            <section class="botom-section">
+              <div class="agenda">
+                <mat-tab-group>
+                  <mat-tab>
+                    <ng-template mat-tab-label>Turnos</ng-template>
+                    <div class="iterables">
+                      <div class="appointments">
+                        <div class="scrollable-section">
+                          <mat-action-list>
+                            <div class="appointment-table">
+                              <table [dataSource]="userAppointments()" class="appointment-table" mat-table>
+                                <ng-container matColumnDef="date">
+                                  <th *matHeaderCellDef mat-header-cell>Date</th>
+                                  <td *matCellDef="let appointment" mat-cell>
+                                    <div class="appointment-title">
+                                      <p class="date">
+                                        @switch (appointment.date.getDay()) {
+                                          @case (1) {
+                                            Lunes
+                                          }
+                                          @case (2) {
+                                            Martes
+                                          }
+                                          @case (3) {
+                                            Miercoles
+                                          }
+                                          @case (4) {
+                                            Jueves
+                                          }
+                                          @case (5) {
+                                            Viernes
+                                          }
+                                          @case (6) {
+                                            Sabado
+                                          }
+                                          @case (0) {
+                                            Domingo
+                                          }
+                                        } {{ appointment.date.getDate() }} de
+                                        @switch (appointment.date.getMonth()) {
+                                          @case (0) {
+                                            Enero
+                                          }
+                                          @case (1) {
+                                            Febrero
+                                          }
+                                          @case (2) {
+                                            Marzo
+                                          }
+                                          @case (3) {
+                                            Abril
+                                          }
+                                          @case (4) {
+                                            Mayo
+                                          }
+                                          @case (5) {
+                                            Junio
+                                          }
+                                          @case (6) {
+                                            Julio
+                                          }
+                                          @case (7) {
+                                            Agosto
+                                          }
+                                          @case (8) {
+                                            Septiembre
+                                          }
+                                          @case (9) {
+                                            Octubre
+                                          }
+                                          @case (10) {
+                                            Noviembre
+                                          }
+                                          @case (11) {
+                                            Diciembre
+                                          }
+                                        } de
+                                        {{ appointment.date.getFullYear() }}
+                                      </p>
+                                      <p class="time">
+                                        {{ appointment.startTime }} - {{ appointment.endTime }}
+                                      </p>
+                                    </div>
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="activity">
+                                  <th *matHeaderCellDef mat-header-cell>No.</th>
+                                  <td *matCellDef="let appointment" id="activity" mat-cell>
+                                    <div class="card-container">
+                                      <mat-chip class="appointment-activity-card">{{ appointment.activity }}</mat-chip>
+                                    </div>
+                                  </td>
+                                </ng-container>
+                                <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+                              </table>
                             </div>
-                          </td>
-                        </ng-container>
-                        <ng-container matColumnDef="activity">
-                          <th *matHeaderCellDef mat-header-cell> No.</th>
-                          <td *matCellDef="let appointment" id="activity" mat-cell>
-                            <div class="card-container">
-                              <mat-chip class="appointment-activity-card">{{
-                                  appointment.activity
-                                }}
-                              </mat-chip>
+                            <div *ngIf="userAppointments().length === 0">
+                              <button mat-list-item>
+                                <div class="no-apointments">
+                                  <p>El usuario no se ha añadido a ningún turno todavía</p>
+                                </div>
+                              </button>
                             </div>
-                          </td>
-                        </ng-container>
-
-                        <tr
-                          *matRowDef="let row; columns: displayedColumns;"
-                          mat-row
-                        ></tr>
-
-                      </table>
-
-                    </div>
-                    @if (userAppointments().length == 0) {
-                      <button mat-list-item>
-                        <div class="no-apointments">
-                          <p>El usuario no se ha añadido a ningún turno todavía</p>
+                          </mat-action-list>
                         </div>
-                      </button>
-                    }
-                  </mat-action-list>
-
-                </div>
-
+                      </div>
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
+                    <ng-template mat-tab-label>Paquetes</ng-template>
+                    <div class="packages">
+                      <div *ngIf="userPackages().length === 0">
+                        <p>No se han asignado paquetes todavía</p>
+                      </div>
+                      <div *ngFor="let paquete of userPackages()">
+                        <mat-card class="package-card">
+                          <p>Package Name: {{ paquete.name }}</p>
+                          <p>Package Details: {{ paquete.description }}</p>
+                        </mat-card>
+                      </div>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
               </div>
-              <div class="divider"></div>
-              <div class="packages">
-
-              </div>
-            </div>
+            </section>
           </div>
         </mat-card-content>
       </mat-card>
