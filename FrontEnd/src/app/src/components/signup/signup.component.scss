@@ -1,3 +1,4 @@
+@use "../../../../variables.scss";
 .contenedor {
     display: flex;
     justify-content: center;
@@ -132,3 +133,41 @@ button {
     enterAnimationDuration,
     exitAnimationDuration,
 }
+
+.password-errors {
+    position: absolute;
+    color: red;
+    border: 1px solid red;
+    padding: 10px;
+    z-index: 1000;
+    width: 100px;
+    left: calc(100% + 10px); /* Ajusta la posición a la derecha del input */
+  }
+
+  .password-errors {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.872);
+    border: 1px solid rgb(255, 0, 1);
+    color: rgb(200, 0, 0);
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 10px;
+    z-index: 1000;
+    width: 50%;
+    left: calc(100% + 10px); /* Ajusta la posición a la derecha del input */
+    top: 48%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  ul {
+    padding-left: 20px;
+  }
+
+  
+  
+  .example-full-width {
+    position: relative;
+  }
+ 
