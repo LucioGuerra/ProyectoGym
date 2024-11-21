@@ -59,19 +59,27 @@
     }
     <div class="buttons-set-appointment">
       @if (this.isReserved()) {
-        @if (isKinesiology()){
-          <button mat-flat-button class="cancelar-turno" (click)="removeUserFromKineAppointment()">Cancelar reserva</button>
+        @if ( this.isPast()) {
+          <button mat-flat-button class="cancelar-turno" disabled style="filter: brightness(0.7);">El turno ya ha pasado</button>
         } @else {
-          <button mat-flat-button class="cancelar-turno" (click)="isUserInAppointment()">Cancelar reserva</button>
+          @if (isKinesiology()){
+            <button mat-flat-button class="cancelar-turno" (click)="removeUserFromKineAppointment()">Cancelar reserva</button>
+          } @else {
+            <button mat-flat-button class="cancelar-turno" (click)="isUserInAppointment()">Cancelar reserva</button>
+          }
         }
       } @else {
-        @if (this.isFull()) {
-          <button mat-flat-button class="agendar-turno" disabled>Turno completo</button>
+        @if (this.isPast()) {
+          <button mat-flat-button class="agendar-turno" disabled style="filter: brightness(0.7);">El turno ya ha pasado</button>
         } @else {
-          @if (isKinesiology()) {
-            <button mat-flat-button class="agendar-turno" (click)="addUserToKineAppointment()">Reservar turno</button>
+          @if (this.isFull()) {
+            <button mat-flat-button class="agendar-turno" disabled>Turno completo</button>
           } @else {
-            <button mat-flat-button class="agendar-turno" (click)="isUserInAppointment()">Reservar turno</button>
+            @if (isKinesiology()) {
+              <button mat-flat-button class="agendar-turno" (click)="addUserToKineAppointment()">Reservar turno</button>
+            } @else {
+              <button mat-flat-button class="agendar-turno" (click)="isUserInAppointment()">Reservar turno</button>
+            }
           }
         }
       }
