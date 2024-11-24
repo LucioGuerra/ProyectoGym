@@ -23,7 +23,7 @@ import {MatChip} from "@angular/material/chips";
 import {MatActionList, MatListItem} from "@angular/material/list";
 import {AuthService} from "../services/services";
 import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-user-info',
@@ -46,7 +46,6 @@ import {NgForOf, NgIf} from "@angular/common";
     MatTab,
     MatTabGroup,
     MatTabLabel,
-    NgForOf,
     NgIf
   ],
   templateUrl: './user-info.component.html',
@@ -89,7 +88,6 @@ export class UserInfoComponent {
         this.userService.getUserAppointments(userId).subscribe({
           next: (appointments) => {
             this.userAppointments.set(appointments);
-            console.log('Turnos del usuario: ', appointments)
           }, error: (error) => {
             console.error('User not found');
           }
