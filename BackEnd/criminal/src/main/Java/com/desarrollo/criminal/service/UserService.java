@@ -147,6 +147,35 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(appointmentsDTO);
     }
+
+    public ResponseEntity<Integer> getStreak(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
+
+        List<Appointment> appointments = user.getUserXAppointments().stream()
+                .map(UserXAppointment::getAppointment)
+                .sorted(Comparator.comparing(Appointment::getDate))
+                .toList();
+
+        int streak = 0;
+        boolean streakBroken = false;
+
+        for (Appointment appointment : appointments) {
+            Optional<UserXAppointment> userXAppointmentOpt = user.getUserXAppointments().stream()
+                    .filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment))
+                    .findFirst();
+
+            if (userXAppointmentOpt.isPresent() && userXAppointmentOpt.get().getAttendance()) {
+                if (!streakBroken) {
+                    streak++;
+                }
+            } else {
+                streakBroken = true;
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(streakBroken ? 0 : streak);
+    }
     
     public User save(User user) {
         return userRepository.save(user);
