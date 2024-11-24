@@ -52,18 +52,26 @@ export class UserService {
 
   getUserAppointments(id: number): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/${id}`).pipe(
-      map((appointments: Appointment[]) => appointments.map(appointment => ({
-          ...appointment,
-          date: new Date(appointment.date),
-          max_capacity: appointment.max_capacity || 0,
-          startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
-          endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
-        }))
-      ));
+      map((appointments: Appointment[]) =>
+        appointments
+          .map(appointment => ({
+            ...appointment,
+            date: new Date(appointment.date),
+            max_capacity: appointment.max_capacity || 0,
+            startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
+            endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
+          }))
+          .sort((a, b) => b.date.getTime() - a.date.getTime()) // Ordena por fecha en reversa
+      )
+    );
   }
 
-  getUserPackages(id: number): Observable<any> {
+  getUserActivePackages(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
+  }
+
+  getUserHistory(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/public/users/history/${id}`);
   }
 
   getKinesioUsers() {

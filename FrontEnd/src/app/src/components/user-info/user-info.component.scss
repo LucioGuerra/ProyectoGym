@@ -5,6 +5,10 @@ p {
   justify-self: center;
   }
 
+#contenedora {
+  min-width: 620px;
+  }
+
 .container {
   margin-top: 150px;
   width: 100%;
@@ -174,12 +178,6 @@ mat-card-header {
     }
 
   .streak {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start !important;
-    height: 100%;
-    justify-content: flex-start !important;
-
     mat-card {
       padding: 8px;
       font-size: 1.2rem;
@@ -233,7 +231,7 @@ mat-card-header {
     flex-direction: column;
     height: 85% !important;
     align-items: flex-start !important;
-    justify-content: flex-start !important;
+    justify-content: flex-end !important;
 
     mat-card {
       align-self: flex-end;
@@ -265,13 +263,6 @@ mat-card-header {
 
     .name {
       font-size: 2rem;
-      }
-    }
-
-  .streak {
-    mat-card {
-      padding: 5px;
-      font-size: 1rem;
       }
     }
 
@@ -360,10 +351,6 @@ mat-card-header {
   }
 
 @media (max-width: 750px) {
-  mat-card {
-    margin-top: 70px;
-    }
-
   .calendar {
     width: 100%;
     flex: 1;
@@ -385,11 +372,7 @@ mat-card-header {
     }
   }
 
-@media (max-width: 500px) {
-  mat-card {
-    margin-top: 70px;
-    }
-
+@media (max-width: 660px) {
   .date {
     font-size: 1rem !important;
     display: -webkit-box !important;

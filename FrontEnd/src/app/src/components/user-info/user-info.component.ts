@@ -95,7 +95,7 @@ export class UserInfoComponent {
           }
         });
 
-        this.userService.getUserPackages(userId).subscribe({
+        this.userService.getUserHistory(userId).subscribe({
           next: (packages) => {
             this.userPackages.set(packages);
           }, error: (error) => {
