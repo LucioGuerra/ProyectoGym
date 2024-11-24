@@ -50,11 +50,11 @@ export class UserService {
     });
   }
 
-  getUserAppointments(id: string): Observable<Appointment[]> {
+  getUserAppointments(id: number): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/${id}`).pipe(
       map((appointments: Appointment[]) => appointments.map(appointment => ({
           ...appointment,
-          date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+          date: new Date(appointment.date),
           max_capacity: appointment.max_capacity || 0,
           startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
           endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
@@ -62,7 +62,7 @@ export class UserService {
       ));
   }
 
-  getUserPackages(id: string): Observable<any> {
+  getUserPackages(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
   }
 

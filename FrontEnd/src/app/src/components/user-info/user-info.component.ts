@@ -8,7 +8,6 @@ import {UserService} from "../services/services/user.service";
 
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
-import {MatDivider} from "@angular/material/divider";
 import {Router} from "@angular/router";
 import {
   MatCell,
@@ -20,13 +19,9 @@ import {
   MatRowDef,
   MatTable
 } from "@angular/material/table";
-import {MatChip, MatChipListbox, MatChipOption} from "@angular/material/chips";
-import {MatIcon} from "@angular/material/icon";
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatChip} from "@angular/material/chips";
 import {MatActionList, MatListItem} from "@angular/material/list";
-import {MatMenu, MatMenuItem} from "@angular/material/menu";
 import {AuthService} from "../services/services";
-import {AgendaListComponent} from "../agenda-list/agenda-list.component";
 import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {NgForOf, NgIf} from "@angular/common";
 
@@ -37,25 +32,17 @@ import {NgForOf, NgIf} from "@angular/common";
     DrawerComponent,
     MatCardModule,
     MatButtonModule,
-    MatDivider,
     MatCell,
     MatCellDef,
     MatChip,
     MatColumnDef,
     MatHeaderCell,
-    MatIcon,
-    MatProgressBar,
     MatHeaderCellDef,
     MatActionList,
     MatListItem,
-    MatMenu,
-    MatMenuItem,
     MatRow,
     MatRowDef,
     MatTable,
-    AgendaListComponent,
-    MatChipListbox,
-    MatChipOption,
     MatTab,
     MatTabGroup,
     MatTabLabel,
@@ -97,23 +84,24 @@ export class UserInfoComponent {
     this.userService.getUserByEmail(String(this.user().email)).subscribe({
       next: (userModel) => {
         this.userModel.set(userModel);
-      }, error: (error) => {
-        console.error('User not found');
-      }
-    });
 
-    this.userService.getUserAppointments(String(this.userModel().id)).subscribe({
-      next: (appointments) => {
-        this.userAppointments.set(appointments);
-        console.log('Turnos del usuario: ',appointments)
-      }, error: (error) => {
-        console.error('User not found');
-      }
-    });
+        const userId = this.userModel().id ?? 0;
+        this.userService.getUserAppointments(userId).subscribe({
+          next: (appointments) => {
+            this.userAppointments.set(appointments);
+            console.log('Turnos del usuario: ', appointments)
+          }, error: (error) => {
+            console.error('User not found');
+          }
+        });
 
-    this.userService.getUserPackages(String(this.userModel().id)).subscribe({
-      next: (packages) => {
-        this.userPackages.set(packages);
+        this.userService.getUserPackages(userId).subscribe({
+          next: (packages) => {
+            this.userPackages.set(packages);
+          }, error: (error) => {
+            console.error('User not found');
+          }
+        });
       }, error: (error) => {
         console.error('User not found');
       }
