@@ -246,6 +246,11 @@ export class AppointmentInfoDialogComponent implements OnInit {
         participant.attendance = response;
       },
       (error: any) => {
+        let dialogConf = new MatDialogConfig();
+        dialogConf.data = {
+          message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+        };
+        let d = this.dialog.open(ErrorDialogComponent, dialogConf);
         console.error('Error al cambiar la asistencia del usuario', error);
       }
     );
@@ -255,7 +260,6 @@ export class AppointmentInfoDialogComponent implements OnInit {
     console.log('userInfo: ', this.auth.userInfo());
     this.changeDetectorRef.markForCheck();
     if (this.isReserved()) {
-      // Llamada para des-reservar (unreserve)
       this.appointmentService.unreserveAppointment(this.data.id, this.auth.userInfo().email).subscribe({
         next: () => {
           console.log('Cita des-reservada');
@@ -263,6 +267,11 @@ export class AppointmentInfoDialogComponent implements OnInit {
           this.appointmentService.notifyAppointmentChanged();
         },
         error: (error: any) => {
+          let dialogConf = new MatDialogConfig();
+          dialogConf.data = {
+            message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+          };
+          let d = this.dialog.open(ErrorDialogComponent, dialogConf);
           console.error('Error al des-reservar la cita', error);
         }
       });
@@ -274,6 +283,11 @@ export class AppointmentInfoDialogComponent implements OnInit {
           this.appointmentService.notifyAppointmentChanged();
         },
         error: (error: any) => {
+          let dialogConf = new MatDialogConfig();
+          dialogConf.data = {
+            message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+          };
+          let d = this.dialog.open(ErrorDialogComponent, dialogConf);
           console.error('Error al reservar la cita', error);
         }
       });
@@ -300,8 +314,20 @@ export class AppointmentInfoDialogComponent implements OnInit {
   }
 
   removeUserFromKineAppointment() {
-    this.appointmentService.removeInstructorFromKinesiologyAppointment(this.data.id)
-    this.isUserInAppointment();
+    this.appointmentService.unreserveKinesiologyAppointment(this.data.id, this.auth.userInfo().email).subscribe({
+      next: () => {
+        console.log('Usuario removido de la cita de kinesiología');
+        this.loadAppointment();
+      },
+      error: (error: any) => {
+        let dialogConf = new MatDialogConfig();
+        dialogConf.data = {
+          message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+        };
+        let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+        console.error('Error al remover el usuario de la cita de kinesiología', error);
+      }
+    });
   }
 
   isPast(): boolean {
