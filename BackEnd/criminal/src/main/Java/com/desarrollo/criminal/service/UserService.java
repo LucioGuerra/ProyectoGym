@@ -162,4 +162,13 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
+
+    public ResponseEntity<List<UserResponseDTO>> getAllAdmins() {
+        List<User> allAdmins = userRepository.findAllByRole(Role.ADMIN);
+
+        List<UserResponseDTO> adminsDTO = allAdmins.stream()
+                .map(user -> modelMapper.map(user, UserResponseDTO.class)).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(adminsDTO);
+    }
 }
