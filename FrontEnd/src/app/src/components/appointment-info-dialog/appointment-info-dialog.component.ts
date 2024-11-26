@@ -27,6 +27,7 @@ import {MatInput} from "@angular/material/input";
 import {MatLabel} from "@angular/material/form-field";
 import {MatError} from "@angular/material/form-field";
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { KinesiologyIntegrationService } from '../services/kinesiology/kinesiology-integration.service';
 
 @Component({
   selector: 'app-appointment-info-dialog',
@@ -93,6 +94,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private auth: AuthService,
     private userService: UserService,
+    private kineService: KinesiologyIntegrationService,
     private dialog: MatDialog,
   ) {
   }
@@ -192,7 +194,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
 
   loadKinesiologyInstructors(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.userService.getKinesioUsers().subscribe({
+      this.kineService.getKinesioUsers().subscribe({
         next: (kinesiologos: KineModel[]) => {
           this.kinesiologosOptions = kinesiologos;
           this.changeDetectorRef.markForCheck();
@@ -208,7 +210,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
 
   loadBodyParts(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.userService.getBodyParts().subscribe({
+      this.kineService.getBodyParts().subscribe({
         next: (bodyParts: BodyPart[]) => {
           this.bodyPartOptions = bodyParts;
           this.changeDetectorRef.markForCheck();
