@@ -28,6 +28,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/admins")
+    public ResponseEntity<List<UserResponseDTO>> getAdmins(){
+        return userService.getUserAdmins();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
         return userService.getUserDTOById(id);

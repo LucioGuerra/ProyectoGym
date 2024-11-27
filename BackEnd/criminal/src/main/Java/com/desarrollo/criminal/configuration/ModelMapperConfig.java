@@ -6,6 +6,7 @@ import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.PackageActivity;
+import com.desarrollo.criminal.entity.Activity;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -34,6 +35,21 @@ public class ModelMapperConfig {
            typeMap02.addMappings(mapper -> {
                mapper.when(Conditions.isNotNull()).map(src -> src.getActivity().getName(), GetPackageActivityDTO::setName);
                mapper.when(Conditions.isNotNull()).map(PackageActivity::getQuantity, GetPackageActivityDTO::setQuantity);
+           });
+
+       TypeMap<Package, GetRandomPackageDTO> packageGetRandomPackageDTOTypeMap = modelMapper.createTypeMap(Package.class, GetRandomPackageDTO.class);
+           packageGetRandomPackageDTOTypeMap.addMappings(mapper -> {
+               mapper.using(ctx -> {
+                   //todo arreglar esto
+                   PackageActivity packageActivity = (PackageActivity) ctx.getSource();
+                   if (packageActivity != null) {
+                       return packageActivity.getActivity().getName();
+                   }
+                   else {
+                       return null;
+                   }
+               })
+                .map(src -> src.getPackageActivities().stream().map(PackageActivity::getActivity).map(Activity::getName).toList(), GetRandomPackageDTO::setActivities);
            });
 
        /*TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
