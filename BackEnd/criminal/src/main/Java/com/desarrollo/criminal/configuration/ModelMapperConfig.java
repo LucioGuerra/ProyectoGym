@@ -16,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -40,16 +43,9 @@ public class ModelMapperConfig {
        TypeMap<Package, GetRandomPackageDTO> packageGetRandomPackageDTOTypeMap = modelMapper.createTypeMap(Package.class, GetRandomPackageDTO.class);
            packageGetRandomPackageDTOTypeMap.addMappings(mapper -> {
                mapper.using(ctx -> {
-                   //todo arreglar esto
-                   PackageActivity packageActivity = (PackageActivity) ctx.getSource();
-                   if (packageActivity != null) {
-                       return packageActivity.getActivity().getName();
-                   }
-                   else {
-                       return null;
-                   }
+                           return ((Set<PackageActivity>) ctx.getSource()).stream().map(packageActivity -> packageActivity.getActivity().getName()).toList();
                })
-                .map(src -> src.getPackageActivities().stream().map(PackageActivity::getActivity).map(Activity::getName).toList(), GetRandomPackageDTO::setActivities);
+                .map(Package::getPackageActivities, GetRandomPackageDTO::setActivities);
            });
 
        /*TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
