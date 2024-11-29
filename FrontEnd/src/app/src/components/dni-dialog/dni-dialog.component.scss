@@ -1,0 +1,46 @@
+@use "../../../../variables";
+
+.dni-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  margin-bottom: 10px;
+  margin-right: 5px;
+  border-radius: 15px;
+
+}
+
+h1{
+  margin-bottom: 0;
+}
+
+.title {
+  color: variables.$light-gold-color;
+  width: 70%;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.dni-field {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+::ng-deep .dni-field{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+}
+
+input{
+  width: 100%;
+}

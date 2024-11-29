@@ -16,11 +16,12 @@ import { Router } from '@angular/router';
 import {Subscription} from "rxjs";
 import {ActivityService} from "../services/services";
 import {Activity} from "../models";
+import { ActivityCarouselComponent } from "../activity-carousel/activity-carousel.component";
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CurrencyPipe, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule ],
+  imports: [CurrencyPipe, ToolbarComponent, MatButtonModule, MatIconModule, MatCardModule, ActivityCarouselComponent],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,7 +37,7 @@ export class HomePageComponent implements AfterViewInit {private sections: HTMLE
   ];
 
   constructor(private el: ElementRef, private router: Router, private auth0: AuthService, private activityService: ActivityService) {
-    effect(() => {
+    effect(async () => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
           console.log("Me redirige a admin/agenda");
@@ -46,10 +47,10 @@ export class HomePageComponent implements AfterViewInit {private sections: HTMLE
           this.router.navigate(['/agenda']);
         } else {
           console.log("No es admin ni cliente");
-          this.auth0.handleAuthentication();
+          await this.auth0.handleAuthentication();
         }
       } else {
-        this.auth0.handleAuthentication();
+        await auth0.handleAuthentication();
       }
     }, { allowSignalWrites: true });
   }

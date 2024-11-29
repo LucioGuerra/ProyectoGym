@@ -1,9 +1,10 @@
+import { BodyPart, KineModel } from './../../models/userModel.models';
 import {Injectable} from '@angular/core';
 import {environment} from '../../../../../index';
 
-import {Appointment, UserModel} from '../../models';
+import {Appointment, Role, UserModel} from '../../models';
 
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs/operators";
 
@@ -11,6 +12,7 @@ import {map} from "rxjs/operators";
   providedIn: 'root'
 })
 export class UserService {
+  
   private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
@@ -20,22 +22,27 @@ export class UserService {
     return this.http.get<UserModel>(`${this.apiUrl}/${id}`);
   }
 
-      getUserByEmail(email: string): Observable<UserModel> {
-        return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
-      }
+  getUserByEmail(email: string): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
+  }
+
+  getUserByDNI(dni: string): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.apiUrl}/dni/${dni}`);
+  }
 
   getAllUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(this.apiUrl);
   }
 
   createUser(user: UserModel): Observable<UserModel> {
-        console.log("Entra al create user")
-        return this.http.post<UserModel>(this.apiUrl, user);
-      }
+    console.log("Entra al create user")
+    return this.http.post<UserModel>(this.apiUrl, user);
+  }
 
-      updateUser(user: UserModel): Observable<any> {
-        return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
-      }
+  updateUser(user: UserModel): Observable<any> {
+    console.log('Entra al update user');
+    return this.http.patch<UserModel>(`${this.apiUrl}/${user.id}`, user);
+  }
 
   setPictureToUser(picture: any, email: string) {
     let user = this.getUserByEmail(email);
@@ -46,7 +53,7 @@ export class UserService {
   }
 
   getUserAppointments(id: string): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(`${this.apiUrl}/api/public/users/appointments/${id}`).pipe(
+    return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/${id}`).pipe(
       map((appointments: Appointment[]) => appointments.map(appointment => ({
           ...appointment,
           date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
@@ -54,18 +61,108 @@ export class UserService {
           startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
           endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
         }))
-      )    );
+      ));
   }
 
   getUserPackages(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
   }
 
-  getKinesioUsers() {
-    return this.http.get<UserModel[]>(`${this.apiUrl}/kine`);
+  getKinesioUsers(): Observable<KineModel[]> {
+    const kinesiologos: KineModel[] = [
+      {
+        firstName: 'Kine',
+        lastName: 'Uno',
+        email: 'kineUno@gmail.com',
+        role: Role.KINE,
+        dni: '90909090',
+        picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+        bodyParts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      },
+      {
+        firstName: 'Kine',
+        lastName: 'Dos',
+        email: 'kineDos@gmail.com',
+        role: Role.KINE,
+        dni: '91919191',
+        picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+        bodyParts: [1, 2, 7, 8, 9, 10, 11]
+      },
+      {
+        firstName: 'Kine',
+        lastName: 'Tres',
+        email: 'kineTres@gmail.com',
+        role: Role.KINE,
+        dni: '92929292',
+        picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+        bodyParts: [1, 2, 3, 4, 5]
+      },
+      {
+        firstName: 'Kine',
+        lastName: 'Cuatro',
+        email: 'kineCuatro@gmail.com',
+        role: Role.KINE,
+        dni: '93939393',
+        picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+        bodyParts: [8, 9, 10, 11, 12]
+      },
+    ];
+    return of(kinesiologos);
+    //return this.http.get<UserModel[]>(`${this.apiUrl}/kine`);
   }
 
-  getBodyParts() {
-    return this.http.get<any[]>(`${this.apiUrl}/kine/body-parts`);
+  getBodyParts(): Observable<BodyPart[]> {
+    const bodyParts: BodyPart[] = [
+      {
+        id: 1,
+        name: 'Cabeza',
+      },
+      {
+        id: 2,
+        name: 'Cuello',
+      },
+      {
+        id: 3,
+        name: 'Hombro',
+      },
+      {
+        id: 4,
+        name: 'Brazo',
+      },
+      {
+        id: 5,
+        name: 'Antebrazo',
+      },
+      {
+        id: 6,
+        name: 'Mano',
+      },
+      {
+        id: 7,
+        name: 'Espalda',
+      },
+      {
+        id: 8,
+        name: 'Cadera',
+      },
+      {
+        id: 9,
+        name: 'Pierna',
+      },
+      {
+        id: 10,
+        name: 'Rodilla',
+      },
+      {
+        id: 11,
+        name: 'Tobillo',
+      },
+      {
+        id: 12,
+        name: 'Pie',
+      },
+    ];
+    return of(bodyParts);
+    //return this.http.get<any[]>(`${this.apiUrl}/kine/body-parts`);
   }
 }

@@ -1,78 +1,88 @@
 <app-drawer>
   <ng-container main-content>
     <span class="mainPage">
-      @if (found()) {
+      <ng-container *ngIf="found(); else notFound">
         <mat-card>
-        <form (ngSubmit)="saveChanges()" [formGroup]="form">
-        <div class="header">
-          <mat-card-header>
-            <div class="back">
-              <button (click)="back()" aria-label="Go back" class="back-btn" mat-icon-button>
-                <mat-icon>chevron_left</mat-icon>
-              </button>
-            </div>
-
-            <div class="avatar-container">
-              <div class="user-avatar" (mouseover)="showText(true)" (mouseout)="showText(false)">
-                <img [src]="userModel().picture" alt="User Image" class="user-avatar-img" (click)="changePicture()">
-
-                <div class="hover-text" (click)="changePicture()" *ngIf="isHovering">
-                  Change Picture
+          <form (ngSubmit)="saveChanges()" [formGroup]="form">
+            <div class="header">
+              <mat-card-header>
+                <div class="back">
+                  <button type="button" (click)="back()" aria-label="Go back" class="back-btn" mat-icon-button>
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
                 </div>
+
+            <div class="user-avatar" (mouseover)="showText(true)" (mouseout)="showText(false)">
+              <!-- Imagen visible -->
+              <img
+                [src]="userVista().picture || defaultImage"
+                alt="User Image"
+                class="user-avatar-img"
+                (click)="triggerFileInput()"
+              />
+            
+              <!-- Texto visible al pasar el mouse -->
+              <div class="hover-text" *ngIf="isHovering" (click)="triggerFileInput()">
+                Change Picture
               </div>
+            
+              <!-- Input de tipo archivo (oculto) -->
+              <input
+                type="file"
+                accept="image/*"
+                #fileInput
+                (change)="onFileSelected($event)"
+                style="display: none;"
+              />
             </div>
 
-            <div class="role-container">
-              <select formControlName="role" class="role-select" [value]="userModel().role">
-                  <option class="option" [value]="Role.ADMIN" (click)="changeRole(Role.ADMIN)">
-                    ADMIN
-                  </option>
-                  <option class="option" [value]="Role.CLIENT" (click)="changeRole(Role.CLIENT)">
-                    CLIENT
-                  </option>
-              </select>
-            </div>
-          </mat-card-header>
-        </div>
-        <mat-divider></mat-divider>
-
-        <mat-card-content>
-            <div class="userModel-content">
-              <div class="row">
-                <div class="input-combo">
-                  <mat-form-field appearance="outline" class="custom-text-color">
-                    <mat-label>First Name</mat-label>
-                    <input formControlName="firstName" id="firstName" matInput>
-                  </mat-form-field>
-                </div>
-
-                <div class="input-combo">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Last Name</mat-label>
-                    <input [errorStateMatcher]="matcher" formControlName="lastName" id="lastName"
-                           matInput placeholder="Enter your last name" type="text"/>
-                  </mat-form-field>
-                </div>
+               <div class="role-container">
+                <select formControlName="role" class="role-select" (change)="changeRole($event)">
+                  <option class="option" [value]="Role.ADMIN">ADMIN</option>
+                  <option class="option" [value]="Role.CLIENT">CLIENT</option>
+                </select>
               </div>
 
-              <div class="row">
-                <div class="input-combo">
-                  <mat-form-field appearance="outline">
-                    <mat-label>DNI</mat-label>
-                    <input [errorStateMatcher]="matcher" formControlName="dni" id="dni" matInput
-                           placeholder="Enter your DNI" type="text"/>
-                  </mat-form-field>
+              </mat-card-header>
+            </div>
+            <mat-divider></mat-divider>
+
+            <mat-card-content>
+              <div class="userModel-content">
+                <div class="row">
+                  <div class="input-combo">
+                    <mat-form-field appearance="outline" class="custom-text-color">
+                      <mat-label>First Name</mat-label>
+                      <input formControlName="firstName" id="firstName" matInput>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="input-combo">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Last Name</mat-label>
+                      <input [errorStateMatcher]="matcher" formControlName="lastName" id="lastName"
+                             matInput placeholder="Enter your last name" type="text"/>
+                    </mat-form-field>
+                  </div>
                 </div>
 
-                <div class="input-combo" id="email">
+                <div class="row">
+                  <div class="input-combo">
+                    <mat-form-field appearance="outline">
+                      <mat-label>DNI</mat-label>
+                      <input [errorStateMatcher]="matcher" formControlName="dni" id="dni" matInput
+                             placeholder="Enter your DNI" type="text"/>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="input-combo" id="email">
                     <mat-form-field appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input value="{{userModel().email}}" class="email" matInput disabled>
+                      <input value="{{userVista().email}}" class="email" matInput disabled>
                     </mat-form-field>
+                  </div>
                 </div>
-              </div>
 
-              <!--              <ng-container *ngIf="user()?.sub && !user()?.sub?.includes('windows live') && !user()?.sub?.includes('google') && !user()?.sub?.includes('facebook'); else elseBlock">-->
                 <div class="row">
                   <div class="input-combo">
                     <mat-form-field appearance="outline">
@@ -81,46 +91,45 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="change-password-container">
-                    <button (click)="changePassword()" class="changepassword" color="primary" mat-raised-button>
-                      Change password
-                      <mat-icon class="icon-right">chevron_right</mat-icon>
-                    </button>
+                  @if (!this.id){
+                    @if (this.user().sub?.startsWith('google') || this.user().sub?.startsWith('windowslive')
+                    || this.user().sub?.startsWith('facebook')){
+                      <div class="change-password-container"></div>
+                    } @else {
+                      <div class="change-password-container">
+                        <button type="button" (click)="changePassword()" class="changepassword" color="primary"
+                                mat-raised-button>
+                          Change password
+                          <mat-icon class="icon-right">chevron_right</mat-icon>
+                        </button>
+                      </div>
+                    }
+                  } @else {
+                    <div class="change-password-container">
                   </div>
+                  }
                 </div>
-              <!--              </ng-container>-->
 
-              <!--              <ng-template #elseBlock>-->
-              <!--                <div class="row">-->
-              <!--                  <div class="input-combo">-->
-              <!--                    <mat-form-field appearance="outline">-->
-              <!--                      <mat-label>Mobile</mat-label>-->
-              <!--                      <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>-->
-              <!--                    </mat-form-field>-->
-              <!--                  </div>-->
-              <!--                  <div class="paCompletar"></div>-->
-              <!--                </div>-->
-              <!--              </ng-template>-->
-
-              <div class="save-container">
-                <button class="custom-button" mat-button type="submit">
-                  Save changes
-                </button>
+                <div class="save-container">
+                  <button class="custom-button" mat-button type="submit">
+                    Save changes
+                  </button>
+                </div>
               </div>
-            </div>
-        </mat-card-content>
-        </form>
-      </mat-card>
-      } @else {
+            </mat-card-content>
+          </form>
+        </mat-card>
+      </ng-container>
+      <ng-template #notFound>
         <mat-card class="not-found">
-        <button (click)="back()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-        <div>
-          <h4>User not found</h4>
-        </div>
-      </mat-card>
-      }
+          <button (click)="back()" aria-label="Go back" class="back-btn-not-found" mat-icon-button>
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <div>
+            <h4>User not found</h4>
+          </div>
+        </mat-card>
+      </ng-template>
     </span>
   </ng-container>
 </app-drawer>

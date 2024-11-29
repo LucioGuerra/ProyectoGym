@@ -125,7 +125,7 @@ export class ShifAdminScreenComponent implements OnInit {
 
   getStoredDate(): Date {
     const date = localStorage.getItem('selectedDate');
-    return date ? new Date(date) : new Date();
+    return date ? new Date(date) : new Date(new Date(Date.now()).setHours(0, 0, 0, 0));
   }
 
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -160,7 +160,7 @@ export class ShifAdminScreenComponent implements OnInit {
   }
 
   shop($event: MouseEvent) {
-    alert('shop');
+    this.router.navigate(['/admin/ecommerce']);
   }
 
   onTabChange($event: MatTabChangeEvent) {

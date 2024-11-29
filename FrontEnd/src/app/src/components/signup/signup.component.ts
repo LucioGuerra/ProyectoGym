@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
+import passwordValidators from "./password-validator.validators"
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { Router } from '@angular/router';
 import { AuthService } from "../services/services/auth.service";
@@ -21,7 +21,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ToolbarComponent, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule],
+  imports: [MatTooltipModule, FormsModule, ToolbarComponent, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -39,9 +39,9 @@ export class SignupComponent {
     email: this.emailFormControl,
     firstName: new FormControl("", Validators.required),
     lastName: new FormControl("", Validators.required),
-    dni: new FormControl("", Validators.required),
-    password: new FormControl("", Validators.required),
-    repassword: new FormControl("", Validators.required),
+    dni: new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(8)]),
+    password: new FormControl("", [Validators.required, Validators.minLength(8), passwordValidators.passwordStrengthValidator]),
+    repassword: new FormControl("", [Validators.required, passwordValidators.passwordMatchValidator]),
   });
 
   validacionPassword(): boolean {
