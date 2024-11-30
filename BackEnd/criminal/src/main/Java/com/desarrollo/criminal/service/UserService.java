@@ -152,29 +152,22 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
-        List<Appointment> appointments = user.getUserXAppointments().stream()
-                .map(UserXAppointment::getAppointment)
-                .sorted(Comparator.comparing(Appointment::getDate))
+        List<UserXAppointment> appointments = user.getUserXAppointments().stream()
+                .sorted(Comparator.comparing(uxp -> uxp.getAppointment().getDate()))
                 .toList();
 
         int streak = 0;
-        boolean streakBroken = false;
 
-        for (Appointment appointment : appointments) {
-            Optional<UserXAppointment> userXAppointmentOpt = user.getUserXAppointments().stream()
-                    .filter(userXAppointment -> userXAppointment.getAppointment().equals(appointment))
-                    .findFirst();
-
-            if (userXAppointmentOpt.isPresent() && userXAppointmentOpt.get().getAttendance()) {
-                if (!streakBroken) {
-                    streak++;
-                }
-            } else {
-                streakBroken = true;
+        for (UserXAppointment appointment: appointments) {
+            if(appointment.getAttendance()){
+                streak++;
+            }
+            else{
+                break;
             }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(streakBroken ? 0 : streak);
+        return ResponseEntity.status(HttpStatus.OK).body(streak);
     }
     
     public User save(User user) {
