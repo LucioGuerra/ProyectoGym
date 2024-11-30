@@ -1,0 +1,38 @@
+<div class="carousel-container">
+  <mat-tab-group class="custom-tab-group" [(selectedIndex)]="selectedIndex">
+    @for(announcement of announcements; track announcement) {
+    <mat-tab>
+      <mat-card class="card" (click)="open(announcement)">
+        <mat-card-title>{{ announcement.title }}</mat-card-title>
+        <mat-card-content>{{
+          announcement.body.length > 100
+            ? announcement.body.slice(0, 100) + "..."
+            : announcement.body
+        }}</mat-card-content>
+      </mat-card>
+    </mat-tab>
+    }
+  </mat-tab-group>
+  @if (selectedIndex != 0){
+  <button mat-icon-button class="navigation-buttons-left" (click)="prevSlide()">
+    <mat-icon> navigate_before </mat-icon>
+  </button>
+  } @else {
+    <button mat-icon-button class="navigation-buttons-left" disabled>
+        <mat-icon> navigate_before </mat-icon>
+      </button>
+  }
+  @if (announcements.length > 1) { @if(selectedIndex === announcements.length - 1) {
+  <button mat-icon-button class="navigation-buttons-right" disabled>
+    <mat-icon> navigate_next </mat-icon>
+  </button>
+  } @else {
+  <button
+    mat-icon-button
+    class="navigation-buttons-right"
+    (click)="nextSlide()"
+  >
+    <mat-icon> navigate_next </mat-icon>
+  </button>
+  } }
+</div>

@@ -1,7 +1,6 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import jakarta.validation.constraints.Email;
@@ -28,6 +27,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/admins")
+    public ResponseEntity<List<UserResponseDTO>> getAdmins(){
+        return userService.getUserAdmins();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
         return userService.getUserDTOById(id);
@@ -36,6 +40,11 @@ public class UserController {
     @GetMapping("/email")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam("email") @Email String email){
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<UserResponseDTO> getUserByDni(@PathVariable String dni){
+        return userService.getUserEntityByDni(dni);
     }
 
     @GetMapping("/history/{id}")
@@ -63,11 +72,6 @@ public class UserController {
         return userService.updateUser(id, userUpdateDTO);
     }
 
-    @GetMapping("/streak/{id}")
-    public ResponseEntity<Integer> getStreak(@PathVariable Long id){
-        return userService.getStreak(id);
-    }
-
     @GetMapping("/kine")
     public ResponseEntity<?> getKines(){
         return userService.getKines();
@@ -78,4 +82,8 @@ public class UserController {
         return userService.getKineBodyParts();
     }
 
+    @GetMapping("/streak/{id}")
+    public ResponseEntity<Integer> getStreak(@PathVariable Long id){
+        return userService.getStreak(id);
+    }
 }

@@ -1,15 +1,17 @@
-import {Injectable, signal} from "@angular/core";
-import {environment} from "../../../../../environments/environment";
+import { Injectable, signal } from "@angular/core";
+import { environment } from "../../../../../environments/environment";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
-import {jwtDecode} from "jwt-decode";
-import {UserService} from "./user.service";
-import {Role, UserModel} from "../../models";
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {DniDialogComponent} from "../../dni-dialog/dni-dialog.component";
-import {HttpClient} from "@angular/common/http";
-import {lastValueFrom} from "rxjs";
-import {DniService} from "../dni/dni.service";
+import { jwtDecode } from "jwt-decode";
+import { UserService } from "./user.service";
+import { Role, UserModel } from "../../models";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DniDialogComponent } from "../../dni-dialog/dni-dialog.component";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from "@angular/common/http";
+import { firstValueFrom, lastValueFrom } from "rxjs";
+import { DniService } from "../dni/dni.service";
+import { ErrorDialogComponent } from "../../dialog/error-dialog/error-dialog.component";
 
 
 @Injectable({ providedIn: "root" })
@@ -20,7 +22,12 @@ export class AuthService {
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
 
-  constructor(private userService: UserService, private dialog: MatDialog, private http: HttpClient, private dniService: DniService) {
+  constructor(
+    private userService: UserService,
+    private dialog: MatDialog,
+    private dniService: DniService,
+    private _snackBar: MatSnackBar
+  ) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
@@ -37,6 +44,13 @@ export class AuthService {
       password: password,
       realm: environment.auth0.database,
       audience: environment.auth0.audience
+    }, (err: any, result: any) => {
+      if (err.code == "access_denied") {
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Usuario o contraseña incorrectos" } });
+      } else if (err) {
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente" } });
+      }
+
     });
   }
 
@@ -46,20 +60,63 @@ export class AuthService {
     })
   }
 
-  public signup(email: string | undefined, password: string | undefined, user: UserModel): void {
-    this.auth0Client.signup({
-      email: email,
-      password: password,
-      connection: environment.auth0.database,
-      audience: environment.auth0.audience
-    }, (err: any, result: any) => {
-      if (err) {
-        console.error('Error al registrar:', err);
-      } else {
-        this.createUser(user);
-        this.login(email, password);
-      }
-    });
+   public async signup(email: string | undefined, password: string | undefined, user: UserModel): Promise<void> {
+    var userDniExists: boolean = true;
+    try {
+      const _user: UserModel = await firstValueFrom(this.userService.getUserByDNI(user.dni));
+      console.log("El DNI ya existe, no se puede registrar");
+      this.dialog.open(ErrorDialogComponent, { data: { message: "El DNI ya se encuentra registrado" } });
+      userDniExists = true;
+    } catch (error) {
+      console.log("El DNI no existe, se puede registrar");
+      userDniExists = false;
+    }
+    console.log("userDniExists: ", userDniExists);
+    if (!userDniExists) {
+      console.log("Entra al signup");
+      this.auth0Client.signup({
+        email: email,
+        password: password,
+        connection: environment.auth0.database,
+        audience: environment.auth0.audience
+      }, (err: any, result: any) => {
+        if (err) {
+          if (err.code == "invalid_signup") {
+            this.dialog.open(ErrorDialogComponent, { data: { message: "El email ya se encuentra registrado." } });
+          } else if (err.code == "invalid_password") {
+            this.dialog.open(ErrorDialogComponent, {
+              data: {
+                message: `La contraseña no es lo suficientemente segura, revisa los siguientes puntos:\n
+                * Al menos 8 caracteres de longitud\n
+                * Contener al menos 3 de los siguientes 4 tipos de caracteres:\n
+                * letras minúsculas (a-z)\n
+                * letras mayúsculas (A-Z)\n
+                * números (i.e. 0-9)\n
+                * caracteres especiales (e.g. !@#$%^&*)`
+              }
+            });
+        }else if (err) {
+            console.log("Error: ", err);
+            this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
+          }
+        } else if (result) {
+          console.log("Usuario creado correctamente, result: ", result);
+          this.userService.createUser(user).subscribe(
+            (saveUser: UserModel) => {
+              console.log("Usuario guardado: ", saveUser);
+              var s = this._snackBar.open("Se ha registrado correctamente, logueando...", "Cerrar", {
+                duration: 2000,
+              });
+              s.afterDismissed().subscribe(() => {
+                this.login(email, password);
+              });
+            },
+            (error) => {
+              console.error("Error al guardar el usuario: ", error);
+            });
+        }
+      });
+    }
   }
 
   public async handleAuthentication(): Promise<void> {
@@ -96,16 +153,16 @@ export class AuthService {
             dialogConfig.panelClass = 'custom-dialog';
             dialogConfig.hasBackdrop = false;
             dialogConfig.data = {
-            // @ts-ignore
+              // @ts-ignore
               apellido: jwtDecode(idToken)['family_name'],
-            // @ts-ignore
+              // @ts-ignore
               nombre: jwtDecode(idToken)['given_name'],
             }
             // @ts-ignore
             console.log("apellido: ", jwtDecode(idToken)['family_name']);
             const dialogRef = this.dialog.open(DniDialogComponent, dialogConfig);
             await dialogRef.afterClosed().toPromise();
-            let dni =  this.dniService.getDni();
+            let dni = this.dniService.getDni();
             if (dni) {
               console.log("DNI entered:", dni);
               usuario = {

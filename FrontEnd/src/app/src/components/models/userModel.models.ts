@@ -1,17 +1,26 @@
 export interface UserModel {
-  id?: number;
-  firstName: String;
-  lastName: String;
-  email: String;
-  role?: Role;
-  phone?: String;
-  dni: String;
-  picture?: URL;
-  streak?: number;
+    id?: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role?: Role;
+    phone?: string;
+    dni: string;
+    picture?: URL;
+    streak?: number;
 }
 
 export enum Role {
   ADMIN = 'ADMIN',
   CLIENT = 'CLIENT',
   KINE = 'KINE'
+}
+
+export interface BodyPart {
+  id: number;
+  name: string;
+}
+
+export interface KineModel extends UserModel {
+  bodyParts: number[];
 }

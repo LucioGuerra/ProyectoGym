@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
@@ -11,6 +11,9 @@ import {FormControl, Validators, ReactiveFormsModule} from "@angular/forms";
 import {Activity} from "../models";
 import {ActivityService} from "../services/services";
 import {ActivatedRoute, Router} from "@angular/router";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-create-activity',
@@ -37,12 +40,13 @@ import {ActivatedRoute, Router} from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateActivityComponent implements OnInit {
+  private _snackBar = inject(MatSnackBar);
   activityId: string | null = null;
   activityName = new FormControl('', Validators.required);
   activityDescription = new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]);
   activityPrice = new FormControl<number>(1000.0, [Validators.required, Validators.min(1)]);
 
-  constructor(private activityService: ActivityService, private router: Router, private route: ActivatedRoute) {
+  constructor(private activityService: ActivityService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
 
   }
 
@@ -53,11 +57,24 @@ export class CreateActivityComponent implements OnInit {
 
   loadActivity() {
     if (this.activityId) {
-      this.activityService.getActivitybyId(this.activityId).subscribe((activity: Activity) => {
-        this.activityName.setValue(activity.name);
-        this.activityDescription.setValue(activity.description!);
-        this.activityPrice.setValue(activity.price!);
-      });
+      this.activityService.getActivitybyId(this.activityId).subscribe(
+        (activity: Activity) => {
+          this.activityName.setValue(activity.name);
+          this.activityDescription.setValue(activity.description!);
+          this.activityPrice.setValue(activity.price!);
+        },
+        (error) => {
+          let dialogConf = new MatDialogConfig();
+          dialogConf.data = {
+            message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+          };
+          let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+          d.afterClosed().subscribe(() => {
+            this.router.navigate(['/admin/agenda']);
+          });
+          console.log(`Error al cargar actividades: ${error}`);
+        }
+      );
     }
   }
 
@@ -73,12 +90,12 @@ export class CreateActivityComponent implements OnInit {
       }
       this.activityService.createActivity(createdActivity).subscribe(
         (response) => {
-          console.log(response);
-          alert("se creo correctamente");
+          this._snackBar.open(`Se ha creado la actividad correctamente`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+          console.log(`Actividad creada: ${response}`);
         },
         (error) => {
-          console.error(error);
-          alert(`error ${error}`);
+          this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"})
+          console.log(`Error al crear la actividad: ${error}`);
         }
       );
       alert(`creado ${createdActivity}`);
@@ -105,15 +122,14 @@ export class CreateActivityComponent implements OnInit {
       }
       this.activityService.editActivity(this.activityId, createdActivity).subscribe(
         (response) => {
-          console.log(response);
-          alert("se creo correctamente");
+          this._snackBar.open('La actividad se ha editado correctamente', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+          console.log(`Actividad editada: ${response}`);
         },
         (error) => {
-          console.error(error);
-          alert(`error ${error}`);
+          this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"})
+          console.log(`Error al crear la actividad: ${error}`);
         }
       );
-      alert(`creado ${createdActivity}`);
     } else {
       this.activityName.markAsDirty();
       this.activityDescription.markAsDirty();

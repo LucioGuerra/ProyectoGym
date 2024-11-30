@@ -1,14 +1,16 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, signal} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogActions,
   MatDialogClose,
+  MatDialogConfig,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {MatButtonModule} from "@angular/material/button";
-import {Appointment, AppointmentUser} from "../models";
+import {Appointment, AppointmentUser, BodyPart, KineModel} from "../models";
 import {AppointmentService, AuthService} from "../services/services";
 import {AsyncPipe, DatePipe, NgOptimizedImage} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -24,6 +26,7 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {MatInput} from "@angular/material/input";
 import {MatLabel} from "@angular/material/form-field";
 import {MatError} from "@angular/material/form-field";
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-appointment-info-dialog',
@@ -55,6 +58,7 @@ import {MatError} from "@angular/material/form-field";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppointmentInfoDialogComponent implements OnInit {
+
   loading = true;
   appointmentData: Appointment | undefined;
   isReserved = signal<boolean>(false);
@@ -64,13 +68,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
 
   //para la busqueda de kinesiologo
   kinesiologoControl = new FormControl('', Validators.required);
-  kinesiologosOptions = [
-    {
-      "id": 1,
-      "name": "Kinesiologo 1",
-      "bodyParts": [1, 2, 3, 8], // IDs de "Cuello", "Hombros", "Espalda", "Manos"
-    }
-  ];
+  kinesiologosOptions: KineModel[] = [];
   filteredKinesiologosOptions: Observable<string[]> | undefined;
 
   //para la busqueda de partes del cuerpo
@@ -95,6 +93,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private auth: AuthService,
     private userService: UserService,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -115,7 +114,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
         // Filtro de kinesiologo
         this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.name))),
+          map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.firstName + ' ' + kinesiologo.lastName))),
         );
 
         // Filtro de partes del cuerpo
@@ -134,19 +133,27 @@ export class AppointmentInfoDialogComponent implements OnInit {
                 const filteredKinesiologos = this.kinesiologosOptions.filter(kinesiologo =>
                   kinesiologo.bodyParts.includes(this.bodyPartOptions.find(part => part.name === bodyPart)?.id || 0)
                 );
-                return this._filter(value || '', filteredKinesiologos.map(kinesiologo => kinesiologo.name));
+                return this._filter(value || '', filteredKinesiologos.map(kinesiologo => kinesiologo.firstName + ' ' + kinesiologo.lastName));
               })
             );
           } else {
             this.filteredKinesiologosOptions = this.kinesiologoControl.valueChanges.pipe(
               startWith(''),
-              map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.name))),
+              map(value => this._filter(value || '', this.kinesiologosOptions.map(kinesiologo => kinesiologo.firstName + ' ' + kinesiologo.lastName))),
             );
           }
         });
       }
     } catch (error) {
       console.error('Error during initialization', error);
+      let dialogConf = new MatDialogConfig();
+      dialogConf.data = {
+        message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+      };
+      let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+      d.afterClosed().subscribe(() => {
+        this.onClose();
+      });
     }
   }
 
@@ -186,7 +193,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   loadKinesiologyInstructors(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.userService.getKinesioUsers().subscribe({
-        next: (kinesiologos: any[]) => {
+        next: (kinesiologos: KineModel[]) => {
           this.kinesiologosOptions = kinesiologos;
           this.changeDetectorRef.markForCheck();
           resolve();
@@ -202,7 +209,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   loadBodyParts(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.userService.getBodyParts().subscribe({
-        next: (bodyParts: any[]) => {
+        next: (bodyParts: BodyPart[]) => {
           this.bodyPartOptions = bodyParts;
           this.changeDetectorRef.markForCheck();
           resolve();
@@ -276,7 +283,9 @@ export class AppointmentInfoDialogComponent implements OnInit {
       this.appointmentService.addUserToKinesiologyAppointment(
         this.data.id,
         this.auth.userInfo().email,
-        this.kinesiologosOptions.filter(kinesiologo => kinesiologo.name === this.kinesiologoControl.value)[0].id
+        this.kinesiologosOptions.find(kinesiologo =>
+          kinesiologo.firstName + ' ' + kinesiologo.lastName === this.kinesiologoControl.value
+        )!
       ).then((observable) => {
         observable.subscribe(() => {
           this.loadAppointment();
@@ -292,4 +301,23 @@ export class AppointmentInfoDialogComponent implements OnInit {
     this.appointmentService.removeInstructorFromKinesiologyAppointment(this.data.id)
     this.isUserInAppointment();
   }
+
+  isPast(): boolean {
+    if (new Date(this.appointmentData!.date) < new Date()){
+      console.log('isPast: ', true);
+      return true;
+    } else if (new Date(this.appointmentData!.date) > new Date()) {
+      return false;
+    } else {
+      if (this.appointmentData?.startTime && this.appointmentData?.endTime) {
+        const now = new Date();
+        const startTime = new Date(this.appointmentData.startTime);
+        const endTime = new Date(this.appointmentData.endTime);
+        return now < startTime;
+      } else {
+        return false;
+      }
+    }
+  }
+
 }

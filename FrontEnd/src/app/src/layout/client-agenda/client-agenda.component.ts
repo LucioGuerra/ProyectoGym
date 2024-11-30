@@ -23,7 +23,7 @@ import {Activity} from '../../components';
 import {Router} from "@angular/router";
 import {MatTableModule} from '@angular/material/table';
 import {AgendaListComponent} from "../../components/agenda-list/agenda-list.component";
-import {AnnouncementCarouselComponent} from "../../components/announcement-carousel/announcement-carousel.component";
+import { MaterialCarouselComponent } from "../../components/material-carousel/material-carousel.component";
 
 @Component({
   selector: 'app-client-agenda',
@@ -45,8 +45,8 @@ import {AnnouncementCarouselComponent} from "../../components/announcement-carou
     MatMenuModule,
     MatTableModule,
     MatDatepickerModule,
-    AnnouncementCarouselComponent,
-  ],
+    MaterialCarouselComponent
+],
   templateUrl: './client-agenda.component.html',
   styleUrl: './client-agenda.component.scss',
   providers: [provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},],

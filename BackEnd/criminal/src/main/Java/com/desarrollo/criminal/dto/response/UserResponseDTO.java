@@ -32,6 +32,7 @@ public class UserResponseDTO {
     
     private Long routineId;
 
+    //todo agregar para obtenerlo
     private Long aPackageId;
 
     private Integer streak;

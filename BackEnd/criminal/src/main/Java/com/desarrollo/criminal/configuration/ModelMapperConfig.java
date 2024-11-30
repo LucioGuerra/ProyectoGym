@@ -6,6 +6,7 @@ import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.entity.PackageActivity;
+import com.desarrollo.criminal.entity.Activity;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -15,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -36,12 +40,22 @@ public class ModelMapperConfig {
                mapper.when(Conditions.isNotNull()).map(PackageActivity::getQuantity, GetPackageActivityDTO::setQuantity);
            });
 
-       TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
+       TypeMap<Package, GetRandomPackageDTO> packageGetRandomPackageDTOTypeMap = modelMapper.createTypeMap(Package.class, GetRandomPackageDTO.class);
+           packageGetRandomPackageDTOTypeMap.addMappings(mapper -> {
+               mapper.using(ctx -> {
+                           return ((Set<PackageActivity>) ctx.getSource()).stream().map(packageActivity -> packageActivity.getActivity().getName()).toList();
+               })
+                .map(Package::getPackageActivities, GetRandomPackageDTO::setActivities);
+           });
+
+       /*TypeMap<User, UserResponseDTO> typeMap03 = modelMapper.createTypeMap(User.class, UserResponseDTO.class);
          typeMap03.addMappings(mapper -> {
             mapper.map(src -> src.getRoutine().getId() != null ? src.getRoutine().getId(): null, UserResponseDTO::setRoutineId);
             //mapper.map(src -> src.getAPackage().getId() != null ? src.getAPackage().getId(): null, UserResponseDTO::setAPackageId);
              mapper.map(src -> src.getPicture(), UserResponseDTO::setPicture);
          });
+
+        */
 
          TypeMap<UserRequestDTO, User> typeMap04 = modelMapper.createTypeMap(UserRequestDTO.class, User.class);
             typeMap04.addMappings(mapper -> {

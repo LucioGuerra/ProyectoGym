@@ -1,19 +1,25 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
-import {Role, UserModel} from '../models';
-import {MatIconModule} from '@angular/material/icon';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatButtonModule} from '@angular/material/button';
-import {DrawerComponent} from '../drawer/drawer.component';
-import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {MatInput} from '@angular/material/input';
-import {AuthService} from "../services/services";
-import {User} from "@auth0/auth0-angular";
-import {NgIf, TitleCasePipe} from "@angular/common";
-import {UserService} from "../services/services/user.service";
+import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Role, UserModel } from '../models';
+import { MatIconModule } from '@angular/material/icon';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { DrawerComponent } from '../drawer/drawer.component';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+import { AuthService } from "../services/services";
+import { User } from "@auth0/auth0-angular";
+import { NgIf, TitleCasePipe } from "@angular/common";
+import { UserService } from "../services/services/user.service";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments';
+import { lastValueFrom } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-edit',
@@ -39,10 +45,13 @@ import {UserService} from "../services/services/user.service";
 })
 
 export class UserEditComponent {
+  private _snackBar = inject(MatSnackBar);
   user = signal<User>({});
   found = signal<boolean>(false);
-
+  defaultImage = 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg';
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   id: string | null = '';
+  imageFile: string = '';
 
   isHovering = false;
   form: FormGroup;
@@ -55,7 +64,7 @@ export class UserEditComponent {
     role: Role.CLIENT,
     phone: '',
     dni: '',
-    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+    picture: new URL(this.defaultImage),
   });
 
   userVista = signal<UserModel>({
@@ -66,14 +75,20 @@ export class UserEditComponent {
     role: Role.CLIENT,
     phone: '',
     dni: '',
-    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+    picture: new URL(this.defaultImage),
   });
   protected readonly Role = Role;
 
+  private dialogConfig = new MatDialogConfig();
+  
+
   constructor(public auth: AuthService,
-              private router: Router,
-              private userService: UserService,
-              private route: ActivatedRoute) {
+    private router: Router,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private http: HttpClient,
+  ) {
     console.log(this.user().picture);
 
     this.form = new FormGroup({
@@ -81,7 +96,7 @@ export class UserEditComponent {
       lastName: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       role: new FormControl('', [Validators.required]),
-      picture: new FormControl('', [Validators.required]),
+      picture: new FormControl(''),
       dni: new FormControl('', [Validators.required]),
       phone: new FormControl(''),
     });
@@ -145,13 +160,17 @@ export class UserEditComponent {
     this.form.patchValue({ role: selectedRole === 'ADMIN' ? Role.ADMIN : Role.CLIENT });
   }
 
-  saveChanges() {
+  async saveChanges() {
+    console.log('img', this.imageFile);
     this.id = this.route.snapshot.paramMap.get('id');
 
     if (this.form.invalid) {
+      console.log('invalido')
       this.form.markAsTouched();
       return;
     }
+
+    await this.uploadImage();
 
     // Actualizar `userVista` con los valores del formulario
     const formValues = this.form.getRawValue();
@@ -189,5 +208,70 @@ export class UserEditComponent {
 
   showText(isHovering: boolean) {
     this.isHovering = isHovering;
+  }
+
+
+  // Dispara el clic en el input oculto
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  // Maneja la selección del archivo
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      if (!file.type.startsWith('image/')) {
+        this.dialogConfig.autoFocus = true;
+        this.dialogConfig.maxWidth = '1400px';
+        this.dialogConfig.width = '40%';
+        this.dialogConfig.panelClass = 'custom-dialog';
+        this.dialogConfig.data = { message: 'El archivo seleccionado no es una imagen.' };
+        const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
+        return;
+      }
+
+      const maxSizeInMB = 2;
+      if (file.size / 1024 / 1024 > maxSizeInMB) {
+        
+        this.dialogConfig.data = { message:`La imagen excede el tamaño maximo de ${maxSizeInMB}MB.` };
+        const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.userVista.set({ ...this.userVista(), picture: new URL(reader.result as string) });
+        console.log('Imagen:', reader.result);
+        this.imageFile = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async uploadImage(): Promise<void> {
+    if (this.imageFile) {
+      console.log('entrando a uploadImage');
+      const formData = new FormData();
+      formData.append('file', this.imageFile);
+      formData.append('upload_preset', environment.cloudinary.preset);
+  
+      try {
+        const response: any = await lastValueFrom(this.http.post(environment.cloudinary.api, formData));
+        console.log('Imagen cargada con éxito:', response);
+        this.userVista.set({ ...this.userVista(), picture: new URL(response.secure_url) });
+        console.log('Imagen cargada:', this.userVista().picture);
+      } catch (error) {
+        this.dialogConfig.autoFocus = true;
+        this.dialogConfig.maxWidth = '1400px';
+        this.dialogConfig.width = '40%';
+        this.dialogConfig.panelClass = 'custom-dialog';
+        this.dialogConfig.data = { message: 'Ha habido un error, por favor intentelo mas tarde.' };
+        const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
+        console.error('Error al cargar la imagen:', error);
+      }
+    } else {
+      console.error('No se ha seleccionado ningún archivo.');
+    }
   }
 }

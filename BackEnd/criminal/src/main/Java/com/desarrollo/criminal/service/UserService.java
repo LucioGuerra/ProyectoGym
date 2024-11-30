@@ -55,6 +55,14 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 
+    public ResponseEntity<List<UserResponseDTO>> getUserAdmins() {
+        List<User> admins = userRepository.findByRole(Role.ADMIN);
+        List<UserResponseDTO> adminsDTO = admins.stream()
+                .map(admin -> modelMapper.map(admin, UserResponseDTO.class)).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(adminsDTO);
+    }
+
     public ResponseEntity<List<GetPackageDTO>> getUserHistory(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
@@ -174,60 +182,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<?> getKines() {
-        List<Map<String, Object>> kinesiologosOptions = new ArrayList<>();
-        kinesiologosOptions.add(new HashMap<>(Map.of("id", 1, "name", "Manolo Hernandez", "Dni", "12312345", "email", "kine1@kine1.com", "bodyParts", List.of(1, 2, 3, 8))));
-        kinesiologosOptions.add(new HashMap<>(Map.of("id", 2, "name", "Marcos Ramirez", "Dni", "12312665", "email", "kine2@kine2.com", "bodyParts", List.of(3, 4, 8))));
-        kinesiologosOptions.add(new HashMap<>(Map.of("id", 3, "name", "Castro Sanchez", "Dni", "12992345", "email", "kine3@kine3.com", "bodyParts", List.of(5, 8, 6, 7))));
-
-        List<User> kines = userRepository.findByRole(Role.KINE);
-
-        if (kines.isEmpty()) {
-            kinesiologosOptions.forEach(kine -> {
-                User user = new User();
-                user.setRole(Role.KINE);
-                user.setFirstName(((String) kine.get("name")).split(" ")[0]);
-                user.setLastName(((String) kine.get("name")).split(" ")[1]);
-                user.setDni(kine.get("Dni").toString());
-                user.setEmail((String) kine.get("email"));
-                userRepository.save(user);
-            });
-        } else {
-            for (Map<String, Object> kine : kinesiologosOptions) {
-                String email = (String) kine.get("email");
-                if (userRepository.findByEmail(email).isEmpty()) {
-                    User user = new User();
-                    user.setRole(Role.KINE);
-                    user.setFirstName(((String) kine.get("name")).split(" ")[0]);
-                    user.setLastName(((String) kine.get("name")).split(" ")[1]);
-                    user.setDni(kine.get("Dni").toString());
-                    user.setEmail(email);
-                    userRepository.save(user);
-                }
-            }
-        }
-        kines = userRepository.findByRole(Role.KINE);
-        kines.forEach(kine -> {
-            kinesiologosOptions.forEach(kineMap -> {
-                if (kine.getEmail().equals(kineMap.get("email"))) {
-                    kineMap.put("id", kine.getId());
-                }
-            });
-        });
-
-        return ResponseEntity.status(HttpStatus.OK).body(kinesiologosOptions);
+    public Optional<User> getUserByDni(String dni) {
+        return userRepository.findByDni(dni);
     }
 
-    public ResponseEntity<?> getKineBodyParts() {
-        List<Map<String, Object>> bodyPartOptions = new ArrayList<>();
-        bodyPartOptions.add(Map.of("id", 1, "name", "Cuello"));
-        bodyPartOptions.add(Map.of("id", 2, "name", "Hombros"));
-        bodyPartOptions.add(Map.of("id", 3, "name", "Espalda"));
-        bodyPartOptions.add(Map.of("id", 4, "name", "Cadera"));
-        bodyPartOptions.add(Map.of("id", 5, "name", "Piernas"));
-        bodyPartOptions.add(Map.of("id", 6, "name", "Pies"));
-        bodyPartOptions.add(Map.of("id", 7, "name", "Brazos"));
-        bodyPartOptions.add(Map.of("id", 8, "name", "Manos"));
-        return ResponseEntity.status(HttpStatus.OK).body(bodyPartOptions);
+    public ResponseEntity<UserResponseDTO> getUserEntityByDni(String dni) {
+        User user = this.getUserByDni(dni).orElseThrow(() ->
+                new EntityNotFoundException("User not found with dni: " + dni));
+
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
     }
 }
