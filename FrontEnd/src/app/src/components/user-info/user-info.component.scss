@@ -187,6 +187,55 @@ mat-card-header {
     }
   }
 
+.paquetes {
+  width: 100%;
+  align-items: center;
+  color: #0A0B0B !important;
+
+  mat-card {
+    margin-top: 20px;
+    width: 90%;
+
+    mat-card-header {
+      justify-content: start;
+      padding: 0;
+      margin: 0;
+
+      h2 {
+        margin: 0;
+        font-weight: bold;
+        }
+      }
+
+    mat-card-content {
+      .actividad {
+        justify-content: space-between;
+        display: flex;
+        }
+
+      .actividades {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        }
+      }
+
+    }
+
+  .tarjeta-activa {
+    mat-card {
+      background-color: rgba(208, 208, 208, 0.8);
+      }
+    }
+
+  .tarjeta-inactiva {
+    mat-card {
+      background-color: rgba(208, 208, 208, 0.4);
+      }
+    }
+
+  }
+
 @media (max-width: 1440px) {
   .container {
     margin-top: 150px;

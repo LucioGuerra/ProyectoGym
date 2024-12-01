@@ -37,6 +37,70 @@
               <div class="agenda">
                 <mat-tab-group>
                   <mat-tab>
+                    <ng-template mat-tab-label>Paquetes</ng-template>
+                    <div *ngIf="userPackages().length === 0">
+                      <button mat-list-item>
+                        <div class="no-apointments">
+                          <p>El usuario no posee paquetes todavía</p>
+                        </div>
+                      </button>
+                    </div>
+                    <div class="paquetes">
+                      @for (paquete of userPackages(); track paquete.expirationDate) {
+                        @if (paquete.active) {
+                          <div class="tarjeta-activa">
+                            <mat-card>
+                              <mat-card-header>
+                                <h2 style="color: #0A0B0B !important">Paquete Activo</h2>
+                              </mat-card-header>
+
+                              <mat-divider></mat-divider>
+
+                              <mat-card-content>
+                                <p style="margin-bottom: 0;">Fecha de
+                                  vencimiento: {{ paquete.expirationDate.toLocaleString() }}</p>
+                                <div class="actividad">
+                                  <p style="margin-bottom: 0; font-weight: bold">Actividad</p>
+                                  <p style="margin-bottom: 0; font-style: italic">Créditos restantes</p>
+                                </div>
+                                <div class="actividades">
+                                  @for (activity of paquete.activities; track activity.activityId) {
+                                    <div class="actividad">
+                                      <p>{{ activity.name }}</p>
+                                      <p>{{ activity.quantity }}</p>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                  }
+                                </div>
+
+                              </mat-card-content>
+                            </mat-card>
+                          </div>
+                        } @else {
+                          <div class="tarjeta-inactiva">
+                            <mat-card>
+                              <mat-card-header>
+                                <h2 style="font-weight: bold !important;color: #0A0B0B !important">Paquete
+                                  Vencido</h2>
+                              </mat-card-header>
+
+                              <mat-divider></mat-divider>
+
+                              <mat-card-content>
+                                <p>Fecha de vencimiento: {{ paquete.expirationDate }}</p>
+                                <p>Actividades:</p>
+                                @for (activity of paquete.activities; track activity.activityId) {
+                                  <p>{{ activity.name }}</p>
+                                  <p>{{ activity.quantity }}</p>
+                                }
+                              </mat-card-content>
+                            </mat-card>
+                          </div>
+                        }
+                      }
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
                     <ng-template mat-tab-label>Turnos</ng-template>
                     <div class="iterables">
                       <div class="appointments">
@@ -140,35 +204,6 @@
                         </div>
                       </div>
                     </div>
-                  </mat-tab>
-                  <mat-tab>
-                    <ng-template mat-tab-label>Paquetes</ng-template>
-                    <mat-action-list>
-                      <div class="iterables">
-                        <div class="appointments">
-                          <div class="scrollable">
-                            <div *ngIf="userPackages().length === 0">
-                              <button mat-list-item>
-                                <div class="no-apointments">
-                                  <p>El usuario no posee paquetes todavía</p>
-                                </div>
-                              </button>
-                            </div>
-                            @for (paquete of userPackages(); track paquete.expirationDate) {
-                              <div class="tarjeta">
-                                <mat-card>
-                                  <p>Fecha de vencimiento: {{ paquete.expirationDate }}</p>
-                                  <p>Actividades:</p>
-                                  @for (activity of paquete.activities; track activity.activityId) {
-                                    <p>{{ activity.activityId }}</p>
-                                  }
-                                </mat-card>
-                              </div>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    </mat-action-list>
                   </mat-tab>
                 </mat-tab-group>
               </div>

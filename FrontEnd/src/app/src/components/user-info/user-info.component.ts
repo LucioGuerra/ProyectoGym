@@ -24,6 +24,7 @@ import {MatActionList, MatListItem} from "@angular/material/list";
 import {AuthService} from "../services/services";
 import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {NgIf} from "@angular/common";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-user-info',
@@ -47,6 +48,7 @@ import {NgIf} from "@angular/common";
     MatTabGroup,
     MatTabLabel,
     NgIf,
+    MatDivider,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -68,7 +70,6 @@ export class UserInfoComponent {
   userAppointments = signal<Appointment[]>([]);
   userPackages = signal<Package[]>([]);
   streak = signal<number>(0);
-  protected readonly Symbol = Symbol;
 
   constructor(
     private userService: UserService,
@@ -95,7 +96,7 @@ export class UserInfoComponent {
             console.error('Error fetching user streak');
           }
         });
-        
+
         this.userService.getUserAppointments(String(userId)).subscribe({
           next: (appointments) => {
             this.userAppointments.set(appointments);
@@ -105,13 +106,14 @@ export class UserInfoComponent {
         });
 
         this.userService.getUserHistory(userId).subscribe({
-          next: (packages) => {
+          next: (packages: Package[]) => {
             this.userPackages.set(packages);
             console.log('User packages: ', this.userPackages());
           }, error: (error) => {
             console.error('User not found');
           }
         });
+
       }, error: (error) => {
         console.error('User not found');
       }
