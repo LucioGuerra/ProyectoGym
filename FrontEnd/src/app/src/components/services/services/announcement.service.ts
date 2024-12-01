@@ -77,4 +77,8 @@ export class AnnouncementService {
     return announcements
     /*return this.http.get<Announcement[]>(this.apiUrl);*/
   }
+
+  deleteAnnouncement(id: number) {
+
+  }
 }
