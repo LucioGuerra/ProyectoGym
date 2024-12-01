@@ -1,8 +1,89 @@
 @use "../../../../variables.scss";
 
-p {
-  align-self: center;
-  justify-self: center;
+mat-action-list {
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+
+  button {
+    height: auto;
+    }
+
+  .no-apointments {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1rem;
+    color: variables.$white-color;
+    font-weight: 500;
+    }
+
+  ::ng-deep .appointment-table {
+    background-color: variables.$grey-color !important;
+    border-radius: 10px;
+    overflow: hidden;
+
+    ::ng-deep .mat-column-date {
+      width: 20%;
+      height: 80px;
+      }
+
+    ::ng-deep .mat-column-activity {
+      justify-items: right;
+      width: 7%;
+      padding-right: 10px !important;
+      padding-left: 0 !important;
+      }
+
+    .appointment-title {
+      margin: 10px 0 0 10px;
+      color: variables.$white-color;
+      width: fit-content;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      text-align: start;
+      font-weight: 500;
+
+      .date {
+        width: fit-content;
+        margin: 0;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.1rem;
+        }
+
+      .time {
+        width: fit-content;
+        margin: -5px 0 0 0;
+        font-size: 0.9rem;
+        color: variables.$white-color;
+        opacity: 0.6;
+        }
+      }
+    }
+
+
+  .card-container {
+    width: 175px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .apointment-activity-card {
+      padding: 0 0;
+      margin: 10px 0 10px 20px;
+      background-color: transparent;
+      border-color: variables.$white-color;
+      color: variables.$white-color;
+      border-radius: 10px;
+      }
+    }
   }
 
 #contenedora {
@@ -282,52 +363,6 @@ mat-card-header {
     .appointments,
     .packages {
       width: 100%;
-      }
-    }
-  }
-
-::ng-deep .appointment-table {
-  background-color: variables.$grey-color !important;
-  border-radius: 10px;
-  overflow: hidden;
-
-  ::ng-deep .mat-column-date {
-    width: 20%;
-    height: 80px;
-    }
-
-  ::ng-deep .mat-column-activity {
-    justify-items: right;
-    width: 7%;
-    padding-right: 10px !important;
-    padding-left: 0 !important;
-    }
-
-  .appointment-title {
-    margin: 10px 0 0 10px;
-    color: variables.$white-color;
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    text-align: start;
-    font-weight: 500;
-
-    .date {
-      width: fit-content;
-      margin: 0;
-      white-space: normal;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 1.1rem;
-      }
-
-    .time {
-      width: fit-content;
-      margin: -5px 0 0 0;
-      font-size: 0.9rem;
-      color: variables.$white-color;
-      opacity: 0.6;
       }
     }
   }

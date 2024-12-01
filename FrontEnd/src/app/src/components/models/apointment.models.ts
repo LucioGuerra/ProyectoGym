@@ -1,13 +1,13 @@
 export interface Appointment {
-    id: number,
-    date: Date,
-    startTime: string,
-    endTime: string,
-    activity: string,
-    max_capacity: number,
-    participantsCount: number,
-    participants?: AppointmentUser[],
-    instructor?: string,
+  id: number,
+  date: Date,
+  startTime: string,
+  endTime: string,
+  activity: string,
+  max_capacity: number,
+  participantsCount: number,
+  participants?: AppointmentUser[],
+  instructor?: string,
 }
 
 export interface AppointmentUser {
@@ -16,10 +16,6 @@ export interface AppointmentUser {
   lastName: string,
   attendance: boolean,
   picture: string,
-}
-
-export interface AppointmentList {
-    appointments: Appointment[];
 }
 
 export interface Instructor {

@@ -46,7 +46,7 @@ import {NgIf} from "@angular/common";
     MatTab,
     MatTabGroup,
     MatTabLabel,
-    NgIf
+    NgIf,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -116,7 +116,7 @@ export class UserInfoComponent {
     });
   }
 
-  editUser(id: number) {
+  editUser() {
     this.router.navigate(['/edit']);
   }
 }

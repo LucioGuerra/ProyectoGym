@@ -3,6 +3,7 @@ export interface Package {
   description: string,
   userId: number,
   activities: ActivityPackage[],
+  expirationDate: Date;
 }
 
 export interface ActivityPackage {
