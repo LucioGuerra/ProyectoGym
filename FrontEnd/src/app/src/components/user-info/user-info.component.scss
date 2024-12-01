@@ -329,7 +329,7 @@ mat-card-header {
     }
   }
 
-@media (max-width: 750px) {
+@media (max-width: 820px) {
   .container {
     width: 100%;
     }
@@ -344,6 +344,20 @@ mat-card-header {
 
     .name {
       font-size: 2rem;
+      }
+    }
+
+  .streak {
+    grid-area: streak;
+    display: flex;
+    flex-direction: column;
+    height: 85% !important;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+
+    mat-card {
+      align-self: flex-end;
+      margin-left: -10px;
       }
     }
 
