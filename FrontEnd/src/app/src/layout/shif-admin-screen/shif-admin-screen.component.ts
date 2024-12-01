@@ -155,8 +155,8 @@ export class ShifAdminScreenComponent implements OnInit {
     this.router.navigate(['/package/create'])
   }
 
-  newSale($event: MouseEvent) {
-    alert('new sale');
+  newAnnouncement($event: MouseEvent) {
+    this.router.navigate(['/admin/announcements/create'])
   }
 
   shop($event: MouseEvent) {

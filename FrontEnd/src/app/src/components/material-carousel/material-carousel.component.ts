@@ -25,7 +25,20 @@ export class MaterialCarouselComponent {
   constructor(private announcementService: AnnouncementService, private dialog: MatDialog) {}
 
   ngOnInit() {
-    this.announcements = this.announcementService.getAnnouncements();
+    this.announcementService.getAnnouncements().subscribe({
+      next: (announcements: any) => {
+        this.announcements = announcements.map((announcement: any) => ({
+          ...announcement,
+          date: new Date(announcement.date).toLocaleDateString('es-AR')
+        }));
+      },
+      error: (error: any) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('Request completed');
+      }
+    });
   }
 
   prevSlide() {
@@ -46,9 +59,7 @@ export class MaterialCarouselComponent {
   public open(announcement: Announcement) {
     this.dialog.open(AnnouncementDialogComponent, {
       data: {
-        title: announcement.title,
-        body: announcement.body,
-        date: announcement.date
+        announcementId: announcement.id
       },
       disableClose: true
     })
