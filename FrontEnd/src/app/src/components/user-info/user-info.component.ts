@@ -86,6 +86,7 @@ export class UserInfoComponent {
       next: (userModel) => {
         this.userModel.set(userModel);
         const userId = userModel.id ?? 0;
+
         this.userService.getStreak(String(userId)).subscribe({
           next: (streak) => {
             this.streak.set(streak);
@@ -94,7 +95,7 @@ export class UserInfoComponent {
             console.error('Error fetching user streak');
           }
         });
-        console.log('User streak: ', this.streak());
+        
         this.userService.getUserAppointments(String(userId)).subscribe({
           next: (appointments) => {
             this.userAppointments.set(appointments);
@@ -106,6 +107,7 @@ export class UserInfoComponent {
         this.userService.getUserHistory(userId).subscribe({
           next: (packages) => {
             this.userPackages.set(packages);
+            console.log('User packages: ', this.userPackages());
           }, error: (error) => {
             console.error('User not found');
           }

@@ -69,11 +69,11 @@ export class UserService {
   }
 
   getUserActivePackages(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
+    return this.http.get(`${this.apiUrl}/package/${id}`);
   }
 
   getUserHistory(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/public/users/history/${id}`);
+    return this.http.get(`${this.apiUrl}/history/${id}`);
   }
 
   getKinesioUsers(): Observable<KineModel[]> {
