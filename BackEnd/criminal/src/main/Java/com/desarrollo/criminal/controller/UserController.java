@@ -72,16 +72,6 @@ public class UserController {
         return userService.updateUser(id, userUpdateDTO);
     }
 
-    @GetMapping("/kine")
-    public ResponseEntity<?> getKines(){
-        return userService.getKines();
-    }
-
-    @GetMapping("/kine/body-parts")
-    public ResponseEntity<?> getKineBodyParts(){
-        return userService.getKineBodyParts();
-    }
-
     @GetMapping("/streak/{id}")
     public ResponseEntity<Integer> getStreak(@PathVariable Long id){
         return userService.getStreak(id);

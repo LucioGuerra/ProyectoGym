@@ -63,10 +63,12 @@ export class UserInfoComponent {
     role: Role.CLIENT,
     phone: '',
     dni: '',
-    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg')
   });
   userAppointments = signal<Appointment[]>([]);
   userPackages = signal<Package[]>([]);
+  streak = signal<number>(0);
+  protected readonly Symbol = Symbol;
 
   constructor(
     private userService: UserService,
@@ -83,9 +85,17 @@ export class UserInfoComponent {
     this.userService.getUserByEmail(String(this.user().email)).subscribe({
       next: (userModel) => {
         this.userModel.set(userModel);
-
-        const userId = this.userModel().id ?? 0;
-        this.userService.getUserAppointments(userId).subscribe({
+        const userId = userModel.id ?? 0;
+        this.userService.getStreak(String(userId)).subscribe({
+          next: (streak) => {
+            this.streak.set(streak);
+          },
+          error: (error) => {
+            console.error('Error fetching user streak');
+          }
+        });
+        console.log('User streak: ', this.streak());
+        this.userService.getUserAppointments(String(userId)).subscribe({
           next: (appointments) => {
             this.userAppointments.set(appointments);
           }, error: (error) => {

@@ -1,4 +1,4 @@
-import { BodyPart, KineModel } from './../../models/userModel.models';
+import {BodyPart, KineModel} from './../../models/userModel.models';
 import {Injectable} from '@angular/core';
 import {environment} from '../../../../../index';
 
@@ -18,8 +18,8 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  getStreak(id: string): Observable<UserModel> {
-    return this.http.get<UserModel>(`${this.apiUrl}/streak/${id}`);
+  getStreak(id: string): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/streak/${id}`);
   }
 
   getUserById(id: string): Observable<UserModel> {

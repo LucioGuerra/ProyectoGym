@@ -17,10 +17,15 @@
           </div>
 
           <div class="streak">
-            <!-- Acá después se agrega un if en base a las asistencias -->
-            <mat-card>
-              <div class="text">Meses activo: 22 🔥</div>
-            </mat-card>
+            @if (streak() === 0) {
+              <mat-card>
+                <div class="text">Racha de presentes: 0 😭</div>
+              </mat-card>
+            } @else {
+              <mat-card>
+                <div class="text">Racha de presentes: {{ streak.toString().split(" ")[1].replace(']', '') }}🔥</div>
+              </mat-card>
+            }
           </div>
         </mat-card-header>
 
