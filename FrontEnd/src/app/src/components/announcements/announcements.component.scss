@@ -1,10 +1,12 @@
-app-drawer {
-    background-color: transparent;
-}
+@use "../../../../variables.scss";
 
-ng-container {
-    background-color: transparent;
-}
+.main-content__title {
+    margin: 0;
+    color: variables.$white-color;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: start;
+  }
 
 #container {
     display: flex;
@@ -15,21 +17,44 @@ ng-container {
     align-content: center;
 }
 
+::ng-deep .mat-mdc-card-header-text {
+    width: fit-content !important;
+}
+
 mat-card-subtitle {
-    color: rgba(255, 255, 255, 0.13);
+    color: variables.$white-color;
     font-style: italic;
+    width: fit-content;
     margin-bottom: 5px;
 }
 
 .fila {
     flex-direction: row;
+    display: flex;
+    align-items: center;
+}
+
+.header {
     width: 100%;
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add {
+    margin-right: 10px;
+}
+
+.threedotbutton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
 }
 
 .columna {
     flex-direction: column;
-    width: 100%;
     display: flex;
 }
 
@@ -53,21 +78,25 @@ mat-card-subtitle {
     }
 }
 
+mat-action-list {
+    display: grid;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
 .hija {
     border-radius: 20px;
     border: 0.001px solid rgb(18, 18, 18);
     padding: 20px;
     width: 100%;
+    min-width: 900px;
     background-color: #0c0d0ffc;
     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
-    margin: 30px auto;
     color: white;
 
     mat-card-title {
         font-size: 36px;
         display: flex;
-        margin-right: 2.5%;
-        width: 70%;
     }
 }
 
@@ -83,44 +112,14 @@ mat-divider {
     width: 100%;
 }
 
-#boton {
-    display: flex;
-    color: #0a0a0a;
-    flex-direction: column;
-    margin-bottom: 20px;
-    margin-top: -35px;
+@media(max-width: 1000px) {
+    .hija {
+        min-width: 600px;
+    }
 }
 
-.derecha{
-    display: flex;
-    justify-content: right;
-    width: 25%;
-}
-
-button {
-    font-size: 20px;
-    height: 40px;
-    margin-bottom: 5px;
-    width: 130px;
-    text-align: center;
-    border-radius: 10px;
-}
-
-.update {
-    background-color: rgb(255, 187, 0);
-}
-
-.delete:hover {
-    background-color: rgba(228, 42, 42, 0.795);
-}
-
-.delete {
-    background-color: #580000;
-    color: white;
-    cursor: pointer;
-}
-
-.update:hover {
-    background-color: #ffdb3a;
-    cursor: pointer;
+@media (max-width: 650px) {
+    .hija {
+        min-width: 300px;
+    }
 }

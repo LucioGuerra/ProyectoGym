@@ -7,36 +7,37 @@ import { MatActionList } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
-
-interface Announcement {
-  id: any;
-  title: string;
-  description: string;
-  date: string;
-}
+import { Announcement } from '../models';
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { AnnouncementDialogComponent } from '../announcement-dialog/announcement-dialog.component';
 
 @Component({
   selector: 'app-announcements',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatDivider, MatActionList, DrawerComponent],
+  imports: [MatCardModule, MatButtonModule, MatActionList, MainScreenComponent, MatMenuModule, MatIconModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './announcements.component.html',
   styleUrl: './announcements.component.scss'
 })
 export class AnnouncementsComponent {
-  announcements: any[] = [];
 
-  constructor(private announcementService: AnnouncementService, private router: Router) { }
+  announcements: Announcement[] = [];
+
+  constructor(private announcementService: AnnouncementService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.announcements = this.announcementService.getAnnouncements();
-    /*this.announcementService.getAnnouncements().subscribe({
+    this.loadAnnouncements();
+  }
+
+  loadAnnouncements() {
+    this.announcementService.getAnnouncements().subscribe({
       next: (announcements: any) => {
-        this.announcements = announcements.map((announcements: any) => ({
-          id: announcements.id,
-          title: announcements.title,
-          description: announcements.description,
-          date: new Date(announcements.date).toLocaleDateString('es-AR')
+        this.announcements = announcements.map((announcement: any) => ({
+          ...announcement,
+          date: new Date(announcement.date)
         }));
       },
       error: (error: any) => {
@@ -45,18 +46,39 @@ export class AnnouncementsComponent {
       complete: () => {
         console.log('Request completed');
       }
-    });*/
+    });
   }
 
-  deleteAnnouncement(id: number) {
-    /*this.announcementService.deleteAnnouncement(id).subscribe(() => {
-      this.announcements = this.announcements.filter(
-        (announcement: any) => announcement.id !== id
-      );
-    });*/
+  openAnnouncement(id: any, $event: MouseEvent) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.dialog.open(AnnouncementDialogComponent, {data: {dialogId: id}});
   }
 
-  updateAnnouncement(id: any) {
-    this.router.navigate(['/update-announcement', id]);
+  deleteAnnouncement(id: number, $event: MouseEvent) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.announcementService.deleteAnnouncement(id).subscribe(() => {
+      this.loadAnnouncements();
+    });
+  }
+
+  updateAnnouncement(id: any, $event: MouseEvent) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.router.navigate(['/admin/announcements/edit', id]);
+  }
+
+  openMenu($event: MouseEvent) {
+    $event.stopPropagation();
+    $event.preventDefault();
+  }
+
+  volver() {
+    window.history.back();
+  }
+
+  create() {
+    this.router.navigate(['/admin/announcements/create']);
   }
 }
