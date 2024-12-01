@@ -1,0 +1,126 @@
+app-drawer {
+    background-color: transparent;
+}
+
+ng-container {
+    background-color: transparent;
+}
+
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin: 0 auto;
+    align-content: center;
+}
+
+mat-card-subtitle {
+    color: rgba(255, 255, 255, 0.13);
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.fila {
+    flex-direction: row;
+    width: 100%;
+    display: flex;
+}
+
+.columna {
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+}
+
+.padre {
+    border-radius: 20px;
+    border: 0.001px solid rgb(18, 18, 18);
+    padding: 40px;
+    width: 60%;
+    min-width: 650px;
+    height: auto;
+    background-color: #252525e7;
+    box-shadow: 5px 5prgba(37, 37, 37, 0.76) rgba(0, 0, 0, 0.2);
+    margin: 100px auto;
+
+    .principal {
+        font-size: 50px;
+        color: white;
+        font-weight: bold;
+        margin-bottom: 10px;
+        padding: 20px;
+    }
+}
+
+.hija {
+    border-radius: 20px;
+    border: 0.001px solid rgb(18, 18, 18);
+    padding: 20px;
+    width: 100%;
+    background-color: #0c0d0ffc;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+    margin: 30px auto;
+    color: white;
+
+    mat-card-title {
+        font-size: 36px;
+        display: flex;
+        margin-right: 2.5%;
+        width: 70%;
+    }
+}
+
+.no-announcements {
+    margin-top: 40px;
+    transform: translate(35%, 0);
+    font-style: italic;
+    color: white;
+}
+
+mat-divider {
+    color: white;
+    width: 100%;
+}
+
+#boton {
+    display: flex;
+    color: #0a0a0a;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-top: -35px;
+}
+
+.derecha{
+    display: flex;
+    justify-content: right;
+    width: 25%;
+}
+
+button {
+    font-size: 20px;
+    height: 40px;
+    margin-bottom: 5px;
+    width: 130px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.update {
+    background-color: rgb(255, 187, 0);
+}
+
+.delete:hover {
+    background-color: rgba(228, 42, 42, 0.795);
+}
+
+.delete {
+    background-color: #580000;
+    color: white;
+    cursor: pointer;
+}
+
+.update:hover {
+    background-color: #ffdb3a;
+    cursor: pointer;
+}
