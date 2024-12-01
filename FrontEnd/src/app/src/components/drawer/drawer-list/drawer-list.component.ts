@@ -16,6 +16,7 @@ export class DrawerListComponent {
     {id: 1, name: 'Agenda', icon: 'calendar_today', link: '/admin/agenda'},
     {id: 2, name: 'Users', icon: 'people', link: '/admin/users'},
     {id: 4, name: 'Ecomerce', icon: 'shopping_cart', link: '/admin/ecommerce'},
+    {id: 5, name: 'Announcements', icon: 'announcement', link: '/admin/announcements'},
   ];
 
   constructor(private router: Router) {
