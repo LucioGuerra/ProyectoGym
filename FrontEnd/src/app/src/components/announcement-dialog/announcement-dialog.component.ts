@@ -29,14 +29,14 @@ export class AnnouncementDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AnnouncementDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { dialogId: number },
+    @Inject(MAT_DIALOG_DATA) public data: { announcementId: number },
     private announcementService: AnnouncementService,
   ) {
     this.loadAnnouncement();
   }
 
   private loadAnnouncement() {
-    this.announcementService.getAnnouncementById(this.data.dialogId).subscribe({
+    this.announcementService.getAnnouncementById(this.data.announcementId).subscribe({
       next: (announcement: Announcement) => {
         this.announcement = {
           ...announcement,

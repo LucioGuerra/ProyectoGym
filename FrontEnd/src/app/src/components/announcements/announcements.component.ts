@@ -52,7 +52,7 @@ export class AnnouncementsComponent {
   openAnnouncement(id: any, $event: MouseEvent) {
     $event.stopPropagation();
     $event.preventDefault();
-    this.dialog.open(AnnouncementDialogComponent, {data: {dialogId: id}});
+    this.dialog.open(AnnouncementDialogComponent, {data: {announcementId: id}});
   }
 
   deleteAnnouncement(id: number, $event: MouseEvent) {
