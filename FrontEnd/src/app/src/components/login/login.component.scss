@@ -1,8 +1,23 @@
 @use "../../../../variables.scss";
 
-.container {
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  backdrop-filter: blur(10px);
+  background-image: url("/assets/background.png");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  overflow: auto;
+  }
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-  overflow-y: hidden;
+  overflow: hidden;
   }
 
 .centered-card {

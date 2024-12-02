@@ -17,7 +17,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden; // Evita el desbordamiento
+  overflow: hidden;
   }
 
 .error {
@@ -152,7 +152,7 @@ button {
 
 .password-errors {
   position: absolute;
-  color: rgb(255, 32, 32);
+  color: rgb(255, 167, 167);
   left: calc(100% + 10px);
   background-color: rgba(0, 0, 0, 0.872);
   border: 1px solid rgb(255, 0, 1);
