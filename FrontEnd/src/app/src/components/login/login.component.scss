@@ -1,11 +1,15 @@
 @use "../../../../variables.scss";
 
+.container {
+  height: 100vh;
+  overflow-y: hidden;
+  }
+
 .centered-card {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 170px;
-  margin-bottom: 40px;
   }
 
 mat-card-content {
@@ -22,10 +26,11 @@ mat-card-content {
   justify-content: center;
   height: fit-content;
   width: fit-content;
-  border: 0.001px solid rgb(18, 18, 18);
 
+  border: 0.001px solid rgb(18, 18, 18);
   background-color: rgba(0, 0, 0, 0.872);
   box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+
   border-radius: 20px;
   padding: 40px;
 
@@ -107,21 +112,25 @@ mat-card-content {
   justify-content: space-between;
   }
 
+mat-card-header {
+  justify-items: center;
+  width: 100%;
+  }
+
 .titulo {
-  font-size: 30px;
+  font-size: 45px;
   font-weight: bold;
-  margin-top: 0px;
-  margin-left: 25px;
-  margin-bottom: 20px;
+  margin-top: 0;
+  margin-bottom: 30px;
   }
 
 #signup {
-  width: 205px;
+  width: 225px;
   margin-top: 20px;
   }
 
 #login {
-  width: 205px;
+  width: 225px;
   margin-top: 20px;
   }
 
@@ -131,9 +140,6 @@ mat-card-content {
   border: #B9A552 2px solid;
   }
 
-mat-card-header {
-  justify-items: center;
-  }
 
 .example-form {
   width: 100%;
@@ -182,7 +188,7 @@ button {
 
 @media (height<=768px) {
   .centered-card {
-    margin-top: 80px;
+    margin-top: 100px;
     }
   }
 

@@ -1,10 +1,11 @@
-<app-drawer>
+<app-toolbar></app-toolbar>
+<div class="container">
   <ng-container main-content>
     <div class="centered-card">
       <div class="main-container">
         <div class="main-content">
           <mat-card-header>
-            <p class="titulo">Log In to your Account</p>
+            <p class="titulo">Iniciar sesión</p>
           </mat-card-header>
 
           <mat-card-content>
@@ -13,14 +14,14 @@
                 <mat-label>Email</mat-label>
                 <input [errorStateMatcher]="matcher" formControlName="email" matInput placeholder="Ex. pat@example.com"
                        required type="email">
-                @if ("formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')") {
+                @if (formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')) {
                   <mat-error>
-                    Please enter a valid email address
+                    Por favor, ingrese un Email válido
                   </mat-error>
                 }
-                @if ("formGroup.get('email')?.hasError('required')") {
+                @if (formGroup.get('email')?.hasError('required')) {
                   <mat-error>
-                    Email is <strong>required</strong>
+                    Su email es <strong>requerido</strong>
                   </mat-error>
                 }
               </mat-form-field>
@@ -31,27 +32,27 @@
                        placeholder="Enter your password" required>
               </mat-form-field>
               <div id="olvidaste">
-                <section (click)="forgot()" class="forgot">Forgot password?</section>
+                <section (click)="forgot()" class="forgot">¿Olvidaste tu contraseña?</section>
               </div>
               <div class="botones">
 
                 <button (click)="onLogin()" id="login" mat-flat-button type="submit">
-                  Log In
+                  Iniciar sesión
                 </button>
 
                 <button (click)="signup()" id="signup" mat-raised-button>
-                  Sign Up
+                  Registrarse
                 </button>
 
               </div>
 
               <button (click)="volver()" id="volver" mat-stroked-button>
-                Go Back
+                Volver
               </button>
 
               <div class="opciones">
                 <mat-divider></mat-divider>
-                <p>or log in with</p>
+                <p> o iniciá sesión con </p>
                 <mat-divider></mat-divider>
               </div>
 
@@ -74,4 +75,4 @@
       </div>
     </div>
   </ng-container>
-</app-drawer>
+</div>
