@@ -1,135 +1,137 @@
 <app-toolbar/>
 
 <div class="contenedor">
-    <mat-card appearance="outlined">
+  <mat-card appearance="outlined">
 
-      <mat-card-header>
-        <p class="titulo">Create Account</p>
-      </mat-card-header>
+    <mat-card-header>
+      <p class="titulo">Crear cuenta</p>
+    </mat-card-header>
 
-      <mat-card-content>
-        <form [formGroup]="formGroup">
-          <mat-form-field class="example-full-width">
-            <mat-label id="email">Email</mat-label>
-            <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
-              placeholder="Ex. pat@example.com">
-            @if (formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched) {
+    <mat-card-content>
+      <form [formGroup]="formGroup">
+        <mat-form-field class="example-full-width">
+          <mat-label id="email">Email</mat-label>
+          <input [errorStateMatcher]="matcher" formControlName="email" matInput placeholder="Ej. nombre@example.com"
+                 type="email">
+          @if (formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched) {
             <mat-error>
-              Please enter a valid email address
+              Por favor, ingrese un Email válido
             </mat-error>
-            }
-            @if (formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched) {
+          }
+          @if (formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched) {
             <mat-error>
-              Tu email es <b>necesario</b> para que inicies sesion
+              Tu email es <b>necesario</b> para que puedas registrarte
             </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="inputs">
+          <mat-form-field class="compartidos">
+            <mat-label id="firstName">Nombre</mat-label>
+            <input formControlName="firstName" matInput placeholder="Ingresá tu nombre" required>
+            @if (formGroup.get('firstName')?.hasError('required') && formGroup.get('firstName')?.touched) {
+              <mat-error>
+                Es necesario para identificarte
+              </mat-error>
             }
           </mat-form-field>
 
-          <div class="inputs">
-            <mat-form-field class="compartidos">
-              <mat-label id="firstName">First Name</mat-label>
-                <input id="firstName" matInput formControlName="firstName" placeholder="Enter your first name" required>
-                @if (formGroup.get('firstName')?.hasError('required') && formGroup.get('firstName')?.touched) {
-                  <mat-error>
-                    Es necesario para identificarte
-                  </mat-error>
-                  }
-            </mat-form-field>
-
-            <mat-form-field class="compartidos">
-              <mat-label id="lastName">Last Name</mat-label>
-                <input id="lastName" matInput formControlName="lastName" placeholder="Enter your last name" required>
-                @if (formGroup.get('lastName')?.hasError('required') && formGroup.get('lastName')?.touched) {
-                  <mat-error>
-                    Es necesario para identificarte
-                  </mat-error>
-                  }
-            </mat-form-field>
-          </div>
-
-          <mat-form-field class="example-full-width">
-            <mat-label id="dni">DNI</mat-label>
-            <input id="dni" matInput formControlName="dni" placeholder="Enter your DNI" required>
-            @if (formGroup.get('dni')?.hasError('required') && formGroup.get('dni')?.touched) {
+          <mat-form-field class="compartidos">
+            <mat-label id="lastName">Apellido</mat-label>
+            <input formControlName="lastName" matInput placeholder="Ingresá tu apellido" required>
+            @if (formGroup.get('lastName')?.hasError('required') && formGroup.get('lastName')?.touched) {
               <mat-error>
-                Necesitamos tu DNI para verificar tu identidad
+                Es necesario para identificarte
               </mat-error>
-              }
-            @if(formGroup.get('dni')?.hasError('pattern')) {
-              <mat-error>
-                Tu dni no puede contener letras o simbolos
-              </mat-error>
-              }
-            @if (formGroup.get('dni')?.hasError("minlength")) {
-              <mat-error>
-                Tu dni debe tener 8 digitos
-              </mat-error>
-              }
-            @if (formGroup.get('dni')?.hasError('maxlength')) {
-              <mat-error>
-                Tu dni debe tener 8 digitos
-              </mat-error>
-              }
-          </mat-form-field>
-
-          
-          <mat-form-field class="example-full-width">
-            <mat-label id="password">Password</mat-label>
-            <input id="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'"
-              placeholder="Enter your password">
-              <button mat-icon-button matSuffix (click)="hide = !hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </mat-form-field>
-            @if (formGroup.get('password')?.touched && formGroup.get('password')?.errors) {
-              <div class="password-errors">
-                <ul>
-                  @if (formGroup.get('password')?.hasError('required')) {
-                    <li>Tu contraseña es necesaria para que inicies sesion</li>
-                  }
-                  @if (formGroup.get('password')?.hasError('minlength')) {
-                    <li>La contraseña debe tener mas de 8 caracteres.</li>
-                  }
-                  @if (formGroup.get('password')?.hasError('hasUpperCase')) {
-                    <li>La contraseña debe incluir mayúsculas.</li>
-                  }
-                  @if (formGroup.get('password')?.hasError('hasLowerCase')) {
-                    <li>La contraseña debe incluir minúsculas.</li>
-                  }
-                  @if (formGroup.get('password')?.hasError('hasNumeric')) {
-                    <li>La contraseña debe incluir números.</li>
-                  }
-                  @if (formGroup.get('password')?.hasError('hasSpecial')) {
-                    <li>La contraseña debe incluir caracteres especiales.</li>
-                  }
-                </ul>
-              </div>
             }
-          
-
-          <mat-form-field class="example-full-width">
-            <mat-label id="password">Repeat password</mat-label>
-            <input id="repassword" matInput formControlName="repassword" [type]="hide ? 'password' : 'text'"
-              placeholder="Repeat your password">
-            @if (formGroup.get('repassword')?.errors?.['mismatch'] && formGroup.get('repassword')?.touched) {
-              <mat-error>
-                Tus contraseñas no coinciden
-              </mat-error>
-              }
           </mat-form-field>
+        </div>
 
-          <button type="submit" id="singup" (click)="signup()" mat-stroked-button>
-            Create Account
+        <mat-form-field class="example-full-width">
+          <mat-label id="dni">DNI</mat-label>
+          <input formControlName="dni" matInput placeholder="Ingresá tu DNI" required>
+          @if (formGroup.get('dni')?.hasError('required') && formGroup.get('dni')?.touched) {
+            <mat-error>
+              Necesitamos tu DNI para verificar tu identidad
+            </mat-error>
+          }
+          @if (formGroup.get('dni')?.hasError('pattern')) {
+            <mat-error>
+              Tu DNI no puede contener letras o simbolos
+            </mat-error>
+          }
+          @if (formGroup.get('dni')?.hasError("minlength")) {
+            <mat-error>
+              Tu DNI debe tener 8 digitos
+            </mat-error>
+          }
+          @if (formGroup.get('dni')?.hasError('maxlength')) {
+            <mat-error>
+              Tu DNI debe tener 8 digitos
+            </mat-error>
+          }
+        </mat-form-field>
+
+
+        <mat-form-field class="example-full-width">
+          <mat-label id="password">Contraseña</mat-label>
+          <input [type]="hide ? 'password' : 'text'" formControlName="password" matInput
+                 placeholder="Ingresá tu contraseña">
+          <button (click)="hide = !hide" mat-icon-button matSuffix>
+            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
+        </mat-form-field>
+        @if (formGroup.get('password')?.touched && formGroup.get('password')?.errors) {
+          <div class="password-errors">
+            <ul>
+              @if (formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched) {
+                <mat-error style="margin-top: -10px; margin-left: -20px">Tu contraseña es necesaria para que inicies
+                  sesion
+                </mat-error>
+              }
+              @if (formGroup.get('password')?.hasError('minlength')) {
+                <li>La contraseña debe tener mas de 8 caracteres.</li>
+              }
+              @if (formGroup.get('password')?.hasError('hasUpperCase')) {
+                <li>La contraseña debe incluir mayúsculas.</li>
+              }
+              @if (formGroup.get('password')?.hasError('hasLowerCase')) {
+                <li>La contraseña debe incluir minúsculas.</li>
+              }
+              @if (formGroup.get('password')?.hasError('hasNumeric')) {
+                <li>La contraseña debe incluir números.</li>
+              }
+              @if (formGroup.get('password')?.hasError('hasSpecial')) {
+                <li>La contraseña debe incluir caracteres especiales.</li>
+              }
+            </ul>
+          </div>
+        }
 
-          <section >
-            <div class="icon-text-container">
-              <mat-icon style="font-size: 16px; width: 16px; height: 16px;" fontIcon="arrow_back_ios"></mat-icon>
-              <span (click)="volver()">Back to Log In</span>
-            </div>
-          </section>
 
-        </form>
-      </mat-card-content>
-    </mat-card>
+        <mat-form-field class="example-full-width">
+          <mat-label>Repetir contraseña</mat-label>
+          <input [type]="hide ? 'password' : 'text'" formControlName="repassword" id="repassword" matInput
+                 placeholder="Repetí tu contraseña">
+          @if (formGroup.get('repassword')?.errors?.['mismatch'] && formGroup.get('repassword')?.touched) {
+            <mat-error>
+              Tus contraseñas no coinciden
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <button (click)="signup()" id="singup" mat-stroked-button type="submit">
+          Crear cuenta
+        </button>
+
+        <section>
+          <div class="icon-text-container">
+            <mat-icon fontIcon="arrow_back_ios" style="font-size: 16px; width: 16px; height: 16px;"></mat-icon>
+            <span (click)="volver()">Volver a iniciar sesión</span>
+          </div>
+        </section>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
