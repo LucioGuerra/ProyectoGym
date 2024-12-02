@@ -72,4 +72,8 @@ public class UserController {
         return userService.updateUser(id, userUpdateDTO);
     }
 
+    @GetMapping("/streak/{id}")
+    public ResponseEntity<Integer> getStreak(@PathVariable Long id){
+        return userService.getStreak(id);
+    }
 }

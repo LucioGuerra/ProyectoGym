@@ -1,4 +1,4 @@
-import { BodyPart, KineModel } from './../../models/userModel.models';
+import {BodyPart, KineModel} from './../../models/userModel.models';
 import {Injectable} from '@angular/core';
 import {environment} from '../../../../../index';
 
@@ -12,10 +12,14 @@ import {map} from "rxjs/operators";
   providedIn: 'root'
 })
 export class UserService {
-  
+
   private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
+  }
+
+  getStreak(id: string): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/streak/${id}`);
   }
 
   getUserById(id: string): Observable<UserModel> {
@@ -54,18 +58,23 @@ export class UserService {
 
   getUserAppointments(id: string): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/${id}`).pipe(
-      map((appointments: Appointment[]) => appointments.map(appointment => ({
+      map((appointments: Appointment[]) =>
+        appointments.map(appointment => ({
           ...appointment,
-          date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
+          date: new Date(appointment.date),
           max_capacity: appointment.max_capacity || 0,
           startTime: appointment.startTime.split(':').slice(0, 2).join(':') || '',
           endTime: appointment.endTime.split(':').slice(0, 2).join(':') || '',
-        }))
-      ));
+        })).sort((a, b) => b.date.getTime() - a.date.getTime())
+      ))
   }
 
-  getUserPackages(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
+  getUserActivePackages(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/package/${id}`);
+  }
+
+  getUserHistory(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/history/${id}`);
   }
 
   getKinesioUsers(): Observable<KineModel[]> {

@@ -7,6 +7,7 @@ export interface UserModel {
     phone?: string;
     dni: string;
     picture?: URL;
+    streak?: number;
 }
 
 export enum Role {

@@ -155,6 +155,28 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(appointmentsDTO);
     }
+
+    public ResponseEntity<Integer> getStreak(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
+
+        List<UserXAppointment> appointments = user.getUserXAppointments().stream()
+                .sorted(Comparator.comparing(uxp -> uxp.getAppointment().getDate()))
+                .toList();
+
+        int streak = 0;
+
+        for (UserXAppointment appointment: appointments) {
+            if(appointment.getAttendance()){
+                streak++;
+            }
+            else{
+                break;
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(streak);
+    }
     
     public User save(User user) {
         return userRepository.save(user);
