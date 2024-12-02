@@ -79,26 +79,31 @@ mat-table {
 
 .column {
   background-color: transparent !important;
+  align-items: left !important;
 }
 
 th, td {
-  padding: 12px 80px; 
+  padding: 12px 87px; 
 }
 
 th {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: bold;
   border-bottom: 2px solid #d0d0d0;
   white-space: nowrap; 
-  text-align: center;
+  text-align: left !important;
+  align-items: start !important;
+  align-content: start !important;
+  transform: translateY(20%);
 }
+
 
 td {
   font-size: 0.9rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  text-align: left;
+  text-align: left !important;
 }
 
 tr {
@@ -107,13 +112,46 @@ tr {
 }
 
 mat-header-row, mat-row {
-  display: table-row;
+  display: flex !important;
 }
 
-mat-cell, mat-header-cell {
-  flex: 1; 
-  width: 25%; 
+
+th {
+  text-align: left !important;
+  vertical-align: top !important;
+  padding: 12px; 
 }
+
+#colNombre {
+  width: 35% !important;
+  flex: 3 !important;
+}
+
+#colDes {
+  width: 50% !important;
+  flex: 5 !important; 
+}
+
+#colPrice, #colEdit {
+  width: 12% !important; 
+  flex: 2 !important;
+}
+
+mat-header-cell, mat-cell {
+  box-sizing: border-box;
+  padding: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex: none !important;
+}
+
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////
 
