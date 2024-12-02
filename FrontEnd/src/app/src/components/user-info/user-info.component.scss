@@ -259,7 +259,7 @@ mat-card-header {
     margin-top: 150px;
     }
 
-  mat-card-header {
+  #principal {
     display: grid;
     grid-template-areas:
       "img info"
@@ -307,7 +307,7 @@ mat-card-header {
     padding: 20px;
     }
 
-  mat-card-header {
+  #principal {
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -346,7 +346,7 @@ mat-card-header {
     width: fit-content;
     }
 
-  mat-card-header {
+  #principal {
     display: grid;
     grid-template-areas:
       "img img"
