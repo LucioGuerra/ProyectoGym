@@ -1,0 +1,46 @@
+@use '../../../../variables.scss';
+
+.main-content__title {
+  margin: 0;
+  color: variables.$white-color;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: start;
+}
+
+.example-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  min-width: 600px;
+  width: 100%;
+  row-gap: 15px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+
+mat-hint {
+  color: white;
+  margin-left: -15px;
+}
+
+.boton {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
+
+.textarea {
+  height: 100px !important;
+}
+
+@media (max-width: 650px) {
+  .example-form {
+    min-width: 0;
+  }
+}
