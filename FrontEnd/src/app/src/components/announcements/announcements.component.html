@@ -1,0 +1,61 @@
+<app-main-screen>
+  <ng-container header>
+    <div class="header">
+        <div class="header-title" style="display: flex; flex-direction: row; align-items: center;  ">
+          <button mat-icon-button style="margin-right: 10px" (click)="volver()">
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+          <h1 class="main-content__title">Anuncios</h1>
+    </div>
+    <button mat-icon-button class="add" (click)="create()">
+      <mat-icon>
+        add
+      </mat-icon>
+    </button>
+  </div>
+  </ng-container>
+  <ng-container body>
+    <div class="scrollable-section">
+      <mat-action-list>
+        @if(announcements.length === 0) {
+        <div class="no-announcements">
+          <p>There aren't any announcements yet</p>
+        </div>
+        } @else { @for (announcement of announcements; track announcement) {
+        <mat-card class="hija" (click)="openAnnouncement(announcement.id, $event)">
+          <mat-card-header class="fila">
+            <div class="columna">
+              <mat-card-subtitle>{{
+                announcement.date.toLocaleDateString("es-AR")
+              }}</mat-card-subtitle>
+              <mat-card-title>{{ announcement.title }}</mat-card-title>
+            </div>
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Example icon-button with a menu"
+              class="threedotbutton"
+              (click)="openMenu($event)"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="deleteAnnouncement(announcement.id, $event)">
+                <mat-icon>delete</mat-icon>
+                <span>Borrar</span>
+              </button>
+              <button mat-menu-item (click)="updateAnnouncement(announcement.id, $event)">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+            </mat-menu>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ announcement.body.length >= 100 ? announcement.body.slice(0,100) + "..." : announcement.body }}</p>
+          </mat-card-content>
+        </mat-card>
+        } }
+      </mat-action-list>
+    </div>
+  </ng-container>
+</app-main-screen>

@@ -9,8 +9,10 @@ import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
 import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
+import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.user.UserXAppointment;
+import com.desarrollo.criminal.entity.Package;
 import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.AppointmentRepository;
 import com.desarrollo.criminal.repository.UserXAppointmentRepository;
@@ -21,6 +23,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -36,6 +39,7 @@ public class AppointmentService {
     private final UserService userService;
     private final ModelMapper modelMapper;
     private final UserXAppointmentRepository userXAppointmentRepository;
+    private final PackageActivityService packageActivityService;
 
 
     public Appointment getAppointmentById(Long appointmentId) {
@@ -65,7 +69,7 @@ public class AppointmentService {
     }
 
     public ResponseEntity<List<AppointmentListResponseDTO>> getAllAppointments() {
-        List<Appointment> appointments = appointmentRepository.findAll();
+        List<Appointment> appointments = appointmentRepository.findAllAndDeletedFalse();
         return getListResponseEntity(appointments);
     }
 
@@ -154,25 +158,35 @@ public class AppointmentService {
         return ResponseEntity.status(HttpStatus.CREATED).body(appointmentsCreated);
     }
 
+    @Transactional
     public ResponseEntity<?> deleteAppointment(Long id, boolean deleteAllFutureAppointments) {
         int appointmentsDeleted = 0;
-        try {
-            Appointment appointment = this.getAppointmentById(id);
-            appointment.setDeleted(true);
-            appointmentRepository.save(appointment);
-            appointmentsDeleted++;
-            if (deleteAllFutureAppointments) {
-                List<Appointment> futureAppointments = appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
-                futureAppointments.forEach(futureAppointment -> {
-                    futureAppointment.setDeleted(true);
-                    appointmentRepository.save(futureAppointment);
-                });
-                appointmentsDeleted += futureAppointments.size();
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(appointmentsDeleted);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Appointment appointment = this.getAppointmentById(id);
+
+        removeParticipants(appointment);
+        appointmentsDeleted++;
+
+        if (deleteAllFutureAppointments) {
+            List<Appointment> futureAppointments = appointmentRepository.findByRecurrenceIdAndDateGreaterThan(appointment.getRecurrenceId(), appointment.getDate());
+
+            futureAppointments.forEach(this::removeParticipants);
+            appointmentsDeleted += futureAppointments.size();
         }
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentsDeleted);
+    }
+
+    @Transactional
+    protected void removeParticipants(Appointment appointment) {
+        if (!appointment.getParticipants().isEmpty()) {
+            int participants = appointment.getParticipants().size();
+            while(participants > 0){
+                this.removeParticipant(appointment.getId(), appointment.getParticipants().get(0).getId());
+                participants--;
+            }
+        }
+
+        appointment.setDeleted(true);
+        appointmentRepository.save(appointment);
     }
 
     public ResponseEntity<?> updateAllAppointment(Long id, AppointmentDTO appointmentDTO) {
@@ -311,7 +325,12 @@ public class AppointmentService {
 
 
     public ResponseEntity<AppointmentResponseDTO> getResponseAppointmentById(Long id) {
-        Appointment appointment = this.getAppointmentById(id);
+        Appointment appointment =
+                appointmentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                        "Appointment not found with id: " + id));
+        if(appointment.isDeleted()){
+            throw new CriminalCrossException("APPOINTMENT_DELETED", "The appointment has been deleted");
+        }
         return ResponseEntity.status(HttpStatus.OK).body(convertAppointmentToDTO(appointment));
     }
 
@@ -346,15 +365,39 @@ public class AppointmentService {
     public ResponseEntity<?> addParticipant(Long appointmentId, Long userId) {
         Appointment appointment = this.getAppointmentById(appointmentId);
         User user = userService.getUserById(userId);
-        if (appointment.getParticipants().contains(user)) {
-            throw new CriminalCrossException("USER_ALREADY_REGISTERED", "The user is already registered in this appointment");
-        }
+
+        Package userPackage =
+                user.getAPackage().stream().filter(Package::getActive).findFirst().orElseThrow(() -> new CriminalCrossException(
+                        "USER_HAS_NO_ACTIVE_PACKAGE", "The user has no active package"));
+
+        PackageActivity packageActivity = packageActivityService.findPackageActivityByActivityIdAndPackageId(appointment.getActivity().getId(),
+                userPackage.getId()).orElseThrow(() -> new CriminalCrossException("USER_HAS_NO_ACTIVITY", "The user " +
+                "has no activity in his package"));
+
+        this.validateAddParticipant(appointment, user, packageActivity);
+
         appointment.getParticipants().add(user);
         user.getUserXAppointments().add(new UserXAppointment(appointment, user));
+        packageActivity.setQuantity(packageActivity.getQuantity() - 1);
+
+        packageActivityService.save(packageActivity);
         appointmentRepository.save(appointment);
         userService.save(user);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
+    private void validateAddParticipant(Appointment appointment, User user, PackageActivity packageActivity) {
+        if (appointment.getMax_capacity() == appointment.getParticipants().size()){
+            throw new CriminalCrossException("APPOINTMENTS_IS_FULL", "The appointment is full");
+        }
+
+        if (packageActivity.getQuantity() == 0){
+            throw new CriminalCrossException("USER_NO_CREDITS", "The user doesn't have enough credits for this activity");
+        }
+
+        appointmentRepository.findAppointmentByDateAndStartTimeAndParticipantsContains(appointment.getDate(),
+                appointment.getStartTime(), user).ifPresent(a -> {throw new CriminalCrossException(
+                        "USER_ALREADY_REGISTERED", "The user is already registered in this appointment");});
     }
 
     @Transactional
@@ -365,8 +408,17 @@ public class AppointmentService {
         if (!appointment.getParticipants().contains(user)) {
             throw new CriminalCrossException("USER_NOT_REGISTERED", "The user is not registered in this appointment");
         }
-        userXAppointmentRepository.deleteByAppointmentAndUser(appointment, user);
+
+        PackageActivity packageActivity =
+                user.getAPackage().stream().map(pack -> pack.getPackageActivities().stream().filter(packAct ->
+                        packAct.getActivity().getId().equals(appointment.getActivity().getId())).findFirst().orElseThrow(() -> new CriminalCrossException("USER_HAS_NO_ACTIVITY", "The user has no activity in his package"))).findFirst().get();
+
+
+
+        packageActivity.setQuantity(packageActivity.getQuantity() + 1);
         appointment.getParticipants().remove(user);
+        userXAppointmentRepository.deleteByAppointmentAndUser(appointment, user);
+        packageActivityService.save(packageActivity);
         appointmentRepository.save(appointment);
         userService.save(user);
         return ResponseEntity.status(HttpStatus.OK).build();

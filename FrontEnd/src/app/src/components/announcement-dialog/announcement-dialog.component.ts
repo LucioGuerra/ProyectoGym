@@ -8,6 +8,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import { Announcement, AnnouncementService } from '..';
 
 @Component({
   selector: 'app-announcement-dialog',
@@ -23,10 +24,33 @@ import {Router} from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AnnouncementDialogComponent {
+
+  announcement: Announcement | undefined;
+
   constructor(
     public dialogRef: MatDialogRef<AnnouncementDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { title: string, body: string, date: string },
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: { announcementId: number },
+    private announcementService: AnnouncementService,
+  ) {
+    this.loadAnnouncement();
+  }
+
+  private loadAnnouncement() {
+    this.announcementService.getAnnouncementById(this.data.announcementId).subscribe({
+      next: (announcement: Announcement) => {
+        this.announcement = {
+          ...announcement,
+          date: new Date(announcement.date)
+        };
+      },
+      error: (error: any) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('Request completed');
+      }
+    });
+  }
 
   onClose(): void {
     this.dialogRef.close();

@@ -1,14 +1,12 @@
 package com.desarrollo.criminal.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import com.desarrollo.criminal.dto.request.ActivitiesPackageDTO;
 import com.desarrollo.criminal.dto.request.PackageDTO;
 import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetRandomPackageDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.PackageActivity;
 import com.desarrollo.criminal.entity.user.User;
@@ -77,6 +75,16 @@ public class PackageService {
         GetPackageDTO packageDTO = modelMapper.map(aPackage, GetPackageDTO.class);
         packageDTO.setCreatedAt(aPackage.getCreatedAt().toLocalDate());
         return ResponseEntity.status(HttpStatus.OK).body(packageDTO);
+    }
+
+    public ResponseEntity<List<GetRandomPackageDTO>> getRandomPackage(){
+        List<Package> packages = packageRepository.findAll();
+        int numberOfPackages = Math.min(9, packages.size());
+
+        Collections.shuffle(packages);
+        List<Package> randomPackages = packages.subList(0, numberOfPackages);
+
+        return ResponseEntity.status(HttpStatus.OK).body(randomPackages.stream().map(aPackage -> modelMapper.map(aPackage, GetRandomPackageDTO.class)).toList());
     }
 
 

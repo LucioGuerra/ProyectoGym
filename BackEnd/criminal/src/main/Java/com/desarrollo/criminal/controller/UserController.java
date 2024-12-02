@@ -28,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping("/admins")
-    public ResponseEntity<List<UserResponseDTO>> getAllAdmins(){
-        return userService.getAllAdmins();
+    public ResponseEntity<List<UserResponseDTO>> getAdmins(){
+        return userService.getUserAdmins();
     }
 
     @GetMapping("/{id}")

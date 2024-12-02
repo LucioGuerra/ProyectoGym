@@ -52,7 +52,8 @@ public class AppointmentController {
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}/deleteAllFutureAppointments={deleteAllFutureAppointments}")
-    public ResponseEntity<?> deleteAppointment(@PathVariable Long id, @PathVariable Boolean deleteAllFutureAppointments) {
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long id,
+                                                @PathVariable Boolean deleteAllFutureAppointments) {
         return appointmentService.deleteAppointment(id, deleteAllFutureAppointments);
     }
 
@@ -68,6 +69,8 @@ public class AppointmentController {
                                                @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
+
+
 
     @PostMapping("/{appointmentId}/user/{userId}")
     public ResponseEntity<?> addParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {

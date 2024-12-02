@@ -364,6 +364,6 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   Cancel() {
-    this.router.navigate(['/admin/agenda']);
+    window.history.back();
   }
 }

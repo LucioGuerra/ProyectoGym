@@ -12,6 +12,8 @@ import {CreatPackageFormComponent} from "./src/components/creat-package-form/cre
 import {CreateActivityComponent} from "./src/components/create-activity/create-activity.component";
 import {EcommerceComponent} from "./src/components/ecommerce/ecommerce.component";
 import {ShoppingCartComponent} from "./src/components/shopping-cart/shopping-cart.component";
+import {AnnouncementsComponent} from "./src/components/announcements/announcements.component";
+import {AnnouncementCreationComponent} from "./src/components/announcenmentCreation/announcementCreation.component";
 
 export const routes: Routes = [
   {path: 'home', component: HomePageComponent},
@@ -31,5 +33,8 @@ export const routes: Routes = [
   {path: 'admin/activity/edit/:id', component: CreateActivityComponent},
   {path: 'admin/ecommerce', component: EcommerceComponent},
   {path: 'ecommerce/shopping_cart', component: ShoppingCartComponent},
+  {path: 'admin/announcements', component: AnnouncementsComponent},
+  {path: 'admin/announcements/create', component: AnnouncementCreationComponent},
+  {path: 'admin/announcements/edit/:id', component: AnnouncementCreationComponent},
   {path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];

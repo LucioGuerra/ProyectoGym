@@ -12,69 +12,34 @@ export class AnnouncementService {
   constructor(private http: HttpClient) {}
 
   getAnnouncements() {
-    const announcements: Announcement[] = [
-      {
-        id: 1,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 2,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 3,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 4,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 5,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 6,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 7,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 8,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 9,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      },
-      {
-        id: 10,
-        title: 'Lorem ipsum dolor sit amet',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec pur',
-        date: new Date()
-      }
-    ]
-    return announcements
-    /*return this.http.get<Announcement[]>(this.apiUrl);*/
+    return this.http.get<Announcement[]>(this.apiUrl);
+  }
+
+  getAnnouncementById(id: number) {
+    return this.http.get<Announcement>(`${this.apiUrl}/${id}`);
+  }
+
+  updateAnnouncement(announcementID: number, announcement: Announcement) {
+    const announcementSend = {
+      ...announcement,
+      date: this.dateAdapt(announcement.date)
+    };
+    return this.http.put<Announcement>(`${this.apiUrl}/${announcementID}`, announcement);      
+  }
+
+  deleteAnnouncement(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  createAnnouncement(announcement: Announcement) {
+    const announcementSend = {
+      ...announcement,
+      date: this.dateAdapt(announcement.date)
+    };
+    return this.http.post<Announcement>(this.apiUrl, announcement);
+  }
+
+  private dateAdapt(date: Date): string {
+    return date.toLocaleString("es-AR").split(",")[0].split('/').map(part => part.length === 1 ? '0' + part : part).reverse().join('-');
   }
 }

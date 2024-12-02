@@ -1,0 +1,53 @@
+<app-main-screen>
+  <ng-container header>
+    <h1 class="main-content__title">Crear anuncio</h1>
+  </ng-container>
+  <ng-container body>
+    <form [formGroup]="form" class="example-form">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Titulo del anuncio</mat-label>
+        <input
+          matInput
+          formControlName="title"
+          maxlength="50"
+          placeholder="Title"
+        />
+        <mat-hint align="end"
+          >{{ form.get("title")?.value?.length || 0 }} / 50</mat-hint
+        >
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Cuerpo del anuncio</mat-label>
+        <textarea
+          matInput
+          formControlName="body"
+          maxlength="500"
+          class="textarea"
+        ></textarea>
+        <mat-hint align="end"
+          >{{ form.get("description")?.value?.length || 0 }} / 500</mat-hint
+        >
+      </mat-form-field>
+
+      <div class="boton">
+        <button
+          mat-stroked-button
+          (click)="goBack()"
+          style="margin-right: 20px"
+        >
+          Volver
+        </button>
+        @if (announcementID != null) {
+        <button
+          mat-flat-button
+          (click)="editAnnouncement()"
+        >
+          Editar
+        </button>
+        } @else {
+        <button mat-flat-button (click)="createAnnouncement()">Crear</button>
+        }
+      </div>
+    </form>
+  </ng-container>
+</app-main-screen>
