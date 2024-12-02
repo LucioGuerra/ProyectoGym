@@ -164,25 +164,7 @@ mat-header-cell, mat-cell {
       padding: 0.75rem;
     }
   
-   th, td {
-      padding: 12px 75px; 
-    }
-    
-    th {
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-bottom: 2px solid #d0d0d0;
-      white-space: nowrap; 
-      text-align: center;
-    }
-    
-    td {
-      font-size: 0.9rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      text-align: left
-    }
+   
   
   }
 
@@ -196,25 +178,13 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
- th, td {
-    padding: 12px 83px; 
-  }
   
   th {
     font-size: 1.2rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
-    text-align: center;
   }
   
   td {
     font-size: 0.9rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    text-align: left
   }
 
 }
@@ -229,31 +199,14 @@ mat-header-cell, mat-cell {
     padding: 0.75rem;
   }
 
-  th, td {
-    padding: 12px 85px; 
-  }
   
   th {
     font-size: 1.2rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
   }
   
   td {
     font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
   }
   
 
@@ -268,25 +221,14 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
- th, td {
-    padding: 12px 68px; 
-  }
   
   th {
     font-size: 1.2rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
-    text-align: center;
   }
   
   td {
     font-size: 0.9rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-    text-align: left
   }
 
 }
@@ -348,39 +290,14 @@ mat-header-cell, mat-cell {
     table-layout: fixed;
     border-collapse: collapse; 
   }
-
-  th, td {
-    padding: 12px 75px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
-    text-align: center;
+    font-size: 1.1rem;
   }
   
   td {
     font-size: 0.9rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-    text-align: left
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
-  }
-  
-  mat-cell, mat-header-cell {
-    flex: 1; 
-    width: 25%; 
   }
   
 
@@ -395,32 +312,14 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 70px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.9rem;
     overflow: hidden;
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
   }
   
 
@@ -435,32 +334,14 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 65px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.9rem;
     overflow: hidden;
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
   }
   
 
@@ -477,32 +358,14 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 60px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.05rem;
   }
   
   td {
     font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
   }
   
 
@@ -518,32 +381,14 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 54px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.05rem;
   }
   
   td {
     font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
   }
 
 }
@@ -559,31 +404,13 @@ mat-header-cell, mat-cell {
     padding: 0.75rem;
   }
 
-  th, td {
-    padding: 12px 48px; 
-  }
-  
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.05rem;
   }
   
   td {
     font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-  }
-  
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
-  
-  mat-header-row, mat-row {
-    display: table-row;
   }
 
 }
@@ -600,28 +427,15 @@ mat-header-cell, mat-cell {
     padding: 0.75rem;
   }
 
-  th, td {
-    padding: 12px 42px; 
-  }
-  
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.05rem;
   }
   
   td {
     font-size: 0.88rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   
-  tr {
-    display: table-row;
-    color: #d0d0d0;
-  }
 
 }
 
@@ -634,22 +448,13 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 38px; 
-  }
   
   th {
     font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
   }
   
   td {
     font-size: 0.86rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   
@@ -661,26 +466,17 @@ mat-header-cell, mat-cell {
 @media (min-width: 623px) and (max-width: 670px) {
   
   .card {
-    width: 80%;  
+    width: 90%;  
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 35px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.85rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.9rem;
     overflow: hidden;
   }
 
@@ -691,26 +487,17 @@ mat-header-cell, mat-cell {
 @media (min-width: 565px) and (max-width: 623px) {
   
   .card {
-    width: 80%;  
+    width: 90%;  
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 28px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.75rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.9rem;
     overflow: hidden;
   }
 
@@ -722,26 +509,17 @@ mat-header-cell, mat-cell {
 @media (min-width: 506px) and (max-width: 565px) {
   
   .card {
-    width: 90%;  
+    width: 100%;  
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 26px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.75rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.85rem;
     overflow: hidden;
   }
 
@@ -757,22 +535,13 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 27px; 
-  }
   
   th {
     font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
   }
   
   td {
-    font-size: 0.75rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.8rem;
     overflow: hidden;
   }
 
@@ -787,22 +556,13 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 24px; 
-  }
   
   th {
-    font-size: 0.92rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1rem;
   }
   
   td {
-    font-size: 0.77rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.8rem;
     overflow: hidden;
   }
 
@@ -818,22 +578,13 @@ mat-header-cell, mat-cell {
     height: auto;
     padding: 0.75rem;
   }
-
-  th, td {
-    padding: 12px 21px; 
-  }
   
   th {
-    font-size: 0.9rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1rem;
   }
   
   td {
-    font-size: 0.77rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.8rem;
     overflow: hidden;
   }
 
@@ -843,25 +594,21 @@ mat-header-cell, mat-cell {
 
 @media (min-width: 393px) and (max-width: 411px) {
   
-  .card {
-    width: 100%;  
-    height: auto;
-    padding: 0.75rem;
+  .table-container {
+    overflow-x: auto; 
+    width: 100%; 
   }
 
-  th, td {
-    padding: 12px 20px; 
+  .card {
+    width: 100%;
   }
   
   th {
-    font-size: 0.9rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -881,16 +628,9 @@ mat-header-cell, mat-cell {
   .card {
     width: 100%;
   }
-
-  th, td {
-    padding: 12px 28px; 
-  }
   
   th {
-    font-size: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid #d0d0d0;
-    white-space: nowrap; 
+    font-size: 1.1rem;
   }
   
   td {
