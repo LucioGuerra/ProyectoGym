@@ -65,7 +65,7 @@ export class CreateAppointmentFormComponent implements OnInit {
     end: new FormControl<Date | null>(null, [Validators.required]),
     max_capacity: new FormControl<number | null>(20, [Validators.required, Validators.min(1), Validators.max(100)]),
     activity: new FormControl<number | null>(null, [Validators.required, this.activityValidator]),
-    instructor: new FormControl<number | null>(null, [Validators.required]),
+    instructor: new FormControl<number | null>(null),
     daysOfWeek: new FormControl<DayOfWeek[] | []>([]),
     startTime: new FormControl<string | null>(this.formatTime(new Date()), [Validators.required]),
     endTime: new FormControl<string | null>(this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1))), [Validators.required]),
