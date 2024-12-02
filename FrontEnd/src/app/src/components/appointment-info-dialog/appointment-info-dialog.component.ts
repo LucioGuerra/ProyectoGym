@@ -312,7 +312,21 @@ export class AppointmentInfoDialogComponent implements OnInit {
         observable.subscribe(() => {
           this.loadAppointment();
         });
-      });
+      }).catch((error) => {
+        let dialogConf = new MatDialogConfig();
+        if (error.error.error === "USER_HAS_NO_ACTIVITY") {
+          dialogConf.data = {
+            message: 'No tienes creditos para esta actividad.'
+          };
+        } else {
+          dialogConf.data = {
+            message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+          };
+        }
+        let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+        console.error('Error al agregar el usuario a la cita de kinesiología', error);
+      }
+      );
     } else {
       this.kinesiologoControl.markAsDirty();
       this.kinesiologoControl.markAsTouched();
