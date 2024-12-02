@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, signal} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, signal } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -9,23 +9,23 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import {MatButtonModule} from "@angular/material/button";
-import {Appointment, AppointmentUser, BodyPart, KineModel} from "../models";
-import {AppointmentService, AuthService} from "../services/services";
-import {AsyncPipe, DatePipe, NgOptimizedImage} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatChipsModule} from '@angular/material/chips';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatIconModule} from '@angular/material/icon';
-import {UserService} from "../services/services/user.service";
-import {map} from "rxjs/operators";
-import {Observable, startWith} from "rxjs";
-import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatFormField} from "@angular/material/form-field";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
-import {MatInput} from "@angular/material/input";
-import {MatLabel} from "@angular/material/form-field";
-import {MatError} from "@angular/material/form-field";
+import { MatButtonModule } from "@angular/material/button";
+import { Appointment, AppointmentUser, BodyPart, KineModel } from "../models";
+import { AppointmentService, AuthService } from "../services/services";
+import { AsyncPipe, DatePipe, NgOptimizedImage } from "@angular/common";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { UserService } from "../services/services/user.service";
+import { map } from "rxjs/operators";
+import { Observable, startWith } from "rxjs";
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatFormField } from "@angular/material/form-field";
+import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from "@angular/material/autocomplete";
+import { MatInput } from "@angular/material/input";
+import { MatLabel } from "@angular/material/form-field";
+import { MatError } from "@angular/material/form-field";
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 import { KinesiologyIntegrationService } from '../services/kinesiology/kinesiology-integration.service';
 
@@ -75,7 +75,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   //para la busqueda de partes del cuerpo
   bodyPartControl = new FormControl('');
   bodyPartOptions = [
-    {"id": 1, "name": "Cuello"},
+    { "id": 1, "name": "Cuello" },
   ];
   filteredBodyPartOptions: Observable<string[]> | undefined;
 
@@ -284,9 +284,15 @@ export class AppointmentInfoDialogComponent implements OnInit {
         },
         error: (error: any) => {
           let dialogConf = new MatDialogConfig();
-          dialogConf.data = {
-            message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
-          };
+          if (error.error.error === "USER_HAS_NO_ACTIVITY") {
+            dialogConf.data = {
+              message: 'No tienes creditos para esta actividad.'
+            };
+          } else {
+            dialogConf.data = {
+              message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+            };
+          }
           let d = this.dialog.open(ErrorDialogComponent, dialogConf);
           console.error('Error al reservar la cita', error);
         }
@@ -331,7 +337,7 @@ export class AppointmentInfoDialogComponent implements OnInit {
   }
 
   isPast(): boolean {
-    if (new Date(this.appointmentData!.date) < new Date()){
+    if (new Date(this.appointmentData!.date) < new Date()) {
       console.log('isPast: ', true);
       return true;
     } else if (new Date(this.appointmentData!.date) > new Date()) {
