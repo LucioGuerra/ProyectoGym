@@ -1,155 +1,208 @@
-span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+@use "../../../../variables.scss";
 
-.opciones {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 0.7;
-
-    mat-divider {
-        flex: 1;
-        margin: 0 20px;
-    }
-}
-
-.formas-login {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    button-login {
-        margin: 0 20px;
-    }
-    .button-image{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 60px;
-        height: 60px;
-        margin: 0 20px;
-        cursor: pointer;
-        border-radius: 50px;
-        img {
-            width: 100%;
-            height: 100%;
-        }
-        .facebookimg{
-            width: 90%;
-            height: 90%;
-        }
-    }
-}
+.centered-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 170px;
+  margin-bottom: 40px;
+  }
 
 mat-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  }
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+  width: fit-content;
+  border: 0.001px solid rgb(18, 18, 18);
+
+  background-color: rgba(0, 0, 0, 0.872);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 40px;
+
+  .main-content {
     display: flex;
     flex-direction: column;
-
-    justify-items: center;
     align-items: center;
-}
+    justify-content: center;
+    width: 100%;
 
-mat-card {
-    border-radius: 20px;
-    border: 0.001px solid rgb(18, 18, 18);
-    padding: 40px;
+    .main-content__header {
+      width: 100%;
 
-    padding: 20px;
-    width: 550px;
-    height: auto;
-    min-width: 550px;
-    max-width: 550px;
+      .main-content__title {
+        margin: 0;
+        color: variables.$white-color;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: start;
+        }
+      }
 
-    background-color: rgba(0, 0, 0, 0.872);
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
-}
+    mat-divider {
+      width: 100%;
+      margin: 5px 0;
+      }
+    }
+  }
+
+
+.opciones {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.7;
+
+  mat-divider {
+    flex: 1;
+    margin: 0 20px;
+    }
+  }
+
+.formas-login {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  button-login {
+    margin: 0 20px;
+    }
+
+  .button-image {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    margin: 0 20px;
+    cursor: pointer;
+    border-radius: 50px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      }
+
+    .facebookimg {
+      width: 90%;
+      height: 90%;
+      }
+    }
+  }
 
 .botones {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  }
 
 .titulo {
-    font-size: 30px;
-    font-weight: bold;
-    margin-top: 0px;
-    margin-left: 25px;
-    margin-bottom: 20px;
-}
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-left: 25px;
+  margin-bottom: 20px;
+  }
 
 #signup {
-    width: 205px;
-    margin-top: 20px;
-}
+  width: 205px;
+  margin-top: 20px;
+  }
 
 #login {
-    width: 205px;
-    margin-top: 20px;
-}
+  width: 205px;
+  margin-top: 20px;
+  }
 
 #volver {
-    width: 100%;
-    margin-top: 20px;
-    border: #B9A552 2px solid;
-}
+  width: 100%;
+  margin-top: 20px;
+  border: #B9A552 2px solid;
+  }
 
 mat-card-header {
-    justify-items: center;
-}
+  justify-items: center;
+  }
 
 .example-form {
-    width: 100%;
-}
+  width: 100%;
+  }
 
 .example-full-width {
-    width: 100%;
-}
+  width: 100%;
+  }
 
 #email {
-    margin-bottom: 5px;
-}
+  margin-bottom: 5px;
+  }
 
 button {
-    font-size: 16px;
-    height: 55px;
-    border-radius: 10px;
-}
+  font-size: 16px;
+  height: 55px;
+  border-radius: 10px;
+  }
 
 .mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align {
-    height: 0px !important;
-}
-
-:host {
-    display: block;
-    width: 100%;
-    height: 100vh;
-    backdrop-filter: blur(10px);
-}
+  height: 0 !important;
+  }
 
 .forgot {
-    color: #b9a552;
-    font-style: italic;
-    margin-bottom: 6px;
-    margin-left: 290px;
-    text-decoration: underline;
-}
+  color: #B9A552;
+  font-style: italic;
+  margin-bottom: 6px;
+  min-width: max-content;
+  margin-left: 290px;
+  text-decoration: underline;
+  }
 
 #olvidaste {
-    cursor: pointer;
-}
+  cursor: pointer;
+  }
 
 .forgot:hover {
-    color: #a3903f;
-    cursor: pointer;
-}
+  color: #A3903F;
+  cursor: pointer;
+  }
 
 ::ng-deep #password .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
-    height: 0px !important;
-    margin: 3px !important;
-}
+  height: 0 !important;
+  margin: 3px !important;
+  }
+
+@media (height<=768px) {
+  .centered-card {
+    margin-top: 80px;
+    }
+  }
+
+@media(max-width: 600px) {
+  .main-content__body {
+    width: 100%;
+    }
+  .centered-card {
+    padding-top: 20px;
+    margin-top: 80px;
+    }
+  .main-container {
+    height: 100%;
+    justify-content: start;
+    }
+  .main-content {
+    .main-content__header {
+      .main-content__title {
+        font-size: 16px;
+        }
+      }
+    }
+  }

@@ -1,16 +1,30 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { Router } from '@angular/router';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {Router} from '@angular/router';
+import {AuthService} from "../services/services/auth.service";
 
-import { ToolbarComponent } from '../toolbar/toolbar.component';
-import { AuthService } from "../services/services/auth.service";
-
-import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {DrawerComponent} from "../drawer/drawer.component";
+import {DrawerListClientComponent} from "../drawer/drawer-list-client/drawer-list-client.component";
+import {DrawerListComponent} from "../drawer/drawer-list/drawer-list.component";
+import {MatIcon} from "@angular/material/icon";
+import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/material/sidenav";
+import {NgIf} from "@angular/common";
+import {ToolbarComponent} from "../toolbar";
+import {UserProfileComponent} from "../user-profile/user-profile.component";
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -19,10 +33,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ToolbarComponent, MatDividerModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule],
+  imports: [FormsModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, DrawerComponent, DrawerListClientComponent, DrawerListComponent, MatIcon, MatSidenav, MatSidenavContainer, MatSidenavContent, NgIf, ToolbarComponent, UserProfileComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -33,15 +48,19 @@ export class LoginComponent {
 
   auth0 = inject(AuthService);
 
-  emailFormControl = new FormControl("",[Validators.required, Validators.email]);
+  emailFormControl = new FormControl("", [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
 
   formGroup = new FormGroup({
     email: this.emailFormControl,
-    password: new FormControl("",Validators.required),
+    password: new FormControl("", Validators.required),
   });
 
-
+  constructor(private router: Router) {
+    if (localStorage.getItem('selectedDate')) {
+      localStorage.removeItem('selectedDate');
+    }
+  }
 
   onLogin(): void {
     if (this.formGroup.valid) {
@@ -56,28 +75,27 @@ export class LoginComponent {
     }
   }
 
-  constructor(private router: Router) {
-    if (localStorage.getItem('selectedDate')) {
-      localStorage.removeItem('selectedDate');
-    }
-  }
-  signup(){
+  signup() {
     this.router.navigate(['/signup']);
   }
-  volver(){
+
+  volver() {
     this.router.navigate(['/home']);
   }
-  forgot(){
+
+  forgot() {
     this.router.navigate(['/forgot']);
   }
 
-  google(){
+  google() {
     this.auth0.loginWithThirdParty("google-oauth2")
   }
-  facebook(){
+
+  facebook() {
     this.auth0.loginWithThirdParty("facebook")
   }
-  microsoft(){
+
+  microsoft() {
     this.auth0.loginWithThirdParty("windowslive")
   }
 }
