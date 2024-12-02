@@ -21,6 +21,7 @@ import {PackageService} from "../services/services/package.service";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
 
 @Component({
   selector: 'app-creat-package-form',
@@ -43,8 +44,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatAutocompleteTrigger,
     AsyncPipe,
     NgForOf,
-    NgIf
-  ],
+    NgIf,
+    MainScreenComponent
+],
   templateUrl: './creat-package-form.component.html',
   styleUrl: './creat-package-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

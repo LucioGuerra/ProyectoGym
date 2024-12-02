@@ -14,6 +14,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
+import { CreateAppointmentFormComponent } from "../create-appointment-form/create-appointment-form.component";
 
 @Component({
   selector: 'app-create-activity',
@@ -33,8 +35,10 @@ import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.compon
     MatOption,
     MatSelect,
     NgForOf,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    MainScreenComponent,
+    CreateAppointmentFormComponent
+],
   templateUrl: './create-activity.component.html',
   styleUrl: './create-activity.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
