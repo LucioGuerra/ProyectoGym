@@ -1,5 +1,17 @@
 @use "../../../../variables.scss";
 
+.no-apointments {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-size: 1rem;
+  color: variables.$white-color;
+  font-weight: 500;
+  }
+
 mat-action-list {
   padding: 0;
   flex: 1;
@@ -9,17 +21,6 @@ mat-action-list {
     height: auto;
     }
 
-  .no-apointments {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    font-size: 1rem;
-    color: variables.$white-color;
-    font-weight: 500;
-    }
 
   ::ng-deep .appointment-table {
     background-color: variables.$grey-color !important;
@@ -190,11 +191,16 @@ mat-card-header {
 .paquetes {
   width: 100%;
   align-items: center;
-  color: #0A0B0B !important;
+  color: #222 !important;
+  padding-top: 10px;
 
   mat-card {
-    margin-top: 20px;
-    width: 90%;
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.2);
+    justify-self: center;
+    margin-top: 15px;
+    padding: 10px;
+    width: 95.5%;
+    border-radius: 30px;
 
     mat-card-header {
       justify-content: start;
@@ -202,9 +208,16 @@ mat-card-header {
       margin: 0;
 
       h2 {
-        margin: 0;
-        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: -5px;
+        font-weight: normal;
         }
+      }
+
+    mat-divider {
+      width: 98%;
+      align-self: center;
       }
 
     mat-card-content {
@@ -220,17 +233,22 @@ mat-card-header {
         }
       }
 
+    p {
+      padding: 0;
+      margin: 5px 0 0 0;
+      }
+
     }
 
   .tarjeta-activa {
     mat-card {
-      background-color: rgba(208, 208, 208, 0.8);
+      background-color: #D9D9D9;
       }
     }
 
   .tarjeta-inactiva {
     mat-card {
-      background-color: rgba(208, 208, 208, 0.4);
+      background-color: rgba(217, 217, 217, 0.6);
       }
     }
 
