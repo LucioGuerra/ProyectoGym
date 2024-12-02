@@ -2,7 +2,8 @@ export interface Package {
   id?: number,
   name: string,
   description: string,
-  userId: number,
+  price?: number,
+  userId?: number,
   activities: ActivityPackage[],
 }
 
