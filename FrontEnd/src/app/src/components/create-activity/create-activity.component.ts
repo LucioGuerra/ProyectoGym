@@ -111,7 +111,7 @@ export class CreateActivityComponent implements OnInit {
   }
 
   return() {
-    this.router.navigate(['/admin/agenda']);
+    history.back();
   }
 
   edit() {

@@ -146,6 +146,6 @@ export class EcommerceComponent implements OnInit {
   }
 
   volver() {
-    this.router.navigate(['/admin/agenda'])
+    window.history.back();
   }
 }

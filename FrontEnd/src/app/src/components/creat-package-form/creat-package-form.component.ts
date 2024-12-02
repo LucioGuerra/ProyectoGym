@@ -192,6 +192,6 @@ export class CreatPackageFormComponent implements OnInit {
 
   // Navegar de vuelta a la agenda
   return() {
-    this.router.navigate(['/admin/agenda']);
+    history.back();
   }
 }
