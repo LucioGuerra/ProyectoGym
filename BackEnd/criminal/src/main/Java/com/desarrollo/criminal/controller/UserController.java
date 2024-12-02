@@ -6,6 +6,7 @@ import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.UserResponseDTO;
@@ -17,11 +18,12 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return userService.getAllUsers();
