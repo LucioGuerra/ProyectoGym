@@ -3,7 +3,7 @@
 :host {
   display: block;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   backdrop-filter: blur(10px);
   background-image: url("/assets/background.png");
   background-attachment: fixed;
@@ -138,12 +138,6 @@ button {
   border-radius: 10px;
   }
 
-:host {
-  display: block;
-  width: 100%;
-  height: 100vh;
-  backdrop-filter: blur(10px);
-  }
 
 .error-dialog {
   width: 250px;

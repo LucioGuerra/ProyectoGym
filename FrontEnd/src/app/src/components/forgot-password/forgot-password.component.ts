@@ -47,4 +47,8 @@ export class ForgotPasswordComponent {
   login() {
     this.router.navigate(["/login"]);
   }
+
+  enviarMail() {
+    console.log("enviarMail");
+  }
 }
