@@ -12,6 +12,7 @@ import { HttpClient } from "@angular/common/http";
 import { firstValueFrom, lastValueFrom } from "rxjs";
 import { DniService } from "../dni/dni.service";
 import { ErrorDialogComponent } from "../../dialog/error-dialog/error-dialog.component";
+import { Router } from "@angular/router";
 
 
 @Injectable({ providedIn: "root" })
@@ -26,7 +27,8 @@ export class AuthService {
     private userService: UserService,
     private dialog: MatDialog,
     private dniService: DniService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router,
   ) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
@@ -176,9 +178,16 @@ export class AuthService {
                 // @ts-ignore
                 picture: jwtDecode(idToken)['picture'],
               };
-              await this.createUser(usuario);
+              try {
+                await this.createUser(usuario);
+                await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
+              } catch (error) {
+                const d = this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente mas tarde." } });                
+                d.afterClosed().subscribe(() => {
+                  this.router.navigate(['/home']);
+                });
+              }
             }
-            await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
           }
         );
       } catch (error) {
@@ -272,24 +281,15 @@ export class AuthService {
     }
   }
 
-  private createUser(user: UserModel): void {
+  private async createUser(user: UserModel): Promise<void> {
     console.log("Entra a createUser");
 
-    // @ts-ignore
-    this.userService.getUserByEmail(user.email).subscribe(
-      (user: UserModel) => {
-        console.log("Usuario encontrado: ", user);
-      },
-      (error) => {
-        console.error("Error al buscar el usuario: ", error);
-      });
-
-    this.userService.createUser(user).subscribe(
-      (saveUser: UserModel) => {
-        console.log("Usuario guardado: ", saveUser);
-      },
-      (error) => {
-        console.error("Error al guardar el usuario: ", error);
-      });
+    try {
+      const saveUser: UserModel = await firstValueFrom(this.userService.createUser(user));
+      console.log("Usuario guardado: ", saveUser);
+    } catch (error) {
+      console.error("Error al guardar el usuario: ", error);
+      throw error;
+    }
   }
 }
