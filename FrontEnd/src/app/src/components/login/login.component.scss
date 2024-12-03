@@ -3,13 +3,13 @@
 :host {
   display: block;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   backdrop-filter: blur(10px);
   background-image: url("/assets/background.png");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  overflow: auto;
+  overflow-y: auto;
   }
 
 .contenedor {
@@ -17,14 +17,29 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden;
   }
 
-.centered-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 170px;
+mat-card {
+  border-radius: 20px;
+  margin-top: 70px;
+  border: 0.001px solid rgb(18, 18, 18);
+
+  padding: 20px;
+  width: 550px;
+  height: auto;
+  min-width: 550px;
+  max-width: 550px;
+
+  margin-bottom: 30px;
+
+  background-color: rgba(0, 0, 0, 0.872);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+  }
+
+mat-card-header {
+  justify-items: center;
+  width: 100%;
   }
 
 mat-card-content {
@@ -33,48 +48,6 @@ mat-card-content {
   justify-items: center;
   align-items: center;
   }
-
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: fit-content;
-  width: fit-content;
-
-  border: 0.001px solid rgb(18, 18, 18);
-  background-color: rgba(0, 0, 0, 0.872);
-  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
-
-  border-radius: 20px;
-  padding: 40px;
-
-  .main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-
-    .main-content__header {
-      width: 100%;
-
-      .main-content__title {
-        margin: 0;
-        color: variables.$white-color;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: start;
-        }
-      }
-
-    mat-divider {
-      width: 100%;
-      margin: 5px 0;
-      }
-    }
-  }
-
 
 .opciones {
   display: flex;
@@ -127,16 +100,11 @@ mat-card-content {
   justify-content: space-between;
   }
 
-mat-card-header {
-  justify-items: center;
-  width: 100%;
-  }
-
 .titulo {
-  font-size: 45px;
+  font-size: 30px;
   font-weight: bold;
   margin-top: 0;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   }
 
 #signup {
@@ -174,10 +142,6 @@ button {
   border-radius: 10px;
   }
 
-.mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align {
-  height: 0 !important;
-  }
-
 .forgot {
   color: #B9A552;
   font-style: italic;
@@ -196,34 +160,22 @@ button {
   cursor: pointer;
   }
 
-::ng-deep #password .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
-  height: 0 !important;
-  margin: 3px !important;
+
+@media (max-height: 765px) {
+  .contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    }
+
+  mat-card {
+    margin-top: 90px;
+    }
   }
 
-@media (height<=768px) {
-  .centered-card {
-    margin-top: 100px;
-    }
-  }
-
-@media(max-width: 600px) {
-  .main-content__body {
-    width: 100%;
-    }
-  .centered-card {
-    padding-top: 20px;
-    margin-top: 80px;
-    }
-  .main-container {
-    height: 100%;
-    justify-content: start;
-    }
-  .main-content {
-    .main-content__header {
-      .main-content__title {
-        font-size: 16px;
-        }
-      }
+@media (max-height: 710px) {
+  .container {
+    overflow-y: scroll;
     }
   }
