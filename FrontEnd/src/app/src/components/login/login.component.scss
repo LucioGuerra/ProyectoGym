@@ -101,7 +101,7 @@ mat-card-content {
   }
 
 .titulo {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
   margin-top: 0;
   margin-bottom: 20px;
@@ -160,6 +160,12 @@ button {
   cursor: pointer;
   }
 
+.mat-mdc-card-header {
+  width: 100%;
+  display: block;
+  margin-left: -16px;
+  margin-bottom: 10px;
+  }
 
 @media (max-height: 765px) {
   .contenedor {
