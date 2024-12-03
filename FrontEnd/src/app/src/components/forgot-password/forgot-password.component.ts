@@ -8,6 +8,7 @@ import {ToolbarComponent} from "../toolbar";
 import {MyErrorStateMatcher} from "../signup/signup.component";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
+import {AuthService} from "../services/services";
 
 @Component({
   selector: 'app-forgot-password',
@@ -37,7 +38,8 @@ export class ForgotPasswordComponent {
     email: this.emailFormControl,
   });
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private auth: AuthService) {
   }
 
   back() {
@@ -50,5 +52,17 @@ export class ForgotPasswordComponent {
 
   enviarMail() {
     console.log("enviarMail");
+    if (this.formGroup.valid) {
+      const json = this.formGroup.value;
+      if (this.emailFormControl.value != null) {
+        console.log("Me llega el email")
+        console.log(this.emailFormControl.value)
+        this.auth.forgotPassword(this.emailFormControl.value)
+      } else {
+        console.log("Me está llegando null el email")
+      }
+    } else {
+      this.formGroup.markAllAsTouched();
+    }
   }
 }
