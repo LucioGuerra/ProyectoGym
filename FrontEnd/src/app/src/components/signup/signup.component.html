@@ -75,10 +75,10 @@
 
         <mat-form-field class="example-full-width">
           <mat-label id="password">Contraseña</mat-label>
-          <input [type]="hide ? 'password' : 'text'" formControlName="password" matInput
-                 placeholder="Ingresá tu contraseña">
-          <button (click)="hide = !hide" mat-icon-button matSuffix>
-            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <input [type]="hide1 ? 'password' : 'text'" autocomplete="new-password" formControlName="password"
+                 matInput placeholder="Ingresá tu contraseña">
+          <button (click)="hide1 = !hide1" mat-icon-button matSuffix>
+            <mat-icon>{{ hide1 ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </mat-form-field>
         @if (formGroup.get('password')?.touched && formGroup.get('password')?.errors) {
@@ -108,18 +108,18 @@
           </div>
         }
 
-
         <mat-form-field class="example-full-width">
           <mat-label>Repetir contraseña</mat-label>
-          <input [type]="hide ? 'password' : 'text'" formControlName="repassword" id="repassword" matInput
+          <input [type]="hide2 ? 'password' : 'text'" formControlName="repassword" matInput
                  placeholder="Repetí tu contraseña">
-          @if (formGroup.get('repassword')?.errors?.['mismatch'] && formGroup.get('repassword')?.touched) {
-            <mat-error>
-              Tus contraseñas no coinciden
-            </mat-error>
-          }
+          <button (click)="hide2 = !hide2" mat-icon-button matSuffix>
+            <mat-icon>{{ hide2 ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="formGroup.get('repassword')?.errors?.['mismatch'] && formGroup.get('repassword')?.touched">
+            Tus contraseñas no coinciden
+          </mat-error>
         </mat-form-field>
-
+        
         <button (click)="signup()" id="singup" mat-stroked-button type="submit">
           Crear cuenta
         </button>

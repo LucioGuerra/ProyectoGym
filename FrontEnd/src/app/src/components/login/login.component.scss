@@ -141,6 +141,17 @@ button {
   border-radius: 10px;
   }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-webkit-clear-button {
+  display: none;
+  }
+
+input[type="password"] {
+  -webkit-text-security: disc;
+  }
+
 .forgot {
   color: #B9A552;
   font-style: italic;

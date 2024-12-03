@@ -38,6 +38,26 @@ export class AuthService {
     this.loadSession();
   }
 
+  public resetPassword(token:string, newPassword:string){
+    this.auth0Client.changePassword({
+      connection: environment.auth0.database,
+      email: this.userInfo().email,
+      password: newPassword,
+      verify_email: false,
+      client_id: environment.auth0.clientId,
+      reset_password: true,
+      token: token
+    }, (err: any, result: any) => {
+      if (err) {
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Ha ocurrido un error al restablecer la contraseña, intente nuevamente"}});
+      } else {
+        this._snackBar.open("Contraseña restablecida exitosamente", "Cerrar", {
+          duration: 3000,
+        });
+      }
+    });
+  }
+
   public login(email: string | undefined, password: string | undefined): void {
     this.auth0Client.login({
       email: email,
@@ -216,13 +236,13 @@ export class AuthService {
       if (err) {
         console.error("Error sending password change email:", err);
         if (err.description === "User does not exist.") {
-          this.dialog.open(ErrorDialogComponent, { data: { message: "El usuario no existe." } });
+          this.dialog.open(ErrorDialogComponent, {data: {message: "El usuario no existe."}});
         } else {
-          this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
+          this.dialog.open(ErrorDialogComponent, {data: {message: "Ha ocurrido un error, intente nuevamente."}});
         }
       } else {
         console.log("Password change email sent:", resp);
-        this.dialog.open(SendEmailComponent, { data: { message: "Correo de restablecimiento de contraseña enviado." } });
+        this.dialog.open(SendEmailComponent, {data: {message: "Correo de restablecimiento de contraseña enviado."}});
       }
     });
   }

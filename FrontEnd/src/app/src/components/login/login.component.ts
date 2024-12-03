@@ -18,6 +18,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {ToolbarComponent} from "../toolbar";
+import {MatIcon} from "@angular/material/icon";
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -30,7 +31,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, ToolbarComponent],
+  imports: [FormsModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, ToolbarComponent, MatIcon],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -43,7 +44,7 @@ export class LoginComponent {
 
   emailFormControl = new FormControl("", [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
-  
+
 
   formGroup = new FormGroup({
     email: this.emailFormControl,
