@@ -11,6 +11,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {firstValueFrom} from "rxjs";
 import {DniService} from "../dni/dni.service";
 import {ErrorDialogComponent} from "../../dialog/error-dialog/error-dialog.component";
+import {SendEmailComponent} from "../../dialog/send-email/send-email.component";
 
 
 @Injectable({providedIn: "root"})
@@ -210,14 +211,18 @@ export class AuthService {
   public forgotPassword(email: string): void {
     this.auth0Client.changePassword({
       connection: environment.auth0.database,
-      email: email,
-      debugger: true
+      email: email
     }, (err: any, resp: any) => {
       if (err) {
         console.error("Error sending password change email:", err);
+        if (err.description === "User does not exist.") {
+          this.dialog.open(ErrorDialogComponent, { data: { message: "El usuario no existe." } });
+        } else {
+          this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
+        }
       } else {
         console.log("Password change email sent:", resp);
-        console.log(email)
+        this.dialog.open(SendEmailComponent, { data: { message: "Correo de restablecimiento de contraseña enviado." } });
       }
     });
   }
