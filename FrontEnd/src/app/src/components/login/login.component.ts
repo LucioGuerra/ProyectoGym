@@ -43,6 +43,7 @@ export class LoginComponent {
 
   emailFormControl = new FormControl("", [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
+  
 
   formGroup = new FormGroup({
     email: this.emailFormControl,
@@ -91,4 +92,5 @@ export class LoginComponent {
   microsoft() {
     this.auth0.loginWithThirdParty("windowslive")
   }
+
 }

@@ -210,7 +210,8 @@ export class AuthService {
   public forgotPassword(email: string): void {
     this.auth0Client.changePassword({
       connection: environment.auth0.database,
-      email: email
+      email: email,
+      debugger: true
     }, (err: any, resp: any) => {
       if (err) {
         console.error("Error sending password change email:", err);
