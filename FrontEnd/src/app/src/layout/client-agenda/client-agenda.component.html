@@ -70,7 +70,7 @@
                     (change)="chipsChangeEvent('change', $event)"
                   >
                     @for (activity of activities; track activity) {
-                      <mat-chip-option [value]="activity.name" selected>
+                      <mat-chip-option [value]="activity.name" [selected]="isActivitySelected(activity.name)">
                         {{ activity.name }}
                       </mat-chip-option>
                     }

@@ -71,4 +71,8 @@ export class UserService {
   getAdmins(): Observable<Instructor[]> {
     return this.http.get<Instructor[]>(`${this.apiUrl}/admins`);
   }
+
+  getUserPackageActivities(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/package/activity/${email}`);
+  }
 }
