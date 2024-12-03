@@ -102,7 +102,7 @@
                 <li>La contraseña debe incluir números.</li>
               }
               @if (formGroup.get('password')?.hasError('hasSpecial')) {
-                <li>La contraseña debe incluir caracteres especiales.</li>
+                <li>La contraseña debe incluir caracteres especiales (~, &#64;, #, _, ^, *, %, /, , +, :, ;, =).</li>
               }
             </ul>
           </div>
