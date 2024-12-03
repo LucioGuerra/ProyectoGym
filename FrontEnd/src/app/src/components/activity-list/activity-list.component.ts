@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
 import { Role } from '../models';
 import { Activity } from '../models';
 import { User } from "@auth0/auth0-angular";
-
+import { MatDividerModule } from '@angular/material/divider';
 import { MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import { MatActionList} from "@angular/material/list";
 import { MatButton } from '@angular/material/button';
@@ -34,6 +34,7 @@ import { MatTableDataSource } from '@angular/material/table';
     MatMenuTrigger,
     MatActionList, 
     MatButton,
+    MatDividerModule,
   ],
   templateUrl: './activity-list.component.html',
   styleUrls: ['./activity-list.component.scss'],
@@ -90,7 +91,7 @@ export class ActivityListComponent {
   }
 
 
-  updateActivity(id: bigint) {
-    alert("upadating activity with id:" + id);
+  updateActivity(name: string) {
+    alert("upadating activity: " + name);
   }
 }

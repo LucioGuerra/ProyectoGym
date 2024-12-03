@@ -16,7 +16,7 @@
   background-color: #222222;
   color: #d0d0d0;
   font-weight: bold;
-  width: 55%;
+  width: 49%;
   padding: 1rem;
   box-sizing: border-box;
   max-width: 100%;
@@ -83,32 +83,38 @@ mat-table {
 }
 
 th, td {
-  padding: 12px 87px; 
+  padding: 4px 20px; 
+  margin: 1;
 }
 
-th {
+th {        
   font-size: 1.15rem;
   font-weight: bold;
   border-bottom: 2px solid #d0d0d0;
   white-space: nowrap; 
   text-align: left !important;
-  align-items: start !important;
   align-content: start !important;
-  transform: translateY(20%);
+  vertical-align: bottom !important; 
+  line-height: 1 !important;             
+  padding: 16px 20px 3px !important;
 }
 
 
 td {
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   text-align: left !important;
+  vertical-align: top !important;
+  padding: 20px 20px 7px !important;
 }
 
 tr {
   display: table-row;
   color: #d0d0d0;
+  height: auto;        /* Deja que la altura se ajuste automáticamente */
+  min-height: 32px;
 }
 
 mat-header-row, mat-row {
@@ -123,19 +129,20 @@ th {
 }
 
 #colNombre {
-  width: 35% !important;
-  flex: 3 !important;
+  width: 25% !important;
+  flex: 2 !important;
 }
 
 #colDes {
   width: 50% !important;
-  flex: 5 !important; 
+  flex: 4 !important; 
 }
 
 #colPrice, #colEdit {
-  width: 12% !important; 
-  flex: 2 !important;
+  width: 12.5% !important; 
+  flex: 1 !important;
 }
+
 
 mat-header-cell, mat-cell {
   box-sizing: border-box;
@@ -145,13 +152,6 @@ mat-header-cell, mat-cell {
   overflow: hidden;
   flex: none !important;
 }
-
-
-
-
-
-
-
 
 //////////////////////////////////////////////////////////////
 
@@ -174,7 +174,7 @@ mat-header-cell, mat-cell {
 @media (min-width: 1235px) and (max-width: 1295px) {
 
 .card {
-    width: 75%;  
+    width: 65%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -184,7 +184,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
 }
@@ -194,7 +194,7 @@ mat-header-cell, mat-cell {
 @media (min-width: 1190px) and (max-width: 1235px) {
   
   .card {
-    width: 75%;  
+    width: 65%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -205,7 +205,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.88rem;
+    font-size: 1rem;
     overflow: hidden;
   }
   
@@ -239,7 +239,7 @@ mat-header-cell, mat-cell {
 
 @media (min-width: 1025px) and (max-width: 1140px) {
   .card {
-    width: 75%;  
+    width: 71%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -296,7 +296,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.9rem;
+    font-size: 1rem;
     overflow: hidden;
   }
   
@@ -308,7 +308,7 @@ mat-header-cell, mat-cell {
 @media (min-width: 980px) and (max-width: 1025px) {
   
   .card {
-    width: 80%;  
+    width: 75%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -318,7 +318,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.9rem;
+    font-size: 1rem;
     overflow: hidden;
   }
   
@@ -340,7 +340,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.9rem;
+    font-size: 1rem;
     overflow: hidden;
   }
   
@@ -360,11 +360,11 @@ mat-header-cell, mat-cell {
   }
   
   th {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
   
   td {
-    font-size: 0.88rem;
+    font-size: 1rem;
     overflow: hidden;
   }
   
@@ -387,7 +387,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.88rem;
+    font-size: 0.93rem;
     overflow: hidden;
   }
 
@@ -399,7 +399,7 @@ mat-header-cell, mat-cell {
 @media (min-width: 756px) and (max-width: 810px) {
   
   .card {
-    width: 80%;  
+    width: 82%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -409,7 +409,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.88rem;
+    font-size: 0.93rem;
     overflow: hidden;
   }
 
@@ -422,7 +422,7 @@ mat-header-cell, mat-cell {
 @media (min-width: 710px) and (max-width: 756px) {
   
   .card {
-    width: 80%;  
+    width: 86%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -432,7 +432,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.88rem;
+    font-size: 0.93rem;
     overflow: hidden;
   }
   
@@ -444,7 +444,7 @@ mat-header-cell, mat-cell {
 @media (min-width: 670px) and (max-width: 710px) {
   
   .card {
-    width: 80%;  
+    width: 90%;  
     height: auto;
     padding: 0.75rem;
   }
@@ -454,7 +454,7 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.86rem;
+    font-size: 0.9rem;
     overflow: hidden;
   }
   
@@ -466,13 +466,13 @@ mat-header-cell, mat-cell {
 @media (min-width: 623px) and (max-width: 670px) {
   
   .card {
-    width: 90%;  
+    width: 97%;  
     height: auto;
     padding: 0.75rem;
   }
   
   th {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   td {
@@ -484,29 +484,7 @@ mat-header-cell, mat-cell {
 
 ////////////////////////////////////////////
 
-@media (min-width: 565px) and (max-width: 623px) {
-  
-  .card {
-    width: 90%;  
-    height: auto;
-    padding: 0.75rem;
-  }
-  
-  th {
-    font-size: 1.1rem;
-  }
-  
-  td {
-    font-size: 0.9rem;
-    overflow: hidden;
-  }
-
-}
-
-/////////////////////////////////////////////
-
-
-@media (min-width: 506px) and (max-width: 565px) {
+@media (min-width: 599px) and (max-width: 623px) {
   
   .card {
     width: 100%;  
@@ -515,7 +493,7 @@ mat-header-cell, mat-cell {
   }
   
   th {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   td {
@@ -525,10 +503,9 @@ mat-header-cell, mat-cell {
 
 }
 
-////////////////////////////////////////////
+/////////////////////////////////////////////
 
-
-@media (min-width: 470px) and (max-width: 506px) {
+@media (min-width: 593px) and (max-width: 599px) {
   
   .card {
     width: 100%;  
@@ -542,75 +519,6 @@ mat-header-cell, mat-cell {
   
   td {
     font-size: 0.8rem;
-    overflow: hidden;
-  }
-
-}
-
-//////////////////////////////////////////////
-
-@media (min-width: 433px) and (max-width: 470px) {
-  
-  .card {
-    width: 100%;  
-    height: auto;
-    padding: 0.75rem;
-  }
-  
-  th {
-    font-size: 1rem;
-  }
-  
-  td {
-    font-size: 0.8rem;
-    overflow: hidden;
-  }
-
-}
-
-////////////////////////////////////////////
-
-
-@media (min-width: 411px) and (max-width: 433px) {
-  
-  .card {
-    width: 100%;  
-    height: auto;
-    padding: 0.75rem;
-  }
-  
-  th {
-    font-size: 1rem;
-  }
-  
-  td {
-    font-size: 0.8rem;
-    overflow: hidden;
-  }
-
-}
-
-//////////////////////////////////////////////
-
-@media (min-width: 393px) and (max-width: 411px) {
-  
-  .table-container {
-    overflow-x: auto; 
-    width: 100%; 
-  }
-
-  .card {
-    width: 100%;
-  }
-  
-  th {
-    font-size: 1.1rem;
-  }
-  
-  td {
-    font-size: 0.9rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
 
@@ -618,7 +526,8 @@ mat-header-cell, mat-cell {
 
 /////////////////////////////////////////////
 
-@media (max-width: 393px) {
+
+@media (max-width: 593px) {
   
   .table-container {
     overflow-x: auto; 
@@ -634,10 +543,12 @@ mat-header-cell, mat-cell {
   }
   
   td {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
   }
 
 }
+
+
