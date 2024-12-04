@@ -76,8 +76,8 @@ export class ShifAdminScreenComponent implements OnInit {
     this.loadActivities();
     this.appointmentService.appointmentChanged$.subscribe(() => {
       console.log('Cambios en los appointments detectados. Recargando...');
-      this.loadAppointment(this.tabIndex());  // Recargamos los appointments
-      this.changeDetectorRef.markForCheck();  // Forzar la detección de cambios
+      this.loadAppointment(this.tabIndex());
+      this.changeDetectorRef.markForCheck();
     });
   }
 

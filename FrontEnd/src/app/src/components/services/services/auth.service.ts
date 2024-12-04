@@ -17,6 +17,7 @@ import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
+  
   private auth0Client: auth0.WebAuth;
   isAuthenticated = signal<boolean>(false);
   isAdmin = signal<boolean>(false);
@@ -291,5 +292,9 @@ export class AuthService {
       console.error("Error al guardar el usuario: ", error);
       throw error;
     }
+  }
+
+  getToken() {
+    return localStorage.getItem('access_token');
   }
 }
