@@ -144,7 +144,6 @@ export class UserEditComponent {
   }
 
   changePassword(): void {
-    alert('Changing password');
     this.router.navigate(['/change-password']);
   }
 

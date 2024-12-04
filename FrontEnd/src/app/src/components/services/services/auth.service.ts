@@ -11,6 +11,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {firstValueFrom} from "rxjs";
 import {DniService} from "../dni/dni.service";
 import {ErrorDialogComponent} from "../../dialog/error-dialog/error-dialog.component";
+import {HttpClient} from '@angular/common/http';
 
 
 @Injectable({providedIn: "root"})
@@ -25,7 +26,8 @@ export class AuthService {
     private userService: UserService,
     private dialog: MatDialog,
     private dniService: DniService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private http: HttpClient
   ) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
@@ -204,6 +206,26 @@ export class AuthService {
   public setUserInfo(idToken: any) {
     console.log("Entra a setUserInfo: ", jwtDecode(idToken));
     this.userInfo.set(jwtDecode(idToken));
+  }
+
+  public changePassword(oldPassword: string | null | undefined, newPassword: string | null | undefined): void {
+    const email = this.userInfo().email;
+    console.log("Email: ", email);
+    this.auth0Client.changePassword({
+      email: email,
+      connection: environment.auth0.database,
+      password: newPassword
+    }, (err: any, result: any) => {
+      if (err) {
+        console.error('Error changing password:', err);
+        this.dialog.open(ErrorDialogComponent, {data: {message: 'Error changing password.'}});
+      } else {
+        console.log('Password changed successfully.');
+        this._snackBar.open('Password changed successfully.', 'Close', {
+          duration: 2000,
+        });
+      }
+    });
   }
 
   private setSession(accessToken: any, expiresIn: any, idToken: any, userRole: Role): Promise<void> {

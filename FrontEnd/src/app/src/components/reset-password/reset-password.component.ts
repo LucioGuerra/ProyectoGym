@@ -10,6 +10,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {ToolbarComponent} from "../toolbar";
 import {Router} from "@angular/router";
+import { DrawerComponent } from "../drawer/drawer.component";
 
 @Component({
   selector: 'app-reset-password',
@@ -27,8 +28,9 @@ import {Router} from "@angular/router";
     ReactiveFormsModule,
     ToolbarComponent,
     MatIconButton,
-    MatSuffix
-  ],
+    MatSuffix,
+    DrawerComponent
+],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -39,7 +41,7 @@ export class ResetPasswordComponent {
   hide2 = true;
   hide3 = true;
   formGroup = new FormGroup({
-    oldpassword: new FormControl("", [Validators.required, passwordValidators.passwordStrengthValidator]),
+    oldpassword: new FormControl("", [Validators.required]),
     password: new FormControl("", [Validators.required, Validators.minLength(8), passwordValidators.passwordStrengthValidator]),
     repassword: new FormControl("", [Validators.required, passwordValidators.passwordMatchValidator]),
   });
@@ -55,8 +57,9 @@ export class ResetPasswordComponent {
   changePassword(): void {
     if (this.formGroup.valid) {
       if (this.validacionPassword()) {
-        const json = this.formGroup.value;
-
+        const oldPassword = this.formGroup.get('oldpassword')?.value;
+        const newPassword = this.formGroup.get('password')?.value;
+        this.auth.changePassword(oldPassword, newPassword);
       } else {
         this.formGroup.markAsTouched();
       }
