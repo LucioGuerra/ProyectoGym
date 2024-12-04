@@ -21,7 +21,7 @@ export class PackageService {
     userId: any
   }) {
     console.log(packageData);
-    return this.http.post<Package>(this.apiUrl, packageData);
+    return this.http.post<Package>(this.apiUrl+"/admin", packageData);
   }
 
   getRandomPackages() {

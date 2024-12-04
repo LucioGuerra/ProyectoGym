@@ -15,6 +15,8 @@ import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -178,7 +180,7 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(streak);
     }
-    
+
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -208,5 +210,15 @@ public class UserService {
                 .toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(activities);
+    }
+
+
+    //Security
+    public Collection<GrantedAuthority> getAuthorityByEmail(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().name()));
+        return authorities;
     }
 }
