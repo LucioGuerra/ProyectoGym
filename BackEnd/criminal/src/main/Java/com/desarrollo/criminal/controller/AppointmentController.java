@@ -8,6 +8,7 @@ import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
 import com.desarrollo.criminal.service.AppointmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/appointments")
+@RequestMapping("/api/appointments")
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
@@ -34,42 +35,37 @@ public class AppointmentController {
         return appointmentService.getAppointmentByDate(date);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
     }
 
-    @GetMapping("/kine/date/{date}")
+    @GetMapping("/public/kine/date/{date}")
     public ResponseEntity<List<AppointmentListResponseDTO>> getKinesiologyAppointmentByDate(@PathVariable LocalDate date) {
         return appointmentService.getKinesiologyAppointmentByDate(date);
     }
 
-    @PostMapping("/kine")
+    @PostMapping("/public/kine")
     public ResponseEntity<?> createKinesiologyAppointment(@RequestBody KinesiologyAppointmentDTO kinesiologyAppointmentDTO) {
         return appointmentService.createKinesiologyAppointment(kinesiologyAppointmentDTO);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}/deleteAllFutureAppointments={deleteAllFutureAppointments}")
+    @DeleteMapping("/admin/{id}/deleteAllFutureAppointments={deleteAllFutureAppointments}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id,
                                                 @PathVariable Boolean deleteAllFutureAppointments) {
         return appointmentService.deleteAppointment(id, deleteAllFutureAppointments);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping("admin/{id}")
     public ResponseEntity<?> updateAllAppointment(@PathVariable Long id, @RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.updateAllAppointment(id, appointmentDTO);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PatchMapping("/{id}")
+    @PatchMapping("/admin/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Long id,
                                                @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
-
 
 
     @PostMapping("/{appointmentId}/user/{userId}")
@@ -77,7 +73,7 @@ public class AppointmentController {
         return appointmentService.addParticipant(appointmentId, userId);
     }
 
-    @PostMapping("/{appointmentId}/user/{userId}/attendance")
+    @PostMapping("/admin/{appointmentId}/user/{userId}/attendance")
     public ResponseEntity<?> switchParticipantAttendance(@PathVariable Long appointmentId, @PathVariable Long userId) {
         return appointmentService.switchParticipantAttendance(appointmentId, userId);
     }

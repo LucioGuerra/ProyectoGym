@@ -6,6 +6,7 @@ import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
@@ -23,13 +24,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @GetMapping("/admins")
+    @GetMapping("/admin/admins")
     public ResponseEntity<List<UserResponseDTO>> getAdmins(){
         return userService.getUserAdmins();
     }
@@ -39,7 +39,7 @@ public class UserController {
         return userService.getUserDTOById(id);
     }
 
-    @GetMapping("/email")
+    @GetMapping("/public/email")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam("email") @Email String email){
         return userService.getUserByEmail(email);
     }
@@ -64,7 +64,7 @@ public class UserController {
         return userService.getActivePackage(id);
     }
 
-    @PostMapping
+    @PostMapping("/public")
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);
     }

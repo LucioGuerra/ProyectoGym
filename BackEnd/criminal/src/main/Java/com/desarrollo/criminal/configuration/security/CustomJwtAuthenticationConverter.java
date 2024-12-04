@@ -4,6 +4,7 @@ package com.desarrollo.criminal.configuration.security;
 
 import com.desarrollo.criminal.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +13,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Component
 public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
@@ -22,7 +25,8 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         String email = jwt.getClaim("email");
-        Collection<GrantedAuthority> authority = userService.getAuthorityByEmail(email);
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) userService.getAuthorityByEmail(email);
+        log.info("Authorities: {}", authority);
         return new JwtAuthenticationToken(jwt, authority);
     }
 
