@@ -19,7 +19,7 @@
       <mat-action-list>
         @if(announcements.length === 0) {
         <div class="no-announcements">
-          <p>There aren't any announcements yet</p>
+          <p>No hay ningun anuncio por ahora...</p>
         </div>
         } @else { @for (announcement of announcements; track announcement) {
         <mat-card class="hija" (click)="openAnnouncement(announcement.id, $event)">

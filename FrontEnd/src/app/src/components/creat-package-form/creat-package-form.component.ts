@@ -15,9 +15,10 @@ import {Observable, startWith} from "rxjs";
 import {map} from "rxjs/operators";
 import {Router} from '@angular/router';
 import {PackageService} from "../services/services/package.service";
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ErrorDialogComponent} from '../dialog/error-dialog/error-dialog.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
 
 @Component({
   selector: 'app-creat-package-form',
@@ -39,8 +40,9 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     MatAutocompleteTrigger,
     AsyncPipe,
     NgForOf,
-    NgIf
-  ],
+    NgIf,
+    MainScreenComponent
+],
   templateUrl: './creat-package-form.component.html',
   styleUrl: './creat-package-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -146,11 +148,6 @@ export class CreatPackageFormComponent implements OnInit {
     );
   }
 
-  // Navegar de vuelta a la agenda
-  return() {
-    this.router.navigate(['/admin/agenda']);
-  }
-
   // Cargar lista de usuarios
   private loadUsers() {
     this.userService.getAllUsers().subscribe(
@@ -195,5 +192,9 @@ export class CreatPackageFormComponent implements OnInit {
   private _filter(dni: string): UserModel[] {
     const filterValue = dni.toLowerCase();
     return this.users.filter(user => user.dni.toLowerCase().includes(filterValue));
+  }
+  // Navegar de vuelta a la agenda
+  return() {
+    history.back();
   }
 }

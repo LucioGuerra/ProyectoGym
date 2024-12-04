@@ -1,3 +1,4 @@
+import { UserService } from './../../components/services/services/user.service';
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component, effect, OnChanges, OnInit,
@@ -66,7 +67,7 @@ export class ClientAgendaComponent implements OnInit {
   readonly today: Date = new Date();
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+  constructor(private userService: UserService, private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isClient()) {
@@ -83,8 +84,9 @@ export class ClientAgendaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAppointment(this.tabIndex());
     this.loadActivities();
+    this.loadUserPackageActivities();
+    this.loadAppointment(this.tabIndex());
     console.log('Fecha seleccionada:', this.selectedDate());
     console.log('today: ', this.today);
     this.appointmentService.appointmentChanged$.subscribe(() => {
@@ -94,6 +96,23 @@ export class ClientAgendaComponent implements OnInit {
     });
   }
 
+  loadUserPackageActivities() {
+    console.log('Datos de las actividades del usuario:');
+    this.userService.getUserPackageActivities(this.auth0.userInfo().email).subscribe(
+      (data: string[]) => {
+        console.log('Datos de las actividades del usuario:', data);
+        this.selectedActivities.set(data);
+        this.changeDetectorRef.markForCheck();
+      },
+      (error) => {
+        console.error('Error al obtener las actividades del paquete', error);
+      });
+  }
+
+  isActivitySelected(activityName: string): boolean {
+    return this.selectedActivities().includes(activityName);
+  }
+
   loadAppointment(tabIndex: number) {
     if (tabIndex == undefined || tabIndex == 0) {
       console.log('Cargando citas de todas las actividades');
@@ -101,7 +120,7 @@ export class ClientAgendaComponent implements OnInit {
         (data: Appointment[]) => {
           console.log('Datos en el componente:', data);
           this.appointments = data;
-          this.appointmentList.set(data);
+          this.appointmentList.set(this.appointments.filter(appointment => this.selectedActivities().includes(appointment.activity)));
           this.changeDetectorRef.markForCheck();
         },
         (error) => {

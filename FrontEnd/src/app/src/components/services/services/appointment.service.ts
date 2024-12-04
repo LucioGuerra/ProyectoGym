@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Appointment, AppointmentRequest, KineModel, UserModel} from '../../index'; // Ajusta según tus rutas
-import {interval, Observable, Subject, switchMap} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {environment} from '../../../../../index';
-import {UserService} from "./user.service";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Appointment, AppointmentRequest, KineModel, UserModel } from '../../index'; // Ajusta según tus rutas
+import { interval, Observable, Subject, switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../../../index';
+import { UserService } from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +26,17 @@ export class AppointmentService {
     // Emitir actualizaciones cada 1 segundos
     interval(1000)
       .pipe(// Llamar al servidor para obtener citas
-      )
+    )
       .subscribe(() => {
-          // this.appointmentChangedSource.next(); // Emitir las citas actualizadas
-        },
+        // this.appointmentChangedSource.next(); // Emitir las citas actualizadas
+      },
       );
   }
 
 
-  notifyAppointmentChanged() {+
-    console.log('Notificando cambio en las citas');
+  notifyAppointmentChanged() {
+    +
+      console.log('Notificando cambio en las citas');
     this.appointmentChangedSource.next();
   }
 
@@ -88,15 +89,26 @@ export class AppointmentService {
 
   async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologo: UserModel): Promise<Observable<any>> {
     console.log('Agregando usuario a la cita de kinesiología, id:', appointmentId, 'email:', userEmail, 'kinesiologo:', kinesiologo);
-    this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {kinesiologo: kinesiologo, updateAllFutureAppointments:false}).subscribe(
-      () => {
-        console.log('Instructor asignado a la cita de kinesiología');
-      },
-      error => {
-        console.error('Error al asignar el instructor a la cita de kinesiología:', error);
-      }
-    );
-    return this.reserveAppointment(appointmentId, userEmail);
+    return new Observable(observer => {
+      this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, { kinesiologo: kinesiologo, updateAllFutureAppointments: false }).subscribe(
+        () => {
+          console.log('Instructor asignado a la cita de kinesiología');
+          this.reserveAppointment(appointmentId, userEmail).subscribe(
+            reservation => {
+              observer.next(reservation);
+              observer.complete();
+            },
+            error => {
+              observer.error(error);
+            }
+          );
+        },
+        error => {
+          console.error('Error al asignar el instructor a la cita de kinesiología:', error);
+          observer.error(error);
+        }
+      );
+    });
   }
 
   getKinesiologyAppointmentsByDate(date: Date) {
@@ -136,17 +148,31 @@ export class AppointmentService {
     );
   }
 
-  removeInstructorFromKinesiologyAppointment(appointmentId: string) {
-    return this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {
-      "instructorID": "-1",
-      "updateAllFutureAppointments": false
-    }).subscribe(
-      () => {
-        console.log('Instructor eliminado de la cita de kinesiología');
-      },
-      error => {
-        console.error('Error al eliminar el instructor de la cita de kinesiología:', error);
-      }
-    );
+  unreserveKinesiologyAppointment(appointmentId: string, userEmail: string): Observable<any> {
+    return new Observable(observer => {
+      this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {
+        "instructorID": "-1",
+        "updateAllFutureAppointments": false
+      }).subscribe(
+        () => {
+          console.log('Instructor eliminado de la cita de kinesiología');
+          this.unreserveAppointment(appointmentId, userEmail).subscribe(
+            result => {
+              console.log('Cita de kinesiología desreservada');
+              observer.next(result);
+              observer.complete();
+            },
+            error => {
+              console.error('Error al desreservar la cita de kinesiología:', error);
+              observer.error(error);
+            }
+          );
+        },
+        error => {
+          console.error('Error al eliminar el instructor de la cita de kinesiología:', error);
+          observer.error(error);
+        }
+      );
+    });
   }
 }

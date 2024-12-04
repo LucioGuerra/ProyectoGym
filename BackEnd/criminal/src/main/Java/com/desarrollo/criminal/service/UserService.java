@@ -1,6 +1,7 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
+import com.desarrollo.criminal.dto.response.GetPackageActivityDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
@@ -191,5 +192,21 @@ public class UserService {
                 new EntityNotFoundException("User not found with dni: " + dni));
 
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
+
+    public ResponseEntity<List<String>> getActivePackageByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+
+        GetPackageDTO activePackage = this.getActivePackage(user.getId()).getBody();
+
+        if (activePackage == null) {
+            throw new CriminalCrossException("NO_ACTIVE_PACKAGE", "User has no active package");
+        }
+        List<String> activities = activePackage.getActivities().stream()
+                .map(GetPackageActivityDTO::getName)
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 }

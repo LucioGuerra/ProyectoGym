@@ -62,6 +62,11 @@ public class UserController {
         return userService.getActivePackage(id);
     }
 
+    @GetMapping("/package/activity/{email}")
+    public ResponseEntity<List<String>> getUserPackagesByEmail(@PathVariable String email){
+        return userService.getActivePackageByEmail(email);
+    }
+
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);

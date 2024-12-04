@@ -1,5 +1,5 @@
 <div class="carousel-container">
-  <mat-tab-group class="custom-tab-group" [(selectedIndex)]="firstCarouselIndex">
+  <mat-tab-group class="custom-tab-group tab1" [(selectedIndex)]="firstCarouselIndex">
     @for(activity of activities ; track activity) {
     <mat-tab>
         <div class="cartas">
@@ -15,7 +15,7 @@
     </mat-tab>
     }
   </mat-tab-group>
-  <mat-tab-group class="custom-tab-group" [(selectedIndex)]="secondCarouselIndex">
+  <mat-tab-group class="custom-tab-group tab2" [(selectedIndex)]="secondCarouselIndex">
     @for(activity of activities ; track activity) {
     <mat-tab>
         <div class="cartas">
@@ -31,7 +31,7 @@
     </mat-tab>
     }
   </mat-tab-group>
-  <mat-tab-group class="custom-tab-group" [(selectedIndex)]="thirdCarouselIndex">
+  <mat-tab-group class="custom-tab-group tab3" [(selectedIndex)]="thirdCarouselIndex">
     @for(activity of activities ; track activity) {
     <mat-tab>
         <div class="cartas">
