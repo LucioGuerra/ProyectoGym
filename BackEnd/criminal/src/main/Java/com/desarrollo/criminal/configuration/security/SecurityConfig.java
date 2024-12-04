@@ -40,8 +40,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/**/public/**").permitAll()
-                        .requestMatchers("/api/**/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/*/public/**").permitAll()
+                        .requestMatchers("/api/*/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/**").authenticated()
                 )
                 .cors(withDefaults())

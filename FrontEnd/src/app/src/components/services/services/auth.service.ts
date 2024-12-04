@@ -17,7 +17,7 @@ import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  
+
   private auth0Client: auth0.WebAuth;
   isAuthenticated = signal<boolean>(false);
   isAdmin = signal<boolean>(false);
@@ -34,6 +34,7 @@ export class AuthService {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
+      audience: environment.auth0.audience,
       redirectUri: "http://localhost:4200/home",
       responseType: 'token id_token',
       cookieDomain: "."
@@ -46,7 +47,6 @@ export class AuthService {
       email: email,
       password: password,
       realm: environment.auth0.database,
-      audience: environment.auth0.audience
     }, (err: any, result: any) => {
       if (err.code == "access_denied") {
         this.dialog.open(ErrorDialogComponent, { data: { message: "Usuario o contraseña incorrectos" } });
@@ -183,7 +183,7 @@ export class AuthService {
                 await this.createUser(usuario);
                 await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
               } catch (error) {
-                const d = this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente mas tarde." } });                
+                const d = this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente mas tarde." } });
                 d.afterClosed().subscribe(() => {
                   this.router.navigate(['/home']);
                 });

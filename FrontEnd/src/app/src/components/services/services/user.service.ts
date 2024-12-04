@@ -27,7 +27,7 @@ export class UserService {
   }
 
   getUserByEmail(email: string): Observable<UserModel> {
-    return this.http.get<UserModel>(`${this.apiUrl}+/public/email`, {params: {email: email}});
+    return this.http.get<UserModel>(`${this.apiUrl}/public/email`, {params: {email: email}});
   }
 
   getUserByDNI(dni: string): Observable<UserModel> {
