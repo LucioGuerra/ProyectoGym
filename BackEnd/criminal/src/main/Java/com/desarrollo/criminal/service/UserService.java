@@ -209,4 +209,17 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
+
+    public ResponseEntity<List<String>> getActivitiesUser(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+
+        Package aPackage = userRepository.findActivePackagesByUserId(user.getId());
+
+        List<String> activities = aPackage.getPackageActivities().stream()
+                .map(packageActivity -> packageActivity.getActivity().getName())
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(activities);
+    }
 }
