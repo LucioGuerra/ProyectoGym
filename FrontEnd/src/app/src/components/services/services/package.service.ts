@@ -15,6 +15,6 @@ export class PackageService {
 
   createPackage(packageData: Package) {
     console.log(packageData);
-    return this.http.post<Package>(this.apiUrl, packageData);
+    return this.http.post<Package>(this.apiUrl+"/admin", packageData);
   }
 }

@@ -61,7 +61,7 @@ public class AppointmentController {
         return appointmentService.updateAllAppointment(id, appointmentDTO);
     }
 
-    @PatchMapping("/admin/{id}")
+    @PatchMapping("/public/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Long id,
                                                @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
