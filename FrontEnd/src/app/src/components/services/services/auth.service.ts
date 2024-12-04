@@ -38,7 +38,7 @@ export class AuthService {
       responseType: 'token id_token',
       cookieDomain: "."
     })
-    this.loadSession();
+    // this.loadSession();
   }
 
   public login(email: string | undefined, password: string | undefined): void {
