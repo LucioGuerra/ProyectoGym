@@ -37,6 +37,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignupComponent {
+  error = false;//El error lo uso para mostrar el errorDialog una vez que se haga la incidencia
   hide1 = true;
   hide2 = true;
 
@@ -65,6 +66,7 @@ export class SignupComponent {
   signup(): void {
     if (this.formGroup.valid) {
       if (this.validacionPassword()) {
+        this.error = false
         const json = this.formGroup.value;
         var user: UserModel = {
           dni: json.dni!,
@@ -75,6 +77,7 @@ export class SignupComponent {
         console.log(json);
         this.auth0.signup(json.email?.toString(), json.password?.toString(), user);
       } else {
+        this.error = true;
         this.formGroup.markAsTouched();
       }
     } else {
