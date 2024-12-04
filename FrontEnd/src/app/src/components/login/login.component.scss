@@ -25,9 +25,8 @@ mat-card {
   border: 0.001px solid rgb(18, 18, 18);
 
   padding: 20px;
-  width: 550px;
   height: auto;
-  min-width: 550px;
+  min-width: 360px;
   max-width: 550px;
 
   margin-bottom: 30px;
@@ -106,13 +105,8 @@ mat-card-content {
   margin-bottom: 20px;
   }
 
-#signup {
-  width: 225px;
-  margin-top: 20px;
-  }
-
-#login {
-  width: 225px;
+.boton {
+  width: 47.5%;
   margin-top: 20px;
   }
 
@@ -154,15 +148,17 @@ input[type="password"] {
 
 .forgot {
   color: #B9A552;
+  align-self: flex-end;
   font-style: italic;
+  cursor: pointer;
   margin-bottom: 6px;
   min-width: max-content;
-  margin-left: 290px;
   text-decoration: underline;
   }
 
 #olvidaste {
-  cursor: pointer;
+  text-align: right;
+  width: 100%;
   }
 
 .forgot:hover {
@@ -193,5 +189,35 @@ input[type="password"] {
 @media (max-height: 710px) {
   .container {
     overflow-y: scroll;
+    }
+  }
+
+@media (max-height: 780px) {
+  @media (max-width: 400px) {
+    mat-card {
+      padding: 10px;
+      margin-top: 60px;
+      .titulo{
+        font-size: 30px;
+        }
+      button{
+        height: 45px;
+        }
+      }
+    }
+  }
+
+@media (max-width: 575px) {
+  mat-card {
+    padding: 10px;
+    height: auto;
+    min-width: 350px;
+    width: 95%;
+    }
+  }
+
+@media (max-width: 400px) {
+  .boton{
+    font-size: 95%;
     }
   }
