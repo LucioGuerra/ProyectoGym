@@ -36,8 +36,7 @@ export class AuthService {
       clientID: environment.auth0.clientId,
       audience: environment.auth0.audience,
       redirectUri: "http://localhost:4200/home",
-      responseType: 'token id_token',
-      cookieDomain: "."
+      responseType: 'token id_token'
     })
     this.loadSession();
   }
@@ -47,6 +46,7 @@ export class AuthService {
       email: email,
       password: password,
       realm: environment.auth0.database,
+      audience: environment.auth0.audience
     }, (err: any, result: any) => {
       if (err.code == "access_denied") {
         this.dialog.open(ErrorDialogComponent, { data: { message: "Usuario o contraseña incorrectos" } });
@@ -135,6 +135,7 @@ export class AuthService {
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
 
+        console.log("accessToken: ", accessToken);
         console.log("entramos a handleauth ");
         // @ts-ignore
         this.userService.getUserByEmail(jwtDecode(idToken)['email']).subscribe(
