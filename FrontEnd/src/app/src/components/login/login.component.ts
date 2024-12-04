@@ -61,7 +61,7 @@ export class LoginComponent {
     if (this.formGroup.valid) {
       this.error = false
       const json = this.formGroup.value;
-      console.log(json); //Esto se borra después, es para corroborar q se esta mandando to do ok
+      console.log(json);
       this.auth0.login(json.email?.toString(), json.password?.toString());
       /*this.router.navigate(['/agenda']);*/
     } else {
@@ -79,7 +79,7 @@ export class LoginComponent {
   }
 
   forgot() {
-    console.log("Redirigiendo...")
+    this.router.navigate(['/forgot-password']);
   }
 
   google() {
