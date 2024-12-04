@@ -26,6 +26,7 @@ import {HttpStatusCode} from "@angular/common/http";
 import {formatDate} from "@angular/common";
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { UserService } from '../services/services/user.service';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-appointment-form',
@@ -364,6 +365,14 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   Cancel() {
-    window.history.back();
+    if (this.range.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 }
