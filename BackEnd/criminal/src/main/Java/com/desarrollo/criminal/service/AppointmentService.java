@@ -10,6 +10,7 @@ import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.PackageActivity;
+import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.user.UserXAppointment;
 import com.desarrollo.criminal.entity.Package;
@@ -551,5 +552,15 @@ public class AppointmentService {
         List<Appointment> appointments =
                 appointmentRepository.findByDateAndActivity_NameAndDeletedFalseOrderByStartTime(date, "Kinesiologia");
         return getListResponseEntity(appointments);
+    }
+
+    public ResponseEntity<?> getKinesiologyAppointmentByDni(String dni) {
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByInstructorDniAndRole(dni, Role.KINE);
+
+        List<AppointmentResponseDTO> appointmentsDTO = appointments.stream()
+                .map(this::convertAppointmentToDTO)
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentsDTO);
     }
 }

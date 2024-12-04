@@ -1,9 +1,11 @@
 package com.desarrollo.criminal.repository;
 
 import com.desarrollo.criminal.entity.Appointment;
+import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,4 +29,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT a FROM Appointment a WHERE a.deleted = false")
     List<Appointment> findAllAndDeletedFalse();
+
+    @Query("SELECT a FROM Appointment a JOIN a.instructor u WHERE u.dni = :dni AND u.role = :role")
+    List<Appointment> findAppointmentsByInstructorDniAndRole(@Param("dni") String dni,
+                                                             @Param("role") Role role);
 }
