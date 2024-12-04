@@ -38,6 +38,7 @@ export class ResetPasswordComponent {
   hide1 = true;
   hide2 = true;
   formGroup = new FormGroup({
+    oldpassword: new FormControl("", [Validators.required, passwordValidators.passwordStrengthValidator]),
     password: new FormControl("", [Validators.required, Validators.minLength(8), passwordValidators.passwordStrengthValidator]),
     repassword: new FormControl("", [Validators.required, passwordValidators.passwordMatchValidator]),
   });
