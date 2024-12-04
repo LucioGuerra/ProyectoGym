@@ -49,7 +49,7 @@ export class ForgotPasswordComponent {
   }
 
   back() {
-    window.history.back()
+    this.router.navigate(["/login"]);
   }
 
   async checkEmail(): Promise<boolean> {
