@@ -214,7 +214,8 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new EntityNotFoundException("User not found with email: " + email));
 
-        Package aPackage = userRepository.findActivePackagesByUserId(user.getId());
+        Package aPackage = userRepository.findActivePackagesByUserId(user.getId()).orElseThrow(() ->
+                new CriminalCrossException("NO_ACTIVE_PACKAGE", "User has no active package"));
 
         List<String> activities = aPackage.getPackageActivities().stream()
                 .map(packageActivity -> packageActivity.getActivity().getName())

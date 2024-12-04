@@ -23,5 +23,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByRole(Role role);
 
     @Query("SELECT p FROM User u JOIN u.aPackage p WHERE u.id = :userId AND p.active = true")
-    Package findActivePackagesByUserId(@Param("userId") Long userId);
+    Optional<Package> findActivePackagesByUserId(@Param("userId") Long userId);
 }
