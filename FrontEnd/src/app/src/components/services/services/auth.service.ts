@@ -12,6 +12,7 @@ import {firstValueFrom} from "rxjs";
 import {DniService} from "../dni/dni.service";
 import {ErrorDialogComponent} from "../../dialog/error-dialog/error-dialog.component";
 import {HttpClient} from '@angular/common/http';
+import {SendEmailComponent} from "../../dialog/send-email/send-email.component";
 
 
 @Injectable({providedIn: "root"})
@@ -208,22 +209,16 @@ export class AuthService {
     this.userInfo.set(jwtDecode(idToken));
   }
 
-  public changePassword(oldPassword: string | null | undefined, newPassword: string | null | undefined): void {
-    const email = this.userInfo().email;
-    console.log("Email: ", email);
+  public forgotPassword(email: string): void {
     this.auth0Client.changePassword({
-      email: email,
       connection: environment.auth0.database,
-      password: newPassword
-    }, (err: any, result: any) => {
+      email: email
+    }, (err: any, resp: any) => {
       if (err) {
-        console.error('Error changing password:', err);
-        this.dialog.open(ErrorDialogComponent, {data: {message: 'Error changing password.'}});
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
       } else {
-        console.log('Password changed successfully.');
-        this._snackBar.open('Password changed successfully.', 'Close', {
-          duration: 2000,
-        });
+        console.log("Password change email sent:", resp);
+        this.dialog.open(SendEmailComponent, { data: { message: "Correo de restablecimiento de contraseña enviado." } });
       }
     });
   }

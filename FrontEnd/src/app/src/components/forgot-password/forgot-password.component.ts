@@ -54,7 +54,7 @@ export class ForgotPasswordComponent {
     if (this.formGroup.valid) {
       const json = this.formGroup.value;
       if (this.emailFormControl.value != null) {
-        // this.auth.forgotPassword(this.emailFormControl.value)
+        this.auth.forgotPassword(this.emailFormControl.value)
       } else {
         console.log("Me está llegando null el email")
       }
