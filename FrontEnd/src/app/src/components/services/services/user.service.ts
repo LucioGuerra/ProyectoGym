@@ -12,7 +12,7 @@ import {map} from "rxjs/operators";
   providedIn: 'root'
 })
 export class UserService {
-  
+
   private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   getUserByEmail(email: string): Observable<UserModel> {
-    return this.http.get<UserModel>(`${this.apiUrl}/email`, {params: {email: email}});
+    return this.http.get<UserModel>(`${this.apiUrl}+/public/email`, {params: {email: email}});
   }
 
   getUserByDNI(dni: string): Observable<UserModel> {
@@ -31,12 +31,12 @@ export class UserService {
   }
 
   getAllUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.apiUrl);
+    return this.http.get<UserModel[]>(this.apiUrl+"/admin");
   }
 
   createUser(user: UserModel): Observable<UserModel> {
     console.log("Entra al create user")
-    return this.http.post<UserModel>(this.apiUrl, user);
+    return this.http.post<UserModel>(this.apiUrl+"/public", user);
   }
 
   updateUser(user: UserModel): Observable<any> {
@@ -65,7 +65,7 @@ export class UserService {
   }
 
   getUserPackages(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/public/users/package/${id}`);
+    return this.http.get(`${this.apiUrl}/package/${id}`);
   }
 
   getKinesioUsers(): Observable<KineModel[]> {
