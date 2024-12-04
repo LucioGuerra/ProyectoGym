@@ -9,6 +9,9 @@ import {MyErrorStateMatcher} from "../signup/signup.component";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {AuthService} from "../services/services";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {ErrorDialogComponent} from "../dialog/error-dialog/error-dialog.component";
+import {UserService} from "../services/services/user.service";
 
 @Component({
   selector: 'app-forgot-password',
@@ -39,27 +42,42 @@ export class ForgotPasswordComponent {
   });
 
   constructor(private router: Router,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private dialog: MatDialog,
+              private userService: UserService) {
   }
 
   back() {
     window.history.back()
   }
 
+  async checkEmail(): Promise<boolean> {
+    try {
+      const user = await this.userService.getUserByEmail(this.emailFormControl.value!).toPromise();
+      return !!user; //Los dos !! es tipo el equivalente booleano
+    } catch (error) {
+      return false;
+    }
+  }
+
   login() {
     this.router.navigate(["/login"]);
   }
 
-  enviarMail() {
-    if (this.formGroup.valid) {
-      const json = this.formGroup.value;
-      if (this.emailFormControl.value != null) {
-        this.auth.forgotPassword(this.emailFormControl.value)
+  async enviarMail() {
+    const response = await this.checkEmail();
+    if (response){
+      if (this.formGroup.valid) {
+        const json = this.formGroup.value;
+        if (this.emailFormControl.value != null) {
+          this.auth.forgotPassword(this.emailFormControl.value)
+        } else {
+          console.log("Me está llegando null el email")
+        }
       } else {
-        console.log("Me está llegando null el email")
+        this.formGroup.markAllAsTouched();
       }
     } else {
-      this.formGroup.markAllAsTouched();
-    }
+        this.dialog.open(ErrorDialogComponent, { data: { message: "El email ingresado no existe." } });   }
   }
 }
