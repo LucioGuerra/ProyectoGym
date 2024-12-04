@@ -25,7 +25,8 @@
 
         <mat-form-field class="example-full-width">
           <mat-label>Contraseña</mat-label>
-          <input [type]="hide ? 'password' : 'text'" formControlName="repassword" matInput placeholder="Ingresá tu contraseña"
+          <input [type]="hide ? 'password' : 'text'" formControlName="repassword" matInput
+                 placeholder="Ingresá tu contraseña"
                  required>
           <button (click)="hide = !hide" mat-icon-button matSuffix style="
     font-size: 16px !important;
@@ -38,7 +39,8 @@
           </mat-error>
         </mat-form-field>
         <div id="olvidaste">
-          <section (click)="forgot()" class="forgot">¿Olvidaste tu contraseña?</section>
+          <a class="forgot" href="https://dev-22vijuiwzcze21d0.us.auth0.com.auth0.com/lo/reset">¿Olvidaste tu
+            contraseña?</a>
         </div>
         <div class="botones">
 

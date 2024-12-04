@@ -15,6 +15,7 @@ import {ShoppingCartComponent} from "./src/components/shopping-cart/shopping-car
 import {AnnouncementsComponent} from "./src/components/announcements/announcements.component";
 import {AnnouncementCreationComponent} from "./src/components/announcenmentCreation/announcementCreation.component";
 import {ForgotPasswordComponent} from "./src/components/forgot-password/forgot-password.component";
+import {ResetPasswordComponent} from "./src/components/reset-password/reset-password.component";
 
 export const routes: Routes = [
   {path: 'home', component: HomePageComponent},
@@ -38,5 +39,6 @@ export const routes: Routes = [
   {path: 'admin/announcements/create', component: AnnouncementCreationComponent},
   {path: 'admin/announcements/edit/:id', component: AnnouncementCreationComponent},
   {path: 'forgot-password', component: ForgotPasswordComponent},
+  {path: 'change-password', component: ResetPasswordComponent},
   {path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];

@@ -79,7 +79,7 @@ export class LoginComponent {
   }
 
   forgot() {
-    this.router.navigate(['/forgot-password']);
+    console.log("Redirigiendo...")
   }
 
   google() {
