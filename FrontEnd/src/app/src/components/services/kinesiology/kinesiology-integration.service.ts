@@ -1,113 +1,105 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { BodyPart, KineModel } from '../../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KinesiologyIntegrationService {
+  
+    constructor() { }
 
-  kinesiologos = [
-    {
-      "id": 1,
-      "name": "Kinesiologo 1",
-      "bodyParts": [1, 2, 3, 8], // IDs de "Cuello", "Hombros", "Espalda", "Manos"
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 2,
-      "name": "Kinesiologo 2",
-      "bodyParts": [3, 4, 5, 6, 7], // IDs de "Espalda", "Codos", "Muñecas", "Cadera", "Rodillas"
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 3,
-      "name": "Kinesiologo 3",
-      "bodyParts": [8, 9, 10], // IDs de "Manos", "Pies", "Tobillos"
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 4,
-      "name": "Kinesiologo 4",
-      "bodyParts": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Todos los IDs
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 5,
-      "name": "Kinesiologo 5",
-      "bodyParts": [1, 2, 3, 4, 5],
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 6,
-      "name": "Kinesiologo 6",
-      "bodyParts": [6, 7, 8, 9, 10],
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 7,
-      "name": "Kinesiologo 7",
-      "bodyParts": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 8,
-      "name": "Kinesiologo 8",
-      "bodyParts": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 9,
-      "name": "Kinesiologo 9",
-      "bodyParts": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-    {
-      "id": 10,
-      "name": "Kinesiologo 10",
-      "bodyParts": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      "apellido": "Apellido",
-      "email": "algo@algo",
-      "dni": "12345678",
-    },
-  ]
-  bodyPartOptions = [
-    {"id": 1, "name": "Cuello"},
-    {"id": 2, "name": "Hombros"},
-    {"id": 3, "name": "Espalda"},
-    {"id": 4, "name": "Codos"},
-    {"id": 5, "name": "Muñecas"},
-    {"id": 6, "name": "Cadera"},
-    {"id": 7, "name": "Rodillas"},
-    {"id": 8, "name": "Manos"},
-    {"id": 9, "name": "Pies"},
-    {"id": 10, "name": "Tobillos"},
-  ];
-
-  endpointResponse = {
-    "kinesiologos": this.kinesiologos,
-    "bodyParts": this.bodyPartOptions,
-  }
-
-  constructor() { }
-
-  getKinesiologos() {
-    return this.endpointResponse;
-  }
+    getKinesioUsers(): Observable<KineModel[]> {
+      const kinesiologos: KineModel[] = [
+        {
+          firstName: 'Kine',
+          lastName: 'Uno',
+          email: 'kineUno@gmail.com',
+          dni: '90909090',
+          picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+          bodyParts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        },
+        {
+          firstName: 'Kine',
+          lastName: 'Dos',
+          email: 'kineDos@gmail.com',
+          dni: '91919191',
+          picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+          bodyParts: [1, 2, 7, 8, 9, 10, 11]
+        },
+        {
+          firstName: 'Kine',
+          lastName: 'Tres',
+          email: 'kineTres@gmail.com',
+          dni: '92929292',
+          picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+          bodyParts: [1, 2, 3, 4, 5]
+        },
+        {
+          firstName: 'Kine',
+          lastName: 'Cuatro',
+          email: 'kineCuatro@gmail.com',
+          dni: '93939393',
+          picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+          bodyParts: [8, 9, 10, 11, 12]
+        },
+      ];
+      return of(kinesiologos);
+      //return this.http.get<UserModel[]>(`${this.apiUrl}/kine`);
+    }
+  
+    getBodyParts(): Observable<BodyPart[]> {
+      const bodyParts: BodyPart[] = [
+        {
+          id: 1,
+          name: 'Cabeza',
+        },
+        {
+          id: 2,
+          name: 'Cuello',
+        },
+        {
+          id: 3,
+          name: 'Hombro',
+        },
+        {
+          id: 4,
+          name: 'Brazo',
+        },
+        {
+          id: 5,
+          name: 'Antebrazo',
+        },
+        {
+          id: 6,
+          name: 'Mano',
+        },
+        {
+          id: 7,
+          name: 'Espalda',
+        },
+        {
+          id: 8,
+          name: 'Cadera',
+        },
+        {
+          id: 9,
+          name: 'Pierna',
+        },
+        {
+          id: 10,
+          name: 'Rodilla',
+        },
+        {
+          id: 11,
+          name: 'Tobillo',
+        },
+        {
+          id: 12,
+          name: 'Pie',
+        },
+      ];
+      return of(bodyParts);
+      //return this.http.get<any[]>(`${this.apiUrl}/kine/body-parts`);
+    }
 }

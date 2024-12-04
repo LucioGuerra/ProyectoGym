@@ -4,7 +4,8 @@ import { provideAuth0 } from '@auth0/auth0-angular';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { environment } from '../environments/environment';
-import {provideHttpClient} from "@angular/common/http";
+import {provideHttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { CustomHttpInterceptor } from './src/components/services/CustomHttpInterceptor/custom-http-interceptor.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +20,10 @@ export const appConfig: ApplicationConfig = {
       }
     }),
     provideHttpClient(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true
+    },
   ]
 };

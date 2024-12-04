@@ -1,3 +1,12 @@
+@if (announcements.length === 0) {
+  <div class="carousel-container">
+  <mat-card class="card">
+    <mat-card-title>No hay anuncios</mat-card-title>
+    <mat-card-content>
+    </mat-card-content>
+  </mat-card>
+</div>
+} @else {
 <div class="carousel-container">
   <mat-tab-group class="custom-tab-group" [(selectedIndex)]="selectedIndex">
     @for(announcement of announcements; track announcement) {
@@ -22,7 +31,7 @@
         <mat-icon> navigate_before </mat-icon>
       </button>
   }
-  @if (announcements.length > 1) { @if(selectedIndex === announcements.length - 1) {
+  @if(selectedIndex === announcements.length - 1) {
   <button mat-icon-button class="navigation-buttons-right" disabled>
     <mat-icon> navigate_next </mat-icon>
   </button>
@@ -34,5 +43,6 @@
   >
     <mat-icon> navigate_next </mat-icon>
   </button>
-  } }
+  }
 </div>
+}

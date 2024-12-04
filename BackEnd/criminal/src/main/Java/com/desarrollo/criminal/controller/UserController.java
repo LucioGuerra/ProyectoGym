@@ -69,9 +69,19 @@ public class UserController {
         return userService.createUser(userRequestDTO);
     }
 
+    @GetMapping("/package/activity/{email}")
+        public ResponseEntity<List<String>> getUserPackagesByEmail(@PathVariable String email){
+            return userService.getActivePackageByEmail(email);
+        }
+
+
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
         return userService.updateUser(id, userUpdateDTO);
     }
 
+    @GetMapping("/streak/{id}")
+    public ResponseEntity<Integer> getStreak(@PathVariable Long id){
+        return userService.getStreak(id);
+    }
 }

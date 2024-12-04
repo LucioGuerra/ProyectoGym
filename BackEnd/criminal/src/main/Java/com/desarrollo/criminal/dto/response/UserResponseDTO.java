@@ -35,6 +35,7 @@ public class UserResponseDTO {
     //todo agregar para obtenerlo
     private Long aPackageId;
 
+    private Integer streak;
 
     private UserResponseDTO(){}
 

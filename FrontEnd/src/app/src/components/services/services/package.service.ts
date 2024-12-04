@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../../../../environments";
 import {HttpClient} from "@angular/common/http";
 import {Package} from "../../models/package.models";
@@ -7,14 +7,24 @@ import {Package} from "../../models/package.models";
   providedIn: 'root'
 })
 export class PackageService {
+  
   private apiUrl = `${environment.apiUrl}/packages`;
 
   constructor(private http: HttpClient) {
   }
 
 
-  createPackage(packageData: Package) {
+  createPackage(packageData: {
+    activities: { activityId: any; quantity: any }[];
+    name: any;
+    description: any;
+    userId: any
+  }) {
     console.log(packageData);
     return this.http.post<Package>(this.apiUrl+"/admin", packageData);
+  }
+
+  getRandomPackages() {
+    return this.http.get<Package[]>(`${this.apiUrl}/random`);
   }
 }
