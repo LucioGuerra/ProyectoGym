@@ -115,11 +115,14 @@
           <button (click)="hide2 = !hide2" mat-icon-button matSuffix>
             <mat-icon>{{ hide2 ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          <mat-error *ngIf="formGroup.get('repassword')?.errors?.['mismatch'] && formGroup.get('repassword')?.touched">
-            Tus contraseñas no coinciden
-          </mat-error>
+          @if (formGroup.get('repassword')?.errors?.['mismatch'] && formGroup.get('repassword')?.touched) {
+            <mat-error>
+              Tus contraseñas no coinciden
+            </mat-error>
+          }
         </mat-form-field>
-        
+
+
         <button (click)="signup()" id="singup" mat-stroked-button type="submit">
           Crear cuenta
         </button>

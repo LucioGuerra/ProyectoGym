@@ -52,13 +52,11 @@ export class ResetPasswordComponent {
     this.user.set(this.auth.userInfo());
   }
 
-  resetPassword(): void {
+  changePassword(): void {
     if (this.formGroup.valid) {
       if (this.validacionPassword()) {
         const json = this.formGroup.value;
-        console.log(json);
-        // @ts-ignore
-        this.auth.resetPassword(this.user().email, json.password);
+
       } else {
         this.formGroup.markAsTouched();
       }
