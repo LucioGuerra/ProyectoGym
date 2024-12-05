@@ -23,6 +23,7 @@ import {Activity} from '../../components';
 import {Router} from "@angular/router";
 import {MatTableModule} from '@angular/material/table';
 import {AgendaListComponent} from "../../components/agenda-list/agenda-list.component";
+import { GlobalAppDateService } from '../../components/services/globalAppDate/global-app-date.service';
 
 @Component({
   selector: 'app-shif-admin-screen',
@@ -39,14 +40,22 @@ export class ShifAdminScreenComponent implements OnInit {
 
   public appointments: Appointment[] = [];
 
-  public selectedDate = signal<Date>(this.getStoredDate());
+  public selectedDate;
   public selectedActivities = signal<string[]>([]);
   public appointmentList = signal<Appointment[]>([]);
   kinesiology= signal<string[]>(['Kinesiology', 'Kinesiologia']);
   public tabIndex = signal<number>(0);
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef, 
+    protected auth0: AuthService, 
+    private router: Router, 
+    private appointmentService: AppointmentService, 
+    private activityService: ActivityService,
+    private globalAppDateService: GlobalAppDateService
+  ) {
+    this.selectedDate = this.globalAppDateService.dateSignal();
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
@@ -58,7 +67,6 @@ export class ShifAdminScreenComponent implements OnInit {
       } else {
         this.router.navigate(['/login']);
       }
-      this.saveStoredDate(this.selectedDate());
     });
     console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
@@ -68,8 +76,8 @@ export class ShifAdminScreenComponent implements OnInit {
     this.loadActivities();
     this.appointmentService.appointmentChanged$.subscribe(() => {
       console.log('Cambios en los appointments detectados. Recargando...');
-      this.loadAppointment(this.tabIndex());  // Recargamos los appointments
-      this.changeDetectorRef.markForCheck();  // Forzar la detección de cambios
+      this.loadAppointment(this.tabIndex());
+      this.changeDetectorRef.markForCheck();
     });
   }
 
@@ -119,17 +127,8 @@ export class ShifAdminScreenComponent implements OnInit {
     );
   }
 
-  saveStoredDate(date: Date) {
-    localStorage.setItem('selectedDate', date.toISOString());
-  }
-
-  getStoredDate(): Date {
-    const date = localStorage.getItem('selectedDate');
-    return date ? new Date(date) : new Date(new Date(Date.now()).setHours(0, 0, 0, 0));
-  }
-
   datePickerChangeEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.selectedDate.set(event.value!);
+    this.globalAppDateService.setDate(event.value!);
     console.log('index:', this.tabIndex());
     this.loadAppointment(this.tabIndex());
     // alert(`date: ${this.selectedDate().toLocaleDateString()}, apointements: ${this.apointments[0].date} son iguales? ${this.selectedDate().toDateString() == this.apointments[0].date.toDateString()}`);
@@ -170,12 +169,12 @@ export class ShifAdminScreenComponent implements OnInit {
   }
 
   goBackDate($event: MouseEvent) {
-    this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() - 1)));
+    this.globalAppDateService.setDate(new Date(this.selectedDate().setDate(this.selectedDate().getDate() - 1)));
     this.loadAppointment(this.tabIndex());
   }
 
   gofurtherDate($event: MouseEvent) {
-    this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() + 1)));
+    this.globalAppDateService.setDate(new Date(this.selectedDate().setDate(this.selectedDate().getDate() + 1)));
     this.loadAppointment(this.tabIndex());
   }
 

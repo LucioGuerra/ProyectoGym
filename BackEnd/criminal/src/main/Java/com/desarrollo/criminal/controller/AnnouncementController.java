@@ -15,15 +15,14 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/announcements")
+@RequestMapping("/api/announcements")
 public class AnnouncementController{
 
     private final AnnouncementService announcementService;
 
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<com.desarrollo.criminal.dto.request.AnnouncementDTO> createAnnouncement(@Valid @RequestBody AnnouncementDTO announcementDTO){
-
         return announcementService.createAnnouncement(announcementDTO);
     }
 
@@ -34,13 +33,13 @@ public class AnnouncementController{
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetAnnouncementDTO> getAnnouncementById(@PathVariable Long id){
         return announcementService.getAnnouncementDTOById(id);
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id){
         return announcementService.deleteAnnouncement(id);
     }

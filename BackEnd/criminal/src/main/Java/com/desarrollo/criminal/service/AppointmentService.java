@@ -10,6 +10,7 @@ import com.desarrollo.criminal.dto.response.UserResponseDTO;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.PackageActivity;
+import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.user.UserXAppointment;
 import com.desarrollo.criminal.entity.Package;
@@ -249,9 +250,7 @@ public class AppointmentService {
                 } else {
                     userService.createUser(updateAppointmentDTO.getKinesiologo());
                     kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
-                    if (kine.isEmpty()) {
-                        throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
-                    }
+                    kine.get().setRole(Role.KINE);
                     appointment.setInstructor(kine.get());
                 }
             }

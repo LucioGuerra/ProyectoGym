@@ -11,7 +11,7 @@
   <section class="section2">
     <mat-card appearance="outlined" class="card-activities">
       <mat-card-content>
-        <h4 class="title">Activities</h4>
+        <h4 class="title">Nuestras actividades</h4>
         <div class="activities">
           <app-activity-carousel></app-activity-carousel>
         </div>
@@ -21,22 +21,9 @@
   <section class="section2">
     <mat-card appearance="outlined" class="card-prices">
       <mat-card-content>
-        <h4 class="title">Prices</h4>
+        <h4 class="title">Arma tu paquete a tu manera!</h4>
         <div class="prices">
-          @for (price of prices; track price.id) {
-          <mat-card
-            appearance="outlined"
-            [style]="{ height: ' 200px', width: ' 150px' }"
-          >
-            <mat-card-content class="contenido">
-              <div class="card-text">
-                <p class="card-title">{{ price.name }}</p>
-                <p class="card-price">{{ price.price | currency }}</p>
-                <p class="card-description">{{ price.description }}</p>
-              </div>
-            </mat-card-content>
-          </mat-card>
-          }
+        <app-package-carousel></app-package-carousel>
         </div>
       </mat-card-content>
     </mat-card>

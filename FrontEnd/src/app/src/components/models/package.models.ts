@@ -1,7 +1,8 @@
 export interface Package {
   name: string,
   description: string,
-  userId: number,
+  price?: number,
+  userId?: number,
   activities: ActivityPackage[],
   expirationDate: Date;
   active: Boolean;

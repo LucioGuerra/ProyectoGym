@@ -2,38 +2,40 @@ import {Injectable, signal} from "@angular/core";
 import {environment} from "../../../../../environments";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
-import {jwtDecode} from "jwt-decode";
 import {UserService} from "./user.service";
 import {Role, UserModel} from "../../models";
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {DniDialogComponent} from "../../dni-dialog/dni-dialog.component";
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {firstValueFrom} from "rxjs";
 import {DniService} from "../dni/dni.service";
-import {ErrorDialogComponent} from "../../dialog/error-dialog/error-dialog.component";
 import {SendEmailComponent} from "../../dialog/send-email/send-email.component";
+import { jwtDecode } from "jwt-decode";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DniDialogComponent } from "../../dni-dialog/dni-dialog.component";
+import { firstValueFrom, lastValueFrom } from "rxjs";
+import { ErrorDialogComponent } from "../../dialog/error-dialog/error-dialog.component";
+import { Router } from "@angular/router";
 
-
-@Injectable({providedIn: "root"})
+@Injectable({ providedIn: "root" })
 export class AuthService {
+
+  private auth0Client: auth0.WebAuth;
   isAuthenticated = signal<boolean>(false);
   isAdmin = signal<boolean>(false);
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
-  private auth0Client: auth0.WebAuth;
 
   constructor(
     private userService: UserService,
     private dialog: MatDialog,
     private dniService: DniService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router,
   ) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
+      audience: environment.auth0.audience,
       redirectUri: "http://localhost:4200/home",
-      responseType: 'token id_token',
-      cookieDomain: "."
+      responseType: 'token id_token'
     })
     this.loadSession();
   }
@@ -131,6 +133,7 @@ export class AuthService {
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
 
+        console.log("accessToken: ", accessToken);
         console.log("entramos a handleauth ");
         // @ts-ignore
         this.userService.getUserByEmail(jwtDecode(idToken)['email']).subscribe(
@@ -175,9 +178,16 @@ export class AuthService {
                 // @ts-ignore
                 picture: jwtDecode(idToken)['picture'],
               };
-              await this.createUser(usuario);
+              try {
+                await this.createUser(usuario);
+                await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
+              } catch (error) {
+                const d = this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente mas tarde." } });
+                d.afterClosed().subscribe(() => {
+                  this.router.navigate(['/home']);
+                });
+              }
             }
-            await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
           }
         );
       } catch (error) {
@@ -200,11 +210,6 @@ export class AuthService {
       returnTo: 'http://localhost:4200/home'
     })
 
-  }
-
-  public setUserInfo(idToken: any) {
-    console.log("Entra a setUserInfo: ", jwtDecode(idToken));
-    this.userInfo.set(jwtDecode(idToken));
   }
 
   public forgotPassword(email: string): void {
@@ -253,6 +258,11 @@ export class AuthService {
     }
   }
 
+  public setUserInfo(idToken: any) {
+    console.log("Entra a setUserInfo: ", jwtDecode(idToken));
+    this.userInfo.set(jwtDecode(idToken));
+  }
+
   private loadSession() {
     const accessToken = localStorage.getItem('access_token');
     const expiresAt = localStorage.getItem('expires_at');
@@ -285,24 +295,21 @@ export class AuthService {
     }
   }
 
-  private createUser(user: UserModel): void {
+  private async createUser(user: UserModel): Promise<void> {
     console.log("Entra a createUser");
 
-    // @ts-ignore
-    this.userService.getUserByEmail(user.email).subscribe(
-      (user: UserModel) => {
-        console.log("Usuario encontrado: ", user);
-      },
-      (error) => {
-        console.error("Error al buscar el usuario: ", error);
-      });
+    try {
+      const saveUser: UserModel = await firstValueFrom(this.userService.createUser(user));
+      console.log("Usuario guardado: ", saveUser);
+    } catch (error) {
+      console.error("Error al guardar el usuario: ", error);
+      throw error;
+    }
+  }
 
-    this.userService.createUser(user).subscribe(
-      (saveUser: UserModel) => {
-        console.log("Usuario guardado: ", saveUser);
-      },
-      (error) => {
-        console.error("Error al guardar el usuario: ", error);
-      });
+  getToken() {
+    console.log("Entra a getToken");
+    console.log(localStorage.getItem('access_token'));
+    return localStorage.getItem('access_token');
   }
 }

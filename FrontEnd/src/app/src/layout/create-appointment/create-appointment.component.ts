@@ -6,6 +6,7 @@ import {
 import {MatDividerModule} from "@angular/material/divider";
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from "../../components/services/services/auth.service";
+import { MainScreenComponent } from "../main-screen/main-screen.component";
 
 @Component({
   selector: 'app-create-appointment',
@@ -14,7 +15,8 @@ import {AuthService} from "../../components/services/services/auth.service";
     DrawerComponent,
     CreateAppointmentFormComponent,
     MatDividerModule,
-  ],
+    MainScreenComponent
+],
   templateUrl: './create-appointment.component.html',
   styleUrl: './create-appointment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

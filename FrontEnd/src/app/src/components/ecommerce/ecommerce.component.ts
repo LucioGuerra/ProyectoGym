@@ -25,6 +25,8 @@ import {Router} from "@angular/router";
 import {ShopListService} from "../services/shop-list/shop-list.service";
 import {EcommerceProductsService} from "../services/ecommerce/ecommerce-products.service";
 import {EcommerceProducts} from "../models/ecommerceProducts.models";
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-ecommerce',
@@ -79,7 +81,12 @@ export class EcommerceComponent implements OnInit {
 
   displayedColumns: string[] = ['imagen', 'titulo', 'descripcion', 'precio', 'unidades_disponibles', "acciones"];
 
-  constructor(private router: Router, private shopListService: ShopListService, private ecommerceProductsService: EcommerceProductsService) {
+  constructor(
+    private router: Router, 
+    private shopListService: ShopListService, 
+    private ecommerceProductsService: EcommerceProductsService,
+    private dialog: MatDialog
+  ) {
     this.productsOptions = this.ecommerceProductsService.getProducts();
   }
 
@@ -113,7 +120,6 @@ export class EcommerceComponent implements OnInit {
   }
 
   sumarUnidad(elementid: number) {
-    // Incrementar la cantidad de unidades de un producto en la lista de comprados
     if (this.shopListService.getListaComprados() === null || this.shopListService.getListaComprados()!.length === 0) {
       this.shopListService.setListaComprados([{id: elementid, unidades: 1}]);
     } else {
@@ -146,6 +152,14 @@ export class EcommerceComponent implements OnInit {
   }
 
   volver() {
-    this.router.navigate(['/admin/agenda'])
+    if (this.shopListService.getListaComprados() != null || this.shopListService.getListaComprados()?.length != 0) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          this.router.navigate(['/admin/agenda']);
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 }

@@ -7,6 +7,7 @@ import {Package} from "../../models/package.models";
   providedIn: 'root'
 })
 export class PackageService {
+  
   private apiUrl = `${environment.apiUrl}/packages`;
 
   constructor(private http: HttpClient) {
@@ -20,6 +21,10 @@ export class PackageService {
     userId: any
   }) {
     console.log(packageData);
-    return this.http.post<Package>(this.apiUrl, packageData);
+    return this.http.post<Package>(this.apiUrl+"/admin", packageData);
+  }
+
+  getRandomPackages() {
+    return this.http.get<Package[]>(`${this.apiUrl}/public/random`);
   }
 }

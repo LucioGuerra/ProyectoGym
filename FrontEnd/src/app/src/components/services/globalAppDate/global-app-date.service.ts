@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GlobalAppDateService {
-  date: Date = new Date(new Date(Date.now()).setHours(0, 0, 0, 0));
-  constructor() { }
+  private date = signal(new Date(new Date().setHours(0, 0, 0, 0)));
 
-  getDate(): Date {
-    return this.date;
+  getDate() {
+    return this.date(); // Accede al valor actual de la señal
   }
 
   setDate(date: Date): void {
-    this.date = date;
+    this.date.set(date); // Actualiza el valor de la señal
+  }
+
+  dateSignal() {
+    return this.date.asReadonly(); // Retorna la señal para el consumo
   }
 }

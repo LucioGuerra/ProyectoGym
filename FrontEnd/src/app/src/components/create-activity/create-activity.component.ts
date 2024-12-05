@@ -14,6 +14,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
+import { CreateAppointmentFormComponent } from "../create-appointment-form/create-appointment-form.component";
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-activity',
@@ -33,8 +36,10 @@ import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.compon
     MatOption,
     MatSelect,
     NgForOf,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    MainScreenComponent,
+    CreateAppointmentFormComponent
+],
   templateUrl: './create-activity.component.html',
   styleUrl: './create-activity.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -88,6 +93,7 @@ export class CreateActivityComponent implements OnInit {
         description: this.activityDescription.value!,
         price: this.activityPrice.value!
       }
+      console.log(createdActivity);
       this.activityService.createActivity(createdActivity).subscribe(
         (response) => {
           this._snackBar.open(`Se ha creado la actividad correctamente`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -98,7 +104,6 @@ export class CreateActivityComponent implements OnInit {
           console.log(`Error al crear la actividad: ${error}`);
         }
       );
-      alert(`creado ${createdActivity}`);
     } else {
       this.activityName.markAsDirty();
       this.activityDescription.markAsDirty();
@@ -107,7 +112,15 @@ export class CreateActivityComponent implements OnInit {
   }
 
   return() {
-    this.router.navigate(['/admin/agenda']);
+    if (this.activityName.dirty || this.activityDescription.dirty || this.activityPrice.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 
   edit() {

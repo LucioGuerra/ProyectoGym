@@ -41,7 +41,6 @@
           </div>
           <div class="quick-actions">
             <app-material-carousel></app-material-carousel>
-            <!-- componente de proximo turno -->
           </div>
         </section>
         <section class="botom-section">
@@ -70,7 +69,7 @@
                     (change)="chipsChangeEvent('change', $event)"
                   >
                     @for (activity of activities; track activity) {
-                      <mat-chip-option [value]="activity.name" selected>
+                      <mat-chip-option [value]="activity.name" [selected]="isActivitySelected(activity.name)">
                         {{ activity.name }}
                       </mat-chip-option>
                     }

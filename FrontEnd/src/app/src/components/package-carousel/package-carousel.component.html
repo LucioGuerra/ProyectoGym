@@ -1,0 +1,72 @@
+<div class="carousel-container">
+  <mat-tab-group class="custom-tab-group tab1" [(selectedIndex)]="firstCarouselIndex">
+    @for(package of packages ; track package) {
+    <mat-tab>
+        <div class="cartas">
+          <mat-card class="card">
+            <mat-card-title>{{ package.name!.length > 20
+              ? package.name!.slice(0, 20) + "..."
+              : package.name! }}</mat-card-title>
+            <mat-card-content>
+              <p class="card-price">{{ package.price | currency }}</p>
+              <p class="card-description">{{
+              package.description!.length > 100
+                ? package.description!.slice(0, 100) + "..."
+                : package.description!
+            }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+  <mat-tab-group class="custom-tab-group tab2" [(selectedIndex)]="secondCarouselIndex">
+    @for(package of packages ; track package) {
+    <mat-tab>
+        <div class="cartas">
+          <mat-card class="card">
+            <mat-card-title>{{ package.name!.length > 20
+              ? package.name!.slice(0, 20) + "..."
+              : package.name! }}</mat-card-title>
+            <mat-card-content>
+              <p class="card-price">{{ package.price | currency }}</p>
+              <p class="card-description">{{
+              package.description!.length > 100
+                ? package.description!.slice(0, 100) + "..."
+                : package.description!
+            }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+  <mat-tab-group class="custom-tab-group tab3" [(selectedIndex)]="thirdCarouselIndex">
+    @for(package of packages ; track package) {
+    <mat-tab>
+        <div class="cartas">
+          <mat-card class="card">
+            <mat-card-title>{{ package.name!.length > 20
+              ? package.name!.slice(0, 20) + "..."
+              : package.name! }}</mat-card-title>
+            <mat-card-content>
+              <p class="card-price">{{ package.price | currency }}</p>
+              <p class="card-description">{{
+              package.description!.length > 100
+                ? package.description!.slice(0, 100) + "..."
+                : package.description!
+            }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+
+  <button mat-icon-button class="navigation-buttons-left" (click)="prevSlide()">
+    <mat-icon> navigate_before </mat-icon>
+  </button>
+  <button mat-icon-button class="navigation-buttons-right" (click)="nextSlide()" >
+    <mat-icon> navigate_next </mat-icon>
+  </button>
+</div>
