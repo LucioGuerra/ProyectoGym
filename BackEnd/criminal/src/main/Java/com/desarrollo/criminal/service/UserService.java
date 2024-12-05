@@ -140,8 +140,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
-        List<Appointment> appointments = user.getUserXAppointments().stream()
-                .map(UserXAppointment::getAppointment).toList();
+        List<Appointment> appointments = userRepository.findAppointmentsByUserId(id).stream().limit(10).toList();
 
         List<GetUserAppointmentDTO> appointmentsDTO = appointments.stream()
                 .map(appointment -> {

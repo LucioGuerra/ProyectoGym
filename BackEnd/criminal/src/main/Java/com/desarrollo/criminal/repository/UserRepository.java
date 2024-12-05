@@ -1,5 +1,6 @@
 package com.desarrollo.criminal.repository;
 
+import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.user.Role;
 import com.desarrollo.criminal.entity.user.User;
 import com.desarrollo.criminal.entity.Package;
@@ -24,4 +25,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT p FROM User u JOIN u.aPackage p WHERE u.id = :userId AND p.active = true")
     Optional<Package> findActivePackagesByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT ua.appointment " +
+            "FROM UserXAppointment ua " +
+            "WHERE ua.user.id = :userId " +
+            "AND ua.appointment.date <= CURRENT_DATE " +
+            "ORDER BY ua.appointment.date DESC, ua.appointment.startTime ASC")
+    List<Appointment> findAppointmentsByUserId(@Param("userId") Long userId);
 }

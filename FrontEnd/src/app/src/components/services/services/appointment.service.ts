@@ -137,7 +137,7 @@ export class AppointmentService {
 
   reserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.post<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`, {}))
+      switchMap(user => this.http.post<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`, {}))
     );
   }
 
