@@ -13,6 +13,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {AuthService} from "../services/services/auth.service";
 import {User} from "@auth0/auth0-angular";
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
 
 @Component({
   selector: 'app-users-list',
@@ -26,8 +27,9 @@ import {User} from "@auth0/auth0-angular";
     MatIcon,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
-  ],
+    MatMenuTrigger,
+    MainScreenComponent
+],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
