@@ -82,8 +82,8 @@ public class UserController {
         return userService.getStreak(id);
     }
 
-    @GetMapping("/public/activities")
-    public ResponseEntity<List<String>> getActivities(@RequestParam("email") @Email String email){
+    @GetMapping("/activities")
+    public ResponseEntity<List<String>> getActivities(@RequestParam("email") String email){
         return userService.getActivitiesUser(email);
     }
 }
