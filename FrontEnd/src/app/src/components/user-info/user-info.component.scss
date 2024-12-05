@@ -453,28 +453,6 @@ mat-action-list {
     }
   }
 
-@media (max-width: 750px) {
-  .calendar {
-    width: 100%;
-    flex: 1;
-    margin: 0;
-    border-radius: 10px 10px 0 0;
-
-    mat-form-field {
-      width: 90%;
-      }
-    }
-
-  ::ng-deep .mat-column-date {
-    width: 20% !important;
-    height: 80px !important;
-    }
-
-  ::ng-deep .mat-column-activity {
-    width: 2% !important;
-    }
-  }
-
 @media (max-width: 820px) {
   .container {
     width: 100%;
@@ -497,9 +475,9 @@ mat-action-list {
     grid-area: streak;
     display: flex;
     flex-direction: column;
-    height: 85% !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
+    height: 85%;
+    align-items: flex-start;
+    justify-content: flex-end;
 
     mat-card {
       align-self: flex-end;
@@ -512,36 +490,106 @@ mat-action-list {
     }
   }
 
-@media (max-width: 710px) {
+@media (max-width: 750px) {
+  .calendar {
+    width: 100%;
+    flex: 1;
+    margin: 0;
+    border-radius: 10px 10px 0 0;
 
-  mat-card {
-    width: 80%;
-    padding: 20px;
-    }
-  #principal {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 15px;
-    }
-
-  img {
-    width: 150px;
-    height: 150px;
-    }
-  .info {
-    padding: 0 !important;
-    padding-top: 10px !important;
-    align-items: center;
-    }
-  .streak {
-    mat-card {
-      padding: 8px;
-      font-size: 1.2rem;
+    mat-form-field {
+      width: 90%;
       }
     }
-  .content {
-    padding: 15px;
+
+  ::ng-deep .mat-column-date {
+    width: 20% !important;
+    height: 80px !important;
+    }
+
+  ::ng-deep .mat-column-activity {
+    width: 2% !important;
+    }
+
+  @media (max-height: 765px) {
+    .container{
+      margin-top: 90px !important;
+      }
+    }
+
+    }
+
+@media (max-width: 710px) {
+  .name {
+    width: fit-content;
+    }
+
+  #contenedora{
+    min-width: 350px;
+    max-width: 600px;
+    width: 90%;
+    }
+
+  #principal {
+    display: grid;
+    grid-template-areas:
+  "img"
+  "info"
+  "streak";
+    grid-template-columns: 100%;
+    gap: 0;
+    }
+
+  .photo {
+    grid-area: img;
+    width: 100% !important;
+    height: 100% !important;
+    justify-content: center;
+
+    img {
+      width: 60% !important;
+      height: auto !important;
+      }
+    }
+
+  .name {
+    font-size: 2.5rem;
+    margin-bottom: -7.5px;
+    min-width: fit-content;
+    width: fit-content;
+    max-width: 200px !important;
+    text-align: start;
+    justify-content: left;
+    }
+
+  .info {
+    grid-area: info;
+    padding-top: 10px;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    align-items: center;
+    }
+
+  .streak {
+    grid-area: streak;
+    display: flex;
+    flex-direction: row !important;
+    height: 50px !important;
+    margin-left: 0 !important;
+    align-items: flex-start;
+    justify-content: flex-start !important;
+    mat-card {
+      margin-left: 0;
+      }
+    }
+
+  .iterables {
+    grid-template-areas:
+      "appointments"
+      "divider"
+      "packages";
+    gap: 1em;
+    width: 100%;
     }
   }
 
