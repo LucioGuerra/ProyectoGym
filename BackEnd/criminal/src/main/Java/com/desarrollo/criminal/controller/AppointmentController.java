@@ -85,23 +85,23 @@ public class AppointmentController {
         return appointmentService.removeParticipant(appointmentId, userId);
     }
 
-    @GetMapping("/kine")
+    @GetMapping("/public/kine")
     public ResponseEntity<List<GetAppointmentKineDTO>> getAllKinesiologyAppointments(@RequestParam("dni") String dni) {
         return appointmentService.getKinesiologyAppointmentByDni(dni);
     }
 
-    @PatchMapping("/kine/{id}/add")
+    @PatchMapping("/public/kine/{id}/add")
     public ResponseEntity<?> addParticipantToKinesiology(@PathVariable Long id, @RequestBody UserRequestDTO userRequestDTO) {
         return appointmentService.addParticipantToKinesiology(id, userRequestDTO);
     }
 
 
-    @PatchMapping("/kine/{id}/remove")
+    @PatchMapping("/public/kine/{id}/remove")
     public ResponseEntity<?> removeParticipantFromKinesiology(@PathVariable Long id, @RequestParam("dni") String dni) {
         return appointmentService.removeParticipantFromKinesiology(id, dni);
     }
 
-    @PostMapping("/kine/create")
+    @PostMapping("/public/kine/create")
     public ResponseEntity<?> createKinesiology(@RequestBody UserRequestDTO userRequestDTO) {
         return appointmentService.createKine(userRequestDTO);
     }
