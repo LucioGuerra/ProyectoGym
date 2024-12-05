@@ -75,22 +75,22 @@ export class AppointmentService {
   }
 
   createAppointment(appointment: AppointmentRequest): any {
-    return this.http.post<any>(this.apiUrl, appointment);
+    return this.http.post<any>(this.apiUrl+"/admin", appointment);
   }
 
   updateAppointment(id: string, appointment: AppointmentRequest): any {
-    return this.http.patch<any>(`${this.apiUrl}/${id}`, appointment);
+    return this.http.patch<any>(`${this.apiUrl+"/admin"}/${id}`, appointment);
   }
 
   createKinesiologyAppointments(appointmentData: AppointmentRequest): any {
-    return this.http.post<any>(`${this.apiUrl}/kine`, appointmentData);
+    return this.http.post<any>(`${this.apiUrl+"/public"}/kine`, appointmentData);
   }
 
 
   async addUserToKinesiologyAppointment(appointmentId: string, userEmail: string, kinesiologo: UserModel): Promise<Observable<any>> {
     console.log('Agregando usuario a la cita de kinesiología, id:', appointmentId, 'email:', userEmail, 'kinesiologo:', kinesiologo);
     return new Observable(observer => {
-      this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, { kinesiologo: kinesiologo, updateAllFutureAppointments: false }).subscribe(
+      this.http.patch<any>(`${this.apiUrl}/public/${appointmentId}`, { kinesiologo: kinesiologo, updateAllFutureAppointments: false }).subscribe(
         () => {
           console.log('Instructor asignado a la cita de kinesiología');
           this.reserveAppointment(appointmentId, userEmail).subscribe(
@@ -112,7 +112,7 @@ export class AppointmentService {
   }
 
   getKinesiologyAppointmentsByDate(date: Date) {
-    return this.http.get<Appointment[]>(`${this.apiUrl}/kine/date/${this.dateAdapt(date)}`).pipe(
+    return this.http.get<Appointment[]>(`${this.apiUrl+"/public"}/kine/date/${this.dateAdapt(date)}`).pipe(
       map((appointments: any[]) => appointments.map(appointment => ({
         ...appointment,
         date: new Date(appointment.date), // Convertir la cadena "date" a un objeto Date
@@ -124,11 +124,11 @@ export class AppointmentService {
   }
 
   switchUserAttendance(appointmentId: string, userId: number): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/${appointmentId}/user/${userId}/attendance`, {});
+    return this.http.post<boolean>(`${this.apiUrl+"/admin"}/${appointmentId}/user/${userId}/attendance`, {});
   }
 
   cancelAppointment(id: string) {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/admin/${id}/deleteAllFutureAppointments=${false}`);
   }
 
   dateAdapt(date: Date): string {
@@ -137,14 +137,14 @@ export class AppointmentService {
 
   reserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.post<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`, {}))
+      switchMap(user => this.http.post<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`, {}))
     );
   }
 
 
   unreserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.delete<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`))
+      switchMap(user => this.http.delete<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`))
     );
   }
 

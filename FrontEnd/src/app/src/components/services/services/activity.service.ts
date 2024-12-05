@@ -9,25 +9,28 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class ActivityService {
-
   private apiUrl = `${environment.apiUrl}/activities`;
 
   constructor(private http: HttpClient) {
   }
 
   getActivities(): Observable<Activity[]> {
-    return this.http.get<Activity[]>(this.apiUrl);
+    return this.http.get<Activity[]>(`${this.apiUrl}/public`);
   }
 
   createActivity(activity: Activity) {
-    return this.http.post(this.apiUrl, activity);
+    // const header = {
+    //   Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    // }
+    // console.log(header);
+    return this.http.post(this.apiUrl + "/admin", activity);
   }
 
   getActivitybyId(activityId: string) {
-    return this.http.get<Activity>(`${this.apiUrl}/${activityId}`);
+    return this.http.get<Activity>(`${this.apiUrl+"/admin"}/${activityId}`);
   }
 
   editActivity(activityId: string, activity: Activity) {
-    return this.http.patch(`${this.apiUrl}/${activityId}`, activity);
+    return this.http.patch(`${this.apiUrl+"/admin"}/${activityId}`, activity);
   }
 }

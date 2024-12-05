@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CustomHttpInterceptorService } from './custom-http-interceptor.service';
+import { CustomHttpInterceptorService } from '../../../../jwt.interceptor';
 
 describe('CustomHttpInterceptorService', () => {
   let service: CustomHttpInterceptorService;
