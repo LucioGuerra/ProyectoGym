@@ -35,14 +35,14 @@
                 style="display: none;"
               />
             </div>
-
+            @if (auth.isAdmin()){
                <div class="role-container">
                 <select formControlName="role" class="role-select" (change)="changeRole($event)">
                   <option class="option" [value]="Role.ADMIN">ADMIN</option>
                   <option class="option" [value]="Role.CLIENT">CLIENTE</option>
                 </select>
               </div>
-
+            }
               </mat-card-header>
             </div>
             <mat-divider></mat-divider>

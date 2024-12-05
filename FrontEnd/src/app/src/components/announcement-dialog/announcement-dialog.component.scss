@@ -6,3 +6,11 @@
   text-align: end;
   font-style: italic;
 }
+
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
