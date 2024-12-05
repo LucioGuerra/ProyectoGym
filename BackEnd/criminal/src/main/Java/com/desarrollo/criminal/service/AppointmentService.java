@@ -552,11 +552,11 @@ public class AppointmentService {
     }
 
 
-
+    @Transactional
     public ResponseEntity<?> addParticipantToKinesiology(Long appointmentId, UserRequestDTO userRequestDTO) {
         Appointment appointment = this.getAppointmentById(appointmentId);
 
-        if (appointment.getActivity().getName().equals("Kinesiologia")) {
+        if (!appointment.getActivity().getName().equals("Kinesiologia")) {
             throw new CriminalCrossException("APPOINTMENT_NOT_KINESIOLOGY", "The appointment is not a kinesiology appointment");
         }
 
@@ -582,6 +582,7 @@ public class AppointmentService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Transactional
     public ResponseEntity<?> removeParticipantFromKinesiology(Long appointmentId, String userDni) {
         Appointment appointment = this.getAppointmentById(appointmentId);
         User user = userService.getUserByDni(userDni).orElseThrow(() -> new EntityNotFoundException("The user was not found with dni: " + userDni));
@@ -632,7 +633,7 @@ public class AppointmentService {
             userKineDTO.setDni(user.getDni());
             userKineDTO.setFirstName(user.getFirstName());
             userKineDTO.setLastName(user.getLastName());
-            userKineDTO.getEmail();
+            userKineDTO.setEmail(user.getEmail());
 
             getAppointmentKineDTO.setUser(userKineDTO);
         }
