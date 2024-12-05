@@ -206,7 +206,7 @@ export class CreatPackageFormComponent implements OnInit {
 
   // Filtrar usuarios por DNI
   private _filter(dni: string): UserModel[] {
-    const filterValue = dni.toLowerCase();
+    const filterValue = dni;
     return this.users.filter(user => user.dni.toLowerCase().includes(filterValue));
   }
   // Navegar de vuelta a la agenda
