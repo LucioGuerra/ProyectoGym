@@ -16,10 +16,11 @@ import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import passwordValidators from "./password-validator.validators"
-import {ToolbarComponent} from '../toolbar/toolbar.component';
-import {Router} from '@angular/router';
-import {AuthService} from "../services/services/auth.service";
+import {ToolbarComponent} from '../toolbar';
+import {AuthService} from "../services/services";
 import {UserModel} from "../models";
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -55,7 +56,7 @@ export class SignupComponent {
     repassword: new FormControl("", [Validators.required, passwordValidators.passwordMatchValidator]),
   });
 
-  constructor(private router: Router) {
+  constructor(private dialog: MatDialog) {
   }
 
   validacionPassword(): boolean {
@@ -86,6 +87,14 @@ export class SignupComponent {
   }
 
   volver() {
-    this.router.navigate(['/login']);
+    if (this.formGroup.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 }
