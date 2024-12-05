@@ -45,7 +45,7 @@ public class AnnouncementController{
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable Long id, @Valid @RequestBody AnnouncementDTO announcementDTO){
         return announcementService.updateAnnouncement(id, announcementDTO);
     }

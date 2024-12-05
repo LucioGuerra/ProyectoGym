@@ -140,8 +140,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
-        List<Appointment> appointments = user.getUserXAppointments().stream()
-                .map(UserXAppointment::getAppointment).toList();
+        List<Appointment> appointments = userRepository.findAppointmentsByUserId(id).stream().limit(10).toList();
 
         List<GetUserAppointmentDTO> appointmentsDTO = appointments.stream()
                 .map(appointment -> {
@@ -207,6 +206,20 @@ public class UserService {
         }
         List<String> activities = activePackage.getActivities().stream()
                 .map(GetPackageActivityDTO::getName)
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(activities);
+    }
+
+    public ResponseEntity<List<String>> getActivitiesUser(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+
+        Package aPackage = userRepository.findActivePackagesByUserId(user.getId()).orElseThrow(() ->
+                new CriminalCrossException("NO_ACTIVE_PACKAGE", "User has no active package"));
+
+        List<String> activities = aPackage.getPackageActivities().stream()
+                .map(packageActivity -> packageActivity.getActivity().getName())
                 .toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(activities);

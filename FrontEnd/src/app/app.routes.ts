@@ -14,6 +14,7 @@ import {EcommerceComponent} from "./src/components/ecommerce/ecommerce.component
 import {ShoppingCartComponent} from "./src/components/shopping-cart/shopping-cart.component";
 import {AnnouncementsComponent} from "./src/components/announcements/announcements.component";
 import {AnnouncementCreationComponent} from "./src/components/announcenmentCreation/announcementCreation.component";
+import { ActivityListComponent } from './src/components/activity-list/activity-list.component';
 import {ForgotPasswordComponent} from "./src/components/forgot-password/forgot-password.component";
 
 export const routes: Routes = [
@@ -30,6 +31,7 @@ export const routes: Routes = [
   {path: 'agenda', component: ClientAgendaComponent},
   {path: 'user-info', component: UserInfoComponent},
   {path: 'package/create', component: CreatPackageFormComponent},
+  {path: 'admin/activities', component: ActivityListComponent},
   {path: 'admin/activity/create', component: CreateActivityComponent},
   {path: 'admin/activity/edit/:id', component: CreateActivityComponent},
   {path: 'admin/ecommerce', component: EcommerceComponent},

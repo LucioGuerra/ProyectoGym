@@ -128,7 +128,7 @@ export class AppointmentService {
   }
 
   cancelAppointment(id: string) {
-    return this.http.delete<any>(`${this.apiUrl+"/admin"}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/admin/${id}/deleteAllFutureAppointments=${false}`);
   }
 
   dateAdapt(date: Date): string {
@@ -137,7 +137,7 @@ export class AppointmentService {
 
   reserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.post<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`, {}))
+      switchMap(user => this.http.post<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`, {}))
     );
   }
 

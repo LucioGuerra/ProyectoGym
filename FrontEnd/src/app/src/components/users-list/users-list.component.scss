@@ -60,3 +60,42 @@ mat-cell {
   flex-direction: row;
   max-width: 70px;
   }
+
+.mat-column-lastName {
+  max-width: 150px;
+  }
+
+  .mat-column-firstName {
+    max-width: 150px;
+  }
+
+  .mat-column-email {
+    width: 300px !important;
+  }
+
+
+  @media (max-width: 800px) {
+    .mat-column-firstName {
+      display: none;
+    }
+
+  }
+
+  @media (max-width: 600px) {
+    .mat-column-lastName {
+      max-width: 100px !important;
+    }
+
+    .mat-column-buttons {
+      padding: 0!important;
+      max-width: 70px !important;
+    }
+
+  }
+
+  @media (max-width: 420px) {
+    .mat-column-lastName {
+      display: none;
+    }
+
+  }
