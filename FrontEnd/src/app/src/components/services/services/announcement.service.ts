@@ -16,7 +16,7 @@ export class AnnouncementService {
   }
 
   getAnnouncementById(id: number) {
-    return this.http.get<Announcement>(`${this.apiUrl}/admin/${id}`);
+    return this.http.get<Announcement>(`${this.apiUrl}/${id}`);
   }
 
   updateAnnouncement(announcementID: number, announcement: Announcement) {
@@ -24,7 +24,7 @@ export class AnnouncementService {
       ...announcement,
       date: this.dateAdapt(announcement.date)
     };
-    return this.http.put<Announcement>(`${this.apiUrl}/admin/${announcementID}`, announcement);      
+    return this.http.put<Announcement>(`${this.apiUrl}/admin/${announcementID}`, announcement);
   }
 
   deleteAnnouncement(id: number) {

@@ -95,7 +95,7 @@ export class UserEditComponent {
       role: new FormControl('', [Validators.required]),
       picture: new FormControl(''),
       dni: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
-      phone: new FormControl(''),
+      phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.maxLength(11)]),
     });
     effect(() => {
       if (!this.auth.isAuthenticated()) {
