@@ -14,9 +14,10 @@ import {Router} from '@angular/router';
 export class DrawerListComponent {
   appLinks = [
     {id: 1, name: 'Agenda', icon: 'calendar_today', link: '/admin/agenda'},
-    {id: 2, name: 'Users', icon: 'people', link: '/admin/users'},
-    {id: 3, name: 'Announcements', icon: 'announcement', link: '/admin/announcements'},
-    {id: 4, name: 'Ecomerce', icon: 'shopping_cart', link: '/admin/ecommerce'},
+    {id: 2, name: 'Usuarios', icon: 'people', link: '/admin/users'},
+    {id: 3, name: 'Actividades', icon: 'Activity', link: '/admin/activities'},
+    {id: 4, name: 'Anuncios', icon: 'announcement', link: '/admin/announcements'},
+    {id: 5, name: 'Compras', icon: 'shopping_cart', link: '/admin/ecommerce'},
   ];
 
   constructor(private router: Router) {

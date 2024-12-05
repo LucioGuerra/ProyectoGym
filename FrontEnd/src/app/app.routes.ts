@@ -30,6 +30,7 @@ export const routes: Routes = [
   {path: 'agenda', component: ClientAgendaComponent},
   {path: 'user-info', component: UserInfoComponent},
   {path: 'package/create', component: CreatPackageFormComponent},
+  {path: 'admin/activities', component: ActivityListComponent},
   {path: 'admin/activity/create', component: CreateActivityComponent},
   {path: 'admin/activity/edit/:id', component: CreateActivityComponent},
   {path: 'admin/ecommerce', component: EcommerceComponent},
@@ -38,5 +39,4 @@ export const routes: Routes = [
   {path: 'admin/announcements/create', component: AnnouncementCreationComponent},
   {path: 'admin/announcements/edit/:id', component: AnnouncementCreationComponent},
   {path: '**', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'admin/activities', component: ActivityListComponent},
 ];

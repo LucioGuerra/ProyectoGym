@@ -60,6 +60,10 @@ export class ActivityListComponent {
 
       if (!this.auth0.isAuthenticated()) {
         this.router.navigate(['/login']);
+      } else {
+        if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        }
       }
 
     });
@@ -87,7 +91,7 @@ export class ActivityListComponent {
 
 
   addActivity(){
-    alert("adding activity")
+    this.router.navigate(['/admin/activity/create']);
   }
 
 
