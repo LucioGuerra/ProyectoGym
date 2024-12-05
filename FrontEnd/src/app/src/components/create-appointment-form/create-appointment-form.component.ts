@@ -258,6 +258,7 @@ export class CreateAppointmentFormComponent implements OnInit {
         this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
+            this.range.markAsPristine();
             this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           },
           (error: any) => {
@@ -281,6 +282,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               console.log('Datos de la respuesta:', data);
               this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -303,6 +305,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               console.log('Datos de la respuesta:', data);
               this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -333,6 +336,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -353,6 +357,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})

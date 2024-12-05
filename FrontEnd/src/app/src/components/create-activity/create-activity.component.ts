@@ -98,6 +98,9 @@ export class CreateActivityComponent implements OnInit {
         (response) => {
           this._snackBar.open(`Se ha creado la actividad correctamente`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           console.log(`Actividad creada: ${response}`);
+          this.activityDescription.markAsPristine();
+          this.activityName.markAsPristine();
+          this.activityPrice.markAsPristine();
         },
         (error) => {
           this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -137,6 +140,9 @@ export class CreateActivityComponent implements OnInit {
         (response) => {
           this._snackBar.open('La actividad se ha editado correctamente', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           console.log(`Actividad editada: ${response}`);
+          this.activityDescription.markAsPristine();
+          this.activityName.markAsPristine();
+          this.activityPrice.markAsPristine();
         },
         (error) => {
           this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {"duration": 5000, "horizontalPosition": "center", "verticalPosition": "top"})

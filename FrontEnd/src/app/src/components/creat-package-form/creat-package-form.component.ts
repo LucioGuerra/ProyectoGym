@@ -137,6 +137,7 @@ export class CreatPackageFormComponent implements OnInit {
           "verticalPosition": "top"
         })
         console.log(`Paquete creado: ${response}`);
+        this.packageForm.markAsPristine();
       },
       error => {
         this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
