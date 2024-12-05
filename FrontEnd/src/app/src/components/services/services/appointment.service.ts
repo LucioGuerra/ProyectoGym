@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Appointment, AppointmentRequest, KineModel, UserModel } from '../../index'; // Ajusta según tus rutas
-import { interval, Observable, Subject, switchMap } from 'rxjs';
+import {catchError, interval, Observable, Subject, switchMap} from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../index';
 import { UserService } from "./user.service";
+import {ErrorDialogComponent} from "../../dialog/error-dialog/error-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class AppointmentService {
   constructor(
     private http: HttpClient,
     private userService: UserService,
+    private dialog: MatDialog
   ) {
     this.startPolling();
   }
@@ -79,7 +82,7 @@ export class AppointmentService {
   }
 
   updateAppointment(id: string, appointment: AppointmentRequest): any {
-    return this.http.patch<any>(`${this.apiUrl+"/admin"}/${id}`, appointment);
+    return this.http.patch<any>(`${this.apiUrl+"/public"}/${id}`, appointment);
   }
 
   createKinesiologyAppointments(appointmentData: AppointmentRequest): any {
@@ -128,7 +131,7 @@ export class AppointmentService {
   }
 
   cancelAppointment(id: string) {
-    return this.http.delete<any>(`${this.apiUrl+"/admin"}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/admin/${id}/deleteAllFutureAppointments=${false}`);
   }
 
   dateAdapt(date: Date): string {
@@ -137,20 +140,38 @@ export class AppointmentService {
 
   reserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.post<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`, {}))
-    );
+      switchMap(user => this.http.post<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`, {})),
+      catchError(error => {
+        if (error.error.error === 'USER_HAS_NO_ACTIVITY') {
+          this.dialog.open(ErrorDialogComponent, {data: {message: "Su paquete no posee esta actividad"}});
+        }
+        if (error.error.error === 'USER_HAS_NO_ACTIVE_PACKAGE') {
+          this.dialog.open(ErrorDialogComponent, {data: {message: "No posee un paquete activo"}});
+        }
+        if (error.error.error === 'USER_NO_CREDITS') {
+          this.dialog.open(ErrorDialogComponent, {data: {message: "Su paquete no posee con los suficientes creditos para esta actividad"}});
+        }
+        if (error.error.error === 'USER_ALREADY_REGISTERED') {
+          this.dialog.open(ErrorDialogComponent, {data: {message: "Ya se encuentra registrado en esta actividad"}});
+        }
+        if (error.error.error === 'APPOINTMENT_IS_FULL') {
+          this.dialog.open(ErrorDialogComponent, {data: {message: "La actividad ya se encuentra llena"}});
+        }
+        return new Observable();
+      })
+      );
   }
 
 
   unreserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.delete<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`))
+      switchMap(user => this.http.delete<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`))
     );
   }
 
   unreserveKinesiologyAppointment(appointmentId: string, userEmail: string): Observable<any> {
     return new Observable(observer => {
-      this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {
+      this.http.patch<any>(`${this.apiUrl}/public/${appointmentId}`, {
         "instructorID": "-1",
         "updateAllFutureAppointments": false
       }).subscribe(

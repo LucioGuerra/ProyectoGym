@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, OnInit, signal} from '@angular/core';
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {MainScreenComponent} from "../../layout/main-screen/main-screen.component";
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -27,6 +27,7 @@ import {EcommerceProductsService} from "../services/ecommerce/ecommerce-products
 import {EcommerceProducts} from "../models/ecommerceProducts.models";
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import {AuthService} from "../services/services";
 
 @Component({
   selector: 'app-ecommerce',
@@ -82,11 +83,26 @@ export class EcommerceComponent implements OnInit {
   displayedColumns: string[] = ['imagen', 'titulo', 'descripcion', 'precio', 'unidades_disponibles', "acciones"];
 
   constructor(
-    private router: Router, 
-    private shopListService: ShopListService, 
+    private router: Router,
+    private shopListService: ShopListService,
     private ecommerceProductsService: EcommerceProductsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private auth0: AuthService
   ) {
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+          return
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
     this.productsOptions = this.ecommerceProductsService.getProducts();
   }
 
@@ -152,7 +168,7 @@ export class EcommerceComponent implements OnInit {
   }
 
   volver() {
-    if (this.shopListService.getListaComprados() != null || this.shopListService.getListaComprados()?.length != 0) {
+    if (this.shopListService.getListaComprados() != null && this.shopListService.getListaComprados()?.length != 0) {
       this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
         if (result) {
           this.router.navigate(['/admin/agenda']);

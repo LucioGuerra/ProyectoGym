@@ -76,12 +76,17 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id,@Valid @RequestBody UserUpdateDTO userUpdateDTO){
         return userService.updateUser(id, userUpdateDTO);
     }
 
     @GetMapping("/streak/{id}")
     public ResponseEntity<Integer> getStreak(@PathVariable Long id){
         return userService.getStreak(id);
+    }
+
+    @GetMapping("/public/activities")
+    public ResponseEntity<List<String>> getActivities(@RequestParam("email") String email){
+        return userService.getActivitiesUser(email);
     }
 }

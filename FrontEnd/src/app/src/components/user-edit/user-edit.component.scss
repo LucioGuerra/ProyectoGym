@@ -9,6 +9,7 @@
 
   margin-top: 100px;
   width: 100%;
+
   padding: 0;
   }
 
@@ -220,6 +221,7 @@ mat-card-content {
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
+  margin-bottom: 10px;
   }
 
 .row {
@@ -257,7 +259,6 @@ button[mat-raised-button] {
   border: 1px solid #D0D0D0;
   border-radius: 7px;
   }
-
 
 .save-container {
   margin: 10px 0 10px 0;
@@ -301,11 +302,6 @@ button[mat-raised-button] {
 
   mat-card-header {
     flex-direction: row;
-    display: grid;
-    grid-template-areas:
-  "back photo role";
-    grid-template-columns: 3.5fr 8fr 3.5fr;
-
     align-items: end !important;
     position: relative;
     }
@@ -481,4 +477,16 @@ button[mat-raised-button] {
     height: 170px;
     margin-top: 20px;
     }
+  }
+
+@media ( max-width: 450px) {
+    .role-container {
+      margin-bottom: -40px;
+      }
+    .header {
+      height: 200px;
+      }
+    mat-card{
+      min-width: 320px;
+      }
   }

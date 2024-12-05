@@ -1,20 +1,20 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
-import {CreatePackage} from "../../layout/create-package/create-package";
-import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
-import {Activity, UserModel} from "../models";
-import {ActivityService} from "../services/services";
-import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
-import {UserService} from "../services/services/user.service";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {Observable, startWith} from "rxjs";
-import {map} from "rxjs/operators";
-import {Router} from '@angular/router';
-import {PackageService} from "../services/services/package.service";
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
+import { CreatePackage } from "../../layout/create-package/create-package";
+import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
+import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { Activity, UserModel } from "../models";
+import { ActivityService, AuthService } from "../services/services";
+import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { UserService } from "../services/services/user.service";
+import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
+import { Observable, startWith } from "rxjs";
+import { map } from "rxjs/operators";
+import { Router } from '@angular/router';
+import { PackageService } from "../services/services/package.service";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -43,12 +43,19 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
     NgForOf,
     NgIf,
     MainScreenComponent
-],
+  ],
   templateUrl: './creat-package-form.component.html',
   styleUrl: './creat-package-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreatPackageFormComponent implements OnInit {
+  controlEqualsProduct(control: AbstractControl): ValidationErrors | null {
+    const productSelected = control.value;
+    if (typeof productSelected != 'object') {
+      control.parent?.get('variantSelected')?.setValue('');
+    }
+    return typeof productSelected == 'object' ? null : { productMismatch: true };
+  }
   activities: Activity[] = [];
   users: UserModel[] = [];
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
@@ -56,7 +63,7 @@ export class CreatPackageFormComponent implements OnInit {
   packageForm: FormGroup = new FormGroup({
     packageName: new FormControl('', [Validators.required, Validators.minLength(3)]),
     packageDescription: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-    myControl: new FormControl('', [Validators.required]), // Autocomplete para el usuario
+    myControl: new FormControl('', [Validators.required, this.controlEqualsProduct]), // Autocomplete para el usuario
     activitiesArray: new FormArray([]) // FormArray para las actividades
   });
   private _snackBar = inject(MatSnackBar);
@@ -66,8 +73,22 @@ export class CreatPackageFormComponent implements OnInit {
     private activityService: ActivityService,
     private userService: UserService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private auth0: AuthService
   ) {
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   // Getter para facilitar el acceso al FormArray
@@ -137,14 +158,32 @@ export class CreatPackageFormComponent implements OnInit {
           "verticalPosition": "top"
         })
         console.log(`Paquete creado: ${response}`);
+        this.packageForm.markAsPristine();
       },
       error => {
-        this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
-          "duration": 5000,
-          "horizontalPosition": "center",
-          "verticalPosition": "top"
-        })
-        console.log(`Error al crear paquete: ${error}`);
+        if (error.error.error === 'USER_ALREADY_PACKAGE') {
+          this._snackBar.open('El usuario ya tiene un paquete activo', "Cerrar", {
+            "duration": 5000,
+            "horizontalPosition": "center",
+            "verticalPosition": "top"
+          });
+        } else {
+          if(error.error.error === "Validation error"){
+            this._snackBar.open('Verifique que los datos sean correctos', "Cerrar", {
+              "duration": 5000,
+              "horizontalPosition": "center",
+              "verticalPosition": "top"
+            });
+          }else{
+            this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
+              "duration": 5000,
+              "horizontalPosition": "center",
+              "verticalPosition": "top"
+            })
+          }
+
+          console.error(`Error al crear paquete: ${error.error.error}`);
+        }
       }
     );
   }
@@ -191,13 +230,13 @@ export class CreatPackageFormComponent implements OnInit {
 
   // Filtrar usuarios por DNI
   private _filter(dni: string): UserModel[] {
-    const filterValue = dni.toLowerCase();
+    const filterValue = dni;
     return this.users.filter(user => user.dni.toLowerCase().includes(filterValue));
   }
   // Navegar de vuelta a la agenda
   return() {
     if (this.packageForm.dirty) {
-      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+      this.dialog.open(ConfirmationDialogComponent, { data: { message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.' } }).afterClosed().subscribe((result: boolean) => {
         if (result) {
           window.history.back();
         }

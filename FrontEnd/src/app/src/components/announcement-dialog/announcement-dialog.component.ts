@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, signal} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MAT_DIALOG_DATA,
@@ -10,6 +10,8 @@ import {
 import {Router} from "@angular/router";
 import { Announcement, AnnouncementService } from '..';
 
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 @Component({
   selector: 'app-announcement-dialog',
   standalone: true,
@@ -17,7 +19,8 @@ import { Announcement, AnnouncementService } from '..';
     MatButton,
     MatDialogActions,
     MatDialogContent,
-    MatDialogTitle
+    MatDialogTitle,
+    MatProgressSpinnerModule
   ],
   templateUrl: './announcement-dialog.component.html',
   styleUrl: './announcement-dialog.component.scss',
@@ -25,7 +28,13 @@ import { Announcement, AnnouncementService } from '..';
 })
 export class AnnouncementDialogComponent {
 
-  announcement: Announcement | undefined;
+  announcement: Announcement = {
+    id: 0,
+    title: '',
+    body: '',
+    date: new Date(),
+  };
+  isLoading = signal<boolean>(true);
 
   constructor(
     public dialogRef: MatDialogRef<AnnouncementDialogComponent>,
@@ -38,6 +47,7 @@ export class AnnouncementDialogComponent {
   private loadAnnouncement() {
     this.announcementService.getAnnouncementById(this.data.announcementId).subscribe({
       next: (announcement: Announcement) => {
+        this.isLoading.set(false)
         this.announcement = {
           ...announcement,
           date: new Date(announcement.date)

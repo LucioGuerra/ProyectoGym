@@ -13,6 +13,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {AuthService} from "../services/services/auth.service";
 import {User} from "@auth0/auth0-angular";
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
 
 @Component({
   selector: 'app-users-list',
@@ -26,8 +27,9 @@ import {User} from "@auth0/auth0-angular";
     MatIcon,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
-  ],
+    MatMenuTrigger,
+    MainScreenComponent
+],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -46,12 +48,17 @@ export class UsersListComponent {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
+          return
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
         }
-        //todo redirect to client page
       } else {
         this.router.navigate(['/login']);
       }
     });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit() {

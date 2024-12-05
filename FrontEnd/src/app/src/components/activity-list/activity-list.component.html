@@ -1,0 +1,61 @@
+<app-main-screen>
+  <ng-container header>
+    <div class="card-header">
+      <div class="left-header">
+        <mat-icon class="icon">list_alt</mat-icon>
+        <h1>Actividades</h1>
+      </div>
+
+      <button
+        mat-icon-button
+        color="primary"
+        class="add-button"
+        (click)="addActivity()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </div></ng-container
+  >
+  <ng-container body>
+    <div class="contenido">
+      <div class="table-container">
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="name" class="column">
+            <th mat-header-cell *matHeaderCellDef id="colNombre">Nombre</th>
+            <td mat-cell *matCellDef="let element" id="contNombre">
+              {{ element.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description" class="special-column">
+            <th mat-header-cell *matHeaderCellDef id="colDes">Descripción</th>
+            <td mat-cell *matCellDef="let element" class="description">
+              {{ element.description }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="price" class="column">
+            <th mat-header-cell *matHeaderCellDef id="colPrice">Precio</th>
+            <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="buttons" class="column">
+            <th mat-header-cell *matHeaderCellDef id="colEdit"></th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="updateActivity(element.id)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </mat-table>
+      </div>
+    </div>
+  </ng-container>
+</app-main-screen>

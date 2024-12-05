@@ -24,11 +24,11 @@ export class AnnouncementService {
       ...announcement,
       date: this.dateAdapt(announcement.date)
     };
-    return this.http.put<Announcement>(`${this.apiUrl}/${announcementID}`, announcement);      
+    return this.http.put<Announcement>(`${this.apiUrl}/admin/${announcementID}`, announcement);
   }
 
   deleteAnnouncement(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/admin/${id}`);
   }
 
   createAnnouncement(announcement: Announcement) {
@@ -36,7 +36,7 @@ export class AnnouncementService {
       ...announcement,
       date: this.dateAdapt(announcement.date)
     };
-    return this.http.post<Announcement>(this.apiUrl, announcement);
+    return this.http.post<Announcement>(`${this.apiUrl}/admin`, announcement);
   }
 
   private dateAdapt(date: Date): string {

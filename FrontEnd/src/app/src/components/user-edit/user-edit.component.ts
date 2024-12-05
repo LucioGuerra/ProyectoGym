@@ -1,25 +1,26 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
-import { Role, UserModel } from '../models';
-import { MatIconModule } from '@angular/material/icon';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonModule } from '@angular/material/button';
-import { DrawerComponent } from '../drawer/drawer.component';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatInput } from '@angular/material/input';
-import { AuthService } from "../services/services";
-import { User } from "@auth0/auth0-angular";
-import { NgIf, TitleCasePipe } from "@angular/common";
-import { UserService } from "../services/services/user.service";
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments';
-import { lastValueFrom } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {ChangeDetectionStrategy, Component, effect, ElementRef, inject, signal, ViewChild} from '@angular/core';
+import {Role, UserModel} from '../models';
+import {MatIconModule} from '@angular/material/icon';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonModule} from '@angular/material/button';
+import {DrawerComponent} from '../drawer/drawer.component';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {MatInput} from '@angular/material/input';
+import {AuthService} from "../services/services";
+import {User} from "@auth0/auth0-angular";
+import {NgIf} from "@angular/common";
+import {UserService} from "../services/services/user.service";
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ErrorDialogComponent} from '../dialog/error-dialog/error-dialog.component';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../../environments';
+import {lastValueFrom} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-user-edit',
@@ -33,11 +34,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDividerModule,
     MatCardHeader,
     MatCardContent,
-    MatError,
     MatInput,
     MatFormField,
     MatLabel,
-    TitleCasePipe,
+    MatError,
     NgIf],
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
@@ -45,14 +45,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 
 export class UserEditComponent {
-  private _snackBar = inject(MatSnackBar);
   user = signal<User>({});
   found = signal<boolean>(false);
   defaultImage = 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg';
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   id: string | null = '';
   imageFile: string = '';
-
   isHovering = false;
   form: FormGroup;
   matcher = new ErrorStateMatcher();
@@ -66,7 +64,6 @@ export class UserEditComponent {
     dni: '',
     picture: new URL(this.defaultImage),
   });
-
   userVista = signal<UserModel>({
     id: 0,
     firstName: '',
@@ -78,16 +75,16 @@ export class UserEditComponent {
     picture: new URL(this.defaultImage),
   });
   protected readonly Role = Role;
-
+  private _snackBar = inject(MatSnackBar);
   private dialogConfig = new MatDialogConfig();
-  
+
 
   constructor(public auth: AuthService,
-    private router: Router,
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private http: HttpClient,
+              private router: Router,
+              private userService: UserService,
+              private route: ActivatedRoute,
+              private dialog: MatDialog,
+              private http: HttpClient,
   ) {
     console.log(this.user().picture);
 
@@ -97,12 +94,17 @@ export class UserEditComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       role: new FormControl('', [Validators.required]),
       picture: new FormControl(''),
-      dni: new FormControl('', [Validators.required]),
-      phone: new FormControl(''),
+      dni: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.maxLength(11)]),
+    });
+    effect(() => {
+      if (!this.auth.isAuthenticated()) {
+          this.router.navigate(['/home']);
+        }
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.user.set(this.auth.userInfo());
     this.id = this.route.snapshot.paramMap.get('id');
     this.userService.getUserByEmail(String(this.user().email)).subscribe({
@@ -141,23 +143,44 @@ export class UserEditComponent {
     const previousUrl = document.referrer;
     const isAdmin = this.userModel().role === Role.ADMIN;
 
-    if (previousUrl !== '/user-info' && !isAdmin) {
-      this.router.navigate(['/user-info']);
-    } else if (isAdmin) {
-      window.history.back();
+    if (this.form.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          if (previousUrl !== '/user-info' && !isAdmin) {
+            this.router.navigate(['/user-info']);
+          } else if (isAdmin) {
+            window.history.back();
+          }
+        }
+      });
+    } else {
+      if (previousUrl !== '/user-info' && !isAdmin) {
+        this.router.navigate(['/user-info']);
+      } else if (isAdmin) {
+        window.history.back();
+      }
     }
   }
 
-  changePassword(): void {
-    alert('Changing password');
-    this.router.navigate(['/change-password']);
+  async changePassword() {
+    this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: 'Se te enviará un email para restablecer tu' +
+          ' contraseña. ¿Estás seguro de que quieres cambiar tu contraseña?'
+      }
+    }).afterClosed().subscribe((result: boolean) => {
+      if (!result) {
+        return;
+      }
+      this.auth.forgotPassword(this.user().email!);
+    });
   }
 
   async changeRole(event: Event) {
     const selectedRole = (event.target as HTMLSelectElement).value;
 
     // Actualiza solo el formulario para que saveChanges sincronice después con userVista
-    this.form.patchValue({ role: selectedRole === 'ADMIN' ? Role.ADMIN : Role.CLIENT });
+    this.form.patchValue({role: selectedRole === 'ADMIN' ? Role.ADMIN : Role.CLIENT});
   }
 
   async saveChanges() {
@@ -191,10 +214,12 @@ export class UserEditComponent {
     this.userService.updateUser(this.userVista()).subscribe({
       next: (updatedUser: UserModel) => {
         console.log('Usuario actualizado:', updatedUser);
-        alert('User updated successfully');
+        const s = this._snackBar.open("Se ha modificado correctamente el usuario", "Cerrar", {
+          duration: 2000,
+        });
       },
       error: (error: any) => {
-        console.error('Error updating user:', error);
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Este DNI ya pertenece a otro usuario." } });
       },
       complete: () => {
         console.log('Update user completed');
@@ -202,14 +227,9 @@ export class UserEditComponent {
     });
   }
 
-  changePicture() {
-    alert("Insert the new picture");
-  }
-
   showText(isHovering: boolean) {
     this.isHovering = isHovering;
   }
-
 
   // Dispara el clic en el input oculto
   triggerFileInput() {
@@ -227,21 +247,21 @@ export class UserEditComponent {
         this.dialogConfig.maxWidth = '1400px';
         this.dialogConfig.width = '40%';
         this.dialogConfig.panelClass = 'custom-dialog';
-        this.dialogConfig.data = { message: 'El archivo seleccionado no es una imagen.' };
+        this.dialogConfig.data = {message: 'El archivo seleccionado no es una imagen.'};
         const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
         return;
       }
 
       const maxSizeInMB = 2;
       if (file.size / 1024 / 1024 > maxSizeInMB) {
-        
-        this.dialogConfig.data = { message:`La imagen excede el tamaño maximo de ${maxSizeInMB}MB.` };
+
+        this.dialogConfig.data = {message: `La imagen excede el tamaño maximo de ${maxSizeInMB}MB.`};
         const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
         return;
       }
       const reader = new FileReader();
       reader.onload = () => {
-        this.userVista.set({ ...this.userVista(), picture: new URL(reader.result as string) });
+        this.userVista.set({...this.userVista(), picture: new URL(reader.result as string)});
         console.log('Imagen:', reader.result);
         this.imageFile = reader.result as string;
       };
@@ -255,18 +275,18 @@ export class UserEditComponent {
       const formData = new FormData();
       formData.append('file', this.imageFile);
       formData.append('upload_preset', environment.cloudinary.preset);
-  
+
       try {
         const response: any = await lastValueFrom(this.http.post(environment.cloudinary.api, formData));
         console.log('Imagen cargada con éxito:', response);
-        this.userVista.set({ ...this.userVista(), picture: new URL(response.secure_url) });
+        this.userVista.set({...this.userVista(), picture: new URL(response.secure_url)});
         console.log('Imagen cargada:', this.userVista().picture);
       } catch (error) {
         this.dialogConfig.autoFocus = true;
         this.dialogConfig.maxWidth = '1400px';
         this.dialogConfig.width = '40%';
         this.dialogConfig.panelClass = 'custom-dialog';
-        this.dialogConfig.data = { message: 'Ha habido un error, por favor intentelo mas tarde.' };
+        this.dialogConfig.data = {message: 'Ha habido un error, por favor intentelo mas tarde.'};
         const dialogRef = this.dialog.open(ErrorDialogComponent, this.dialogConfig);
         console.error('Error al cargar la imagen:', error);
       }

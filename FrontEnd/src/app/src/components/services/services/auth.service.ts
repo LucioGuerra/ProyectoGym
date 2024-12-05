@@ -1,19 +1,18 @@
-import { Injectable, signal } from "@angular/core";
-import { environment } from "../../../../../environments/environment";
+import {Injectable, signal} from "@angular/core";
+import {environment} from "../../../../../environments";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
+import {UserService} from "./user.service";
+import {Role, UserModel} from "../../models";
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {DniService} from "../dni/dni.service";
+import {SendEmailComponent} from "../../dialog/send-email/send-email.component";
 import { jwtDecode } from "jwt-decode";
-import { UserService } from "./user.service";
-import { Role, UserModel } from "../../models";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DniDialogComponent } from "../../dni-dialog/dni-dialog.component";
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpClient } from "@angular/common/http";
 import { firstValueFrom, lastValueFrom } from "rxjs";
-import { DniService } from "../dni/dni.service";
 import { ErrorDialogComponent } from "../../dialog/error-dialog/error-dialog.component";
 import { Router } from "@angular/router";
-
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -49,11 +48,10 @@ export class AuthService {
       audience: environment.auth0.audience
     }, (err: any, result: any) => {
       if (err.code == "access_denied") {
-        this.dialog.open(ErrorDialogComponent, { data: { message: "Usuario o contraseña incorrectos" } });
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Usuario o contraseña incorrectos"}});
       } else if (err) {
-        this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente" } });
+        this.dialog.open(ErrorDialogComponent, {data: {message: "Ha ocurrido un error, intente nuevamente"}});
       }
-
     });
   }
 
@@ -63,12 +61,12 @@ export class AuthService {
     })
   }
 
-   public async signup(email: string | undefined, password: string | undefined, user: UserModel): Promise<void> {
+  public async signup(email: string | undefined, password: string | undefined, user: UserModel): Promise<void> {
     var userDniExists: boolean = true;
     try {
       const _user: UserModel = await firstValueFrom(this.userService.getUserByDNI(user.dni));
       console.log("El DNI ya existe, no se puede registrar");
-      this.dialog.open(ErrorDialogComponent, { data: { message: "El DNI ya se encuentra registrado" } });
+      this.dialog.open(ErrorDialogComponent, {data: {message: "El DNI ya se encuentra registrado"}});
       userDniExists = true;
     } catch (error) {
       console.log("El DNI no existe, se puede registrar");
@@ -85,7 +83,7 @@ export class AuthService {
       }, (err: any, result: any) => {
         if (err) {
           if (err.code == "invalid_signup") {
-            this.dialog.open(ErrorDialogComponent, { data: { message: "El email ya se encuentra registrado." } });
+            this.dialog.open(ErrorDialogComponent, {data: {message: "El email ya se encuentra registrado."}});
           } else if (err.code == "invalid_password") {
             this.dialog.open(ErrorDialogComponent, {
               data: {
@@ -98,9 +96,9 @@ export class AuthService {
                 * caracteres especiales (e.g. !@#$%^&*)`
               }
             });
-        }else if (err) {
+          } else if (err) {
             console.log("Error: ", err);
-            this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
+            this.dialog.open(ErrorDialogComponent, {data: {message: "Ha ocurrido un error, intente nuevamente."}});
           }
         } else if (result) {
           console.log("Usuario creado correctamente, result: ", result);
@@ -198,21 +196,6 @@ export class AuthService {
     }
   }
 
-  private setSession(accessToken: any, expiresIn: any, idToken: any, userRole: Role): Promise<void> {
-    return new Promise(async (resolve) => {
-      const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
-      localStorage.setItem('access_token', accessToken);
-      localStorage.setItem('expires_at', expiresAt);
-      localStorage.setItem('idToken', idToken);
-
-      this.isAuthenticated.set(true);
-      this.setRole(userRole);
-      this.setUserInfo(idToken);
-
-      //this.isClient.set(true);
-    });
-  }
-
   public logout(): void {
     console.log("Entra al logout")
     localStorage.removeItem('accessToken');
@@ -227,6 +210,35 @@ export class AuthService {
       returnTo: 'http://localhost:4200/home'
     })
 
+  }
+
+  public forgotPassword(email: string): void {
+    this.auth0Client.changePassword({
+      connection: environment.auth0.database,
+      email: email
+    }, (err: any, resp: any) => {
+      if (err) {
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
+      } else {
+        console.log("Password change email sent:", resp);
+        this.dialog.open(SendEmailComponent, { data: { message: "Correo de restablecimiento de contraseña enviado." } });
+      }
+    });
+  }
+
+  private setSession(accessToken: any, expiresIn: any, idToken: any, userRole: Role): Promise<void> {
+    return new Promise(async (resolve) => {
+      const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('expires_at', expiresAt);
+      localStorage.setItem('idToken', idToken);
+
+      this.isAuthenticated.set(true);
+      this.setRole(userRole);
+      this.setUserInfo(idToken);
+
+      //this.isClient.set(true);
+    });
   }
 
   private setRole(userRole: Role) {

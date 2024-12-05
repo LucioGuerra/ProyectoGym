@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, inject, OnInit, signal} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {Observable, startWith} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -18,6 +18,7 @@ import {ShopListService} from "../services/shop-list/shop-list.service";
 import {EcommerceProducts} from "../models/ecommerceProducts.models";
 import {EcommerceProductsService} from "../services/ecommerce/ecommerce-products.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {AuthService} from "../services/services";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -61,10 +62,25 @@ export class ShoppingCartComponent implements OnInit {
   displayedColumns: string[] = ['imagen', 'titulo', 'descripcion', 'precio', 'unidades_disponibles', "acciones"];
 
   constructor(private router: Router,
+              private auth0: AuthService,
               private shopListService: ShopListService,
               private ecommerceProductsService: EcommerceProductsService,
   ) {
     this.productsOptions = this.ecommerceProductsService.getProducts();
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+          return
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit() {

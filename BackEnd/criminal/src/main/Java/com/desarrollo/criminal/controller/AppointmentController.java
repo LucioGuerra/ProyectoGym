@@ -3,9 +3,12 @@ package com.desarrollo.criminal.controller;
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.KinesiologyAppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
+import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
+import com.desarrollo.criminal.dto.response.GetAppointmentKineDTO;
 import com.desarrollo.criminal.service.AppointmentService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +39,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+    public ResponseEntity<?> createAppointment(@RequestBody @Valid AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
     }
 
@@ -46,7 +49,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/public/kine")
-    public ResponseEntity<?> createKinesiologyAppointment(@RequestBody KinesiologyAppointmentDTO kinesiologyAppointmentDTO) {
+    public ResponseEntity<?> createKinesiologyAppointment(@RequestBody @Valid KinesiologyAppointmentDTO kinesiologyAppointmentDTO) {
         return appointmentService.createKinesiologyAppointment(kinesiologyAppointmentDTO);
     }
 
@@ -57,13 +60,13 @@ public class AppointmentController {
     }
 
     @PutMapping("admin/{id}")
-    public ResponseEntity<?> updateAllAppointment(@PathVariable Long id, @RequestBody AppointmentDTO appointmentDTO) {
+    public ResponseEntity<?> updateAllAppointment(@PathVariable Long id, @RequestBody @Valid AppointmentDTO appointmentDTO) {
         return appointmentService.updateAllAppointment(id, appointmentDTO);
     }
 
     @PatchMapping("/public/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Long id,
-                                               @RequestBody UpdatePATCHAppointmentDTO updateAppointmentDTO) {
+                                               @RequestBody @Valid UpdatePATCHAppointmentDTO updateAppointmentDTO) {
         return appointmentService.updateAppointment(id, updateAppointmentDTO);
     }
 
@@ -81,6 +84,27 @@ public class AppointmentController {
     @DeleteMapping("/{appointmentId}/user/{userId}")
     public ResponseEntity<?> removeParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
         return appointmentService.removeParticipant(appointmentId, userId);
+    }
+
+    @GetMapping("/public/kine")
+    public ResponseEntity<List<GetAppointmentKineDTO>> getAllKinesiologyAppointments(@RequestParam("dni") String dni) {
+        return appointmentService.getKinesiologyAppointmentByDni(dni);
+    }
+
+    @PatchMapping("/public/kine/{id}/add")
+    public ResponseEntity<?> addParticipantToKinesiology(@PathVariable Long id, @RequestBody @Valid UserRequestDTO userRequestDTO) {
+        return appointmentService.addParticipantToKinesiology(id, userRequestDTO);
+    }
+
+
+    @PatchMapping("/public/kine/{id}/remove")
+    public ResponseEntity<?> removeParticipantFromKinesiology(@PathVariable Long id, @RequestParam("dni") String dni) {
+        return appointmentService.removeParticipantFromKinesiology(id, dni);
+    }
+
+    @PostMapping("/public/kine/create")
+    public ResponseEntity<?> createKinesiology(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+        return appointmentService.createKine(userRequestDTO);
     }
 
 }
