@@ -27,8 +27,7 @@ export class AuthService {
     private userService: UserService,
     private dialog: MatDialog,
     private dniService: DniService,
-    private _snackBar: MatSnackBar,
-    private http: HttpClient
+    private _snackBar: MatSnackBar
   ) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
