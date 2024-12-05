@@ -7,7 +7,7 @@ import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import {DrawerComponent} from '../drawer/drawer.component';
-import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatInput} from '@angular/material/input';
 import {AuthService} from "../services/services";
@@ -37,6 +37,7 @@ import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-d
     MatInput,
     MatFormField,
     MatLabel,
+    MatError,
     NgIf],
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
@@ -93,7 +94,7 @@ export class UserEditComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       role: new FormControl('', [Validators.required]),
       picture: new FormControl(''),
-      dni: new FormControl('', [Validators.required]),
+      dni: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
       phone: new FormControl(''),
     });
     effect(() => {

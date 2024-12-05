@@ -101,8 +101,4 @@ export class ActivityListComponent {
   updateActivity(id: string) {
     this.router.navigate(['/admin/activity/edit', id]);
   }
-
-  return() {
-    window.history.back();
-  }
 }

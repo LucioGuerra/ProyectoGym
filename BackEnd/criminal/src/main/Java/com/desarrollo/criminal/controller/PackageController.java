@@ -6,6 +6,7 @@ import com.desarrollo.criminal.dto.request.PackageDTO;
 import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetRandomPackageDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class PackageController {
     private final PackageService packageService;
 
     @PostMapping("/admin")
-    public ResponseEntity<Package> createPackage(@RequestBody PackageDTO aPackage){
+    public ResponseEntity<Package> createPackage(@RequestBody @Valid PackageDTO aPackage){
         return packageService.createPackage(aPackage);
     }
 
@@ -43,7 +44,7 @@ public class PackageController {
     }
 
     @PatchMapping("/admin/{id}")
-    public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody UpdatePackageDTO aPackage){
+    public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody @Valid UpdatePackageDTO aPackage){
         return packageService.updatePackage(id, aPackage);
     }
 

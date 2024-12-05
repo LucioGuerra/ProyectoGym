@@ -25,7 +25,6 @@ import {AuthService} from "../services/services";
 import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {NgIf} from "@angular/common";
 import {MatDivider} from "@angular/material/divider";
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-info',
@@ -50,7 +49,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatTabLabel,
     NgIf,
     MatDivider,
-    MatIconModule,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -129,9 +127,5 @@ export class UserInfoComponent {
 
   editUser() {
     this.router.navigate(['/edit']);
-  }
-
-  return() {
-    window.history.back();
   }
 }

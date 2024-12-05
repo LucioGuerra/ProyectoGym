@@ -161,11 +161,20 @@ export class CreatPackageFormComponent implements OnInit {
             "verticalPosition": "top"
           });
         } else {
-          this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
-            "duration": 5000,
-            "horizontalPosition": "center",
-            "verticalPosition": "top"
-          })
+          if(error.error.error === "Validation error"){
+            this._snackBar.open('Verifique que los datos sean correctos', "Cerrar", {
+              "duration": 5000,
+              "horizontalPosition": "center",
+              "verticalPosition": "top"
+            });
+          }else{
+            this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
+              "duration": 5000,
+              "horizontalPosition": "center",
+              "verticalPosition": "top"
+            })
+          }
+
           console.error(`Error al crear paquete: ${error.error.error}`);
         }
       }
