@@ -20,6 +20,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments';
 import {lastValueFrom} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-user-edit',
@@ -97,7 +98,7 @@ export class UserEditComponent {
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.user.set(this.auth.userInfo());
     this.id = this.route.snapshot.paramMap.get('id');
     this.userService.getUserByEmail(String(this.user().email)).subscribe({
@@ -136,15 +137,34 @@ export class UserEditComponent {
     const previousUrl = document.referrer;
     const isAdmin = this.userModel().role === Role.ADMIN;
 
-    if (previousUrl !== '/user-info' && !isAdmin) {
-      this.router.navigate(['/user-info']);
-    } else if (isAdmin) {
-      window.history.back();
+    if (this.form.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          if (previousUrl !== '/user-info' && !isAdmin) {
+            this.router.navigate(['/user-info']);
+          } else if (isAdmin) {
+            window.history.back();
+          }
+        }
+      });
+    } else {
+      if (previousUrl !== '/user-info' && !isAdmin) {
+        this.router.navigate(['/user-info']);
+      } else if (isAdmin) {
+        window.history.back();
+      }
     }
   }
 
-  changePassword(): void {
-    this.router.navigate(['/change-password']);
+  async changePassword() {
+    this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: 'Se te enviará un email para restablecer tu' +
+          ' contraseña. ¿Estás seguro de que quieres cambiar tu contraseña?'
+      }
+    }).afterClosed().subscribe(() => {
+      this.auth.forgotPassword(this.user().email!);
+    });
   }
 
   async changeRole(event: Event) {
@@ -189,7 +209,7 @@ export class UserEditComponent {
           duration: 2000,
         });
       },
-      error: (error: any) => {
+      error: () => {
         this.dialog.open(ErrorDialogComponent, { data: { message: "Este DNI ya pertenece a otro usuario." } });
       },
       complete: () => {
@@ -198,14 +218,9 @@ export class UserEditComponent {
     });
   }
 
-  changePicture() {
-    alert("Insert the new picture");
-  }
-
   showText(isHovering: boolean) {
     this.isHovering = isHovering;
   }
-
 
   // Dispara el clic en el input oculto
   triggerFileInput() {
