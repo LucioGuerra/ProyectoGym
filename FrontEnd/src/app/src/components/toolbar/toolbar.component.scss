@@ -11,6 +11,7 @@ mat-toolbar {
 @media (max-width: 600px) {
   mat-toolbar {
     padding: 0 10px;
-    position: relative;
+    position: fixed;
+
   }
 }

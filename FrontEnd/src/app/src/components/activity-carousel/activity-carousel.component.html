@@ -1,0 +1,57 @@
+<div class="carousel-container">
+  <mat-tab-group class="custom-tab-group tab1" [(selectedIndex)]="firstCarouselIndex">
+    @for(activity of activities ; track activity) {
+    <mat-tab>
+        <div class="cartas">
+          <mat-card class="card">
+            <mat-card-title>{{ activity.name }}</mat-card-title>
+            <mat-card-content>{{
+              activity.description!.length > 100
+                ? activity.description!.slice(0, 100) + "..."
+                : activity.description!
+            }}</mat-card-content>
+          </mat-card>
+        </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+  <mat-tab-group class="custom-tab-group tab2" [(selectedIndex)]="secondCarouselIndex">
+    @for(activity of activities ; track activity) {
+    <mat-tab>
+        <div class="cartas">
+          <mat-card class="card">
+            <mat-card-title>{{ activity.name }}</mat-card-title>
+            <mat-card-content>{{
+              activity.description!.length > 100
+                ? activity.description!.slice(0, 100) + "..."
+                : activity.description!
+            }}</mat-card-content>
+          </mat-card>
+        </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+  <mat-tab-group class="custom-tab-group tab3" [(selectedIndex)]="thirdCarouselIndex">
+    @for(activity of activities ; track activity) {
+    <mat-tab>
+        <div class="cartas">
+          <mat-card class="card">
+            <mat-card-title>{{ activity.name }}</mat-card-title>
+            <mat-card-content>{{
+              activity.description!.length > 100
+                ? activity.description!.slice(0, 100) + "..."
+                : activity.description!
+            }}</mat-card-content>
+          </mat-card>
+        </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+
+  <button mat-icon-button class="navigation-buttons-left" (click)="prevSlide()">
+    <mat-icon> navigate_before </mat-icon>
+  </button>
+  <button mat-icon-button class="navigation-buttons-right" (click)="nextSlide()" >
+    <mat-icon> navigate_next </mat-icon>
+  </button>
+</div>

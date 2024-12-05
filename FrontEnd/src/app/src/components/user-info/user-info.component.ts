@@ -1,18 +1,30 @@
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {DrawerComponent} from "../drawer/drawer.component";
-import {Role, Appointment, UserModel} from "../models";
+import {Appointment, Role, UserModel} from "../models";
 import {User} from "@auth0/auth0-angular";
+import {Package} from "../models/package.models";
 
 import {UserService} from "../services/services/user.service";
 
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
-import {MatDivider} from "@angular/material/divider";
 import {Router} from "@angular/router";
-import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef} from "@angular/material/table";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatRow,
+  MatRowDef,
+  MatTable
+} from "@angular/material/table";
 import {MatChip} from "@angular/material/chips";
-import {MatIcon} from "@angular/material/icon";
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatActionList, MatListItem} from "@angular/material/list";
+import {AuthService} from "../services/services";
+import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
+import {NgIf} from "@angular/common";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-user-info',
@@ -21,69 +33,94 @@ import {MatProgressBar} from "@angular/material/progress-bar";
     DrawerComponent,
     MatCardModule,
     MatButtonModule,
-    MatDivider,
     MatCell,
     MatCellDef,
     MatChip,
     MatColumnDef,
     MatHeaderCell,
-    MatIcon,
-    MatProgressBar,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatActionList,
+    MatListItem,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    MatTab,
+    MatTabGroup,
+    MatTabLabel,
+    NgIf,
+    MatDivider,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserInfoComponent {
+  displayedColumns: string[] = ['date', 'activity'];
   user = signal<User>({});
   userModel = signal<UserModel>({
-    id: 2,
+    id: 0,
     firstName: '',
     lastName: '',
     email: '',
     role: Role.CLIENT,
     phone: '',
     dni: '',
-    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'),
+    picture: new URL('https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg')
   });
   userAppointments = signal<Appointment[]>([]);
+  userPackages = signal<Package[]>([]);
+  streak = signal<number>(0);
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {
   }
 
   ngOnInit(): void {
+    this.user.set(this.auth.userInfo());
     console.log(this.user().picture);
+    this.displayedColumns = ['date', 'activity'];
 
-    this.userService.getUserById('2').subscribe({
+    this.userService.getUserByEmail(String(this.user().email)).subscribe({
       next: (userModel) => {
         this.userModel.set(userModel);
+        const userId = userModel.id ?? 0;
+
+        this.userService.getStreak(String(userId)).subscribe({
+          next: (streak) => {
+            this.streak.set(streak);
+          },
+          error: (error) => {
+            console.error('Error fetching user streak');
+          }
+        });
+
+        this.userService.getUserAppointments(String(userId)).subscribe({
+          next: (appointments) => {
+            this.userAppointments.set(appointments);
+          }, error: (error) => {
+            console.error('User not found');
+          }
+        });
+
+        this.userService.getUserHistory(userId).subscribe({
+          next: (packages: Package[]) => {
+            this.userPackages.set(packages);
+            console.log('User packages: ', this.userPackages());
+          }, error: (error) => {
+            console.error('User not found');
+          }
+        });
+
       }, error: (error) => {
         console.error('User not found');
       }
     });
-
-    this.userService.getUserAppointments('2').subscribe({
-      next: (appointments) => {
-        this.userAppointments.set(appointments);
-      }, error: (error) => {
-        console.error('User not found');
-      }
-    });
-
-    // this.userService.getUserPackages('2').subscribe({
-    //   next: (packages) => {
-    //     this.userPackages.set(packages);
-    //   }, error: (error) => {
-    //     console.error('User not found');
-    //   }
-    // });
   }
 
-  editUser(id: number) {
-    this.router.navigate(['/edit/', id]);
+  editUser() {
+    this.router.navigate(['/edit']);
   }
 }

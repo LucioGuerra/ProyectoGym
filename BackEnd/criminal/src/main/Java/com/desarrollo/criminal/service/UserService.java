@@ -1,7 +1,7 @@
 package com.desarrollo.criminal.service;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
+import com.desarrollo.criminal.dto.response.GetPackageActivityDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import com.desarrollo.criminal.entity.Appointment;
@@ -15,13 +15,14 @@ import com.desarrollo.criminal.exception.CriminalCrossException;
 import com.desarrollo.criminal.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -55,6 +56,14 @@ public class UserService {
                 new EntityNotFoundException("User not found with email: " + email));
 
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
+
+    public ResponseEntity<List<UserResponseDTO>> getUserAdmins() {
+        List<User> admins = userRepository.findByRole(Role.ADMIN);
+        List<UserResponseDTO> adminsDTO = admins.stream()
+                .map(admin -> modelMapper.map(admin, UserResponseDTO.class)).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(adminsDTO);
     }
 
     public ResponseEntity<List<GetPackageDTO>> getUserHistory(Long id) {
@@ -115,10 +124,10 @@ public class UserService {
             user.setPicture(userUpdateDTO.picture());
         }
         if(Optional.ofNullable(userUpdateDTO.role()).isPresent()) {
-            if (userUpdateDTO.role() == "ADMIN") {
+            if (userUpdateDTO.role().equals("ADMIN")) {
                 user.setRole(Role.ADMIN);
             }
-            if (userUpdateDTO.role() == "CLIENT") {
+            if (userUpdateDTO.role().equals("CLIENT")) {
                 user.setRole(Role.CLIENT);
             }
         }
@@ -149,8 +158,67 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(appointmentsDTO);
     }
-    
+
+    public ResponseEntity<Integer> getStreak(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("User not found with id: " + id));
+
+        List<UserXAppointment> appointments = user.getUserXAppointments().stream()
+                .sorted(Comparator.comparing(uxp -> uxp.getAppointment().getDate()))
+                .toList();
+
+        int streak = 0;
+
+        for (UserXAppointment appointment: appointments) {
+            if(appointment.getAttendance()){
+                streak++;
+            }
+            else{
+                break;
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(streak);
+    }
+
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    public Optional<User> getUserByDni(String dni) {
+        return userRepository.findByDni(dni);
+    }
+
+    public ResponseEntity<UserResponseDTO> getUserEntityByDni(String dni) {
+        User user = this.getUserByDni(dni).orElseThrow(() ->
+                new EntityNotFoundException("User not found with dni: " + dni));
+
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(user, UserResponseDTO.class));
+    }
+
+    public ResponseEntity<List<String>> getActivePackageByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+
+        GetPackageDTO activePackage = this.getActivePackage(user.getId()).getBody();
+
+        if (activePackage == null) {
+            throw new CriminalCrossException("NO_ACTIVE_PACKAGE", "User has no active package");
+        }
+        List<String> activities = activePackage.getActivities().stream()
+                .map(GetPackageActivityDTO::getName)
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(activities);
+    }
+
+
+    //Security
+    public Collection<GrantedAuthority> getAuthorityByEmail(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("User not found with email: " + email));
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().name()));
+        return authorities;
     }
 }

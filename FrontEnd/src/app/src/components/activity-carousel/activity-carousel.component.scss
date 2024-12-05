@@ -1,0 +1,124 @@
+@use "../../../../variables.scss";
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+
+  .custom-tab-group {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    ::ng-deep mat-tab-header {
+      display: none !important; /* Oculta el encabezado */
+    }
+
+    ::ng-deep .mat-tab-group {
+      height: 100% !important;
+      border-radius: 10px;
+    }
+
+    ::ng-deep .mat-mdc-tab-body-wrapper {
+      height: 100% !important;
+      border-radius: 10px;
+    }
+
+    ::ng-deep .mat-tab-body {
+      height: 100% !important;
+      border-radius: 10px;
+    }
+  }
+
+  .slide-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+
+  .navigation-buttons-left,
+  .navigation-buttons-right {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  .navigation-buttons-left {
+    left: 0;
+    margin-left: 10px;
+  }
+
+  .navigation-buttons-right {
+    right: 0;
+    margin-right: 10px;
+  }
+
+  mat-card {
+    width: 80%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    margin: 0;
+    padding: 10px;
+    color: variables.$white-color;
+    background-color: #111111;
+    border-radius: 10px;
+  }
+
+  mat-card-title {
+    font-size: 1.2em;
+    border-radius: 10px;
+    margin-top: 20px;
+    height: 50%;
+    color: variables.$dark-gold-color
+  }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 50%;
+    font-size: 0.8em;
+    color: variables.$white-color;
+  }
+}
+.cartas {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .tab2 {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .tab3 {
+    display: none;
+  }
+}

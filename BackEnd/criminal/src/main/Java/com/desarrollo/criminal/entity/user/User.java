@@ -1,8 +1,6 @@
 package com.desarrollo.criminal.entity.user;
 
 import com.desarrollo.criminal.entity.Package;
-import com.desarrollo.criminal.entity.routine.Routine;
-import com.desarrollo.criminal.entity.tracking.Tracking;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -50,22 +48,16 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToOne
-    private Routine routine;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Package> aPackage;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Tracking> trackings;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private Set<UserXAppointment> userXAppointments;
 
-    private User(){
+    public User(){
         aPackage = new ArrayList<>();
         userXAppointments = new HashSet<>();
     }

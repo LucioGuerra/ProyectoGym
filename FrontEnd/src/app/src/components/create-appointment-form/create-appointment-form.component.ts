@@ -14,7 +14,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCardModule} from "@angular/material/card";
 import {MatSelectModule} from "@angular/material/select";
-import {Activity, Appointment, AppointmentRequest, DayOfWeek, Instructor, LocalTime} from "../models";
+import {Activity, Appointment, AppointmentRequest, DayOfWeek, Instructor, LocalTime, UserModel} from "../models";
 import {MatButtonModule} from "@angular/material/button";
 import {MatChipListbox, MatChipListboxChange, MatChipOption} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -25,6 +25,8 @@ import {ErrorDialogComponent} from '../dialog/error-dialog/error-dialog.componen
 import {HttpStatusCode} from "@angular/common/http";
 import {formatDate} from "@angular/common";
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { UserService } from '../services/services/user.service';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-appointment-form',
@@ -64,7 +66,7 @@ export class CreateAppointmentFormComponent implements OnInit {
     end: new FormControl<Date | null>(null, [Validators.required]),
     max_capacity: new FormControl<number | null>(20, [Validators.required, Validators.min(1), Validators.max(100)]),
     activity: new FormControl<number | null>(null, [Validators.required, this.activityValidator]),
-    instructor: new FormControl<number | null>(null, [Validators.required]),
+    instructor: new FormControl<number | null>(null),
     daysOfWeek: new FormControl<DayOfWeek[] | []>([]),
     startTime: new FormControl<string | null>(this.formatTime(new Date()), [Validators.required]),
     endTime: new FormControl<string | null>(this.formatTime(new Date(new Date().setHours(new Date().getHours() + 1))), [Validators.required]),
@@ -72,11 +74,19 @@ export class CreateAppointmentFormComponent implements OnInit {
     kinesiologyQuantity: new FormControl<number | null>(4, [Validators.required, Validators.min(1), Validators.max(100)])
   }, {validators: Validators.compose([this.timeRangeValidator.bind(this)])});
 
-  constructor(private auth: AuthService, private dialog: MatDialog, private router: Router, private activityService: ActivityService, private appointmentService: AppointmentService) {
+  constructor(
+    private auth: AuthService, 
+    private dialog: MatDialog, 
+    private router: Router, 
+    private activityService: ActivityService, 
+    private appointmentService: AppointmentService,
+    private userService: UserService
+  ) {
   }
 
   ngOnInit(): void {
     this.loadActivities();
+    this.loadInstructors();
     if (this.appointmentId) {
       this.loadAppointmentData(this.appointmentId);
     } else {
@@ -84,12 +94,23 @@ export class CreateAppointmentFormComponent implements OnInit {
     }
   }
 
+  loadInstructors() {
+    this.userService.getAdmins().subscribe(
+      (data: Instructor[]) => {
+        console.log('Datos en el componente:', data);
+        this.instructors = data;
+        console.log('Datos en el componente después de la asignación:', this.instructors);
+      },
+      (error) => {
+        console.error('Error al obtener los instructores', error);
+      });
+  }
+
   loadActivities() {
     this.activityService.getActivities().subscribe(
       (data: Activity[]) => {
-        console.log('Datos en el componente:', data); // Aquí los datos ya fueron recibidos
+        console.log('Datos en el componente:', data);
         this.activities = data;
-        // Este console.log se ejecutará después de que los datos hayan sido asignados
         console.log('Datos en el componente después de la asignación:', this.activities);
       },
       (error) => {
@@ -237,11 +258,11 @@ export class CreateAppointmentFormComponent implements OnInit {
         this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
-            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           },
           (error: any) => {
             console.error('Error al crear la cita:', error);
-            this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000})
+            this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           }
         );
       } else {
@@ -259,9 +280,10 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
-              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al crear la cita:', error);
             }
           );
@@ -283,6 +305,7 @@ export class CreateAppointmentFormComponent implements OnInit {
               this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al crear la cita:', error);
             }
           );
@@ -308,9 +331,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           console.log('Datos del formulario:', JSON.stringify(appointmentData), 'ID del turno:', this.appointmentId);
           this.appointmentService.updateAppointment(this.appointmentId!, appointmentData).subscribe(
             (data: any) => {
+              this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al actualizar la cita:', error);
             }
           );
@@ -326,9 +351,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           console.log('Datos del formulario:', JSON.stringify(appointmentData), 'ID del turno:', this.appointmentId);
           this.appointmentService.updateAppointment(this.appointmentId!, appointmentData).subscribe(
             (data: any) => {
+              this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
             },
             (error: any) => {
+              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al actualizar la cita:', error);
             }
           );
@@ -338,6 +365,14 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   Cancel() {
-    this.router.navigate(['/admin/agenda']);
+    if (this.range.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 }

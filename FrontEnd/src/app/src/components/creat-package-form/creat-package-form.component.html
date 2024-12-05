@@ -1,74 +1,80 @@
-<app-create-package>
+<app-main-screen>
   <ng-container header>
     <h1 class="main-content__title">Create package</h1>
   </ng-container>
 
   <ng-container body>
-    <div class="main-content__body">
-      <mat-form-field appearance="outline" class="package_name">
-        <mat-label>Package name</mat-label>
-        <input matInput [formControl]="packageName">
-        <mat-error>Package name can't be empty</mat-error>
-      </mat-form-field>
+    <div class="main-content__body" [formGroup]="packageForm">
+        <mat-form-field appearance="outline" class="package_name">
+          <mat-label>Nombre del paquete</mat-label>
+          <input matInput formControlName="packageName">
+          <mat-error *ngIf="packageForm.get('packageName')?.invalid && packageForm.get('packageName')?.dirty">
+            El nombre del paquete es obligatorio y debe tener al menos 3 caracteres.
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="package_description">
-        <mat-label>Package description</mat-label>
-        <textarea matInput [formControl]="packageDescription" ></textarea>
-        <mat-error>Description can't be empty</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="package_description">
+          <mat-label>Descripción del paquete</mat-label>
+          <textarea matInput formControlName="packageDescription"></textarea>
+          <mat-error *ngIf="packageForm.get('packageDescription')?.invalid && packageForm.get('packageDescription')?.dirty">
+            La descripción es obligatoria y debe tener menos de 500 caracteres.
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="user_filter">
-        <mat-label>Client DNI</mat-label>
-        <input type="text"
-               placeholder="Pick one"
-               aria-label="Client DNI"
-               matInput
-               [formControl]="myControl"
-               [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete"
-                          [displayWith]="displayUser"
-                          (optionSelected)="onUserSelected($event.option.value)">
-          <mat-option *ngFor="let user of filteredOptions | async" [value]="user">
-            {{user.firstName}} {{user.lastName}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="user_filter">
+          <mat-label>DNI del cliente</mat-label>
+          <input type="text" matInput formControlName="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+            <mat-option *ngFor="let user of filteredOptions | async" [value]="user">
+              {{ user.firstName }} {{ user.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="packageForm.get('myControl')?.invalid && packageForm.get('myControl')?.dirty">
+            La selección del cliente es obligatoria.
+          </mat-error>
+        </mat-form-field>
 
-      @for (activityQ of activityQuantity(); track activityQ) {
-        <div class="activity_rows">
-          <mat-form-field appearance="outline" class="activity">
-            <mat-label>Activity</mat-label>
-            <mat-select (selectionChange)="onSelectChange($event, activityQ)">
-              <mat-option [value]="-1"></mat-option>
-              @for (activity of activities; track activity.id) {
-                <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>Please select an activity</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="classes">
-            <input matInput type="number" placeholder="Weekly classes" min="1">
-            <mat-error>Weekly classes can't be empty</mat-error>
-          </mat-form-field>
+        <div formArrayName="activitiesArray">
+          <div *ngFor="let control of activitiesArray.controls; let index = index" [formGroupName]="index">
+            <div class="activity_rows">
+            <mat-form-field appearance="outline" class="activity">
+              <mat-label>Actividad</mat-label>
+              <mat-select formControlName="activityId">
+                <mat-option [value]="-1">Selecciona una actividad</mat-option>
+                <ng-container *ngFor="let activity of activities">
+                  <mat-option [value]="activity.id">{{ activity.name }}</mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-error *ngIf="control.get('activityId')?.invalid && control.get('activityId')?.dirty">
+                Por favor selecciona una actividad.
+              </mat-error>
+            </mat-form-field>
+              <div class="row">
+
+            <mat-form-field appearance="outline" class="classes">
+              <mat-label>Clases semanales</mat-label>
+              <input matInput type="number" formControlName="quantity" min="1">
+              <mat-error *ngIf="control.get('quantity')?.invalid && control.get('quantity')?.dirty">
+                Las clases semanales deben ser mayores a 0.
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" class="remove_button" (click)="removeActivity(index)">
+              <mat-icon>remove</mat-icon>
+            </button>
+              </div>
+            </div>
+          </div>
         </div>
-      }
-      <div class="button-container__activities">
-        <button mat-icon-button (click)="remove()" color="warn" class="remove_button">
-          <mat-icon>remove</mat-icon>
-        </button>
-        <button mat-icon-button (click)="add()" color="primary" class="add_button">
-          <mat-icon>add</mat-icon>
-        </button>
+
+        <div>
+          <button mat-icon-button color="primary" class="add"   (click)="addActivity()"><mat-icon>add</mat-icon></button>
+        </div>
+
+        <div class="button-container__main">
+          <button mat-stroked-button color="warn" class="return_button" (click)="return()">Volver</button>
+          <button mat-flat-button color="primary" (click)="createPackage()">Crear paquete</button>
+        </div>
       </div>
-      <div class="button-container__main">
-        <button mat-stroked-button (click)="return()" color="warn" class="return_button">
-          <!--<mat-icon>chevron_left</mat-icon>-->
-          Return
-        </button>
-        <button mat-flat-button (click)="create()" color="primary" class="create_button">
-          Create package
-        </button>
-      </div>
-    </div>
   </ng-container>
-</app-create-package>
+</app-main-screen>

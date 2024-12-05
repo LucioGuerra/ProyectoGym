@@ -5,6 +5,7 @@ import java.util.List;
 import com.desarrollo.criminal.dto.request.PackageDTO;
 import com.desarrollo.criminal.dto.request.UpdatePackageDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
+import com.desarrollo.criminal.dto.response.GetRandomPackageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,31 +17,37 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/packages")
+@RequestMapping("/api/packages")
 public class PackageController {
     private final PackageService packageService;
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<Package> createPackage(@RequestBody PackageDTO aPackage){
         return packageService.createPackage(aPackage);
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<List<GetPackageDTO>> getAllPackage(){
         return packageService.getAllPackages();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetPackageDTO> getPackageById(@PathVariable Long id){
         return packageService.getPackageById(id);
     }
 
-    @PatchMapping("/{id}")
+    @GetMapping("/public/random")
+    public ResponseEntity<List<GetRandomPackageDTO>> getRandomPackage(){
+        //todo revisar las activities
+        return packageService.getRandomPackage();
+    }
+
+    @PatchMapping("/admin/{id}")
     public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody UpdatePackageDTO aPackage){
         return packageService.updatePackage(id, aPackage);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/admin")
     public ResponseEntity<Package> deletePackage(){
         packageService.deleteExpiredPackages();
         return ResponseEntity.status(HttpStatus.OK).build();

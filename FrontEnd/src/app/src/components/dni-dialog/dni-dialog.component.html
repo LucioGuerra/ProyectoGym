@@ -1,0 +1,29 @@
+<div class="dni-dialog">
+  <h1 mat-dialog-title class="title"><b>Espera!</b> Necesitamos algunos datos tuyos para continuar</h1>
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="dni-field">
+      <mat-label>Nombre</mat-label>
+      <input matInput id="nombre" [formControl]="nombre">
+      <mat-error *ngIf="nombre.invalid && nombre.dirty">
+        Necesitamos su nombre por conveniencias del gimnasio.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="dni-field">
+      <mat-label>Apellido</mat-label>
+      <input matInput id="apellido" [formControl]="apellido">
+      <mat-error *ngIf="apellido.invalid && apellido.dirty">
+        Necesitamos su apellido por conveniencias del gimnasio.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="dni-field">
+      <mat-label>DNI</mat-label>
+      <input matInput id="dni" [formControl]="dni" type="number" (blur)="onDniBlur()">
+      <mat-error *ngIf="dni.invalid && dni.dirty">
+        Necesitamos su dni para validar su identidad.
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button (click)="submitDni()">Ingresar</button>
+  </mat-dialog-actions>
+</div>

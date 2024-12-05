@@ -5,10 +5,14 @@
     *ngIf="!isMobileScreen()"
     [opened]="opened"
     class="sidenav-left"
-    mode="side"
+    mode="over"
   >
     <app-user-profile></app-user-profile>
-    <app-drawer-list></app-drawer-list>
+    @if(isClient && !isAdmin){
+      <app-drawer-list-client></app-drawer-list-client>
+    } @else {
+      <app-drawer-list></app-drawer-list>
+    }
   </mat-sidenav>
 
   <!-- Sidenav para pantallas móviles (sale desde arriba) -->
@@ -19,7 +23,12 @@
     class="sidenav-top"
     mode="over"
   >
-    <app-drawer-list></app-drawer-list>
+    <app-user-profile></app-user-profile>
+    @if(isClient && !isAdmin){
+      <app-drawer-list-client></app-drawer-list-client>
+    } @else {
+      <app-drawer-list></app-drawer-list>
+    }
   </mat-sidenav>
 
   <mat-sidenav-content>

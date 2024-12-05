@@ -1,12 +1,13 @@
 package com.desarrollo.criminal.controller;
 
 import com.desarrollo.criminal.dto.request.UserUpdateDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.GetPackageDTO;
 import com.desarrollo.criminal.dto.response.GetUserAppointmentDTO;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.UserResponseDTO;
@@ -18,14 +19,19 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/admin/admins")
+    public ResponseEntity<List<UserResponseDTO>> getAdmins(){
+        return userService.getUserAdmins();
     }
 
     @GetMapping("/{id}")
@@ -33,9 +39,14 @@ public class UserController {
         return userService.getUserDTOById(id);
     }
 
-    @GetMapping("/email")
+    @GetMapping("/public/email")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam("email") @Email String email){
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<UserResponseDTO> getUserByDni(@PathVariable String dni){
+        return userService.getUserEntityByDni(dni);
     }
 
     @GetMapping("/history/{id}")
@@ -53,13 +64,24 @@ public class UserController {
         return userService.getActivePackage(id);
     }
 
-    @PostMapping
+    @PostMapping("/public")
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);
     }
 
+    @GetMapping("/package/activity/{email}")
+        public ResponseEntity<List<String>> getUserPackagesByEmail(@PathVariable String email){
+            return userService.getActivePackageByEmail(email);
+        }
+
+
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO){
         return userService.updateUser(id, userUpdateDTO);
+    }
+
+    @GetMapping("/streak/{id}")
+    public ResponseEntity<Integer> getStreak(@PathVariable Long id){
+        return userService.getStreak(id);
     }
 }

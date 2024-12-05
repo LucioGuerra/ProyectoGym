@@ -1,27 +1,42 @@
-import {Injectable, signal} from "@angular/core";
-import {environment} from "../../../../../environments/environment";
+import { Injectable, signal } from "@angular/core";
+import { environment } from "../../../../../environments/environment";
 // @ts-ignore
 import * as auth0 from 'auth0-js';
-import {jwtDecode} from "jwt-decode";
-import {UserService} from "./user.service";
-import {User} from "@auth0/auth0-angular";
-import {Role, UserModel} from "../../models";
+import { jwtDecode } from "jwt-decode";
+import { UserService } from "./user.service";
+import { Role, UserModel } from "../../models";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DniDialogComponent } from "../../dni-dialog/dni-dialog.component";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from "@angular/common/http";
+import { firstValueFrom, lastValueFrom } from "rxjs";
+import { DniService } from "../dni/dni.service";
+import { ErrorDialogComponent } from "../../dialog/error-dialog/error-dialog.component";
+import { Router } from "@angular/router";
+
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
+
   private auth0Client: auth0.WebAuth;
   isAuthenticated = signal<boolean>(false);
   isAdmin = signal<boolean>(false);
   isClient = signal<boolean>(false);
   userInfo = signal<any>(null);
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private dialog: MatDialog,
+    private dniService: DniService,
+    private _snackBar: MatSnackBar,
+    private router: Router,
+  ) {
     this.auth0Client = new auth0.WebAuth({
       domain: environment.auth0.domain,
       clientID: environment.auth0.clientId,
+      audience: environment.auth0.audience,
       redirectUri: "http://localhost:4200/home",
-      responseType: 'token id_token',
-      cookieDomain: "."
+      responseType: 'token id_token'
     })
     this.loadSession();
   }
@@ -32,6 +47,13 @@ export class AuthService {
       password: password,
       realm: environment.auth0.database,
       audience: environment.auth0.audience
+    }, (err: any, result: any) => {
+      if (err.code == "access_denied") {
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Usuario o contraseña incorrectos" } });
+      } else if (err) {
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente" } });
+      }
+
     });
   }
 
@@ -41,25 +63,71 @@ export class AuthService {
     })
   }
 
-  public signup(email: string | undefined, password: string | undefined, user: UserModel): void {
-    this.auth0Client.signup({
-      email: email,
-      password: password,
-      connection: environment.auth0.database,
-      audience: environment.auth0.audience
-    }, (err: any, result: any) => {
-      if (err) {
-        console.error('Error al registrar:', err);
-      } else {
-        this.createUser(user);
-        this.login(email, password);
-      }
-    });
+   public async signup(email: string | undefined, password: string | undefined, user: UserModel): Promise<void> {
+    var userDniExists: boolean = true;
+    try {
+      const _user: UserModel = await firstValueFrom(this.userService.getUserByDNI(user.dni));
+      console.log("El DNI ya existe, no se puede registrar");
+      this.dialog.open(ErrorDialogComponent, { data: { message: "El DNI ya se encuentra registrado" } });
+      userDniExists = true;
+    } catch (error) {
+      console.log("El DNI no existe, se puede registrar");
+      userDniExists = false;
+    }
+    console.log("userDniExists: ", userDniExists);
+    if (!userDniExists) {
+      console.log("Entra al signup");
+      this.auth0Client.signup({
+        email: email,
+        password: password,
+        connection: environment.auth0.database,
+        audience: environment.auth0.audience
+      }, (err: any, result: any) => {
+        if (err) {
+          if (err.code == "invalid_signup") {
+            this.dialog.open(ErrorDialogComponent, { data: { message: "El email ya se encuentra registrado." } });
+          } else if (err.code == "invalid_password") {
+            this.dialog.open(ErrorDialogComponent, {
+              data: {
+                message: `La contraseña no es lo suficientemente segura, revisa los siguientes puntos:\n
+                * Al menos 8 caracteres de longitud\n
+                * Contener al menos 3 de los siguientes 4 tipos de caracteres:\n
+                * letras minúsculas (a-z)\n
+                * letras mayúsculas (A-Z)\n
+                * números (i.e. 0-9)\n
+                * caracteres especiales (e.g. !@#$%^&*)`
+              }
+            });
+        }else if (err) {
+            console.log("Error: ", err);
+            this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente nuevamente." } });
+          }
+        } else if (result) {
+          console.log("Usuario creado correctamente, result: ", result);
+          this.userService.createUser(user).subscribe(
+            (saveUser: UserModel) => {
+              console.log("Usuario guardado: ", saveUser);
+              var s = this._snackBar.open("Se ha registrado correctamente, logueando...", "Cerrar", {
+                duration: 2000,
+              });
+              s.afterDismissed().subscribe(() => {
+                this.login(email, password);
+              });
+            },
+            (error) => {
+              console.error("Error al guardar el usuario: ", error);
+            });
+        }
+      });
+    }
   }
 
-  public handleAuthentication(): void {
+  public async handleAuthentication(): Promise<void> {
     const queryParams = new URLSearchParams(window.location.hash.substring(1));
     const urlParams = new URLSearchParams(queryParams);
+    var usuario: UserModel;
+
+    console.log("Entra a handleauth");
 
     if (urlParams.get("access_token")) {
       try {
@@ -67,33 +135,82 @@ export class AuthService {
         const expiresIn = urlParams.get("expires_in");
         const idToken = urlParams.get("id_token");
 
+        console.log("accessToken: ", accessToken);
+        console.log("entramos a handleauth ");
         // @ts-ignore
-        var user: UserModel = this.userService.getUserByEmail(jwtDecode(idToken)['email']);
-        if(user){
-          if (user.picture == null) {
+        this.userService.getUserByEmail(jwtDecode(idToken)['email']).subscribe(
+          async (user: UserModel) => {
+            console.log("Usuario encontrado: ", user);
+            if (user.picture == null) {
+              // @ts-ignore
+              this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+            }
+            await this.setSession(accessToken, expiresIn, idToken, user.role!);
+          },
+          async (error) => {
+            console.log("El usuario no existe, se crea uno...");
+
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.autoFocus = true;
+            dialogConfig.maxWidth = '1400px';
+            dialogConfig.width = '40%';
+            dialogConfig.panelClass = 'custom-dialog';
+            dialogConfig.hasBackdrop = false;
+            dialogConfig.data = {
+              // @ts-ignore
+              apellido: jwtDecode(idToken)['family_name'],
+              // @ts-ignore
+              nombre: jwtDecode(idToken)['given_name'],
+            }
             // @ts-ignore
-            this.userService.setPictureToUser(jwtDecode(idToken)['picture'], jwtDecode(idToken)['email']);
+            console.log("apellido: ", jwtDecode(idToken)['family_name']);
+            const dialogRef = this.dialog.open(DniDialogComponent, dialogConfig);
+            await dialogRef.afterClosed().toPromise();
+            let dni = this.dniService.getDni();
+            if (dni) {
+              console.log("DNI entered:", dni);
+              usuario = {
+                // @ts-ignore
+                email: jwtDecode(idToken)['email'],
+                // @ts-ignore
+                firstName: this.dniService.getNombre(),
+                // @ts-ignore
+                lastName: this.dniService.getApellido(),
+                dni: dni,
+                // @ts-ignore
+                picture: jwtDecode(idToken)['picture'],
+              };
+              try {
+                await this.createUser(usuario);
+                await this.setSession(accessToken, expiresIn, idToken, Role.CLIENT);
+              } catch (error) {
+                const d = this.dialog.open(ErrorDialogComponent, { data: { message: "Ha ocurrido un error, intente mas tarde." } });
+                d.afterClosed().subscribe(() => {
+                  this.router.navigate(['/home']);
+                });
+              }
+            }
           }
-        }else {
-          //todo: crear usuario si se autentico por 3ro por primera vez
-          this.createUser(user);
-        }
-        this.setSession(accessToken, expiresIn, idToken);
+        );
       } catch (error) {
         console.error(error);
       }
     }
   }
 
-  private setSession(accessToken: any, expiresIn: any, idToken: any): void {
-    const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('expires_at', expiresAt);
-    localStorage.setItem('idToken', idToken);
+  private setSession(accessToken: any, expiresIn: any, idToken: any, userRole: Role): Promise<void> {
+    return new Promise(async (resolve) => {
+      const expiresAt = (Date.now() + parseInt(expiresIn) * 1000).toString();
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('expires_at', expiresAt);
+      localStorage.setItem('idToken', idToken);
 
-    this.isAuthenticated.set(true);
-    this.setRole(idToken);
-    this.setUserInfo(idToken);
+      this.isAuthenticated.set(true);
+      this.setRole(userRole);
+      this.setUserInfo(idToken);
+
+      //this.isClient.set(true);
+    });
   }
 
   public logout(): void {
@@ -112,15 +229,14 @@ export class AuthService {
 
   }
 
-  private setRole(idToken: any) {
+  private setRole(userRole: Role) {
     // @ts-ignore
-    const role = jwtDecode(idToken)['https://criminal-cross.com/roles'];
-    if (role) {
-      if (role == 'ADMIN') {
+    if (userRole) {
+      if (userRole == Role.ADMIN) {
         this.isAdmin.set(true);
         this.isClient.set(false);
         console.log("Es admin");
-      } else if (role == 'CLIENT') {
+      } else if (userRole == Role.CLIENT) {
         this.isAdmin.set(false);
         this.isClient.set(true);
         console.log("No es admin, es cliente?", this.isClient());
@@ -129,7 +245,6 @@ export class AuthService {
       console.error("No hay ningun rol asignado")
     }
   }
-
 
   public setUserInfo(idToken: any) {
     console.log("Entra a setUserInfo: ", jwtDecode(idToken));
@@ -147,7 +262,15 @@ export class AuthService {
 
       if (currentDate < expiresAtDate) {
         this.isAuthenticated.set(true);
-        this.setRole(idToken);
+        // @ts-ignore
+        this.userService.getUserByEmail(jwtDecode(idToken)['email']).subscribe(
+          (user: UserModel) => {
+            console.log("Usuario encontrado: ", user);
+            this.setRole(user.role!);
+          },
+          (error) => {
+            console.error("Error al buscar el usuario: ", error);
+          });
         this.setUserInfo(idToken);
         console.log('Sesión restaurada con éxito.');
       } else {
@@ -160,24 +283,21 @@ export class AuthService {
     }
   }
 
-  private createUser(user: UserModel) {
+  private async createUser(user: UserModel): Promise<void> {
     console.log("Entra a createUser");
 
-    // @ts-ignore
-    this.userService.getUserByEmail(user.email).subscribe(
-      (user: UserModel) => {
-        console.log("Usuario encontrado: ", user);
-      },
-      (error) => {
-        console.error("Error al buscar el usuario: ", error);
-      });
+    try {
+      const saveUser: UserModel = await firstValueFrom(this.userService.createUser(user));
+      console.log("Usuario guardado: ", saveUser);
+    } catch (error) {
+      console.error("Error al guardar el usuario: ", error);
+      throw error;
+    }
+  }
 
-    this.userService.createUser(user).subscribe(
-      (saveUser: UserModel) => {
-        console.log("Usuario guardado: ", saveUser);
-      },
-      (error) => {
-        console.error("Error al guardar el usuario: ", error);
-      });
+  getToken() {
+    console.log("Entra a getToken");
+    console.log(localStorage.getItem('access_token'));
+    return localStorage.getItem('access_token');
   }
 }

@@ -1,6 +1,7 @@
+import { UserService } from './../../components/services/services/user.service';
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, effect, OnInit,
+  Component, effect, OnChanges, OnInit,
   signal
 } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
@@ -23,7 +24,7 @@ import {Activity} from '../../components';
 import {Router} from "@angular/router";
 import {MatTableModule} from '@angular/material/table';
 import {AgendaListComponent} from "../../components/agenda-list/agenda-list.component";
-import {AnnouncementCarouselComponent} from "../../components/announcement-carousel/announcement-carousel.component";
+import { MaterialCarouselComponent } from "../../components/material-carousel/material-carousel.component";
 
 @Component({
   selector: 'app-client-agenda',
@@ -45,8 +46,8 @@ import {AnnouncementCarouselComponent} from "../../components/announcement-carou
     MatMenuModule,
     MatTableModule,
     MatDatepickerModule,
-    AnnouncementCarouselComponent,
-  ],
+    MaterialCarouselComponent
+],
   templateUrl: './client-agenda.component.html',
   styleUrl: './client-agenda.component.scss',
   providers: [provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},],
@@ -66,7 +67,7 @@ export class ClientAgendaComponent implements OnInit {
   readonly today: Date = new Date();
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
+  constructor(private userService: UserService, private changeDetectorRef: ChangeDetectorRef, protected auth0: AuthService, private router: Router, private appointmentService: AppointmentService, private activityService: ActivityService) {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isClient()) {
@@ -83,10 +84,33 @@ export class ClientAgendaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAppointment(this.tabIndex());
     this.loadActivities();
+    this.loadUserPackageActivities();
+    this.loadAppointment(this.tabIndex());
     console.log('Fecha seleccionada:', this.selectedDate());
     console.log('today: ', this.today);
+    this.appointmentService.appointmentChanged$.subscribe(() => {
+      console.log('Cambios en los appointments detectados. Recargando...');
+      this.loadAppointment(this.tabIndex());  // Recargamos los appointments
+      this.changeDetectorRef.markForCheck();  // Forzar la detección de cambios
+    });
+  }
+
+  loadUserPackageActivities() {
+    console.log('Datos de las actividades del usuario:');
+    this.userService.getUserPackageActivities(this.auth0.userInfo().email).subscribe(
+      (data: string[]) => {
+        console.log('Datos de las actividades del usuario:', data);
+        this.selectedActivities.set(data);
+        this.changeDetectorRef.markForCheck();
+      },
+      (error) => {
+        console.error('Error al obtener las actividades del paquete', error);
+      });
+  }
+
+  isActivitySelected(activityName: string): boolean {
+    return this.selectedActivities().includes(activityName);
   }
 
   loadAppointment(tabIndex: number) {
@@ -96,7 +120,7 @@ export class ClientAgendaComponent implements OnInit {
         (data: Appointment[]) => {
           console.log('Datos en el componente:', data);
           this.appointments = data;
-          this.appointmentList.set(data);
+          this.appointmentList.set(this.appointments.filter(appointment => this.selectedActivities().includes(appointment.activity)));
           this.changeDetectorRef.markForCheck();
         },
         (error) => {
@@ -184,5 +208,9 @@ export class ClientAgendaComponent implements OnInit {
   gofurtherDate($event: MouseEvent) {
     this.selectedDate.set(new Date(this.selectedDate().setDate(this.selectedDate().getDate() + 1)));
     this.loadAppointment(this.tabIndex());
+  }
+
+  onAppointmentsUpdated() {
+    this.loadAppointment(this.tabIndex());  // Recargar appointments cuando sea necesario
   }
 }

@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,31 +20,31 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/activities")
+@RequestMapping("/api/activities")
 public class ActivityController {
     private final ActivityService activityService;
 
-    @GetMapping
+    @GetMapping("/public")
     public  ResponseEntity<List<GetActivityDTO>> getAllActivities(){
         return activityService.getAllActivities();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetActivityDTO> getActivityById(@PathVariable Long id) {
         return activityService.getAcitivityDTOById(id);
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<?> createActivity(@RequestBody ActivityDTO activityDTO) {
         return activityService.createActivity(activityDTO);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/admin/{id}")
     public ResponseEntity<?> updateActivity(@RequestBody ActivityUpdateDTO activityDTO, @PathVariable Long id) {
         return activityService.updateActivity(activityDTO, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<?> deleteActivity (@PathVariable Long id) {
         return activityService.deleteActivity(id);
     }
