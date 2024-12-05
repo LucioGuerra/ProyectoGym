@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, inject, OnInit} from '@angular/core';
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
@@ -9,7 +9,7 @@ import {MatInput} from "@angular/material/input";
 import {MatSelect} from "@angular/material/select";
 import {FormControl, Validators, ReactiveFormsModule} from "@angular/forms";
 import {Activity} from "../models";
-import {ActivityService} from "../services/services";
+import {ActivityService, AuthService} from "../services/services";
 import {ActivatedRoute, Router} from "@angular/router";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -51,8 +51,21 @@ export class CreateActivityComponent implements OnInit {
   activityDescription = new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]);
   activityPrice = new FormControl<number>(1000.0, [Validators.required, Validators.min(1)]);
 
-  constructor(private activityService: ActivityService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
-
+  constructor(private activityService: ActivityService,
+              private auth0: AuthService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit(): void {

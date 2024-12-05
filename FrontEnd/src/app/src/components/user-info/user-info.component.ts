@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, signal} from '@angular/core';
 import {DrawerComponent} from "../drawer/drawer.component";
 import {Appointment, Role, UserModel} from "../models";
 import {User} from "@auth0/auth0-angular";
@@ -76,6 +76,11 @@ export class UserInfoComponent {
     private router: Router,
     private auth: AuthService
   ) {
+    effect(() => {
+      if (!this.auth.isAuthenticated()) {
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   ngOnInit(): void {

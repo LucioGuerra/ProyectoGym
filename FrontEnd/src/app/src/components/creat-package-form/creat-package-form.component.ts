@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, inject, OnInit} from '@angular/core';
 import {CreatePackage} from "../../layout/create-package/create-package";
 import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
@@ -7,7 +7,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Activity, UserModel} from "../models";
-import {ActivityService} from "../services/services";
+import {ActivityService, AuthService} from "../services/services";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {UserService} from "../services/services/user.service";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -66,8 +66,22 @@ export class CreatPackageFormComponent implements OnInit {
     private activityService: ActivityService,
     private userService: UserService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private auth0: AuthService
   ) {
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   // Getter para facilitar el acceso al FormArray

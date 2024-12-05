@@ -75,13 +75,26 @@ export class CreateAppointmentFormComponent implements OnInit {
   }, {validators: Validators.compose([this.timeRangeValidator.bind(this)])});
 
   constructor(
-    private auth: AuthService, 
-    private dialog: MatDialog, 
-    private router: Router, 
-    private activityService: ActivityService, 
+    private auth0: AuthService,
+    private dialog: MatDialog,
+    private router: Router,
+    private activityService: ActivityService,
     private appointmentService: AppointmentService,
     private userService: UserService
   ) {
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit(): void {

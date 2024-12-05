@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, ElementRef, inject, signal, ViewChild} from '@angular/core';
 import {Role, UserModel} from '../models';
 import {MatIconModule} from '@angular/material/icon';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -95,6 +95,11 @@ export class UserEditComponent {
       picture: new FormControl(''),
       dni: new FormControl('', [Validators.required]),
       phone: new FormControl(''),
+    });
+    effect(() => {
+      if (!this.auth.isAuthenticated()) {
+          this.router.navigate(['/home']);
+        }
     });
   }
 
