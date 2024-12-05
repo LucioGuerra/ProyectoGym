@@ -1,0 +1,554 @@
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: transparent;
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  position: relative;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: #222222;
+  color: #d0d0d0;
+  font-weight: bold;
+  width: 49%;
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+h1 {
+  font-size: 200%;
+}
+
+.icon {
+  font-size: 230%;
+  color: #d0d0d0;
+  width: fit-content;
+  height: fit-content;
+}
+
+.add-button {
+  font-size: 24px;
+  transition: transform 0.3s ease-in-out;
+  flex-shrink: 0;
+  transform: translateX(-65%);
+}
+
+.table-container {
+  flex: 1;
+  max-height: auto;
+  border-radius: 10px;
+  overflow: hidden
+}
+
+mat-table {
+  width: 50%;
+  table-layout: auto;
+  background-color: rgb(102, 100, 94);
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.column {
+  background-color: transparent !important;
+  align-items: left !important;
+}
+
+th, td {
+  padding: 4px 20px; 
+  margin: 1;
+}
+
+th {        
+  font-size: 1.15rem;
+  font-weight: bold;
+  border-bottom: 2px solid #d0d0d0;
+  white-space: nowrap; 
+  text-align: left !important;
+  align-content: start !important;
+  vertical-align: bottom !important; 
+  line-height: 1 !important;             
+  padding: 16px 20px 3px !important;
+}
+
+
+td {
+  font-size: 1.05rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left !important;
+  vertical-align: top !important;
+  padding: 20px 20px 7px !important;
+}
+
+tr {
+  display: table-row;
+  color: #d0d0d0;
+  height: auto;        /* Deja que la altura se ajuste automáticamente */
+  min-height: 32px;
+}
+
+mat-header-row, mat-row {
+  display: flex !important;
+}
+
+
+th {
+  text-align: left !important;
+  vertical-align: top !important;
+  padding: 12px; 
+}
+
+#colNombre {
+  width: 25% !important;
+  flex: 2 !important;
+}
+
+#colDes {
+  width: 50% !important;
+  flex: 4 !important; 
+}
+
+#colPrice, #colEdit {
+  width: 12.5% !important; 
+  flex: 1 !important;
+}
+
+
+mat-header-cell, mat-cell {
+  box-sizing: border-box;
+  padding: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex: none !important;
+}
+
+//////////////////////////////////////////////////////////////
+
+
+@media (min-width: 1295px) and (max-width: 1390px) {
+
+  .card {
+      width: 65%;  
+      height: auto;
+      padding: 0.75rem;
+    }
+  
+   
+  
+  }
+
+
+///////////////////////////////////////////////////////////////
+
+@media (min-width: 1235px) and (max-width: 1295px) {
+
+.card {
+    width: 65%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1.2rem;
+  }
+  
+  td {
+    font-size: 1rem;
+  }
+
+}
+
+//////////////////////////////////////////////////////////////////
+
+@media (min-width: 1190px) and (max-width: 1235px) {
+  
+  .card {
+    width: 65%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  
+  th {
+    font-size: 1.2rem;
+  }
+  
+  td {
+    font-size: 1rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+//////////////////////////////////////////////////////////////////
+
+@media (min-width: 1140px) and (max-width: 1190px) {
+
+.card {
+    width: 71%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1.2rem;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    overflow: hidden;
+  }
+
+}
+
+
+//////////////////////////////////////////////////////////////////
+
+
+@media (min-width: 1025px) and (max-width: 1140px) {
+  .card {
+    width: 71%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;  
+    gap: 12px;
+    padding: 0 10px;
+  }
+
+  .left-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 60%; 
+  }
+
+  h1 {
+    font-size: 140%; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .icon {
+    font-size: 180%;  
+  }
+
+  .add-button {
+    font-size: 22px;
+    margin: 0;
+    padding: 8px;
+    align-self: center;
+    transform: none;
+    transform: translateX(-60%);  
+  }
+
+  .table-container {
+    width: 100%;  
+  }
+
+  mat-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse; 
+  }
+  
+  th {
+    font-size: 1.1rem;
+  }
+  
+  td {
+    font-size: 1rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+////////////////////////////////////////////
+
+@media (min-width: 980px) and (max-width: 1025px) {
+  
+  .card {
+    width: 75%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1.1rem;
+  }
+  
+  td {
+    font-size: 1rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+//////////////////////////////////////////
+
+@media (min-width: 930px) and (max-width: 980px) {
+  
+  .card {
+    width: 80%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1.1rem;
+  }
+  
+  td {
+    font-size: 1rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+
+//////////////////////////////////////////
+
+
+@media (min-width: 880px) and (max-width: 930px) {
+  
+  .card {
+    width: 80%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1.1rem;
+  }
+  
+  td {
+    font-size: 1rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+////////////////////////////////////////////
+
+
+@media (min-width: 810px) and (max-width: 880px) {
+  
+  .card {
+    width: 80%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1.05rem;
+  }
+  
+  td {
+    font-size: 0.93rem;
+    overflow: hidden;
+  }
+
+}
+
+
+
+/////////////////////////////////////////////
+@media (min-width: 756px) and (max-width: 810px) {
+  
+  .card {
+    width: 82%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 1.05rem;
+  }
+  
+  td {
+    font-size: 0.93rem;
+    overflow: hidden;
+  }
+
+}
+
+
+
+/////////////////////////////////////////////
+
+@media (min-width: 710px) and (max-width: 756px) {
+  
+  .card {
+    width: 86%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  th {
+    font-size: 1.05rem;
+  }
+  
+  td {
+    font-size: 0.93rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+/////////////////////////////////////////////
+
+@media (min-width: 670px) and (max-width: 710px) {
+  
+  .card {
+    width: 90%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1rem;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    overflow: hidden;
+  }
+  
+
+}
+
+///////////////////////////////////////////
+
+@media (min-width: 623px) and (max-width: 670px) {
+  
+  .card {
+    width: 97%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1rem;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    overflow: hidden;
+  }
+
+}
+
+////////////////////////////////////////////
+
+@media (min-width: 599px) and (max-width: 623px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1rem;
+  }
+  
+  td {
+    font-size: 0.85rem;
+    overflow: hidden;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+@media (min-width: 593px) and (max-width: 599px) {
+  
+  .card {
+    width: 100%;  
+    height: auto;
+    padding: 0.75rem;
+  }
+  
+  th {
+    font-size: 1rem;
+  }
+  
+  td {
+    font-size: 0.8rem;
+    overflow: hidden;
+  }
+
+}
+
+/////////////////////////////////////////////
+
+
+@media (max-width: 593px) {
+  
+  .table-container {
+    overflow-x: auto; 
+    width: 100%; 
+  }
+
+  .card {
+    width: 100%;
+  }
+  
+  th {
+    font-size: 1.1rem;
+  }
+  
+  td {
+    font-size: 0.95rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+}
+
+
