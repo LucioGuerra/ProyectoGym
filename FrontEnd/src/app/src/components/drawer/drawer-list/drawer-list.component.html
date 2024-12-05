@@ -1,13 +1,13 @@
 <mat-list>
   @for (element of appLinks; track element.id) {
-    <a [href]="element.link">
+    <button (click)="link(element.link)">
       <mat-list-item>
         <div class="items">
           <!-- <mat-icon class="icon">{{ element.icon }}</mat-icon> -->
           <p class="title">{{ element.name }}</p>
         </div>
       </mat-list-item>
-    </a>
+    </button>
     <mat-divider></mat-divider>
   }
   <mat-divider></mat-divider>

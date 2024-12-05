@@ -1,15 +1,7 @@
-@if (announcements.length === 0) {
-  <div class="carousel-container">
-  <mat-card class="card">
-    <mat-card-title>No hay anuncios</mat-card-title>
-    <mat-card-content>
-    </mat-card-content>
-  </mat-card>
-</div>
-} @else {
+
 <div class="carousel-container">
   <mat-tab-group class="custom-tab-group" [(selectedIndex)]="selectedIndex">
-    @for(announcement of announcements; track announcement) {
+    @for(announcement of announcements(); track announcement) {
     <mat-tab>
       <mat-card class="card" (click)="open(announcement)">
         <mat-card-title>{{ announcement.title }}</mat-card-title>
@@ -45,4 +37,3 @@
   </button>
   }
 </div>
-}

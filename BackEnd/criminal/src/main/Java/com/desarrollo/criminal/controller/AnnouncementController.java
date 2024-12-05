@@ -33,7 +33,7 @@ public class AnnouncementController{
     }
 
 
-    @GetMapping("/admin/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<GetAnnouncementDTO> getAnnouncementById(@PathVariable Long id){
         return announcementService.getAnnouncementDTOById(id);
     }

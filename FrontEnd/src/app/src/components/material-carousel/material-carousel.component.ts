@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgForOf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,17 +20,18 @@ import { MatDialog } from '@angular/material/dialog';
 export class MaterialCarouselComponent {
 
   selectedIndex = 0;
-  announcements: Announcement[] = [];
+  announcements = signal<Announcement[]>([]);
 
   constructor(private announcementService: AnnouncementService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.announcementService.getAnnouncements().subscribe({
-      next: (announcements: any) => {
-        this.announcements = announcements.map((announcement: any) => ({
+      next: (announcementss: any) => {
+        this.announcements.set(announcementss.map((announcement: any) => ({
           ...announcement,
           date: new Date(announcement.date).toLocaleDateString('es-AR')
-        }));
+        })));
+        console.log('anuncios: ',this.announcements());
       },
       error: (error: any) => {
         console.error(error);
@@ -50,7 +51,8 @@ export class MaterialCarouselComponent {
 
   nextSlide() {
     // Ir al siguiente slide
-    if (this.selectedIndex < this.announcements.length - 1) {
+    console.log('selectedindex: ',this.selectedIndex, );
+    if (this.selectedIndex < this.announcements().length - 1) {
       this.selectedIndex++;
     }
   }

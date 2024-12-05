@@ -1,5 +1,6 @@
-a {
+button {
   color: #000;
+  background-color: transparent;
   text-decoration: none;
   display: block;
   padding: 10px 0;
@@ -29,7 +30,7 @@ a {
     }
   }
 
-a:hover {
+button:hover {
   color: #222;
   background-color: #D0D0D0;
   cursor: default;

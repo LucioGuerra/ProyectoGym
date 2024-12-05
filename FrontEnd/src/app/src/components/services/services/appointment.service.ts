@@ -82,7 +82,7 @@ export class AppointmentService {
   }
 
   updateAppointment(id: string, appointment: AppointmentRequest): any {
-    return this.http.patch<any>(`${this.apiUrl+"/admin"}/${id}`, appointment);
+    return this.http.patch<any>(`${this.apiUrl+"/public"}/${id}`, appointment);
   }
 
   createKinesiologyAppointments(appointmentData: AppointmentRequest): any {

@@ -272,11 +272,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           (data: any) => {
             console.log('Datos de la respuesta:', data);
             this.range.markAsPristine();
-            this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+            this._snackBar.open(`${data} turnos creados`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           },
           (error: any) => {
             console.error('Error al crear la cita:', error);
-            this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+            this._snackBar.open('Ups! ha habido un error, por favor, inténtelo más tarde', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           }
         );
       } else {
@@ -294,11 +294,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
-              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+              this._snackBar.open(`${data} turnos creados`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               this.range.markAsPristine();
             },
             (error: any) => {
-              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+              this._snackBar.open('Ups! ha habido un error, por favor, inténtelo más tarde', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al crear la cita:', error);
             }
           );
@@ -317,11 +317,11 @@ export class CreateAppointmentFormComponent implements OnInit {
           this.appointmentService.createAppointment(appointmentData).subscribe(
             (data: any) => {
               console.log('Datos de la respuesta:', data);
-              this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+              this._snackBar.open(`${data} turnos creados`, "Cerrar", {"duration": 3000})
               this.range.markAsPristine();
             },
             (error: any) => {
-              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+              this._snackBar.open('Ups! ha habido un error, por favor, inténtelo más tarde', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al crear la cita:', error);
             }
           );
@@ -350,9 +350,10 @@ export class CreateAppointmentFormComponent implements OnInit {
               this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
               this.range.markAsPristine();
+              window.history.back();
             },
             (error: any) => {
-              this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+              this._snackBar.open('Ups! ha habido un error, por favor, inténtelo más tarde', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.error('Error al actualizar la cita:', error);
             }
           );
