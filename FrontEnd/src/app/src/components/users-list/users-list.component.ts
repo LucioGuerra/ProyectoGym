@@ -81,4 +81,8 @@ export class UsersListComponent {
   updateUser(id: bigint) {
     this.router.navigate(['/edit', id]);
   }
+
+  return() {
+    window.history.back();
+  }
 }

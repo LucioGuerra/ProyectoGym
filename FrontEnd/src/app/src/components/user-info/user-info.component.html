@@ -2,6 +2,9 @@
   <ng-container main-content>
     <div class="container">
       <mat-card id="contenedora">
+        <button mat-icon-button class="return" (click)="return()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
         <mat-card-header id="principal">
           <div class="photo">
             <img [src]="this.userModel().picture"
