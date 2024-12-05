@@ -1,20 +1,20 @@
-import {ChangeDetectionStrategy, Component, effect, inject, OnInit} from '@angular/core';
-import {CreatePackage} from "../../layout/create-package/create-package";
-import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
-import {Activity, UserModel} from "../models";
-import {ActivityService, AuthService} from "../services/services";
-import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
-import {UserService} from "../services/services/user.service";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {Observable, startWith} from "rxjs";
-import {map} from "rxjs/operators";
-import {Router} from '@angular/router';
-import {PackageService} from "../services/services/package.service";
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
+import { CreatePackage } from "../../layout/create-package/create-package";
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { Activity, UserModel } from "../models";
+import { ActivityService, AuthService } from "../services/services";
+import { MatAutocomplete, MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { UserService } from "../services/services/user.service";
+import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
+import { Observable, startWith } from "rxjs";
+import { map } from "rxjs/operators";
+import { Router } from '@angular/router';
+import { PackageService } from "../services/services/package.service";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -43,7 +43,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
     NgForOf,
     NgIf,
     MainScreenComponent
-],
+  ],
   templateUrl: './creat-package-form.component.html',
   styleUrl: './creat-package-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -154,12 +154,20 @@ export class CreatPackageFormComponent implements OnInit {
         this.packageForm.markAsPristine();
       },
       error => {
-        this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
-          "duration": 5000,
-          "horizontalPosition": "center",
-          "verticalPosition": "top"
-        })
-        console.log(`Error al crear paquete: ${error}`);
+        if (error.error.error === 'USER_ALREADY_PACKAGE') {
+          this._snackBar.open('El usuario ya tiene un paquete activo', "Cerrar", {
+            "duration": 5000,
+            "horizontalPosition": "center",
+            "verticalPosition": "top"
+          });
+        } else {
+          this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
+            "duration": 5000,
+            "horizontalPosition": "center",
+            "verticalPosition": "top"
+          })
+          console.error(`Error al crear paquete: ${error.error.error}`);
+        }
       }
     );
   }
@@ -212,7 +220,7 @@ export class CreatPackageFormComponent implements OnInit {
   // Navegar de vuelta a la agenda
   return() {
     if (this.packageForm.dirty) {
-      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+      this.dialog.open(ConfirmationDialogComponent, { data: { message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.' } }).afterClosed().subscribe((result: boolean) => {
         if (result) {
           window.history.back();
         }
