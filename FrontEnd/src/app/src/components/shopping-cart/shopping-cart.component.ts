@@ -72,8 +72,6 @@ export class ShoppingCartComponent implements OnInit {
         if (this.auth0.isAdmin()) {
         } else if (this.auth0.isClient()) {
           this.router.navigate(['/agenda']);
-        } else {
-          this.router.navigate(['/home']);
         }
       } else {
         this.router.navigate(['/login']);

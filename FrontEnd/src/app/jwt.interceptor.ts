@@ -6,7 +6,7 @@ import { AuthService } from './src/components/services/services/auth.service';
 export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
   console.log('Interceptor');
   const token = localStorage.getItem('access_token');
-  if (token && !req.url.includes('public')) {
+  if (token && !req.url.includes('public') && !req.url.includes('cloudinary')) {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
