@@ -53,7 +53,7 @@ export class SignupComponent {
     email: this.emailFormControl,
     firstName: new FormControl("", Validators.required),
     lastName: new FormControl("", Validators.required),
-    dni: new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(8)]),
+    dni: new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(8), Validators.maxLength(8)]),
     password: new FormControl("", [Validators.required, Validators.minLength(8), passwordValidators.passwordStrengthValidator]),
     repassword: new FormControl("", [Validators.required, passwordValidators.passwordMatchValidator]),
   });

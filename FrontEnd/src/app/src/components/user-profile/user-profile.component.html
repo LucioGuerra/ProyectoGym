@@ -1,6 +1,11 @@
 <div (click)="userInfo()" class="main-container">
-  @if (user().name) {
-    <img [src]="user().picture!" alt="user photo"/>
+  @if (userModel().picture) {
+    <img [src]="userModel().picture!" alt="user photo"/>
+    <p class="name">{{ userModel().firstName }}</p>
+    <p class="email">{{ userModel().email }}</p>
+    <mat-divider></mat-divider>
+  } @else if (user().picture){
+    <img [src]="user().picture" alt="user photo"/>
     <p class="name">{{ user().name }}</p>
     <p class="email">{{ user().email }}</p>
     <mat-divider></mat-divider>
