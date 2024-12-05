@@ -15,6 +15,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import { MatActionList} from "@angular/material/list";
 import { MatButton } from '@angular/material/button';
 import { MatTableDataSource } from '@angular/material/table';
+import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
 
 
 
@@ -23,19 +24,20 @@ import { MatTableDataSource } from '@angular/material/table';
   standalone: true,
   imports: [
     DrawerComponent,
-    MatCard, 
-    MatCardContent, 
+    MatCard,
+    MatCardContent,
     MatCardHeader,
-    MatIconModule, 
-    MatTableModule, 
+    MatIconModule,
+    MatTableModule,
     MatButtonModule,
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    MatActionList, 
+    MatActionList,
     MatButton,
     MatDividerModule,
-  ],
+    MainScreenComponent
+],
   templateUrl: './activity-list.component.html',
   styleUrls: ['./activity-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -95,7 +97,7 @@ export class ActivityListComponent {
   }
 
 
-  updateActivity(name: string) {
-    alert("upadating activity: " + name);
+  updateActivity(id: string) {
+    this.router.navigate(['/admin/activity/edit', id]);
   }
 }
