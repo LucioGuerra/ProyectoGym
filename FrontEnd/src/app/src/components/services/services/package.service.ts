@@ -25,6 +25,6 @@ export class PackageService {
   }
 
   getRandomPackages() {
-    return this.http.get<Package[]>(`${this.apiUrl}/random`);
+    return this.http.get<Package[]>(`${this.apiUrl}/public/random`);
   }
 }

@@ -38,7 +38,7 @@ export class AuthService {
       redirectUri: "http://localhost:4200/home",
       responseType: 'token id_token'
     })
-    // this.loadSession();
+    this.loadSession();
   }
 
   public login(email: string | undefined, password: string | undefined): void {
@@ -296,6 +296,8 @@ export class AuthService {
   }
 
   getToken() {
+    console.log("Entra a getToken");
+    console.log(localStorage.getItem('access_token'));
     return localStorage.getItem('access_token');
   }
 }

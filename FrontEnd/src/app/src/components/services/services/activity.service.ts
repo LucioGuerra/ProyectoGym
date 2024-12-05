@@ -9,7 +9,6 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class ActivityService {
-
   private apiUrl = `${environment.apiUrl}/activities`;
 
   constructor(private http: HttpClient) {
@@ -20,6 +19,10 @@ export class ActivityService {
   }
 
   createActivity(activity: Activity) {
+    // const header = {
+    //   Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    // }
+    // console.log(header);
     return this.http.post(this.apiUrl + "/admin", activity);
   }
 

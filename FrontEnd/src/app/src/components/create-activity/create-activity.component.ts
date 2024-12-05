@@ -92,6 +92,7 @@ export class CreateActivityComponent implements OnInit {
         description: this.activityDescription.value!,
         price: this.activityPrice.value!
       }
+      console.log(createdActivity);
       this.activityService.createActivity(createdActivity).subscribe(
         (response) => {
           this._snackBar.open(`Se ha creado la actividad correctamente`, "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -102,7 +103,6 @@ export class CreateActivityComponent implements OnInit {
           console.log(`Error al crear la actividad: ${error}`);
         }
       );
-      alert(`creado ${createdActivity}`);
     } else {
       this.activityName.markAsDirty();
       this.activityDescription.markAsDirty();

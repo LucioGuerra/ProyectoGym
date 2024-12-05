@@ -24,7 +24,8 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        String email = jwt.getClaim("email");
+        String email = jwt.getClaim("https://criminal-cross.com/email");
+        System.out.println("Email: " + email);
         log.info(jwt.toString());
         List<GrantedAuthority> authority = (List<GrantedAuthority>) userService.getAuthorityByEmail(email);
         log.info("Authorities: {}", authority);
