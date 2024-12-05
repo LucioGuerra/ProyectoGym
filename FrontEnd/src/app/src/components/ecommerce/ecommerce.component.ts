@@ -165,7 +165,7 @@ export class EcommerceComponent implements OnInit {
   }
 
   volver() {
-    if (this.shopListService.getListaComprados() != null || this.shopListService.getListaComprados()?.length != 0) {
+    if (this.shopListService.getListaComprados() != null && this.shopListService.getListaComprados()?.length != 0) {
       this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
         if (result) {
           this.router.navigate(['/admin/agenda']);
