@@ -144,13 +144,13 @@ export class AppointmentService {
 
   unreserveAppointment(appointmentID: string, userEmail: string): Observable<any> {
     return this.userService.getUserByEmail(userEmail).pipe(
-      switchMap(user => this.http.delete<any>(`${this.apiUrl+"/admin"}/${appointmentID}/user/${user.id}`))
+      switchMap(user => this.http.delete<any>(`${this.apiUrl}/${appointmentID}/user/${user.id}`))
     );
   }
 
   unreserveKinesiologyAppointment(appointmentId: string, userEmail: string): Observable<any> {
     return new Observable(observer => {
-      this.http.patch<any>(`${this.apiUrl}/${appointmentId}`, {
+      this.http.patch<any>(`${this.apiUrl}/public/${appointmentId}`, {
         "instructorID": "-1",
         "updateAllFutureAppointments": false
       }).subscribe(
