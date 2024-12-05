@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { CreatePackage } from "../../layout/create-package/create-package";
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
 import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
@@ -49,6 +49,13 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreatPackageFormComponent implements OnInit {
+  controlEqualsProduct(control: AbstractControl): ValidationErrors | null {
+    const productSelected = control.value;
+    if (typeof productSelected != 'object') {
+      control.parent?.get('variantSelected')?.setValue('');
+    }
+    return typeof productSelected == 'object' ? null : { productMismatch: true };
+  }
   activities: Activity[] = [];
   users: UserModel[] = [];
   filteredOptions: Observable<UserModel[]> = new Observable<UserModel[]>();
@@ -56,7 +63,7 @@ export class CreatPackageFormComponent implements OnInit {
   packageForm: FormGroup = new FormGroup({
     packageName: new FormControl('', [Validators.required, Validators.minLength(3)]),
     packageDescription: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-    myControl: new FormControl('', [Validators.required]), // Autocomplete para el usuario
+    myControl: new FormControl('', [Validators.required, this.controlEqualsProduct]), // Autocomplete para el usuario
     activitiesArray: new FormArray([]) // FormArray para las actividades
   });
   private _snackBar = inject(MatSnackBar);
