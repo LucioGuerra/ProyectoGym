@@ -22,6 +22,7 @@ import { Announcement } from '..';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-shif-admin-screen',
@@ -110,16 +111,15 @@ export class AnnouncementCreationComponent implements OnInit {
   }
 
   goBack() {
-    // if (this.form.dirty) {
-    //   const d = this.dialog.open(ErrorDialogComponent, {data: {message: '¿Estás seguro que deseas salir?'}});
-    //   d.afterClosed().subscribe((result: boolean) => {
-    //     if (result) {
-    //       window.history.back();
-    //     }
-    //   });
-    // } else {
+    if (this.form.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
       window.history.back();
-    // }
+    }
   }
 
 

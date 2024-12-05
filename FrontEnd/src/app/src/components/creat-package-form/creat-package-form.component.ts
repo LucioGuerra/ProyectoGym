@@ -19,6 +19,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MainScreenComponent } from "../../layout/main-screen/main-screen.component";
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-creat-package-form',
@@ -136,6 +137,7 @@ export class CreatPackageFormComponent implements OnInit {
           "verticalPosition": "top"
         })
         console.log(`Paquete creado: ${response}`);
+        this.packageForm.markAsPristine();
       },
       error => {
         this._snackBar.open('Ha ocurrido un error, por favor intentelo mas tarde', "Cerrar", {
@@ -195,6 +197,14 @@ export class CreatPackageFormComponent implements OnInit {
   }
   // Navegar de vuelta a la agenda
   return() {
-    history.back();
+    if (this.packageForm.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 }

@@ -238,6 +238,17 @@ public class AppointmentService {
                 appointment.setActivity(activity);
             }
 
+            if (updateAppointmentDTO.getKinesiologo() != null) {
+                Optional<User> kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
+                if (kine.isPresent()) {
+                    appointment.setInstructor(kine.get());
+                } else {
+                    userService.createUser(updateAppointmentDTO.getKinesiologo());
+                    kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
+                    kine.get().setRole(Role.KINE);
+                    appointment.setInstructor(kine.get());
+                }
+            }
 
 
             if (updateAppointmentDTO.getMax_capacity() != null) {
