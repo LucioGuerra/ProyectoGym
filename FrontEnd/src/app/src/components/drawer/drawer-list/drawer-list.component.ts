@@ -22,6 +22,10 @@ export class DrawerListComponent {
 
   constructor(private router: Router) {
   }
+
+  link(link: string) {
+    this.router.navigate([link]);
+  }
 }
 
 
