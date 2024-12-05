@@ -3,8 +3,10 @@ package com.desarrollo.criminal.controller;
 import com.desarrollo.criminal.dto.request.AppointmentDTO;
 import com.desarrollo.criminal.dto.request.KinesiologyAppointmentDTO;
 import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
+import com.desarrollo.criminal.dto.request.UserRequestDTO;
 import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
 import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
+import com.desarrollo.criminal.dto.response.GetAppointmentKineDTO;
 import com.desarrollo.criminal.service.AppointmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -85,6 +87,27 @@ public class AppointmentController {
     @DeleteMapping("/{appointmentId}/user/{userId}")
     public ResponseEntity<?> removeParticipant(@PathVariable Long appointmentId, @PathVariable Long userId) {
         return appointmentService.removeParticipant(appointmentId, userId);
+    }
+
+    @GetMapping("/kine")
+    public ResponseEntity<List<GetAppointmentKineDTO>> getAllKinesiologyAppointments(@RequestParam("dni") String dni) {
+        return appointmentService.getKinesiologyAppointmentByDni(dni);
+    }
+
+    @PatchMapping("/kine/{id}/add")
+    public ResponseEntity<?> addParticipantToKinesiology(@PathVariable Long id, @RequestBody UserRequestDTO userRequestDTO) {
+        return appointmentService.addParticipantToKinesiology(id, userRequestDTO);
+    }
+
+
+    @PatchMapping("/kine/{id}/remove")
+    public ResponseEntity<?> removeParticipantFromKinesiology(@PathVariable Long id, @RequestParam("dni") String dni) {
+        return appointmentService.removeParticipantFromKinesiology(id, dni);
+    }
+
+    @PostMapping("/kine/create")
+    public ResponseEntity<?> createKinesiology(@RequestBody UserRequestDTO userRequestDTO) {
+        return appointmentService.createKine(userRequestDTO);
     }
 
 }

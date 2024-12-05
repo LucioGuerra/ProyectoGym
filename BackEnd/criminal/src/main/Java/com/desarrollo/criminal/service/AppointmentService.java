@@ -1,12 +1,7 @@
 package com.desarrollo.criminal.service;
 
-import com.desarrollo.criminal.dto.request.AppointmentDTO;
-import com.desarrollo.criminal.dto.request.KinesiologyAppointmentDTO;
-import com.desarrollo.criminal.dto.request.UpdatePATCHAppointmentDTO;
-import com.desarrollo.criminal.dto.response.AppointmentListResponseDTO;
-import com.desarrollo.criminal.dto.response.AppointmentResponseDTO;
-import com.desarrollo.criminal.dto.response.AppointmentUserDTO;
-import com.desarrollo.criminal.dto.response.UserResponseDTO;
+import com.desarrollo.criminal.dto.request.*;
+import com.desarrollo.criminal.dto.response.*;
 import com.desarrollo.criminal.entity.Activity;
 import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.entity.PackageActivity;
@@ -24,13 +19,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 @AllArgsConstructor
 @Service
@@ -243,19 +238,6 @@ public class AppointmentService {
                 appointment.setActivity(activity);
             }
 
-            if (updateAppointmentDTO.getKinesiologo() != null) {
-                Optional<User> kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
-                if (kine.isPresent()) {
-                    appointment.setInstructor(kine.get());
-                } else {
-                    userService.createUser(updateAppointmentDTO.getKinesiologo());
-                    kine = userService.getUserByDni(updateAppointmentDTO.getKinesiologo().getDni());
-                    if (kine.isEmpty()) {
-                        throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
-                    }
-                    appointment.setInstructor(kine.get());
-                }
-            }
 
 
             if (updateAppointmentDTO.getMax_capacity() != null) {
@@ -554,13 +536,102 @@ public class AppointmentService {
         return getListResponseEntity(appointments);
     }
 
-    public ResponseEntity<?> getKinesiologyAppointmentByDni(String dni) {
+    public ResponseEntity<List<GetAppointmentKineDTO>> getKinesiologyAppointmentByDni(String dni) {
+        Optional<User> kine = userService.getUserByDni(dni);
+
+        if (kine.isEmpty()) {
+            throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
+        }
+
         List<Appointment> appointments = appointmentRepository.findAppointmentsByInstructorDniAndRole(dni, Role.KINE);
 
-        List<AppointmentResponseDTO> appointmentsDTO = appointments.stream()
-                .map(this::convertAppointmentToDTO)
-                .toList();
+
+        List<GetAppointmentKineDTO> appointmentsDTO = appointments.stream().map(this::convertAppointmentKineToDTO).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(appointmentsDTO);
+    }
+
+
+
+    public ResponseEntity<?> addParticipantToKinesiology(Long appointmentId, UserRequestDTO userRequestDTO) {
+        Appointment appointment = this.getAppointmentById(appointmentId);
+
+        if (appointment.getActivity().getName().equals("Kinesiologia")) {
+            throw new CriminalCrossException("APPOINTMENT_NOT_KINESIOLOGY", "The appointment is not a kinesiology appointment");
+        }
+
+        if (appointment.getParticipants().size() == 1) {
+            throw new CriminalCrossException("APPOINTMENT_IS_FULL", "The appointment is full");
+        }
+
+        Optional<User> user = userService.getUserByDni(userRequestDTO.getDni());
+
+        if (user.isEmpty()) {
+            userService.createUser(userRequestDTO);
+            user = userService.getUserByDni(userRequestDTO.getDni());
+        }
+
+
+        appointment.getParticipants().add(user.get());
+        user.get().getUserXAppointments().add(new UserXAppointment(appointment, user.get()));
+
+        appointmentRepository.save(appointment);
+        userService.save(user.get());
+
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<?> removeParticipantFromKinesiology(Long appointmentId, String userDni) {
+        Appointment appointment = this.getAppointmentById(appointmentId);
+        User user = userService.getUserByDni(userDni).orElseThrow(() -> new EntityNotFoundException("The user was not found with dni: " + userDni));
+
+        if (appointment.getParticipants().isEmpty()) {
+            throw new CriminalCrossException("APPOINTMENT_IS_EMPTY", "The appointment is empty");
+        }
+
+        appointment.getParticipants().remove(user);
+        userXAppointmentRepository.deleteByAppointmentAndUser(appointment, user);
+        appointmentRepository.save(appointment);
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<?> createKine(UserRequestDTO userRequestDTO) {
+            Optional<User> kine = userService.getUserByDni(userRequestDTO.getDni());
+            if (kine.isPresent()) {
+                throw new CriminalCrossException("KINESIOLOGO_ALREADY_CREATED", "The kinesiologo already exists");
+            }
+
+            userService.createUser(userRequestDTO);
+            kine = userService.getUserByDni(userRequestDTO.getDni());
+            if (kine.isEmpty()) {
+                throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
+            }
+
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    private GetAppointmentKineDTO convertAppointmentKineToDTO(Appointment appointment) {
+        GetAppointmentKineDTO getAppointmentKineDTO = new GetAppointmentKineDTO();
+        getAppointmentKineDTO.setId(appointment.getId());
+        getAppointmentKineDTO.setDate(appointment.getDate());
+        getAppointmentKineDTO.setStartTime(appointment.getStartTime());
+        getAppointmentKineDTO.setEndTime(appointment.getEndTime());
+        getAppointmentKineDTO.setKineDni(appointment.getInstructor().getDni());
+
+        if (!appointment.getParticipants().isEmpty()) {
+            GetUserKineDTO userKineDTO = new GetUserKineDTO();
+            User user = appointment.getParticipants().get(0);
+
+            userKineDTO.setDni(user.getDni());
+            userKineDTO.setFirstName(user.getFirstName());
+            userKineDTO.setLastName(user.getLastName());
+            userKineDTO.getEmail();
+
+            getAppointmentKineDTO.setUser(userKineDTO);
+        }
+
+        return getAppointmentKineDTO;
     }
 }
