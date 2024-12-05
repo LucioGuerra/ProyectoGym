@@ -70,7 +70,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found with id: " + id));
 
-        List<GetPackageDTO> packagesDTO = user.getAPackage().stream()
+        List<GetPackageDTO> packagesDTO = userRepository.findPackagesByUserId(id).stream().limit(10)
                 .map(aPackage -> {
                     GetPackageDTO dto = modelMapper.map(aPackage, GetPackageDTO.class);
                     dto.setCreatedAt(aPackage.getCreatedAt().toLocalDate());

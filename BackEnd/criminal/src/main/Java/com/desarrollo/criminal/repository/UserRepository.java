@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "AND ua.appointment.date <= CURRENT_DATE " +
             "ORDER BY ua.appointment.date DESC, ua.appointment.startTime ASC")
     List<Appointment> findAppointmentsByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT p FROM User u JOIN u.aPackage p WHERE u.id = :userId order by p.expirationDate desc")
+    List<Package> findPackagesByUserId(@Param("userId") Long id);
 }
