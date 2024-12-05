@@ -11,7 +11,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {firstValueFrom} from "rxjs";
 import {DniService} from "../dni/dni.service";
 import {ErrorDialogComponent} from "../../dialog/error-dialog/error-dialog.component";
-import {HttpClient} from '@angular/common/http';
 import {SendEmailComponent} from "../../dialog/send-email/send-email.component";
 
 

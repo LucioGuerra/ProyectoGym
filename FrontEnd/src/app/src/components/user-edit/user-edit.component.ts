@@ -185,10 +185,12 @@ export class UserEditComponent {
     this.userService.updateUser(this.userVista()).subscribe({
       next: (updatedUser: UserModel) => {
         console.log('Usuario actualizado:', updatedUser);
-        alert('User updated successfully');
+        const s = this._snackBar.open("Se ha modificado correctamente el usuario", "Cerrar", {
+          duration: 2000,
+        });
       },
       error: (error: any) => {
-        console.error('Error updating user:', error);
+        this.dialog.open(ErrorDialogComponent, { data: { message: "Este DNI ya pertenece a otro usuario." } });
       },
       complete: () => {
         console.log('Update user completed');
