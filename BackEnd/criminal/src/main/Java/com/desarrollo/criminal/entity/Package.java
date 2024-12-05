@@ -50,7 +50,7 @@ public class Package {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Package(){
+    public Package(){
 
     }
 

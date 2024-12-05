@@ -4,7 +4,9 @@
     <mat-tab>
         <div class="cartas">
           <mat-card class="card">
-            <mat-card-title>{{ package.name }}</mat-card-title>
+            <mat-card-title>{{ package.name!.length > 20
+              ? package.name!.slice(0, 20) + "..."
+              : package.name! }}</mat-card-title>
             <mat-card-content>
               <p class="card-price">{{ package.price | currency }}</p>
               <p class="card-description">{{
@@ -23,7 +25,9 @@
     <mat-tab>
         <div class="cartas">
           <mat-card class="card">
-            <mat-card-title>{{ package.name }}</mat-card-title>
+            <mat-card-title>{{ package.name!.length > 20
+              ? package.name!.slice(0, 20) + "..."
+              : package.name! }}</mat-card-title>
             <mat-card-content>
               <p class="card-price">{{ package.price | currency }}</p>
               <p class="card-description">{{
@@ -42,7 +46,9 @@
     <mat-tab>
         <div class="cartas">
           <mat-card class="card">
-            <mat-card-title>{{ package.name }}</mat-card-title>
+            <mat-card-title>{{ package.name!.length > 20
+              ? package.name!.slice(0, 20) + "..."
+              : package.name! }}</mat-card-title>
             <mat-card-content>
               <p class="card-price">{{ package.price | currency }}</p>
               <p class="card-description">{{

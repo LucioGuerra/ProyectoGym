@@ -26,6 +26,7 @@ import {HttpStatusCode} from "@angular/common/http";
 import {formatDate} from "@angular/common";
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { UserService } from '../services/services/user.service';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-appointment-form',
@@ -257,6 +258,7 @@ export class CreateAppointmentFormComponent implements OnInit {
         this.appointmentService.createKinesiologyAppointments(appointmentData).subscribe(
           (data: any) => {
             console.log('Datos de la respuesta:', data);
+            this.range.markAsPristine();
             this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
           },
           (error: any) => {
@@ -280,6 +282,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               console.log('Datos de la respuesta:', data);
               this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -302,6 +305,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               console.log('Datos de la respuesta:', data);
               this._snackBar.open(`${data} appointments created`, "close", {"duration": 3000})
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -332,6 +336,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -352,6 +357,7 @@ export class CreateAppointmentFormComponent implements OnInit {
             (data: any) => {
               this._snackBar.open('Turnos editados con exito!', "Cerrar", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
               console.log('Datos de la respuesta:', data);
+              this.range.markAsPristine();
             },
             (error: any) => {
               this._snackBar.open('Ups! an error ocurred, please try again later', "close", {"duration": 3000, "horizontalPosition": "center", "verticalPosition": "top"})
@@ -364,6 +370,14 @@ export class CreateAppointmentFormComponent implements OnInit {
   }
 
   Cancel() {
-    window.history.back();
+    if (this.range.dirty) {
+      this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          window.history.back();
+        }
+      });
+    } else {
+      window.history.back();
+    }
   }
 }
