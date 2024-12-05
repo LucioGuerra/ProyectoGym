@@ -162,7 +162,10 @@ export class UserEditComponent {
         message: 'Se te enviará un email para restablecer tu' +
           ' contraseña. ¿Estás seguro de que quieres cambiar tu contraseña?'
       }
-    }).afterClosed().subscribe(() => {
+    }).afterClosed().subscribe((result: boolean) => {
+      if (!result) {
+        return;
+      }
       this.auth.forgotPassword(this.user().email!);
     });
   }
@@ -209,7 +212,7 @@ export class UserEditComponent {
           duration: 2000,
         });
       },
-      error: () => {
+      error: (error: any) => {
         this.dialog.open(ErrorDialogComponent, { data: { message: "Este DNI ya pertenece a otro usuario." } });
       },
       complete: () => {
