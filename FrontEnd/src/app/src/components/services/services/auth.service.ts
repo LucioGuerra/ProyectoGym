@@ -296,6 +296,8 @@ export class AuthService {
   }
 
   getToken() {
+    console.log("Entra a getToken");
+    console.log(localStorage.getItem('access_token'));
     return localStorage.getItem('access_token');
   }
 }
