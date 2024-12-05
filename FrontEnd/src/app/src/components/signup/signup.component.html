@@ -75,38 +75,25 @@
 
         <mat-form-field class="example-full-width">
           <mat-label id="password">Contraseña</mat-label>
-          <input [type]="hide1 ? 'password' : 'text'" autocomplete="new-password" formControlName="password"
-                 matInput placeholder="Ingresá tu contraseña">
+          <input
+            [type]="hide1 ? 'password' : 'text'"
+            autocomplete="new-password"
+            formControlName="password"
+            matInput
+            placeholder="Ingresá tu contraseña"
+            (focus)="showPasswordConditions = true"
+            (input)="updatePasswordConditions()"
+          />
           <button (click)="hide1 = !hide1" mat-icon-button matSuffix>
             <mat-icon>{{ hide1 ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
+          <mat-error *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched">
+            Tu contraseña es necesaria para que inicies sesión
+          </mat-error>
+          <mat-error *ngIf="formGroup.get('password')?.hasError('minlength')">
+            La contraseña debe tener más de 8 caracteres.
+          </mat-error>
         </mat-form-field>
-        @if (formGroup.get('password')?.touched && formGroup.get('password')?.errors) {
-          <div class="password-errors">
-            <ul>
-              @if (formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched) {
-                <mat-error style="margin-top: -10px; margin-left: -20px">Tu contraseña es necesaria para que inicies
-                  sesion
-                </mat-error>
-              }
-              @if (formGroup.get('password')?.hasError('minlength')) {
-                <li>La contraseña debe tener mas de 8 caracteres.</li>
-              }
-              @if (formGroup.get('password')?.hasError('hasUpperCase')) {
-                <li>La contraseña debe incluir mayúsculas.</li>
-              }
-              @if (formGroup.get('password')?.hasError('hasLowerCase')) {
-                <li>La contraseña debe incluir minúsculas.</li>
-              }
-              @if (formGroup.get('password')?.hasError('hasNumeric')) {
-                <li>La contraseña debe incluir números.</li>
-              }
-              @if (formGroup.get('password')?.hasError('hasSpecial')) {
-                <li>La contraseña debe incluir caracteres especiales (~, &#64;, #, _, ^, *, %, /, , +, :, ;, =).</li>
-              }
-            </ul>
-          </div>
-        }
 
         <mat-form-field class="example-full-width">
           <mat-label>Repetir contraseña</mat-label>
@@ -121,6 +108,14 @@
             </mat-error>
           }
         </mat-form-field>
+
+        <div class="password-conditions" *ngIf="showPasswordConditions">
+          <p [class.valid]="passwordConditions.length">✓  Al menos 8 caracteres</p>
+          <p [class.valid]="passwordConditions.uppercase">✓  Una letra mayúscula</p>
+          <p [class.valid]="passwordConditions.lowercase">✓  Una letra minúscula</p>
+          <p [class.valid]="passwordConditions.numeric">✓  Un número</p>
+          <p [class.valid]="passwordConditions.special">✓  Un carácter especial</p>
+        </div>
 
 
         <button (click)="signup()" id="singup" mat-stroked-button type="submit">

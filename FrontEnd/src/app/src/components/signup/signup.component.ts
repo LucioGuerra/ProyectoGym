@@ -21,6 +21,8 @@ import {AuthService} from "../services/services";
 import {UserModel} from "../models";
 import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {Router} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -32,7 +34,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatTooltipModule, FormsModule, ToolbarComponent, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule],
+  imports: [MatTooltipModule, FormsModule, ToolbarComponent, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule, NgIf],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -56,7 +58,8 @@ export class SignupComponent {
     repassword: new FormControl("", [Validators.required, passwordValidators.passwordMatchValidator]),
   });
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog,
+              private router: Router) {
   }
 
   validacionPassword(): boolean {
@@ -86,15 +89,36 @@ export class SignupComponent {
     }
   }
 
+  showPasswordConditions = false;
+
+  passwordConditions = {
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    numeric: false,
+    special: false,
+  };
+
+  updatePasswordConditions(): void {
+    const password = this.formGroup.get('password')?.value || '';
+    this.passwordConditions = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      numeric: /[0-9]/.test(password),
+      special: /[~@#$%^&*()_+=[\]{}|\\,.<>:;?!/-]/.test(password),
+    };
+  }
+
   volver() {
     if (this.formGroup.dirty) {
       this.dialog.open(ConfirmationDialogComponent, {data: {message: '¿Estás seguro de que deseas cancelar? Los cambios se perderán.'}}).afterClosed().subscribe((result: boolean) => {
-        if (result) {
-          window.history.back();
+        if (result){
+          this.router.navigate(['/login']);
         }
       });
     } else {
-      window.history.back();
+      this.router.navigate(['/login']);
     }
   }
 }

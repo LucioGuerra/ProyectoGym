@@ -14,9 +14,127 @@
 .contenedor {
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: scroll;
+  }
+
+mat-card {
+  border-radius: 20px;
+  margin-top: 70px;
+  border: 0.001px solid rgb(18, 18, 18);
+
+  padding: 20px;
+  width: 40%;
+  height: fit-content;
+  min-width: min-content;
+  max-width: 550px;
+
+  margin-bottom: 30px;
+
+  background-color: rgba(0, 0, 0, 0.872);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+
+  .titulo {
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 20px;
+    }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+  .inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .compartidos {
+      width: 48.5%
+      }
+    }
+
+    #vuelta {
+      margin-top: 15px;
+      }
+
+    #singup {
+      width: 100%;
+      margin-top: 20px;
+      border: #B9A552 2px solid;
+      }
+
+    .example-form {
+      width: 100%;
+      }
+
+    .example-full-width {
+      margin-bottom: 5px;
+      width: 100%;
+      }
+
+    .icon-text-container {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      margin-bottom: 0;
+      color: #D0D0D0;
+      width: 240px;
+      }
+
+    mat-icon {
+      display: block;
+      margin-right: -15px;
+      }
+
+    span {
+      margin-bottom: 1px;
+      padding-left: 15px;
+      }
+
+    mat-error {
+      display: block;
+      }
+
+    .password-conditions {
+      border: 1px solid #F6C90E;
+      padding: 20px;
+      transition: all 0.3s ease-in-out;
+      opacity: 1;
+
+      &.ng-leave {
+        opacity: 0;
+        }
+      p {
+        margin: 5px 0 5px 10px;
+        color: #D0D0D0;
+        &.valid {
+          color: #F6C90E;
+          }
+        }
+      }
+
+
+    .icon-text-container:hover {
+      color: #B9A552;
+      cursor: pointer;
+      }
+
+    .icon-text-container mat-icon {
+      padding-left: 5px;
+      }
+
+
+    button {
+      font-size: 16px;
+      height: 55px;
+      border-radius: 10px;
+      }
+    }
   }
 
 .error {
@@ -40,103 +158,6 @@
     margin-left: -15px;
     }
   }
-
-mat-card-content {
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
-  }
-
-mat-card {
-  border-radius: 20px;
-  margin-top: 70px;
-  border: 0.001px solid rgb(18, 18, 18);
-
-  padding: 20px;
-  width: 550px;
-  height: auto;
-  min-width: 550px;
-  max-width: 550px;
-
-  margin-bottom: 30px;
-
-  background-color: rgba(0, 0, 0, 0.872);
-  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
-  }
-
-.inputs {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  }
-
-#vuelta {
-  margin-top: 15px;
-  }
-
-.compartidos {
-  width: 230px;
-  }
-
-.titulo {
-  font-size: 40px;
-  font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 20px;
-  }
-
-#singup {
-  width: 100%;
-  margin-top: 20px;
-  border: #B9A552 2px solid;
-  }
-
-.example-form {
-  width: 100%;
-  }
-
-.example-full-width {
-  margin-bottom: 5px;
-  width: 100%;
-  }
-
-.icon-text-container {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 0;
-  color: #D0D0D0;
-  width: 240px;
-  }
-
-mat-icon {
-  display: block;
-  margin-right: -15px;
-  }
-
-span {
-  margin-bottom: 1px;
-  padding-left: 15px;
-  }
-
-.icon-text-container:hover {
-  color: #B9A552;
-  cursor: pointer;
-  }
-
-.icon-text-container mat-icon {
-  padding-left: 5px;
-  }
-
-
-button {
-  font-size: 16px;
-  height: 55px;
-  border-radius: 10px;
-  }
-
 
 .error-dialog {
   width: 250px;
@@ -178,12 +199,7 @@ input[type="password"] {
   -webkit-text-security: disc;
   }
 
-
-.example-full-width {
-  position: relative;
-  }
-
-@media (max-height: 765px) {
+@media (max-height: 737px) {
   .contenedor {
     display: flex;
     justify-content: center;
@@ -192,12 +208,24 @@ input[type="password"] {
     }
 
   mat-card {
-    margin-top: 90px;
+    margin-top: 70px;
     }
   }
 
-@media (max-height: 710px) {
-  .container {
-    overflow-y: scroll;
+@media (max-width: 550px) {
+  mat-card{
+    min-width: 300px !important;
+    width: 90%;
+
+    .titulo{
+      font-size: 32px;
+      }
+
+    .inputs{
+      flex-direction: column !important;
+      .compartidos{
+        width: 100% !important;
+        }
+      }
     }
   }
