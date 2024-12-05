@@ -22,7 +22,7 @@ import {Router} from "@angular/router";
       <p>{{ data.message }}</p>
     </div>
     <div mat-dialog-actions>
-      <button mat-button (click)="onClose()">Close</button>
+      <button mat-button (click)="onClose()">Cerrar</button>
     </div>
   `,
   styleUrl: './error-dialog.component.scss',
