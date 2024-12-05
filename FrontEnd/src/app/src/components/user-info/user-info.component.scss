@@ -213,7 +213,7 @@ mat-action-list {
       h2 {
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: -5px;
+        margin-left: 15px;
         font-weight: bold;
         }
       }
@@ -239,9 +239,8 @@ mat-action-list {
     p {
       padding: 0;
       margin: 5px 0 0 0;
-      }
-
     }
+  }
 
   .tarjeta-activa {
     mat-card {
@@ -524,10 +523,15 @@ mat-action-list {
     width: fit-content;
     }
 
+  #content-main{
+    padding: 0 !important;
+    }
+
   #contenedora{
     min-width: 350px;
     max-width: 600px;
     width: 90%;
+    padding: 0;
     }
 
   #principal {
@@ -591,9 +595,7 @@ mat-action-list {
     gap: 1em;
     width: 100%;
     }
-  }
 
-@media (max-width: 660px) {
   .date {
     font-size: 1rem !important;
     display: -webkit-box !important;
@@ -607,9 +609,7 @@ mat-action-list {
     cursor: pointer;
     transition: background-color 0.3s ease;
     }
-  }
 
-@media (max-width: 500px) {
   .info {
     .name {
       font-size: 1.5rem;

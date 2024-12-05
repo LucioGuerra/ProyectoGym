@@ -31,7 +31,7 @@
           </div>
         </mat-card-header>
 
-        <mat-card-content>
+        <mat-card-content id="content-main">
           <div class="content">
             <section class="botom-section">
               <div class="agenda">
@@ -198,8 +198,9 @@
                                   vencimiento: {{ paquete.expirationDate.toLocaleString() }}</p>
                                 <div class="actividad">
                                   <p style="margin-bottom: 0; font-weight: bold">Actividades:</p>
-                                  <p style="margin-bottom: 0; font-style: italic; font-weight: bold">Créditos
-                                    restantes</p>
+                                  <p id="credito" style="margin-bottom: 0; text-align: right !important; font-style:
+                                  italic;
+                                    font-weight: bold;">Créditos restantes</p>
                                 </div>
                                 <div class="actividades">
                                   @for (activity of paquete.activities; track activity.quantity) {
