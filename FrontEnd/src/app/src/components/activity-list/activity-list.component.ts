@@ -61,10 +61,9 @@ export class ActivityListComponent {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
+          return
         } else if (this.auth0.isClient()) {
           this.router.navigate(['/agenda']);
-        } else {
-          this.router.navigate(['/home']);
         }
       } else {
         this.router.navigate(['/login']);
