@@ -3,7 +3,7 @@ import { DrawerComponent } from '../drawer/drawer.component';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button'; 
+import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from "../services/services/auth.service";
 import { ActivityService } from '../services/services/activity.service';
 import { Router } from "@angular/router";
@@ -46,8 +46,8 @@ import { MainScreenComponent } from "../../layout/main-screen/main-screen.compon
 export class ActivityListComponent {
 
   roles = Object.values(Role);
-  user = signal<User>({}); 
-  activities = signal<Activity[]>([]); 
+  user = signal<User>({});
+  activities = signal<Activity[]>([]);
   dataSource = new MatTableDataSource<Activity>();
 
   displayedColumns: string[] = ['name', 'description', 'price', 'buttons'];
@@ -59,19 +59,21 @@ export class ActivityListComponent {
     private router: Router,
     private changes: ChangeDetectorRef) {
     effect(() => {
-
-      if (!this.auth0.isAuthenticated()) {
-        this.router.navigate(['/login']);
-      } else {
-        if (this.auth0.isClient()) {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
           this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
         }
+      } else {
+        this.router.navigate(['/login']);
       }
-
     });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
-  
+
   ngOnInit() {
     this.activityService.getActivities().subscribe({
       next: (activities: any) => {
@@ -82,14 +84,14 @@ export class ActivityListComponent {
           price: activity.price
         }));
         this.activities.set(formattedActivities);
-        this.dataSource.data = formattedActivities;   
+        this.dataSource.data = formattedActivities;
         this.changes.detectChanges();
       },
       error: (error: any) => console.error(error),
       complete: () => console.log('Request completed')
     });
   }
-    
+
 
 
   addActivity(){

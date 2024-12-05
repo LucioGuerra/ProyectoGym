@@ -20,12 +20,12 @@
                 class="user-avatar-img"
                 (click)="triggerFileInput()"
               />
-            
+
               <!-- Texto visible al pasar el mouse -->
               <div class="hover-text" *ngIf="isHovering" (click)="triggerFileInput()">
                 Change Picture
               </div>
-            
+
               <!-- Input de tipo archivo (oculto) -->
               <input
                 type="file"
@@ -39,7 +39,7 @@
                <div class="role-container">
                 <select formControlName="role" class="role-select" (change)="changeRole($event)">
                   <option class="option" [value]="Role.ADMIN">ADMIN</option>
-                  <option class="option" [value]="Role.CLIENT">CLIENT</option>
+                  <option class="option" [value]="Role.CLIENT">CLIENTE</option>
                 </select>
               </div>
 
@@ -52,16 +52,16 @@
                 <div class="row">
                   <div class="input-combo">
                     <mat-form-field appearance="outline" class="custom-text-color">
-                      <mat-label>First Name</mat-label>
-                      <input formControlName="firstName" id="firstName" matInput>
+                      <mat-label>Nombre</mat-label>
+                      <input formControlName="firstName" id="firstName" placeholder="Ingresá tu nombre" matInput>
                     </mat-form-field>
                   </div>
 
                   <div class="input-combo">
                     <mat-form-field appearance="outline">
-                      <mat-label>Last Name</mat-label>
+                      <mat-label>Apellido</mat-label>
                       <input [errorStateMatcher]="matcher" formControlName="lastName" id="lastName"
-                             matInput placeholder="Enter your last name" type="text"/>
+                             matInput placeholder="Ingresá tu apellido" type="text"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -71,14 +71,15 @@
                     <mat-form-field appearance="outline">
                       <mat-label>DNI</mat-label>
                       <input [errorStateMatcher]="matcher" formControlName="dni" id="dni" matInput
-                             placeholder="Enter your DNI" type="text"/>
+                             placeholder="Ingresá tu DNI" type="text"/>
                     </mat-form-field>
                   </div>
 
                   <div class="input-combo" id="email">
                     <mat-form-field appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input value="{{userVista().email}}" class="email" matInput disabled>
+                      <input value="{{userVista().email}}" class="email" placeholder="Ingresá tu email" matInput
+                             disabled>
                     </mat-form-field>
                   </div>
                 </div>
@@ -86,8 +87,10 @@
                 <div class="row">
                   <div class="input-combo">
                     <mat-form-field appearance="outline">
-                      <mat-label>Phone</mat-label>
-                      <input [errorStateMatcher]="matcher" formControlName="phone" matInput type="text"/>
+                      <mat-label>Teléfono</mat-label>
+                      <input [errorStateMatcher]="matcher" formControlName="phone"
+                             placeholder="Ingresá tu número de teléfono"
+                             matInput type="text"/>
                     </mat-form-field>
                   </div>
 
@@ -112,7 +115,7 @@
 
                 <div class="save-container">
                   <button class="custom-button" mat-button type="submit">
-                    Save changes
+                    Guardar cambios
                   </button>
                 </div>
               </div>
@@ -126,7 +129,7 @@
             <mat-icon>chevron_left</mat-icon>
           </button>
           <div>
-            <h4>User not found</h4>
+            <h4>Usuario no encontrado</h4>
           </div>
         </mat-card>
       </ng-template>

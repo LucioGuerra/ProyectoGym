@@ -1,4 +1,100 @@
 @use "../../../../variables.scss";
+.container {
+  margin-top: 150px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+  }
+
+#contenedora{
+  min-width: 950px;
+  background-color: #66645E;
+  display: flex;
+  padding: 25px;
+  width: 65%;
+  height: auto;
+  flex-direction: column;
+  margin-bottom: 30px;
+  }
+
+#principal {
+  color: #D0D0D0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+
+  .photo{
+    width: fit-content;
+    }
+
+  img {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-top: 30px;
+    gap: 0.5em;
+    font-size: large;
+    width: 100%;
+
+    .name {
+      font-size: 2.5rem;
+      margin-bottom: -7.5px;
+      width: max-content;
+      max-width: 400px;
+      text-align: start;
+      justify-content: left;
+      }
+
+    button {
+      border: 1px solid rgba(246, 201, 14, 0.79);
+      background-color: transparent;
+      border-radius: 5px;
+      font-size: 1rem;
+      color: #F6C90E;
+      }
+
+    button:hover {
+      color: #F6C90E;
+      background-color: rgba(208, 208, 208, 0.1);
+      cursor: pointer;
+      }
+    }
+
+  .streak {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    height: 170px;
+    margin-right: 30px;
+    justify-content: flex-end;
+    width: 100%;
+
+    mat-card {
+      background-color: rgba(208, 208, 208, 0.75);
+      padding: 10px;
+      height: auto;
+      width: max-content;
+      font-weight: bold;
+      color: #222;
+
+      .text {
+        width: 100%;
+        padding-left: 5px;
+        font-size: 0.99em;
+        }
+      }
+    }
+  }
 
 .no-apointments {
   display: flex;
@@ -87,98 +183,6 @@ mat-action-list {
     }
   }
 
-#contenedora {
-  min-width: 620px;
-  }
-
-.container {
-  margin-top: 150px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  display: flex;
-  }
-
-mat-card {
-  background-color: #66645E;
-  display: flex;
-  padding: 25px;
-  width: 65%;
-  height: auto;
-  flex-direction: column;
-  }
-
-mat-card-header {
-  color: #D0D0D0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
-
-  img {
-    border-radius: 50%;
-    width: 200px;
-    height: 200px;
-    }
-
-  .info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-left: 20px;
-    padding-top: 30px;
-    gap: 0.5em;
-    font-size: large;
-    width: 100%;
-
-    .name {
-      font-size: 2.5rem;
-      margin-bottom: -7.5px;
-      width: max-content;
-      }
-
-    button {
-      border: 1px solid rgba(246, 201, 14, 0.79);
-      background-color: transparent;
-      border-radius: 5px;
-      font-size: 1rem;
-      color: #F6C90E;
-      }
-
-    button:hover {
-      color: #F6C90E;
-      background-color: rgba(208, 208, 208, 0.1);
-      cursor: pointer;
-      }
-    }
-
-  .streak {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    height: 170px;
-    margin-right: 30px;
-    justify-content: flex-end;
-    width: 100%;
-
-    mat-card {
-      background-color: rgba(208, 208, 208, 0.75);
-      padding: 10px;
-      height: auto;
-      width: max-content;
-      font-weight: bold;
-      color: #222;
-
-      .text {
-        width: 100%;
-        padding-left: 5px;
-        font-size: 0.99em;
-        }
-      }
-    }
-  }
-
 .content {
   margin-top: 20px;
 
@@ -209,7 +213,7 @@ mat-card-header {
       h2 {
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: -5px;
+        margin-left: 15px;
         font-weight: bold;
         }
       }
@@ -235,9 +239,8 @@ mat-card-header {
     p {
       padding: 0;
       margin: 5px 0 0 0;
-      }
-
     }
+  }
 
   .tarjeta-activa {
     mat-card {
@@ -263,6 +266,7 @@ mat-card-header {
     grid-template-areas:
       "img info"
       "img streak";
+    grid-template-columns: 200px calc(100% - 250px);
     gap: 15px;
     }
 
@@ -301,57 +305,14 @@ mat-card-header {
   }
 
 @media (max-width: 1300px) {
-  mat-card {
-    width: 80%;
-    padding: 20px;
-    }
-
-  #principal {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 15px;
-    }
-
-  img {
-    width: 150px;
-    height: 150px;
-    }
-
-  .info {
-    padding: 0 !important;
-    padding-top: 10px !important;
-    align-items: center;
-    }
-
-  .streak {
-    mat-card {
-      padding: 8px;
-      font-size: 1.2rem;
-      }
-    }
-
-  .content {
-    padding: 15px;
-    }
-  }
-
-@media (max-width: 945px) {
-  .container {
-    margin-top: 150px;
-    }
-
-  .name {
-    width: fit-content;
-    }
 
   #principal {
     display: grid;
     grid-template-areas:
-      "img img"
-      "info streak";
-    text-align: center;
-    gap: 0;
+      "img info"
+      "img streak";
+    grid-template-columns: 200px calc(100% - 250px);
+    gap: 15px;
     }
 
   .photo {
@@ -360,38 +321,134 @@ mat-card-header {
     justify-content: center;
 
     img {
-      width: 350px;
-      height: 350px;
+      width: 250px;
+      height: 250px;
       }
     }
 
   .info {
     grid-area: info;
-    padding-top: 10px;
-    margin-left: 10px;
+    padding-top: 20px !important;
     align-items: center;
     }
 
   .streak {
     grid-area: streak;
     display: flex;
-    flex-direction: column;
-    height: 85% !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
+    flex-direction: row;
+    height: 0 !important;
+    margin-right: 30px;
 
     mat-card {
-      align-self: flex-end;
+      display: flex;
       }
+
+    align-items: flex-start;
+    justify-content: left;
+    margin-top: 0;
+    }
+
+  .content {
+    padding: 15px;
+    }
+  }
+
+@media (max-width: 1100px) {
+  .button-class:nth-child(n + 4) {
+    display: none;
+    }
+  ::ng-deep .mat-column-date {
+    width: 40% !important;
+    }
+  ::ng-deep .mat-column-activity {
+    width: 10%;
+    }
+  }
+
+@media (max-width: 975px) {
+  #principal {
+    display: grid;
+    grid-template-areas:
+  "img info"
+  "img streak";
+    grid-template-columns: 200px calc(100% - 250px);
+    gap: 15px;
+    }
+
+  .photo {
+    grid-area: img;
+    display: flex;
+    justify-content: center;
+
+    img {
+      width: 250px;
+      height: 250px;
+      }
+    }
+
+  .info {
+    grid-area: info;
+    padding-top: 20px !important;
+    align-items: center;
+    }
+
+  .streak {
+    grid-area: streak;
+    display: flex;
+    flex-direction: row;
+    height: 0 !important;
+    margin-right: 30px;
+
+    mat-card {
+      display: flex;
+      }
+
+    align-items: flex-start;
+    justify-content: left;
+    margin-top: 0;
+    }
+
+  #contenedora{
+    min-width: 680px;
+    max-width: 960px;
+    width: 90%;
     }
 
   .iterables {
     grid-template-areas:
-      "appointments"
-      "divider"
-      "packages";
+  "appointments"
+  "divider"
+  "packages";
     gap: 1em;
     width: 100%;
+    }
+  }
+
+@media (max-width: 910px) {
+  .calendar {
+    width: 100%;
+    flex: 1;
+    margin: 0;
+    border-radius: 10px 10px 0 0;
+
+    mat-form-field {
+      width: 90%;
+      }
+    }
+
+  ::ng-deep .mat-column-date {
+    width: 20% !important;
+    height: 80px !important;
+    }
+
+  ::ng-deep .mat-column-activity {
+    width: 2% !important;
+    }
+  }
+
+@media (max-width: 900px) {
+  .button-class:nth-child(n + 3) {
+    display: none;
     }
   }
 
@@ -417,9 +474,9 @@ mat-card-header {
     grid-area: streak;
     display: flex;
     flex-direction: column;
-    height: 85% !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
+    height: 85%;
+    align-items: flex-start;
+    justify-content: flex-end;
 
     mat-card {
       align-self: flex-end;
@@ -429,39 +486,6 @@ mat-card-header {
 
   .content {
     padding: 10px;
-    }
-  }
-
-@media (max-width: 500px) {
-  .info {
-    .name {
-      font-size: 1.5rem;
-      }
-    }
-
-  .iterables {
-    .appointments,
-    .packages {
-      width: 100%;
-      }
-    }
-  }
-
-@media (max-width: 1100px) {
-  .button-class:nth-child(n + 4) {
-    display: none;
-    }
-  ::ng-deep .mat-column-date {
-    width: 40% !important;
-    }
-  ::ng-deep .mat-column-activity {
-    width: 10%;
-    }
-  }
-
-@media (max-width: 900px) {
-  .button-class:nth-child(n + 3) {
-    display: none;
     }
   }
 
@@ -485,9 +509,93 @@ mat-card-header {
   ::ng-deep .mat-column-activity {
     width: 2% !important;
     }
-  }
 
-@media (max-width: 660px) {
+  @media (max-height: 765px) {
+    .container{
+      margin-top: 90px !important;
+      }
+    }
+
+    }
+
+@media (max-width: 710px) {
+  .name {
+    width: fit-content;
+    }
+
+  #content-main{
+    padding: 0 !important;
+    }
+
+  #contenedora{
+    min-width: 350px;
+    max-width: 600px;
+    width: 90%;
+    padding: 0;
+    }
+
+  #principal {
+    display: grid;
+    grid-template-areas:
+  "img"
+  "info"
+  "streak";
+    grid-template-columns: 100%;
+    gap: 0;
+    }
+
+  .photo {
+    grid-area: img;
+    width: 100% !important;
+    height: 100% !important;
+    justify-content: center;
+
+    img {
+      width: 60% !important;
+      height: auto !important;
+      }
+    }
+
+  .name {
+    font-size: 2.5rem;
+    margin-bottom: -7.5px;
+    min-width: fit-content;
+    width: fit-content;
+    max-width: 200px !important;
+    text-align: start;
+    justify-content: left;
+    }
+
+  .info {
+    grid-area: info;
+    padding-top: 10px;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    align-items: center;
+    }
+
+  .streak {
+    grid-area: streak;
+    display: flex;
+    flex-direction: row !important;
+    height: 50px !important;
+    margin-left: 0 !important;
+    align-items: flex-start;
+    justify-content: flex-start !important;
+    mat-card {
+      margin-left: 0;
+      }
+    }
+
+  .iterables {
+    grid-template-areas:
+      "appointments"
+      "divider"
+      "packages";
+    gap: 1em;
+    width: 100%;
+    }
+
   .date {
     font-size: 1rem !important;
     display: -webkit-box !important;
@@ -500,5 +608,18 @@ mat-card-header {
     background-color: rgba(0, 0, 0, 0.04);
     cursor: pointer;
     transition: background-color 0.3s ease;
+    }
+
+  .info {
+    .name {
+      font-size: 1.5rem;
+      }
+    }
+
+  .iterables {
+    .appointments,
+    .packages {
+      width: 100%;
+      }
     }
   }

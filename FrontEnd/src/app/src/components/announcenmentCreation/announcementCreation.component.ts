@@ -1,6 +1,6 @@
-import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { AnnouncementService } from '../services/services';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component, effect, OnInit} from '@angular/core';
+import {AnnouncementService, AuthService} from '../services/services';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -54,18 +54,33 @@ export class AnnouncementCreationComponent implements OnInit {
   announcementID: string | null = null;
 
   constructor(
-    private announcementService: AnnouncementService, 
-    private activatedRoute: ActivatedRoute, 
+    private announcementService: AnnouncementService,
+    private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private auth0: AuthService,
+    private router: Router
   ) {
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
       body: new FormControl('', [Validators.required]),
       date: this.date
     });
   }
-  
+
   ngOnInit(): void {
     this.announcementID = this.activatedRoute.snapshot.paramMap.get('id');
     console.log('ID:', this.announcementID);

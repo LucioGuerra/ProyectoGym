@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, effect} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { AnnouncementService } from '../services/services';
-import { DrawerComponent } from '../drawer/drawer.component';
-import { MatDivider } from '@angular/material/divider';
 import { MatActionList } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -13,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { AnnouncementDialogComponent } from '../announcement-dialog/announcement-dialog.component';
+import { AuthService } from '../services/services';
 
 @Component({
   selector: 'app-announcements',
@@ -26,7 +25,19 @@ export class AnnouncementsComponent {
 
   announcements: Announcement[] = [];
 
-  constructor(private announcementService: AnnouncementService, private router: Router, private dialog: MatDialog) { }
+  constructor(private announcementService: AnnouncementService, private router: Router, private dialog: MatDialog, private auth0:AuthService) {effect(() => {
+    if (this.auth0.isAuthenticated()) {
+      if (this.auth0.isAdmin()) {
+      } else if (this.auth0.isClient()) {
+        this.router.navigate(['/agenda']);
+      } else {
+        this.router.navigate(['/home']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient()); }
 
   ngOnInit() {
     this.loadAnnouncements();

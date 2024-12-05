@@ -9,7 +9,7 @@
               >calendar_month
               </mat-icon
               >
-              <h1 class="datepicker-title">Select date</h1>
+                <h1 class="datepicker-title">Seleccionar fecha</h1>
               @if (selectedDate().getDate() != today.getDate()) {
               <button mat-icon-button (click)="goBackDate($event)">
                 <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_left</mat-icon>
@@ -25,7 +25,7 @@
             </div>
             <mat-divider></mat-divider>
             <mat-form-field>
-              <mat-label>DD/MM/YYYY</mat-label>
+              <mat-label>DD/MM/AAAA</mat-label>
               <input
                 [value]="selectedDate()"
                 matInput
@@ -53,7 +53,7 @@
                   <div
                     style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
                     <mat-icon class="example-tab-icon" style="margin-right: 10px">fitness_center</mat-icon>
-                    <p style="margin: 0; align-content: center; justify-content: center">Gym agenda</p>
+                    <p style="margin: 0; align-content: center; justify-content: center">Agenda gimnasio</p>
                   </div>
                 </ng-template>
                 <div class="title-section">
@@ -61,7 +61,7 @@
                   >calendar_view_day
                   </mat-icon
                   >
-                  <h1 class="agenda-title">Activity List</h1>
+                  <h1 class="agenda-title">Lista de actividades</h1>
                   <mat-chip-listbox
                     class="activities-cards"
                     multiple="true"
@@ -83,8 +83,8 @@
                              style="display: flex; flex-direction: row; align-content: center; justify-content: center">
                   <div
                     style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
-                    <span class="material-symbols-outlined" style="margin-right: 10px">rheumatology</span>
-                    <p style="margin: 0; align-content: center; justify-content: center">Kinesiology agenda</p>
+                    <span class="material-symbols-outlined" style="margin-right: 10px">reumatología</span>
+                    <p style="margin: 0; align-content: center; justify-content: center">Agenda kinesiología</p>
                   </div>
                 </ng-template>
                 <mat-divider></mat-divider>

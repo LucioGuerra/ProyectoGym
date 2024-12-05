@@ -69,10 +69,6 @@ export class UserService {
       ))
   }
 
-  getUserActivePackages(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/package/${id}`);
-  }
-
   getUserHistory(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/history/${id}`);
   }

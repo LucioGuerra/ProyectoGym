@@ -48,12 +48,16 @@ export class UsersListComponent {
     effect(() => {
       if (this.auth0.isAuthenticated()) {
         if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
         }
-        //todo redirect to client page
       } else {
         this.router.navigate(['/login']);
       }
     });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit() {

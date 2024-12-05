@@ -23,15 +23,19 @@ export class CreatePackage implements OnInit {
   appointmentID: string | null = null;
 
   constructor(private auth0: AuthService, private router: Router, private route: ActivatedRoute) {
-    /*effect(() => {
-      if(this.auth0.isAuthenticated()){
-        if(this.auth0.isAdmin()){
+    effect(() => {
+      if (this.auth0.isAuthenticated()) {
+        if (this.auth0.isAdmin()) {
+        } else if (this.auth0.isClient()) {
+          this.router.navigate(['/agenda']);
+        } else {
+          this.router.navigate(['/home']);
         }
-      }
-      else{
+      } else {
         this.router.navigate(['/login']);
       }
-    });*/
+    });
+    console.log('is admin? ', this.auth0.isAdmin(), 'is client? ', this.auth0.isClient());
   }
 
   ngOnInit(): void {

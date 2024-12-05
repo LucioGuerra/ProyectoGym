@@ -11,7 +11,7 @@
                 >calendar_month
                 </mat-icon
                 >
-                <h1 class="datepicker-title">Select date</h1></div>
+                <h1 class="datepicker-title">Seleccionar fecha</h1></div>
               <div class="buttons">
                 <button mat-icon-button (click)="goBackDate($event)">
                   <mat-icon class="example-tab-icon" style="margin-right: 10px; color: #b9a552">chevron_left</mat-icon>
@@ -23,7 +23,7 @@
             </div>
             <mat-divider></mat-divider>
             <mat-form-field>
-              <mat-label>DD/MM/YYYY</mat-label>
+              <mat-label>DD/MM/AAAA</mat-label>
               <input
                 [value]="selectedDate()"
                 matInput
@@ -43,29 +43,29 @@
               >auto_awesome
               </mat-icon
               >
-              <h1 class="quickactions-title">Quick actions</h1>
+              <h1 class="quickactions-title">Atajos</h1>
             </div>
             <mat-divider></mat-divider>
             <div class="quickstart-buttons">
               <button mat-flat-button class="button-class" (click)="newShift($event)">
                 <mat-icon>add</mat-icon>
-                Add new shift
+                Crear turno
               </button>
               <button mat-flat-button class="button-class" (click)="newActivity($event)">
                 <mat-icon>add_task</mat-icon>
-                Add new activity
+                Crear actividad
               </button>
               <button mat-flat-button class="button-class" (click)="newPackage($event)">
                 <mat-icon>person_add</mat-icon>
-                Create new package
+                Crear paquete
               </button>
               <button mat-flat-button class="button-class" (click)="newAnnouncement($event)">
                 <mat-icon>announcement</mat-icon>
-                New announcement
+                Crear anuncio
               </button>
               <button mat-flat-button class="button-class" (click)="shop($event)">
                 <mat-icon>shopping_cart</mat-icon>
-                Purchase gym elements
+                Comprar elementos de gimnasio
               </button>
             </div>
           </div>
@@ -80,7 +80,7 @@
                   <div
                     style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
                     <mat-icon class="example-tab-icon" style="margin-right: 10px">fitness_center</mat-icon>
-                    <p style="margin: 0; align-content: center; justify-content: center">Gym agenda</p>
+                    <p style="margin: 0; align-content: center; justify-content: center">Agenda gimnasio</p>
                   </div>
                 </ng-template>
                 <div class="title-section">
@@ -88,7 +88,7 @@
                   >calendar_view_day
                   </mat-icon
                   >
-                  <h1 class="agenda-title">Activity List</h1>
+                  <h1 class="agenda-title">Lista de actividades</h1>
                   <mat-chip-listbox
                     class="activities-cards"
                     multiple="true"
@@ -113,7 +113,7 @@
                   <div
                     style="display: flex; flex-direction: row; align-content: center; justify-content: center; color: #f6c90e;">
                     <span class="material-symbols-outlined" style="margin-right: 10px">rheumatology</span>
-                    <p style="margin: 0; align-content: center; justify-content: center">Kinesiology agenda</p>
+                    <p style="margin: 0; align-content: center; justify-content: center">Agenda kinesiología</p>
                   </div>
                 </ng-template>
                 <mat-divider></mat-divider>
