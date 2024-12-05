@@ -8,6 +8,7 @@ import com.desarrollo.criminal.entity.Appointment;
 import com.desarrollo.criminal.service.ActivityService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -35,12 +36,12 @@ public class ActivityController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<?> createActivity(@RequestBody ActivityDTO activityDTO) {
+    public ResponseEntity<?> createActivity(@RequestBody @Valid ActivityDTO activityDTO) {
         return activityService.createActivity(activityDTO);
     }
 
     @PatchMapping("/admin/{id}")
-    public ResponseEntity<?> updateActivity(@RequestBody ActivityUpdateDTO activityDTO, @PathVariable Long id) {
+    public ResponseEntity<?> updateActivity(@RequestBody @Valid ActivityUpdateDTO activityDTO, @PathVariable Long id) {
         return activityService.updateActivity(activityDTO, id);
     }
 
