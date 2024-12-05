@@ -1,10 +1,12 @@
-<div class="contenedor">
-<h1 mat-dialog-title>{{ announcement!.title }}</h1>
+@if (!isLoading()) {<div class="contenedor">
+<h1 mat-dialog-title>{{ announcement.title }}</h1>
 <div mat-dialog-content>
-  <p>{{ announcement!.body }}</p>
+  <p>{{ announcement.body }}</p>
   <p class="date">{{ announcement!.date.toLocaleDateString("es-Ar") }}</p>
 </div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onClose()">Cerrar</button>
-</div>
+</div>} @else {
+<mat-spinner></mat-spinner>
+}
