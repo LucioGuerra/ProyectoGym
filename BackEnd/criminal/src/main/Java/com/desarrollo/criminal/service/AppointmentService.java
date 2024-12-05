@@ -540,7 +540,7 @@ public class AppointmentService {
         Optional<User> kine = userService.getUserByDni(dni);
 
         if (kine.isEmpty()) {
-            throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
+            throw new CriminalCrossException("KINESIOLOGO_NOT_EXIST", "The kinesiologo not be exist");
         }
 
         List<Appointment> appointments = appointmentRepository.findAppointmentsByInstructorDniAndRole(dni, Role.KINE);
@@ -608,6 +608,11 @@ public class AppointmentService {
             if (kine.isEmpty()) {
                 throw new CriminalCrossException("KINESIOLOGO_NOT_CREATED", "The kinesiologo could not be created");
             }
+            User user = kine.get();
+
+            user.setRole(Role.KINE);
+
+            userService.save(user);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
     }
