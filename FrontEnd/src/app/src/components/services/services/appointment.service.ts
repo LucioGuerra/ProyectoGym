@@ -128,7 +128,7 @@ export class AppointmentService {
   }
 
   cancelAppointment(id: string) {
-    return this.http.delete<any>(`${this.apiUrl+"/admin"}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/admin/${id}/deleteAllFutureAppointments=${false}`);
   }
 
   dateAdapt(date: Date): string {

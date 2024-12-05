@@ -12,6 +12,7 @@ import {ErrorDialogComponent} from "../dialog/error-dialog/error-dialog.componen
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {AppointmentInfoDialogComponent} from "../appointment-info-dialog/appointment-info-dialog.component";
 import {AppointmentService} from "../services/services";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-agenda-list',
@@ -48,7 +49,13 @@ export class AgendaListComponent implements OnInit {
     @Input() isAdmin: boolean = false;
 
 
-    constructor(private changeDetectorRef: ChangeDetectorRef,private router: Router, private dialog: MatDialog, private appointmentService: AppointmentService) {
+    constructor(
+        private changeDetectorRef: ChangeDetectorRef,
+        private router: Router, 
+        private dialog: MatDialog, 
+        private appointmentService: AppointmentService,
+        private snackbar: MatSnackBar,
+    ) {
     }
 
     ngOnInit() {
@@ -93,7 +100,25 @@ export class AgendaListComponent implements OnInit {
     cancel_appointment($event: MouseEvent, appointment: Appointment) {
         $event.stopPropagation();
         $event.preventDefault();
-        this.appointmentService.cancelAppointment(appointment.id.toString());
-        alert(`canceling appointment id: ${appointment.id}`);
+        console.log('Canceling appointment', appointment.id);
+        this.appointmentService.cancelAppointment(appointment.id.toString()).subscribe(
+            (response) => {
+                console.log('Appointment canceled: ', response);
+                this.snackbar.open('Cita cancelada', 'Cerrar', {
+                    duration: 3000,
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                });
+                this.appointmentList.set(this.appointmentList().filter(a => a.id !== appointment.id));
+            },
+            (error) => {
+                console.log('Error canceling appointment', error);
+                let dialogConf = new MatDialogConfig();
+                dialogConf.data = {
+                    message: 'Ha ocurrido un error, por favor intentelo mas tarde.'
+                };
+                let d = this.dialog.open(ErrorDialogComponent, dialogConf);
+            }
+        );
     }
 }
