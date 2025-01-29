@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  build-app:
+    image: maven:3.8.6-eclipse-temurin-17
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: mvn clean package -DskipTests
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+        - build-app
